@@ -287,7 +287,7 @@ const Sync = {
     if (this.username) {
       chip.append(
         h("span", { class: "email" }, `Playing as ${this.username}`),
-        ...(typeof Events !== "undefined" && Events.equipped("title") ? [h("span", { class: "player-title" }, ` · ${Events.equipped("title").icon || ""} ${Events.equipped("title").name}`)] : []),
+        ...(typeof Events !== "undefined" && Events.equipped("title") ? [h("span", { class: "player-title" }, ` · ${Events.equipped("title").name}`)] : []),
         h("span", { class: "signout", onclick: e => { e.stopPropagation(); this.promptUsername(); } }, "Switch")
       );
     } else {
@@ -2234,14 +2234,16 @@ async function viewLibrary() {
   // the event calendar (events.js): what's on, its shop, what's coming
   const fe = Events.featured();
   root.append(h("div", { class: "cat-title" }, "Events"));
-  root.append(h("div", { class: "book-list" }, [h("a", { class: "book event-card", href: "#/events" }, [
-    h("div", { class: "t" }, fe ? `${fe.ev.icon} ${fe.ev.name} · ${fe.ev.native}` : "📅 Event calendar"),
-    h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · sign-in, goals and the shop` : "Between events"),
-    h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? `${fe.ev.ci} ${Events.balance(fe.ev.id)}` : "")]),
+  // (the event's own banner behind it, its currency's picture: tools/gen_event_art.py)
+  root.append(h("div", { class: "book-list" }, [h("a", { class: "book event-card" + (fe ? " has-art" : ""), href: "#/events",
+      style: fe ? `background-image:linear-gradient(90deg,rgba(12,8,20,.86),rgba(12,8,20,.35)),url('assets/events/banner-${fe.ev.id}.webp?v=1')` : "" }, [
+    h("div", { class: "t" }, fe ? `${fe.ev.name} · ${fe.ev.native}` : "Event calendar"),
+    h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · sign-in, tasks and the shop` : "Between events"),
+    h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? [h("img", { class: "ev-cur", src: `assets/events/cur-${fe.ev.id}.png?v=1`, alt: "" }), ` ${Events.balance(fe.ev.id)}`] : "")]),
   ]),
   // the protagonists collected from the stories (avatars.js)
   h("a", { class: "book avatar-card-book", href: "#/avatars" }, [
-    h("div", { class: "t" }, "🎭 Avatars & items"),
+    h("div", { class: "t" }, [h("img", { class: "ev-icon", src: "assets/events/tab-collection.png?v=1", alt: "" }), " Avatars & items"]),
     h("div", { class: "n" }, "the stories' protagonists, boards, stones, titles and hats: collect and wear"),
     h("div", { class: "row" }, [h("span", { class: "badge" }, "collection"), h("span", { class: "cnt" }, `${Avatars.count()}`)]),
   ])]));
@@ -5333,8 +5335,8 @@ const Candy = {
     this.taps = this.taps.filter(t => now - t < 3000).concat(now);
     if (this.taps.length < 5) return;
     this.taps = [];
-    if (Events.owns("stones-candy")) this.set(!this.on, this.on ? "The candy's all eaten." : "🍬 Trick or treat! The stones are candy.");
-    else this.toast("🍬 Candy stones are in the Halloween shop (Events)");
+    if (Events.owns("stones-candy")) this.set(!this.on, this.on ? "The candy's all eaten." : "Trick or treat! The stones are candy.");
+    else this.toast("Candy stones are in the Halloween shop (Events)");
   },
 };
 document.addEventListener("DOMContentLoaded", () => {

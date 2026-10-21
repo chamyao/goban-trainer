@@ -100,7 +100,7 @@ body.season-halloween :is(.controls, .rv-actions, .sgf-loader, .modal) button.pr
 body.season-halloween :is(.controls, .rv-actions) button.active { border-image-source: url("assets/ui/halloween/btn-pumpkin.png"); color: #2a1206; text-shadow: none; }
 body.season-halloween :is(.controls, .nav-row, .rv-nav, .rv-actions) button:disabled { filter: grayscale(.7) brightness(.8); opacity: .6; }
 /* the plain buttons elsewhere (no painted plate): night violet with an orange edge */
-body.season-halloween button:not(:is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button):not(.theme-chip):not(.engine-chip):not(.auth-chip):not(.music-btn) {
+body.season-halloween button:not(:is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button):not(.theme-chip):not(.engine-chip):not(.auth-chip):not(.music-btn):not([class^="ev-"]) {
   background-color: #2d2340; color: #f0e2ff; border-color: #8a6aa8; }
 
 /* --- the board in the haunted-wood frame: a jack-o'-lantern on each corner; the board itself stays wood --- */
@@ -233,7 +233,7 @@ body.season-harvest :is(.controls, .rv-actions, .sgf-loader, .modal) button.prim
 body.season-harvest :is(.controls, .rv-actions) button.active { border-image-source: url("assets/ui/harvest/btn-wheat.png"); color: #2a1206; text-shadow: none; }
 body.season-harvest :is(.controls, .nav-row, .rv-nav, .rv-actions) button:disabled { filter: grayscale(.7) brightness(.8); opacity: .6; }
 /* the plain buttons elsewhere (no painted plate): night violet with an orange edge */
-body.season-harvest button:not(:is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button):not(.theme-chip):not(.engine-chip):not(.auth-chip):not(.music-btn) {
+body.season-harvest button:not(:is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button):not(.theme-chip):not(.engine-chip):not(.auth-chip):not(.music-btn):not([class^="ev-"]) {
   background-color: #3c2412; color: #f8ead2; border-color: #b08a4a; }
 
 /* --- the board in the haunted-wood frame: a jack-o'-lantern on each corner; the board itself stays wood --- */
@@ -273,12 +273,7 @@ html:has(body.season-harvest)::after { left: 68vw; width: 26px; height: 26px; an
   background: #ff8a1f; color: #1b1024; font-weight: 700; box-shadow: 0 6px 20px rgba(0, 0, 0, .4); animation: candy-in .3s ease-out; }
 @keyframes candy-in { from { opacity: 0; transform: translate(-50%, -8px); } }
 
-/* the event calendar's rows (events.js) on the haunted hall's parchment */
-body.season-halloween .event-row { background: #efe3c8; color: #2e2219; border-color: #8c6a3c; }
-body.season-halloween .event-row .event-when, body.season-halloween .event-row .meta-sub { color: #6b5338; }
-body.season-halloween .event-toast { background: #ff8a1f; color: #1b1024; }
-body.season-halloween .cal-day { background: #efe3c8; color: #2e2219; border-color: #8c6a3c; }
-body.season-halloween .cal-day .cal-n, body.season-halloween .cal-day .cal-what { color: #6b5338; }
+/* (the Events page is a dark stage of its own in every look: style.css .ev-page) */
 /* the section banners' words in the middle of the ribbon (the user: "center text on banners"): the line the banner's
    height, and the letter-spacing's trailing gap evened out on the left */
 body.season-halloween .cat-title, body.season-harvest .cat-title { line-height: 38px; padding: 0 calc(10px - .07em) 0 calc(10px + .07em); }

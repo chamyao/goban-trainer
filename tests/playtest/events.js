@@ -21,7 +21,7 @@ const up=Object.fromEntries(cal.up.map(([id,s,e])=>[id,[s.slice(0,10),e.slice(0,
 console.log('  coming:',cal.up.map(([id,s])=>`${id} ${s.slice(5,10)}`).join(', '));
 check(up.harvest&&up.harvest[0].startsWith('2026-11-1'),`Harvest around Thanksgiving (Nov 26 2026): from ${up.harvest&&up.harvest[0]}`);
 check(!!up['spring-festival']&&up['spring-festival'][0]==='2027-01-30',`Spring Festival 2027 (Feb 6) from a week before: ${up['spring-festival']&&up['spring-festival'][0]}`);
-check(await p.evaluate(()=>/🍬 \d+/.test(document.getElementById('eventChip').textContent)),'the header chip shows the event and the balance');
+check(await p.evaluate(()=>{const c=document.getElementById('eventChip');return /cur-halloween/.test(c.querySelector('img').src)&&/^\d+$/.test(c.textContent.trim());}),'the header chip shows the event\'s currency (its picture, no emoji) and the balance');
 // earning
 const solve=async(book,pid,flawed)=>p.evaluate(([book,pid,flawed])=>{const before=Events.balance('halloween');
   const t={book:{id:book},p:{id:pid},flawed:flawed?'a hint':null,done:null,els:{},nextBranch(){return null;},setStatus(){},render(){}};Trainer.prototype.finish.call(t,'ok');return Events.balance('halloween')-before;},[book,pid,flawed]);
@@ -32,7 +32,10 @@ check(await solve('testbook','p3',false)===1,'the next new one: 1');
 check(await p.evaluate(()=>Events.earn('tp:1:turn',3))===3,'a turning point found: 3');
 // the shop
 await p.evaluate(()=>{const q=loadProgress();q.ev.earn.halloween.gift=70;TK.saveProg(q);});
-await p.evaluate(()=>location.hash='#/events');await p.waitForSelector('.event-item');
+await p.evaluate(()=>location.hash='#/events');await p.waitForSelector('.ev-banner');
+check(await p.evaluate(()=>/banner-halloween/.test(document.querySelector('.ev-banner').style.backgroundImage)&&!!document.querySelector('.ev-clock')),'the page: the event\'s painted banner and a clock');
+check(await p.$$eval('.ev-tab',e=>e.map(x=>x.textContent).join('|'))==='Sign-in|Tasks|Shop|Collection','its tabs: Sign-in, Tasks, Shop, Collection');
+await p.evaluate(()=>Events.view('shop'));await p.waitForSelector('.event-item');
 const items=await p.$$eval('.event-item .t',e=>e.map(x=>x.textContent));
 check(items.length===4,`the Halloween shop: ${items.join(' / ')}`);
 const bal0=await p.evaluate(()=>Events.balance('halloween'));
@@ -73,16 +76,33 @@ check(await p.evaluate(()=>!Events.claimGoal('solve10')),'9 problems: the 10-pro
 await p.evaluate(()=>{const q=loadProgress();q.ev.earn.halloween['b:10']=1;q.ev.earn.halloween['tp:3:turn']=3;TK.saveProg(q);});
 check(await p.evaluate(()=>Events.claimGoal('solve10')&&!Events.claimGoal('solve10')),'10: claimed once');
 check(await p.evaluate(()=>Events.claimGoal('turn3')&&Events.claimGoal('signin5')&&Events.owns('title-trick-or-treater')),'all three goals: the Trick-or-Treater title');
-await p.evaluate(()=>location.hash='#/events');await p.waitForSelector('.cal-day');
-check(await p.$$eval('.cal-day',e=>e.length)===10&&await p.$$eval('.cal-day.done',e=>e.length)===10,'the page shows the ten days, all signed');
-check((await p.$$eval('.goal-row',e=>e.length))===4,'and the three goals and their prize');
+await p.evaluate(()=>{location.hash='#/events';});await p.waitForSelector('.ev-banner');await p.evaluate(()=>Events.view('signin'));
+check(await p.$$eval('.cal-day',e=>e.length)===10&&await p.$$eval('.cal-day.done .ev-stamp',e=>e.length)===10,'the sign-in tab shows the ten days, all stamped');
+await p.evaluate(()=>Events.view('tasks'));
+check((await p.$$eval('.goal-row',e=>e.length))===4,'the tasks tab: the three goals and their prize');
+await p.close();
+// the tasks tab: a red dot for what's ready, Claim all, the rewards shown; the shop: a card opens the item, Exchange buys it
+p=await open('2026-10-21T12:00:00');
+await p.evaluate(()=>{const q=loadProgress();delete q.ev;q.ev={earn:{halloween:Object.fromEntries([...Array(10)].map((_,i)=>['b:'+i,1]).concat([['tp:1:turn',3],['tp:2:turn',3],['tp:3:key',3]]))},own:{},eq:{},days:{halloween:{'2026-10-20':1}}};TK.saveProg(q);location.hash='#/events';});
+await p.waitForSelector('.ev-banner');await p.evaluate(()=>Events.view('tasks'));
+check(await p.$eval('.ev-tab:nth-child(2) .ev-dot',e=>e.textContent)==='2','the Tasks tab\'s red dot: two to claim');
+await p.click('text=Claim all');await p.waitForSelector('.ev-reward .ev-tile');
+check(/×20/.test(await p.textContent('.ev-reward')),`Claim all: the rewards shown (${(await p.textContent('.ev-reward-tiles')).trim()})`);
+await p.click('.ev-reward');await p.waitForTimeout(300);
+check(await p.$$eval('.ev-task .ev-stamp',e=>e.length)===2&&!await p.$('.ev-dot'),'both stamped claimed, the dot gone');
+await p.evaluate(()=>{const q=loadProgress();q.ev.earn.halloween.gift=40;TK.saveProg(q);Events.view('shop');});
+await p.click('.event-item:has-text("Witch hat")');await p.waitForSelector('.ev-modal');
+await p.click('.ev-modal button:has-text("Exchange")');await p.waitForSelector('.ev-reward');
+check(await p.evaluate(()=>Events.owns('hat-witch')&&!document.querySelector('.ev-modal')),'a card opens the item; Exchange buys it, shown as a reward');
+await p.click('.ev-reward');await p.evaluate(()=>Events.view('collection'));
+check(await p.$$eval('.ev-card',e=>e.length)===1,'the collection tab: what you own');
 await p.close();
 // Feb 12 2027: Spring Festival and Valentine's both on; the shorter is featured; no look painted yet: Classic
 p=await open('2027-02-12T12:00:00');
 const fe=await p.evaluate(()=>({f:Events.featured().ev.id,on:Events.active().map(w=>w.ev.id),cls:document.body.className}));
 check(fe.f==='valentines'&&fe.on.includes('spring-festival')&&!/season-/.test(fe.cls),`Feb 12 2027: ${fe.on.join(' + ')} on, ${fe.f} featured, no look yet`);
 check(await p.evaluate(()=>!Events.buy('title-pumpkin-king')),'the Halloween shop is closed out of its event');
-await p.evaluate(()=>location.hash='#/events');await p.waitForSelector('.event-row');
+await p.evaluate(()=>location.hash='#/events');await p.waitForSelector('.ev-banner');
 check(/Valentine/.test(await p.textContent('.event-hero')),'the page leads with what\'s on');
 await p.close();
 // between events

@@ -66,16 +66,16 @@ const Events = (() => {
 
   // the shops: looks only. board: a board look (BoardTheme), title: by the player's name, hat: on Sun Wukong
   const ITEMS = [
-    { id: "board-haunted", ev: "halloween", type: "board", name: "Haunted board", price: 15,
+    { id: "board-haunted", rar: "SR", ev: "halloween", type: "board", name: "Haunted board", price: 15,
       board: { id: "haunted", name: "Haunted", wood: ["#8a78a6", "#7d6b99", "#705e8c"], tex: "assets/boards/haunted.webp?v=2", line: "#1c1228", label: "#f0e6ff", stone: "rgba(0,0,0,.45)" } },
-    { id: "stones-candy", ev: "halloween", type: "stones", name: "Candy stones", icon: "🍬", price: 20 },
-    { id: "title-pumpkin-king", ev: "halloween", type: "title", name: "Pumpkin King", icon: "🎃", price: 10 },
-    { id: "hat-witch", ev: "halloween", type: "hat", name: "Witch hat for Sun Wukong", price: 25 },
+    { id: "stones-candy", rar: "SSR", ev: "halloween", type: "stones", name: "Candy stones", icon: "🍬", price: 20 },
+    { id: "title-pumpkin-king", rar: "R", ev: "halloween", type: "title", name: "Pumpkin King", icon: "🎃", price: 10 },
+    { id: "hat-witch", rar: "SR", ev: "halloween", type: "hat", name: "Witch hat for Sun Wukong", price: 25 },
     // not for sale: the sign-in calendar's prizes (slot) and the event goals' (goals)
-    { id: "hat-pumpkin", ev: "halloween", type: "hat", name: "Pumpkin hat for Sun Wukong", price: 0, gift: true, slot: 5 },
-    { id: "board-moonlit", ev: "halloween", type: "board", name: "Moonlit board", price: 0, gift: true, slot: 10,
+    { id: "hat-pumpkin", rar: "SR", ev: "halloween", type: "hat", name: "Pumpkin hat for Sun Wukong", price: 0, gift: true, slot: 5 },
+    { id: "board-moonlit", rar: "SSR", ev: "halloween", type: "board", name: "Moonlit board", price: 0, gift: true, slot: 10,
       board: { id: "moonlit", name: "Moonlit", wood: ["#3d5584", "#344a75", "#2c4067"], tex: "assets/boards/moonlit.webp", line: "#e6eeff", label: "#d4e0fa", stone: "rgba(255,255,255,.45)" } },
-    { id: "title-trick-or-treater", ev: "halloween", type: "title", name: "Trick-or-Treater", icon: "🍭", price: 0, gift: true, goals: true },
+    { id: "title-trick-or-treater", rar: "SR", ev: "halloween", type: "title", name: "Trick-or-Treater", icon: "🍭", price: 0, gift: true, goals: true },
   ];
 
   // The sign-in calendar, DragonVale's (the user: "a calendar by event with sign-in bonus and special event, similar to
@@ -125,7 +125,7 @@ const Events = (() => {
       const day = `day:${today()}`;   // the day's first solve: 2 more
       if (!book[day]) { book[day] = 2; got += 2; }
     });
-    if (got) { toast(`${f.ev.ci} +${got} ${f.ev.cur[got === 1 ? 0 : 1]}`); chip(); }
+    if (got) { toast(f.ev, `+${got} ${f.ev.cur[got === 1 ? 0 : 1]}`); chip(); }
     return got;
   }
   // what the event's goals count, from the ledger
@@ -159,10 +159,16 @@ const Events = (() => {
         got.push([i, coins, it]);
       }
     });
-    for (const [i, coins, it] of got) toast(`📅 Day ${i}: ${coins ? `${f.ev.ci} +${coins}` : ""}${it ? ` ${it.icon || "🎁"} ${it.name}` : ""}`);
-    if (got.length) { chip(); if (location.hash === "#/events") view(); }
+    if (!got.length) return;
+    chip();
+    // the sign-in's rewards shown off where it's no interruption (the Library, the Events page); elsewhere a note
+    const coins = got.reduce((a, x) => a + x[1], 0), items = got.map(x => x[2]).filter(Boolean);
+    if (/^(#\/?)?$|^#\/events/.test(location.hash)) {
+      reward(`Day ${got[got.length - 1][0]} sign-in`, [...(coins ? [coinTile(f.ev, coins)] : []), ...items.map(itemTile)]);
+      if (location.hash === "#/events") view();
+    } else toast(f.ev, `Day ${got[got.length - 1][0]} sign-in: +${coins}${items.length ? ` and ${items.map(x => x.name).join(", ")}` : ""}`);
   }
-  function claimGoal(id) {
+  function claimGoal(id, quiet) {
     const f = featured(), g = GOALS.find(x => x.id === id);
     if (!f || !g) return false;
     const ev = f.ev.id, c = counts(ev);
@@ -171,7 +177,7 @@ const Events = (() => {
     store(E => { const book = E.earn[ev] = E.earn[ev] || {}; if (book[`goal:${id}`] == null) { book[`goal:${id}`] = g.pay; ok = true; }
       // all of them: the goal prize
       if (GOALS.every(x => book[`goal:${x.id}`] != null)) for (const it of ITEMS.filter(x => x.ev === ev && x.goals)) E.own[it.id] = 1; });
-    if (ok) { toast(`${f.ev.ci} +${g.pay} ${f.ev.cur[1]}`); chip(); }
+    if (ok) { if (!quiet) toast(f.ev, `+${g.pay} ${f.ev.cur[1]}`); chip(); }
     return ok;
   }
   function buy(id) {
@@ -226,9 +232,9 @@ const Events = (() => {
       box.innerHTML = svg + "</svg>";
       if (it.type === "stones") Candy.load();
     } else if (it.type === "title") {
-      box.append(small ? h("span", { class: "auth-chip event-title-chip" }, `${it.icon || ""} ${it.name}`)   // (a small tile: the title alone)
+      box.append(small ? h("span", { class: "auth-chip event-title-chip" }, it.name)   // (a small tile: the title alone)
         : h("span", { class: "auth-chip event-title-chip" }, [h("span", {}, `Playing as ${(typeof Sync !== "undefined" && Sync.username) || "you"}`),
-          h("span", { class: "player-title" }, ` · ${it.icon || ""} ${it.name}`)]));
+          h("span", { class: "player-title" }, ` · ${it.name}`)]));
     } else if (it.type === "hat" && typeof WK !== "undefined") {
       const rows = WK.HAT_ROWS(it.id), cv = document.createElement("canvas");
       cv.width = 22; cv.height = rows + 15; cv.className = "event-hat";
@@ -238,103 +244,221 @@ const Events = (() => {
     return box;
   }
 
-  function toast(text) {
-    const t = h("div", { class: "event-toast" }, text);
+  // the page's art (tools/gen_event_art.py): each event's banner and currency, the tabs' icons; no emoji on the page
+  // (the user: "avoid relying on emojis")
+  const ART = "assets/events/", AV = 1;
+  const art = name => `${ART}${name}?v=${AV}`;
+  const curImg = (ev, cls = "") => h("img", { class: `ev-cur ${cls}`, src: art(`cur-${ev.id}.png`), alt: ev.cur[1], draggable: "false" });
+  const icon = (name, cls = "") => h("img", { class: `ev-icon ${cls}`, src: art(`${name}.png`), alt: "", draggable: "false" });
+  const evOf = it => LIST.find(e => e.id === it.ev);
+  const RAR = { R: "Rare", SR: "Super rare", SSR: "Legendary" };
+  const TYPE = { board: "Board", title: "Title by your name", hat: "Sun Wukong's hat", stones: "Stones" };
+  const DESC = { board: "A board to play on, in the board cycle.", title: "Shown by your name, everywhere.", hat: "Sun Wukong wears it in the story.",
+                 stones: "Candy corn and chocolate truffles for stones." };
+
+  // a passing note (a coin earned): the currency's own picture, not an emoji
+  function toast(ev, text) {
+    const t = h("div", { class: "event-toast" }, [ev ? curImg(ev) : null, h("span", {}, text)].filter(Boolean));
     document.body.append(t);
     setTimeout(() => t.remove(), 2400);
   }
-  // the header chip: the featured event and its currency
+  // rewards got: shown off, one tile after another, over a turning burst of light (a sign-in, a goal, a purchase)
+  function reward(title, tiles) {
+    document.querySelectorAll(".ev-reward").forEach(x => x.remove());
+    const close = () => { o.classList.add("out"); setTimeout(() => o.remove(), 220); };
+    const o = h("div", { class: "ev-reward", onclick: close }, [
+      h("div", { class: "ev-reward-rays" }),
+      h("div", { class: "ev-reward-box" }, [
+        h("div", { class: "ev-reward-title" }, title),
+        h("div", { class: "ev-reward-tiles" }, tiles.map(([pic, label, rar], i) =>
+          h("div", { class: `ev-tile ev-rar-${rar || "N"}`, style: `animation-delay:${.12 + i * .12}s` }, [h("div", { class: "ev-tile-pic" }, [pic]), h("div", { class: "ev-tile-label" }, label)]))),
+        h("div", { class: "ev-reward-hint" }, "Tap to continue"),
+      ]),
+    ]);
+    document.body.append(o);
+    return o;
+  }
+  const coinTile = (ev, n) => [curImg(ev, "big"), `${ev.cur[n === 1 ? 0 : 1]} ×${n}`];
+  const itemTile = it => [preview(it, true), it.name, it.rar];
+
+  // the header chip: the featured event's currency and balance, or the calendar between events
   function chip() {
     let c = document.getElementById("eventChip");
     const f = featured();
     if (!c) {
       const after = document.getElementById("boardChip");
       if (!after) return;
-      c = h("a", { id: "eventChip", class: "theme-chip event-chip", href: "#/events", title: "The event calendar" });
+      c = h("a", { id: "eventChip", class: "theme-chip event-chip", href: "#/events", title: "Events" });
       after.before(c);
     }
-    c.textContent = f ? `${f.ev.ci} ${balance(f.ev.id)}` : "📅 Events";
+    c.replaceChildren(...(f ? [curImg(f.ev), h("span", {}, String(balance(f.ev.id)))] : [icon("calendar"), h("span", {}, "Events")]));
   }
 
   const fmt = d => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   const left = end => { const days = Math.ceil((end - now()) / 864e5); return days <= 1 ? "ends today" : `${days} days left`; };
-  function view() {
+  const countdown = end => {
+    const ms = Math.max(0, end - now()), d = Math.floor(ms / 864e5), hr = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60;
+    return d ? `${d}d ${hr}h ${m}m` : `${hr}h ${m}m`;
+  };
+  // the host's word: the picked avatar, standing on the banner
+  const HOST = [
+    ev => `${ev.name} is here! Every problem you solve first try earns ${ev.cur[1]}.`,
+    ev => `Sign in each day: the fifth and tenth days hold something special.`,
+    ev => `The shop closes when ${ev.name} ends. Spend your ${ev.cur[1]} before then.`,
+    ev => `A turning point found is worth three ${ev.cur[1]}. Shall we look at your games?`,
+  ];
+  // what's waiting to be claimed (a red dot on its tab)
+  const claimable = ev => { const book = (ledger().earn || {})[ev.id] || {}, c = counts(ev.id);
+    return GOALS.filter(g => c[g.of] >= g.need && book[`goal:${g.id}`] == null).length; };
+  let tab = (() => { try { return localStorage.getItem("gt-event-tab") || "signin"; } catch { return "signin"; } })();
+
+  function view(to) {
+    if (to) tab = to;
+    try { localStorage.setItem("gt-event-tab", tab); } catch {}
     Candy.load();   // (the candy stones' picture in the shop)
     crumbs.innerHTML = "";
     crumbs.append(h("a", { href: "#/" }, "Library"), " / Events");
     root.innerHTML = "";
     const f = featured(), d = now();
-    const shopFor = ev => ITEMS.filter(it => it.ev === ev.id);
-    if (f) {
-      const ev = f.ev, bal = balance(ev.id);
-      const others = active(d).slice(1);
-      root.append(h("div", { class: "event-hero panel" }, [
-        h("div", { class: "event-hero-icon" }, ev.icon),
-        h("div", {}, [
-          h("div", { class: "cat-title" }, "Now"),
-          h("h2", { class: "event-name" }, `${ev.name} · ${ev.native}`),
-          h("div", { class: "meta-sub" }, `${fmt(f.start)} – ${fmt(f.end)} · ${left(f.end)}${others.length ? ` · also on: ${others.map(o => o.ev.name).join(", ")}` : ""}`),
-          ev.blurb ? h("p", { class: "meta-sub" }, ev.blurb) : null,
-          h("div", { class: "event-balance" }, `${ev.ci} ${bal} ${ev.cur[bal === 1 ? 0 : 1]}`),
-          h("p", { class: "meta-sub" }, `Earn ${ev.cur[1]} by solving: 1 for a problem you've never solved, first try (no hint, no wrong move); 3 for a turning point or key move you find; 2 more for the day's first. Each problem pays once.`),
-        ].filter(Boolean)),
+    if (!f) {
+      root.append(h("div", { class: "ev-page ev-none" }, [
+        h("div", { class: "ev-banner event-hero ev-banner-none" }, [h("div", { class: "ev-banner-text" }, [
+          h("div", { class: "ev-kicker" }, "Events"), h("h1", { class: "ev-title" }, "Between events"),
+          h("div", { class: "ev-sub" }, "No event is on right now. The next one opens its own sign-in, tasks and shop."),
+        ])]),
+        collection(null),
       ]));
-      // the sign-in calendar
-      const L = ledger(), book = (L.earn || {})[ev.id] || {}, signed = Object.keys((L.days || {})[ev.id] || {}).length;
-      root.append(h("div", { class: "cat-title" }, "Daily sign-in"));
-      root.append(h("p", { class: "meta-sub" }, `Open the site on a day of ${ev.name} to fill the next day. Missed days just wait. ${signed} of ${CAL.length} so far.`));
-      root.append(h("div", { class: "cal-grid" }, CAL.map((_, j) => {
-        const i = j + 1, [coins, it] = slotReward(ev.id, i), done = book[`cal:${i}`] != null;
-        return h("div", { class: "cal-day" + (done ? " done" : "") + (i === signed + 1 ? " next" : "") + (it ? " prize" : "") }, [
-          h("div", { class: "cal-n" }, `Day ${i}`),
-          it ? preview(it, true) : h("div", { class: "cal-coins" }, `${ev.ci} ${coins}`),
-          it ? h("div", { class: "cal-what" }, `${it.name}${coins ? ` + ${ev.ci} ${coins}` : ""}`) : null,
-          done ? h("div", { class: "cal-check" }, "✓") : null,
-        ].filter(Boolean));
-      })));
-      // the special event's goals
-      const c = counts(ev.id), allDone = GOALS.every(g => book[`goal:${g.id}`] != null), goalPrize = ITEMS.find(x => x.ev === ev.id && x.goals);
-      root.append(h("div", { class: "cat-title" }, `${ev.name} goals`));
-      root.append(h("div", { class: "event-list" }, [...GOALS.map(g => {
-        const have = Math.min(g.need, c[g.of]), claimed = book[`goal:${g.id}`] != null;
-        return h("div", { class: "event-row goal-row" }, [
-          h("span", { class: "event-what" }, [h("b", {}, g.text), h("div", { class: "bar goal-bar" }, [h("div", { style: `width:${100 * have / g.need}%` })])]),
-          h("span", { class: "event-when" }, `${have} / ${g.need}`),
-          claimed ? h("span", { class: "badge" }, "✓ claimed") : Object.assign(h("button", { class: have >= g.need ? "primary" : "",
-            onclick: () => { if (claimGoal(g.id)) view(); } }, `${ev.ci} ${g.pay}`), { disabled: have < g.need }),
-        ]);
-      }), goalPrize ? h("div", { class: "event-row goal-row" }, [preview(goalPrize, true),
-        h("span", { class: "event-what" }, [h("b", {}, `All three: ${goalPrize.icon || ""} ${goalPrize.name}`), h("span", { class: "meta-sub" }, " · not in the shop")]),
-        allDone ? h("span", { class: "badge" }, "✓ yours") : null].filter(Boolean)) : null].filter(Boolean)));
-
-      const items = shopFor(ev).filter(it => !it.gift);
-      root.append(h("div", { class: "cat-title" }, `${ev.name} shop`));
-      if (!items.length) root.append(h("p", { class: "meta-sub" }, "This event's shop is still being stocked."));
-      else root.append(h("div", { class: "book-list" }, items.map(it => {
-        const own = owns(it.id), on = own && isOn(it);
-        const btn = own ? h("button", { onclick: () => { equip(it.id, !on); view(); } }, on ? "Take off" : "Wear")
-          : h("button", { class: "primary", onclick: () => { if (buy(it.id)) { toast(`${it.icon || ev.icon} ${it.name}!`); chip(); view(); } } },
-              `${ev.ci} ${it.price}`);
-        if (!own && bal < it.price) { btn.disabled = true; btn.title = `${it.price - bal} more ${ev.cur[1]}`; }
-        return h("div", { class: "book event-item" + (own ? " owned" : "") }, [
-          preview(it),
-          h("div", { class: "t" }, `${it.icon ? it.icon + " " : ""}${it.name}`),
-          h("div", { class: "n" }, { board: "A board", title: "A title by your name", hat: "Sun Wukong wears it", stones: "Candy corn and chocolate truffles for stones" }[it.type] + (own ? " · yours" : "")),
-          h("div", { class: "row" }, [btn]),
-        ]);
-      })));
-    } else root.append(h("div", { class: "panel" }, [h("h2", {}, "Between events"), h("p", { class: "meta-sub" }, "No event is on right now.")]));
-
-    // what's been collected, by event (the album)
-    const mine = ITEMS.filter(it => owns(it.id));
-    if (mine.length) {
-      root.append(h("div", { class: "cat-title" }, "Your collection"));
-      root.append(h("div", { class: "event-list" }, mine.map(it => { const ev = LIST.find(e => e.id === it.ev);
-        return h("div", { class: "event-row" }, [h("span", { class: "event-icon" }, ev.icon), h("span", { class: "event-what" }, [h("b", {}, it.name), ` · ${ev.name}`]),
-          h("button", { onclick: () => { equip(it.id, !isOn(it)); view(); } }, isOn(it) ? "Take off" : "Wear")]); })));
+      return;
     }
+    const ev = f.ev, bal = balance(ev.id), others = active(d).slice(1);
+    const clock = h("span", { class: "ev-clock" }, countdown(f.end));
+    const tick = setInterval(() => { if (!clock.isConnected) return clearInterval(tick); clock.textContent = countdown(f.end); }, 20000);
+    const hostBox = h("div", { class: "ev-host" });
+    if (typeof Avatars !== "undefined") Avatars.host().then(a => { if (!a) return;
+      hostBox.append(h("img", { class: "ev-host-img", src: a.src, alt: a.name }),
+        h("div", { class: "ev-host-say" }, [h("div", { class: "ev-host-name" }, a.name), h("div", {}, HOST[Math.floor(Math.random() * HOST.length)](ev))])); });
+    const banner = h("div", { class: "ev-banner event-hero", style: `background-image:url('${art(`banner-${ev.id}.webp`)}')` }, [
+      h("div", { class: "ev-banner-text" }, [
+        h("div", { class: "ev-kicker" }, `Limited event · ${KINDS[ev.kind]}`),
+        h("h1", { class: "ev-title event-name" }, ev.name),
+        h("div", { class: "ev-native" }, ev.native),
+        ev.blurb ? h("div", { class: "ev-sub" }, ev.blurb) : null,
+        h("div", { class: "ev-when" }, [h("span", {}, `${fmt(f.start)} – ${fmt(f.end)}`), h("span", { class: "ev-ends" }, ["Ends in ", clock])]),
+        others.length ? h("div", { class: "ev-also" }, `Also on: ${others.map(o => o.ev.name).join(", ")}`) : null,
+      ].filter(Boolean)),
+      hostBox,
+      h("div", { class: "ev-wallet event-balance", title: `Your ${ev.cur[1]}` }, [curImg(ev), h("b", {}, String(bal))]),
+    ]);
+    const dots = { tasks: claimable(ev) };
+    const TABS = [["signin", "Sign-in", "tab-signin"], ["tasks", "Tasks", "tab-tasks"], ["shop", "Shop", "tab-shop"], ["collection", "Collection", "tab-collection"]];
+    const nav = h("nav", { class: "ev-tabs" }, TABS.map(([id, label, ic]) => h("button", { class: "ev-tab" + (tab === id ? " on" : ""), onclick: () => view(id) },
+      [icon(ic), h("span", {}, label), dots[id] ? h("i", { class: "ev-dot" }, String(dots[id])) : null].filter(Boolean))));
+    const panel = h("section", { class: "ev-panel" }, [{ signin, tasks, shop, collection }[tab] ? { signin, tasks, shop, collection }[tab](ev) : signin(ev)]);
+    root.append(h("div", { class: `ev-page ev-${ev.id}` }, [banner, h("div", { class: "ev-body" }, [nav, panel])]));
+  }
+
+  // the sign-in calendar: ten days, the fifth and tenth the event's prizes
+  function signin(ev) {
+    const L = ledger(), book = (L.earn || {})[ev.id] || {}, signed = Object.keys((L.days || {})[ev.id] || {}).length;
+    return h("div", {}, [
+      h("div", { class: "ev-head" }, [h("h2", {}, "Daily sign-in"), h("span", { class: "ev-count" }, `${Math.min(signed, CAL.length)} / ${CAL.length}`)]),
+      h("p", { class: "ev-note" }, `Open the site on a day of ${ev.name} to sign in for the next day. A missed day just waits.`),
+      h("div", { class: "cal-grid" }, CAL.map((_, j) => {
+        const i = j + 1, [coins, it] = slotReward(ev.id, i), done = book[`cal:${i}`] != null;
+        return h("div", { class: "cal-day" + (done ? " done" : "") + (i === signed + 1 ? " next" : "") + (it ? ` prize ev-rar-${it.rar || "SR"}` : "") }, [
+          h("div", { class: "cal-n" }, `Day ${i}`),
+          h("div", { class: "cal-pic" }, [it ? preview(it, true) : curImg(ev, "big")]),
+          h("div", { class: "cal-what" }, it ? it.name : `×${coins}`),
+          it && coins ? h("div", { class: "cal-plus" }, [curImg(ev), `×${coins}`]) : null,
+          done ? h("div", { class: "cal-check ev-stamp" }, "Claimed") : null,
+        ].filter(Boolean));
+      })),
+    ]);
+  }
+  // the event's tasks (goals), and the prize for all three
+  function tasks(ev) {
+    const book = (ledger().earn || {})[ev.id] || {}, c = counts(ev.id), goalPrize = ITEMS.find(x => x.ev === ev.id && x.goals);
+    const go = { solved: "#/stream", turning: "#/turning", signins: null };
+    const claim = ids => { const got = ids.filter(id => claimGoal(id, true));
+      if (!got.length) return;
+      const pay = got.reduce((a, id) => a + GOALS.find(g => g.id === id).pay, 0);
+      const tiles = [coinTile(ev, pay)];
+      if (goalPrize && GOALS.every(g => book[`goal:${g.id}`] != null || got.includes(g.id))) tiles.push(itemTile(goalPrize));
+      reward("Rewards", tiles); view(); };
+    const ready = GOALS.filter(g => c[g.of] >= g.need && book[`goal:${g.id}`] == null).map(g => g.id);
+    const allDone = GOALS.every(g => book[`goal:${g.id}`] != null);
+    return h("div", {}, [
+      h("div", { class: "ev-head" }, [h("h2", {}, "Event tasks"),
+        ready.length > 1 ? h("button", { class: "ev-btn gold", onclick: () => claim(ready) }, "Claim all") : null].filter(Boolean)),
+      h("div", { class: "event-list" }, [...GOALS.map(g => {
+        const have = Math.min(g.need, c[g.of]), claimed = book[`goal:${g.id}`] != null, can = have >= g.need && !claimed;
+        return h("div", { class: "event-row goal-row ev-task" + (claimed ? " claimed" : can ? " ready" : "") }, [
+          h("div", { class: "ev-task-main" }, [h("b", {}, g.text),
+            h("div", { class: "ev-bar" }, [h("div", { style: `width:${100 * have / g.need}%` })]), h("span", { class: "ev-prog" }, `${have} / ${g.need}`)]),
+          h("div", { class: "ev-task-pay" }, [curImg(ev, "mid"), h("span", {}, `×${g.pay}`)]),
+          claimed ? h("div", { class: "ev-stamp small" }, "Claimed")
+            : can ? h("button", { class: "ev-btn gold", onclick: () => claim([g.id]) }, "Claim")
+            : go[g.of] ? h("a", { class: "ev-btn", href: go[g.of] }, "Go") : h("span", { class: "ev-btn off" }, "Tomorrow"),
+        ]);
+      }), goalPrize ? h("div", { class: `event-row goal-row ev-task ev-grand ev-rar-${goalPrize.rar || "SR"}` + (allDone ? " claimed" : "") }, [
+        h("div", { class: "ev-grand-pic" }, [preview(goalPrize, true)]),
+        h("div", { class: "ev-task-main" }, [h("div", { class: "ev-kicker" }, "Complete all three"), h("b", {}, goalPrize.name),
+          h("span", { class: "ev-note" }, `${TYPE[goalPrize.type]} · not in the shop`)]),
+        allDone ? h("div", { class: "ev-stamp small" }, "Yours") : h("span", { class: "ev-prog" }, `${GOALS.filter(g => book[`goal:${g.id}`] != null).length} / ${GOALS.length}`),
+      ]) : null].filter(Boolean)),
+      h("p", { class: "ev-note" }, `Earn ${ev.cur[1]} by solving: 1 for a problem you've never solved, first try (no hint, no wrong move); 3 for a turning point or key move you find; 2 more for the day's first. Each problem pays once.`),
+    ]);
+  }
+  // the exchange shop: a card per item; a tap opens it, to look at and exchange
+  function shop(ev) {
+    const items = ITEMS.filter(it => it.ev === ev.id && !it.gift), bal = balance(ev.id);
+    if (!items.length) return h("div", {}, [h("div", { class: "ev-head" }, [h("h2", {}, "Exchange shop")]), h("p", { class: "ev-note" }, "This event's shop is still being stocked.")]);
+    return h("div", {}, [
+      h("div", { class: "ev-head" }, [h("h2", {}, "Exchange shop"), h("span", { class: "ev-count" }, [curImg(ev), String(bal)])]),
+      h("div", { class: "ev-shop" }, items.map(it => {
+        const own = owns(it.id);
+        return h("button", { class: `ev-card event-item ev-rar-${it.rar || "R"}` + (own ? " owned" : ""), onclick: () => details(it) }, [
+          h("div", { class: "ev-card-rar" }, it.rar || "R"),
+          h("div", { class: "ev-card-pic" }, [preview(it, it.type === "title")]),
+          h("div", { class: "t ev-card-name" }, it.name),
+          h("div", { class: "ev-card-type" }, `${TYPE[it.type]} · limit 1`),
+          own ? h("div", { class: "ev-card-price owned" }, isOn(it) ? "Wearing" : "Owned")
+            : h("div", { class: "ev-card-price" + (bal < it.price ? " short" : "") }, [curImg(ev), String(it.price)]),
+        ]);
+      })),
+    ]);
+  }
+  // an item, up close: exchange it, or wear it
+  function details(it) {
+    const ev = evOf(it), own = owns(it.id), bal = balance(ev.id), open = !!featured() && featured().ev.id === ev.id;
+    const close = () => o.remove();
+    const act = own ? h("button", { class: "ev-btn gold", onclick: () => { equip(it.id, !isOn(it)); close(); view(); } }, isOn(it) ? "Take off" : "Wear")
+      : Object.assign(h("button", { class: "ev-btn gold", onclick: () => { if (buy(it.id)) { close(); chip(); view(); reward("Exchanged", [itemTile(it)]); } } },
+          [h("span", {}, "Exchange"), curImg(ev), String(it.price)]), { disabled: !open || bal < it.price });
+    const o = h("div", { class: "ev-modal", onclick: e => { if (e.target === o) close(); } }, [h("div", { class: `ev-modal-box ev-rar-${it.rar || "R"}` }, [
+      h("div", { class: "ev-modal-pic" }, [preview(it)]),
+      h("div", { class: "ev-card-rar" }, `${it.rar || "R"} · ${RAR[it.rar || "R"]}`),
+      h("h2", {}, it.name), h("p", { class: "ev-note" }, `${TYPE[it.type]}. ${DESC[it.type]}`),
+      !own && bal < it.price ? h("p", { class: "ev-note" }, [`${it.price - bal} more `, curImg(ev), ` ${ev.cur[1]} to go.`]) : null,
+      h("div", { class: "ev-modal-act" }, [h("button", { class: "ev-btn", onclick: close }, "Close"), act]),
+    ].filter(Boolean))]);
+    document.body.append(o);
+  }
+  // what's been collected, by event (the album)
+  function collection(ev) {
+    const mine = ITEMS.filter(it => owns(it.id));
+    return h("div", {}, [
+      h("div", { class: "ev-head" }, [h("h2", {}, "Your collection"), h("span", { class: "ev-count" }, `${mine.length} / ${ITEMS.length}`)]),
+      mine.length ? h("div", { class: "ev-shop" }, mine.map(it => h("button", { class: `ev-card ev-rar-${it.rar || "R"} owned`, onclick: () => details(it) }, [
+        h("div", { class: "ev-card-rar" }, it.rar || "R"),
+        h("div", { class: "ev-card-pic" }, [preview(it, it.type === "title")]),
+        h("div", { class: "ev-card-name" }, it.name),
+        h("div", { class: "ev-card-type" }, evOf(it).name),
+        h("div", { class: "ev-card-price owned" }, isOn(it) ? "Wearing" : "Tap to wear"),
+      ]))) : h("p", { class: "ev-note" }, "Nothing yet. Sign in, finish tasks and visit the shop."),
+    ]);
   }
 
   document.addEventListener("DOMContentLoaded", () => { setTimeout(chip, 0); setTimeout(checkIn, 1500); });   // (the day's sign-in, once the page is up)
-  return { preview, isOn, CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
+  return { reward, details, preview, isOn, CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
 })();

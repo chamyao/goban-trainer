@@ -47,7 +47,7 @@ const Avatars = (() => {
     who = norm(who);
     if (!who || NOT.has(who) || owns(who)) return false;
     store(A => { A.own[who] = 1; if (!A.pick) A.pick = who; });
-    if (!quiet) toast(`🎭 ${name(who)} joins your avatars`);
+    if (!quiet) toast(`${name(who)} joins your avatars`);
     return true;
   }
   // a story board completed: whoever you're playing as joins (TK.markCleared calls this)
@@ -439,5 +439,7 @@ const Avatars = (() => {
     if (r) new MutationObserver(schedule).observe(r, { childList: true, subtree: true });
     addEventListener("hashchange", schedule);
   });
-  return { INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
+  // the picked one's portrait and name, for another page's own use (the Events page's host)
+  const host = async () => { const who = picked(); if (!who) return null; const m = await loadPortraits(); return m[who] ? { who, name: name(who), src: img(m[who]) } : null; };
+  return { host, INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();
