@@ -67,14 +67,14 @@ const Events = (() => {
   // the shops: looks only. board: a board look (BoardTheme), title: by the player's name, hat: on Sun Wukong
   const ITEMS = [
     { id: "board-haunted", ev: "halloween", type: "board", name: "Haunted board", price: 15,
-      board: { id: "haunted", name: "Haunted", wood: ["#4a3763", "#3e2d55", "#332447"], line: "#e9dcff", label: "#d6c3f5", stone: "rgba(255,255,255,.35)" } },
+      board: { id: "haunted", name: "Haunted", wood: ["#8a78a6", "#7d6b99", "#705e8c"], tex: "assets/boards/haunted.webp?v=2", line: "#1c1228", label: "#f0e6ff", stone: "rgba(0,0,0,.45)" } },
     { id: "stones-candy", ev: "halloween", type: "stones", name: "Candy stones", icon: "🍬", price: 20 },
     { id: "title-pumpkin-king", ev: "halloween", type: "title", name: "Pumpkin King", icon: "🎃", price: 10 },
     { id: "hat-witch", ev: "halloween", type: "hat", name: "Witch hat for Sun Wukong", price: 25 },
     // not for sale: the sign-in calendar's prizes (slot) and the event goals' (goals)
     { id: "hat-pumpkin", ev: "halloween", type: "hat", name: "Pumpkin hat for Sun Wukong", price: 0, gift: true, slot: 5 },
     { id: "board-moonlit", ev: "halloween", type: "board", name: "Moonlit board", price: 0, gift: true, slot: 10,
-      board: { id: "moonlit", name: "Moonlit", wood: ["#26365a", "#1f2d4c", "#19253f"], line: "#cdd9f3", label: "#bccbea", stone: "rgba(255,255,255,.35)" } },
+      board: { id: "moonlit", name: "Moonlit", wood: ["#3d5584", "#344a75", "#2c4067"], tex: "assets/boards/moonlit.webp", line: "#e6eeff", label: "#d4e0fa", stone: "rgba(255,255,255,.45)" } },
     { id: "title-trick-or-treater", ev: "halloween", type: "title", name: "Trick-or-Treater", icon: "🍭", price: 0, gift: true, goals: true },
   ];
 

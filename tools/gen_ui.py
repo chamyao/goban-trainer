@@ -7,6 +7,7 @@ hover/pressed states here. No logos, no text, nothing traced from any game.
       cobwebs, pumpkins and bone.
   harvest (body.season-harvest, assets/ui/harvest/): a harvest barn at Thanksgiving: barn wood, wicker, wheat,
       maple leaves, acorns, gourds, cranberry and amber.
+  boards (assets/boards/): the event boards' painted surfaces (Events ITEMS board.tex), under the grid and stones.
   A new season is a PAINT block, a build function and a SLICES entry in SETS below, plus its CSS block in
   theme-seasonal.css (body.season-<name>, urls into assets/ui/<name>/).
 
@@ -145,6 +146,32 @@ HV_PAINT = {
     "leaf": ("1:1", "A single red-orange autumn maple leaf, seen flat from above, with a short stem, rich glowing "
                     "colours, simple bold shape. " + ON_WHITE + " " + HV_LOOK),
 }
+BD_LOOK = ("A flat, front-on, evenly lit texture filling the whole square frame edge to edge, seen straight from above, "
+           "painterly hand-painted game art. The middle is calm and even, a medium tone (neither dark nor light), with "
+           "only soft low-contrast detail; any motifs are faint and kept toward the corners. No grid, no lines, no "
+           "stones, no border, no frame, no text, no letters, no logos.")
+BD_PAINT = {   # the event boards' surfaces (Events ITEMS board.tex): drawn under the grid and stones, so they stay calm
+    "haunted": ("1:1", "The playing surface of a haunted go board: dusky medium violet-purple wood with faint, soft "
+                       "ghostly swirling grain, a gentle pale moonlight sheen across it, the faintest cobweb wisps in "
+                       "the four corners. " + BD_LOOK),
+    "moonlit": ("1:1", "The playing surface of a moonlit go board: medium night-blue lacquer, smooth and softly glossy, "
+                       "with tiny faint silver star flecks scattered sparsely and a soft pale moon glow in one corner. "
+                       + BD_LOOK),
+}
+
+
+BD_SOFTEN = {"haunted": .15}   # less softening where the grain is the point (the user: 'look like wood grain')
+
+
+def build_boards(save):
+    """Each board 1024 square, its detail softened a little so lines and both colours of stone read on it."""
+    for n in BD_PAINT:
+        im = Image.open(RAW / f"{n}.webp").convert("RGB").resize((1024, 1024), Image.LANCZOS)
+        im = Image.blend(im, im.filter(ImageFilter.GaussianBlur(5)), BD_SOFTEN.get(n, .45))
+        im.save(UI / f"{n}.webp", quality=80, method=6)
+        save.meta[n] = {"file": f"{n}.webp", "size": [1024, 1024]}
+
+
 HV_SLICES = {"btn-wheat": [0, 48], "btn-cranberry": [0, 48], "ribbon": [0, 72]}   # the frames: measured in build
 
 
@@ -252,13 +279,15 @@ def saver(meta):
         im.save(path, quality=88) if fmt == "webp" else im.save(path)
         base = name.split("-hover")[0].split("-pressed")[0]
         meta[name] = {"file": path.name, "size": list(im.size), **({"slice": SET["slices"][base]} if base in SET["slices"] else {})}
+    save.meta = meta
     return save
 
 
 def build():
     meta = {}
     SET["build"](saver(meta))
-    (UI / "ui.json").write_text(json.dumps(meta, indent=1))
+    if SET is not SETS["boards"]:   # (the boards are plain pictures: nothing to slice)
+        (UI / "ui.json").write_text(json.dumps(meta, indent=1))
     print(f"built {len(meta)} assets in {UI.relative_to(ROOT)}")
 
 
@@ -368,6 +397,7 @@ SETS = {
     "tavern": {"dir": UI, "paint": PAINT, "slices": SLICES, "build": build_tavern},
     "halloween": {"dir": UI / "halloween", "paint": HW_PAINT, "slices": HW_SLICES, "build": build_halloween},
     "harvest": {"dir": UI / "harvest", "paint": HV_PAINT, "slices": HV_SLICES, "build": build_harvest},
+    "boards": {"dir": ROOT / "assets/boards", "paint": BD_PAINT, "slices": {}, "build": build_boards},
 }
 SET = SETS["tavern"]
 
