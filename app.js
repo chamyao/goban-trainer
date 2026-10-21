@@ -2202,6 +2202,12 @@ async function viewLibrary() {
       h("div", { class: "n" }, "练习 · problems at your level, one after another"),
       h("div", { class: "row" }, [h("span", { class: "badge" }, "15k–3d"), h("span", { class: "cnt" }, "∞")]),
     ]));
+    // your own lost OGS games' decisive moves, to play again (viewTurning)
+    if (title === "Tsumego") list.append(h("div", { class: "book book-turning", onclick: () => location.hash = "#/turning" }, [
+      h("div", { class: "t" }, "Turning points"),
+      h("div", { class: "n" }, "胜负手 · the moves that lost your OGS games, to play again"),
+      h("div", { class: "row" }, [h("span", { class: "badge" }, "your games"), h("span", { class: "cnt" }, "OGS")]),
+    ]));
     for (const b of books) {
       const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
       const isFav = favs.has(b.id);
@@ -2482,6 +2488,259 @@ async function viewStream() {
   if (TKElo.state().streamRated === key && !p.sz) aiBtn.hidden = false;   // answered before a reload
 }
 const GRADE_NAMES = Array.from({ length: 44 }, (_, i) => i < 30 ? `${15 - Math.floor(i / 2)}K${i % 2 ? "+" : ""}` : `${1 + Math.floor((i - 30) / 2)}D${(i - 30) % 2 ? "+" : ""}`);
+
+/* ================= turning points: the moves that lost your OGS games, fed to you to play again ================= */
+// The user: "reviews the user's OGS games, and gives them 'decisive' positions from their games that they lost, and
+// allows them to replay that moment to improve upon it. Similar to a stream where it's just fed to them."
+// Decisive, as in the win-rate study ("decisive means it decided the game"): the last time the game changed hands. A
+// quick pass of the network over every position finds where the lost game's win rate went under 50% for good (each
+// read averaged with the next, which cancels the network's lean to the side to play); searches of the player's moves
+// around there pick the one that gave up the most, and it counts only if it gave up 10 points or more (the Review's
+// mistake line) from a position that was still the player's. A game that was never theirs, or slid away a little at a
+// time, has no turning point and is skipped.
+const Turning = {
+  KEY: "goban.turning",
+  state() {
+    try { const s = JSON.parse(localStorage.getItem(this.KEY)); if (s && s.items) return s; } catch {}
+    return { user: "", uid: 0, scanned: {}, items: [], next: null };
+  },
+  save(s) { try { localStorage.setItem(this.KEY, JSON.stringify(s)); } catch (e) { console.error("[turning] save failed", e); } },
+  pending(s) { return s.items.filter(x => !x.done); },
+
+  // the player's win rate (0..1) at every position from one forward pass each, smoothed over neighbours
+  async quickPass(g, mine) {
+    const u = [];
+    for (let k = 0; k <= g.n; k++) {
+      const e = await Review.enqueue(() => Engine.evaluate({
+        board: gridToBoardState(g.grids[k]),
+        previousBoard: k > 0 ? gridToBoardState(g.grids[k - 1]) : undefined,
+        previousPreviousBoard: k > 1 ? gridToBoardState(g.grids[k - 2]) : undefined,
+        currentPlayer: (k < g.n ? g.moves[k].color : 3 - g.moves[g.n - 1].color) === BLACK ? "black" : "white",
+        komi: g.meta.engineKomi,
+      }));
+      u.push(mine(e.winRate != null ? e.winRate : e.rootWinRate));
+    }
+    return u.map((w, k) => k < g.n ? (w + u[k + 1]) / 2 : w);
+  },
+  async search(g, k, visits = 100) {
+    const hist = [];
+    for (let j = Math.max(0, k - 6); j < k; j++) { const q = g.moves[j]; if (!q.pass) hist.push({ x: q.c, y: q.r, player: q.color === BLACK ? "black" : "white" }); }
+    const turn = k < g.n ? g.moves[k].color : 3 - g.moves[g.n - 1].color;
+    return Review.enqueue(() => Engine.analyze({
+      board: gridToBoardState(g.grids[k]), currentPlayer: turn === BLACK ? "black" : "white", moveHistory: hist,
+      komi: g.meta.engineKomi, visits, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
+    }));
+  },
+
+  // the decisive move of a lost game for color `me`, or null
+  async find(sgf, me) {
+    const g = gameFromSgf(sgf);
+    if (g.n < 20) return null;
+    const mine = w => me === BLACK ? w : 1 - w;
+    const s = await this.quickPass(g, mine);
+    let kc = -1;
+    for (let k = g.n; k >= 0; k--) if (s[k] >= 0.5) { kc = k; break; }
+    if (kc < 0 || kc >= g.n - 1) return null;   // never ahead, or ahead to the end (time, a disconnect)
+    let best = null;
+    for (let k = Math.max(0, kc - 8); k <= Math.min(g.n - 1, kc + 4); k++) {
+      const m = g.moves[k];
+      if (m.color !== me || m.pass) continue;
+      const a = await this.search(g, k);
+      const top = (a.moves || [])[0];
+      if (!top) continue;
+      const played = a.moves.find(c => c.x === m.c && c.y === m.r);
+      const after = played ? mine(played.winRate) : mine((await this.search(g, k + 1)).rootWinRate);
+      const before = mine(a.rootWinRate), loss = 100 * (mine(top.winRate) - after);
+      if (before >= 0.5 && loss >= 10 && (!best || loss > best.loss))
+        best = { k, before, after, bestW: mine(top.winRate), loss, best: [top.x, top.y] };
+    }
+    return best;
+  },
+
+  // scans the player's lost 19×19 games, newest first, until `want` turning points wait unplayed
+  // (it reports to the page showing now, Turning.onStatus: a scan outlives the turning point it started under)
+  async scan(want = 3) {
+    if (this.scanning) return;
+    this.scanning = true;
+    const onStatus = t => this.onStatus && this.onStatus(t);
+    const alive = () => location.hash.startsWith("#/turning");
+    try {
+      await Engine.ensure();
+      let s = this.state();
+      let url = s.next || OGS.firstPageUrl(s.uid).replace("page_size=15", "page_size=20");
+      while (alive() && this.pending(this.state()).length < want && url) {
+        const d = await OGS.json(url);
+        for (const gm of d.results || []) {
+          if (!alive() || this.pending(this.state()).length >= want) break;
+          s = this.state();
+          if (s.scanned[gm.id] !== undefined) continue;
+          const me = gm.players.black.id === s.uid ? BLACK : WHITE;
+          const lost = me === BLACK ? gm.black_lost && !gm.white_lost : gm.white_lost && !gm.black_lost;
+          if (!lost || gm.annulled) { s.scanned[gm.id] = 0; this.save(s); continue; }
+          const opp = (me === BLACK ? gm.players.white : gm.players.black).username;
+          onStatus(`Reading your game against ${opp} (${new Date(gm.ended).toLocaleDateString()})…`);
+          let hit = null, sgf = null;
+          try { sgf = await OGS.sgf(gm.id); hit = await this.find(sgf, me); }
+          catch (e) { console.error("[turning]", gm.id, e); }
+          if (!alive() && !hit) break;   // (left mid-read: read it again next time)
+          s = this.state();
+          s.scanned[gm.id] = hit ? 1 : 0;
+          if (hit) s.items.push({ gid: gm.id, sgf, me, opp, date: gm.ended, ...hit });
+          this.save(s);
+          if (hit) onStatus(null);
+        }
+        if (alive() && this.pending(this.state()).length < want) { url = d.next; s = this.state(); s.next = url; this.save(s); }
+      }
+      onStatus(url ? "" : "That's every lost game on your OGS account so far.");
+    } catch (e) {
+      onStatus(e.message === "Failed to fetch" ? "Couldn't reach OGS." : e.message);
+    } finally { this.scanning = false; }
+  },
+};
+
+function viewTurning() {
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / Turning points");
+  root.innerHTML = "";
+  const s = Turning.state();
+
+  if (!s.uid) {
+    const input = h("input", { class: "rec-field", placeholder: "OGS username", value: OGS.remembered() });
+    const err = h("div", { class: "meta-sub" });
+    const go = async () => {
+      const name = input.value.trim();
+      if (!name) return;
+      err.textContent = "Looking up…";
+      try {
+        const p = await OGS.findPlayer(name);
+        OGS.remember(p.username);
+        Turning.save({ user: p.username, uid: p.id, scanned: {}, items: [], next: null });
+        viewTurning();
+      } catch (e) { err.textContent = e.message === "Failed to fetch" ? "Couldn't reach OGS." : e.message; }
+    };
+    input.addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+    root.append(h("div", { class: "sgf-loader" }, [
+      h("div", { class: "cat-title" }, "Turning points"),
+      h("p", { class: "meta-sub" }, "KataGo reads the 19×19 games you lost on OGS and finds the move where each one slipped away. You get that position to play again."),
+      h("div", { class: "row" }, [input, h("button", { class: "primary", onclick: go }, "Start")]),
+      err,
+    ]));
+    return;
+  }
+
+  const item = Turning.pending(s)[0];
+  const status = h("div", { class: "meta-sub turning-scan" });
+  const setStatus = t => {
+    if (t === null) { if (!item && location.hash.startsWith("#/turning")) viewTurning(); return; }
+    status.textContent = t;
+  };
+  const doneCount = s.items.filter(x => x.done).length;
+  const who = h("div", { class: "meta-sub" }, [`OGS: ${s.user} · ${doneCount} played · `,
+    h("a", { href: "javascript:void 0", onclick: () => { Turning.save({ user: "", uid: 0, scanned: {}, items: [], next: null }); viewTurning(); } }, "change")]);
+
+  if (!item) {
+    root.append(h("div", { class: "sgf-loader" }, [
+      h("div", { class: "cat-title" }, "Turning points"), who,
+      h("p", {}, "Looking through your lost games for the move that decided each one. The first can take a minute while KataGo loads."),
+      status,
+    ]));
+    Turning.onStatus = setStatus; Turning.scan();
+    return;
+  }
+
+  const g = gameFromSgf(item.sgf), me = item.me, k = item.k;
+  const pct = w => `${Math.round(100 * w)}%`;
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" }, [svg]);
+  const result = h("div", { id: "status" }, `You're ${me === BLACK ? "Black" : "White"}, at ${pct(item.before)}. Find a better move than the one you played.`);
+  const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => play(c, r));
+  goban.hoverColor = me;
+  let tried = null, show = null, busy = false;
+  const prev = k > 0 ? g.moves[k - 1] : null;
+  const draw = () => {
+    const grid = tried ? tried.grid : g.grids[k];
+    const last = tried ? [tried.c, tried.r] : prev && !prev.pass ? [prev.c, prev.r] : null;
+    goban.render(grid, last, !tried && !busy);
+    for (const [c, r, color, label] of show || []) {
+      const x = goban.px(c), y = goban.py(r);
+      goban.el("circle", { cx: x, cy: y, r: goban.cell * .44, fill: color, stroke: "#fff", "stroke-width": 2, "pointer-events": "none", class: "turn-mark" });
+      goban.el("text", { x, y: y + goban.cell * .14, "text-anchor": "middle", "font-size": goban.cell * .34, "font-weight": 700, fill: "#fff", "pointer-events": "none" }).textContent = label;
+    }
+  };
+  const gm = g.moves[k];
+  const marks = (withMine) => [
+    [item.best[0], item.best[1], "rgba(34,160,90,.85)", pct(item.bestW).replace("%", "")],
+    [gm.c, gm.r, "rgba(176,65,62,.85)", pct(item.after).replace("%", "")],
+    ...(withMine && tried ? [[tried.c, tried.r, "rgba(53,102,176,.85)", pct(tried.w).replace("%", "")]] : []),
+  ];
+  const play = async (c, r) => {
+    if (tried || busy) return;
+    const g2 = applyMove(g.grids[k], c, r, me);
+    if (!g2) return;
+    busy = true; tried = { c, r, grid: g2 }; draw();
+    result.textContent = "KataGo is reading your move…";
+    try {
+      const a = await Turning.search(g, k, 200);
+      const mine = w => me === BLACK ? w : 1 - w;
+      const hit = (a.moves || []).find(m => m.x === c && m.y === r);
+      let w;
+      if (hit) w = mine(hit.winRate);
+      else {
+        const hist = [{ x: c, y: r, player: me === BLACK ? "black" : "white" }];
+        const b = await Review.enqueue(() => Engine.analyze({
+          board: gridToBoardState(g2), currentPlayer: me === BLACK ? "white" : "black", moveHistory: hist,
+          komi: g.meta.engineKomi, visits: 200, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false,
+        }));
+        w = mine(b.rootWinRate);
+      }
+      if (!location.hash.startsWith("#/turning")) return;
+      tried.w = w;
+      const fixed = w >= 0.5 || w >= item.bestW - 0.05;
+      const sameAsGame = c === gm.c && r === gm.r;
+      result.textContent = sameAsGame ? `That's the move you played in the game: ${pct(w)}.`
+        : fixed ? `Turned it around: ${pct(w)} for you, where the game move left you ${pct(item.after)}.`
+        : w > item.after ? `Better than the game (${pct(item.after)}), but still ${pct(w)}. Try again?`
+        : `${pct(w)}: no better than the game move (${pct(item.after)}). Try again?`;
+      result.className = fixed && !sameAsGame ? "ok" : "bad";
+      if (!item.done) { const st = Turning.state(), it = st.items.find(x => x.gid === item.gid); if (it) { it.tries = (it.tries || 0) + 1; it.fixed = it.fixed || (fixed && !sameAsGame); Turning.save(st); } }
+    } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
+    busy = false; draw();
+  };
+  const next = () => {
+    const st = Turning.state(), it = st.items.find(x => x.gid === item.gid);
+    if (it) { it.done = true; delete it.sgf; }   // (the SGF can go: the game is on OGS)
+    Turning.save(st); viewTurning();
+  };
+  const openInReview = () => {
+    Review.load(item.sgf); Review.currentId = Review.newId(); Review.saveState();
+    Review.node = Review.mainNodes[k]; location.hash = "#/review";
+  };
+  draw();
+  window.__turning = { play, item };
+
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Turning point"), who,
+      h("div", { class: "meta-title" }, `vs ${item.opp} · move ${k + 1}`),
+      h("div", { class: "meta-sub" }, [`${new Date(item.date).toLocaleDateString()} · `,
+        h("a", { href: `https://online-go.com/game/${item.gid}`, target: "_blank" }, "the game on OGS")]),
+      h("div", { class: "badges" }, [h("span", { class: "badge turn" }, `${me === BLACK ? "Black" : "White"} to play`)]),
+    ]),
+    h("div", { class: "panel" }, [h("h2", {}, "Status"), result, status]),
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Controls"),
+      h("div", { class: "controls" }, [
+        h("button", { onclick: () => { if (busy) return; tried = null; show = null; result.className = ""; result.textContent = `You're at ${pct(item.before)}. Find a better move.`; draw(); } }, "Try again"),
+        h("button", { onclick: () => { if (busy) return; show = marks(true); draw();
+          result.textContent = `Green: KataGo's move (${pct(item.bestW)}). Red: yours in the game (${pct(item.after)}).${tried && tried.w != null ? ` Blue: this try (${pct(tried.w)}).` : ""}`; } }, "Show answer"),
+        h("button", { onclick: openInReview }, "Open in Review"),
+        h("button", { class: "primary", onclick: next }, "Next →"),
+      ]),
+    ]),
+  ]);
+  root.append(h("div", { class: "player" }, [boardCard, aside]));
+  Turning.onStatus = setStatus; Turning.scan();   // the next ones get read while this one's played
+}
 
 /* ---- Spotify: a small player in the header ---- */
 // PKCE login (public client, no secret) and the Web API's playback control:
@@ -4725,6 +4984,7 @@ async function route() {
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "stream") await viewStream();
+  else if (parts[0] === "turning") viewTurning();
   else if (parts[0] === "review") viewReview();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "friend" && parts[1]) viewFriend(parts[1]);
