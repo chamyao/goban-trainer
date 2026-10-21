@@ -982,3 +982,21 @@ svg.pl-counting .last-move { display: none; }
 .turn-times { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
 .turning-bar { margin-top: 6px; } .turning-tally { margin: 4px 0; }
 .turn-chart { width: 100%; height: 60px; margin: 6px 0; cursor: pointer; color: var(--ink, #222); }
+/* the event calendar (events.js) */
+.event-chip { text-decoration: none; }
+.event-toast { position: fixed; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 9px 16px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,.3); animation: candy-in .3s ease-out; }
+.event-hero { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 14px; }
+.event-hero-icon { font-size: 56px; line-height: 1; }
+.event-name { margin: 2px 0 4px; }
+.event-balance { font-size: 22px; font-weight: 700; margin: 8px 0; }
+.event-item.owned { outline: 2px solid var(--accent); }
+.event-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.event-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border-radius: 10px; background: var(--card); border: 1px solid var(--border, #e3dccb); }
+.event-icon { font-size: 22px; width: 28px; text-align: center; }
+.event-when { min-width: 120px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.event-what { flex: 1; min-width: 160px; }
+.event-kind.event-go { background: #2f5d50; color: #fff; } .event-kind.event-china { background: #b0302a; color: #fff; } .event-kind.event-west { background: #4a4a8a; color: #fff; }
+.player-title { font-weight: 650; }
+@media (max-width: 600px) { .event-hero-icon { font-size: 40px; } .event-when { min-width: 0; } }
+@media (max-width: 600px) { .event-row .event-what .meta-sub { display: none; } }

@@ -11,7 +11,7 @@ const www = join(here, "www");
 
 rmSync(www, { recursive: true, force: true });
 mkdirSync(www);
-for (const f of ["style.css", "wukong.js", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data", "assets"])
+for (const f of ["style.css", "wukong.js", "events.js", "engine/engine-utils.js", "engine/katago-worker.js", "tfjs", "data", "assets"])
   cpSync(join(repo, f), join(www, f), { recursive: true });
 // every other local script and stylesheet index.html loads (the campaign's tk-*.js, …), so a new
 // file can't be left out of the app; app.js is written below

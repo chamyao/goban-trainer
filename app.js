@@ -156,6 +156,7 @@ const Sync = {
         continue;
       }
       if (bookId === "tkElo") { local.tkElo = this.mergeElo(local.tkElo, remote.tkElo); continue; }
+      if (bookId === "ev") { local.ev = Events.merge(local.ev, remote.ev); continue; }   // the event ledger (events.js)
       const b = local[bookId] || (local[bookId] = {});
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
     }
@@ -285,6 +286,7 @@ const Sync = {
     if (this.username) {
       chip.append(
         h("span", { class: "email" }, `Playing as ${this.username}`),
+        ...(typeof Events !== "undefined" && Events.equipped("title") ? [h("span", { class: "player-title" }, ` · ${Events.equipped("title").icon || ""} ${Events.equipped("title").name}`)] : []),
         h("span", { class: "signout", onclick: e => { e.stopPropagation(); this.promptUsername(); } }, "Switch")
       );
     } else {
@@ -551,12 +553,14 @@ const BoardTheme = {
     { id: "green",  name: "Green",  wood: ["#55935f", "#4b8755", "#417a4b"], line: "#15301a", label: "#e1f0e2", stone: "rgba(0,0,0,.45)" },
     { id: "paper",  name: "Paper",  wood: ["#fcfbf7", "#f8f7f2", "#f2f0e9"], line: "#2b2b2b", label: "#666",    stone: "rgba(0,0,0,.55)" },
   ],
+  // the looks to cycle: these, and the event boards the player has (events.js)
+  all() { return this.LIST.concat(typeof Events === "undefined" ? [] : Events.ITEMS.filter(it => it.type === "board" && Events.owns(it.id)).map(it => it.board)); },
   get current() {
     let id; try { id = localStorage.getItem(this.KEY); } catch {}
-    return this.LIST.find(t => t.id === id) || this.LIST[0];
+    return this.all().find(t => t.id === id) || this.LIST[0];
   },
   next() {
-    const i = this.LIST.indexOf(this.current), t = this.LIST[(i + 1) % this.LIST.length];
+    const L = this.all(), i = L.findIndex(t => t.id === this.current.id), t = L[(i + 1) % L.length];
     try { t.id === "kaya" ? localStorage.removeItem(this.KEY) : localStorage.setItem(this.KEY, t.id); } catch {}
     this.paintAll(); this.label();
   },
@@ -1054,7 +1058,10 @@ class Trainer {
     }
     this.done = kind;
     if (kind === "bad") this.flawed = this.flawed || "a wrong move";  // a reset doesn't wipe it
+    const solvedBefore = (loadProgress()[this.book.id] || {})[this.p.id] === 1;
     markResult(this.book.id, this.p.id, kind === "ok");
+    // the event's currency (events.js): a problem never solved before, first try, pays once
+    if (kind === "ok" && !this.flawed && !solvedBefore && typeof Events !== "undefined") Events.earn(`${this.book.id}:${this.p.id}`, 1);
     const zh = this.els.noEngine;  // the Three Kingdoms campaign leads with Chinese
     this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? (zh ? "正确 Correct" : "Correct") : (zh ? "错误 Wrong" : "Wrong"));
     this.render();
@@ -2193,6 +2200,14 @@ async function viewLibrary() {
     if (!nv.live && !(typeof TK_TEST !== "undefined" && TK_TEST)) continue;
     stories.push([`#/tk/${nv.first}`, `tk-card tk-card-${id}`, nv.title, nv.native, nv.live ? "" : "test", "story"]);
   }
+  // the event calendar (events.js): what's on, its shop, what's coming
+  const fe = Events.featured();
+  root.append(h("div", { class: "cat-title" }, "Events"));
+  root.append(h("div", { class: "book-list" }, [h("a", { class: "book event-card", href: "#/events" }, [
+    h("div", { class: "t" }, fe ? `${fe.ev.icon} ${fe.ev.name} · ${fe.ev.native}` : "📅 Event calendar"),
+    h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · its shop and the year's events` : "The year's events"),
+    h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? `${fe.ev.ci} ${Events.balance(fe.ev.id)}` : "")]),
+  ])]));
   root.append(h("div", { class: "cat-title" }, "Stories"));
   root.append(h("div", { class: "book-list" }, stories.map(([href, cls, title, native, grade, cnt]) =>
     h("a", { class: `book book-story ${cls}`, href }, [
@@ -2977,6 +2992,7 @@ function viewTurning(kind = "turn", at = 0) {
       if (fixed && !show) { show = "solved"; result.textContent += " Red: your move in the game."; }
       const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
       if (it) { it.tries = (it.tries || 0) + 1; it.fixed = it.fixed || fixed; it.seen = Date.now(); Turning.save(st); Turning.pushGame(item.gid); showTally(); }
+      if (fixed && typeof Events !== "undefined") Events.earn(`tp:${item.gid}:${kind}`, 3);
     } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
     busy = false; draw();
   };
@@ -5225,6 +5241,8 @@ const Theme = {
   SEASONS: [["halloween", [10, 1], [11, 2]]],
   season(d = new Date()) {
     try { const f = localStorage.getItem("gt-season-force"); if (f) return f; } catch {}   // (tests, previews)
+    // the event calendar's (events.js): the featured event, if it has a look; else the one with a look among those on
+    if (typeof Events !== "undefined") { const on = Events.active(); const w = on.find(x => Events.RESKINS.includes(x.ev.id)); return w ? w.ev.id : ""; }
     const md = (d.getMonth() + 1) * 100 + d.getDate();
     for (const [name, [m1, d1], [m2, d2]] of this.SEASONS) {
       const a = m1 * 100 + d1, b = m2 * 100 + d2;
@@ -5318,6 +5336,7 @@ async function route() {
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "stream") await viewStream();
+  else if (parts[0] === "events") Events.view();
   else if (parts[0] === "turning") viewTurning("turn");
   else if (parts[0] === "keymoves") viewTurning("key");
   else if (parts[0] === "review") viewReview();

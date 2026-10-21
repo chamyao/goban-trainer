@@ -139,3 +139,8 @@ html:has(body.season-halloween)::after { top: 26vh; width: 44px; height: 21px; a
 .candy-toast { position: fixed; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 10px 18px; border-radius: 999px;
   background: #ff8a1f; color: #1b1024; font-weight: 700; box-shadow: 0 6px 20px rgba(0, 0, 0, .4); animation: candy-in .3s ease-out; }
 @keyframes candy-in { from { opacity: 0; transform: translate(-50%, -8px); } }
+
+/* the event calendar's rows (events.js) on the haunted hall's parchment */
+body.season-halloween .event-row { background: #efe3c8; color: #2e2219; border-color: #8c6a3c; }
+body.season-halloween .event-row .event-when, body.season-halloween .event-row .meta-sub { color: #6b5338; }
+body.season-halloween .event-toast { background: #ff8a1f; color: #1b1024; }

@@ -11,6 +11,7 @@ const WK = (() => {
     k: "#2a1c14", y: "#f7c51f", o: "#d9930b", g: "#86d0b8", G: "#4b9f88",
     w: "#ffffff", r: "#e2461d", e: "#2f9e43", b: "#161616", n: "#b0602e",
     p: "#f08a78", c: "#e8604c", L: "#d9461a", s: "#c8351a", h: "#f3d2a2",
+    v: "#6b3fa0", V: "#472870", O: "#ff8a1f",   // (the witch hat)
   };
   const HEAD = [
     "...............gg.....",
@@ -46,6 +47,22 @@ const WK = (() => {
   for (let i = 0; i < HEAD_X.length; i++) HEAD_X[i] = HEAD_X[i].join("");
   // Back of the head, for climbing.
   const HEAD_BACK = HEAD.map((r, i) => i < 8 ? r : i < 16 ? r.replace(/[wrebp]/g, "y").replace(/n/g, "n") : r);
+  // hats (events.js shop), 22 wide like the head: v purple, V shade, O orange band
+  const HATS = {
+    "hat-witch": [
+      "..............kk......",
+      ".............kvk......",
+      "............kvVk......",
+      "...........kvvVk......",
+      "..........kvvvVk......",
+      ".........kvvvvVk......",
+      "........kvvvvvVVk.....",
+      ".......kOOOOOOOOOk....",
+      "....kkkvOOOOOOOOOvkk..",
+      "..kkvvvvvvvvvvvvvvvvkk",
+      "...kkkkkkkkkkkkkkkkkk.",
+    ],
+  };
   const TORSO = [
     "..kGgggggGk..",
     ".kyyyyyyyyyk.",
@@ -165,6 +182,9 @@ const WK = (() => {
     blit(g, torso, FX - 6, torsoY);
     const headY = torsoY - head.length + 1 + frame.hy;
     blit(g, head, FX - 11 + frame.hx, headY);
+    // a hat from the event shop (events.js), its brim on the top of his head
+    const hat = typeof Events !== "undefined" && Events.equipped("hat");
+    if (hat && HATS[hat.id]) blit(g, HATS[hat.id], FX - 11 + frame.hx, headY + 3 - HATS[hat.id].length + 1);
     if (frame.arms) {  // climbing: one arm up, one lower, brown hands
       const up = frame.arms === "AL" ? -1 : 1;
       g.fillStyle = PAL.y;
