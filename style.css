@@ -979,7 +979,7 @@ svg.pl-counting .last-move { display: none; }
 
 .controls button[hidden] { display: none; }
 .controls button.ai-btn.active { background: #1f7a4d; color: #fff; border-color: #1f7a4d; }
-.turn-steps { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.turn-steps { display: flex; align-items: center; justify-content: flex-start; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .turn-steps button { min-width: 40px; }
 .turn-steps button:disabled { opacity: .4; }
 .turn-times { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
