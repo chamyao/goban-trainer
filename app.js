@@ -5270,11 +5270,13 @@ document.addEventListener("DOMContentLoaded", () => {
 // Black's stones become chocolate truffles and White's candy corn. One visit in eight it's on from the start
 // ("Trick or treat!"); tapping the site's name five times quickly turns it on or off. Only in the Halloween look.
 const Candy = {
-  on: true,   // on through the season (the user: "just make the easter egg default"); five taps on the title still turn it off
+  // a reward now, from the Halloween shop (the user: "let's make the candy tiles a reward too"; events.js): on while
+  // worn, in any season once bought; never on a story page
+  get on() { const it = typeof Events !== "undefined" && Events.equipped("stones"); return !!it && it.id === "stones-candy"; },
   STONES: `<radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#a8703f"/><stop offset="45%" stop-color="#5c3219"/><stop offset="100%" stop-color="#26120a"/></radialGradient>
       <linearGradient id="ws" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="32%" stop-color="#fff3dc"/>
         <stop offset="33%" stop-color="#ff9124"/><stop offset="65%" stop-color="#ff8a1f"/><stop offset="66%" stop-color="#ffd43b"/><stop offset="100%" stop-color="#f5c22a"/></linearGradient>`,
-  active() { return this.on && document.body.classList.contains("season-halloween"); },
+  active() { return this.on && !location.hash.startsWith("#/tk"); },
   // shaped candies, not striped circles (the user: "the Easter egg stones are still circular, I want new assets"):
   // Graphics' painted candy when it's there (assets/ui/halloween/stone-{black,white}-1.webp, one per colour), else the drawn
   // placeholders; a stone's variant follows its point, so it doesn't change from move to move
@@ -5286,7 +5288,7 @@ const Candy = {
       const found = [];
       for (let i = 1; i <= 1; i++) {   // one candy per colour (the user: "one variation per color, not too many")
         const url = `${this.DIR}stone-${name}-${i}.webp`, img = new Image();
-        img.onload = () => { found[i - 1] = url; this.sprites[color] = found.filter(Boolean); if (this.active()) route(); };
+        img.onload = () => { found[i - 1] = url; this.sprites[color] = found.filter(Boolean); if (this.active() || location.hash === "#/events") route(); };   // (the shop shows them too)
         img.src = url;
       }
     }
@@ -5297,20 +5299,23 @@ const Candy = {
     document.body.append(t);
     setTimeout(() => t.remove(), 2600);
   },
-  set(v, text) { this.on = v; if (v) this.load(); if (text && this.active()) this.toast(text); else if (text && !v) this.toast(text); route(); },
+  set(v, text) { Events.equip("stones-candy", v); if (v) this.load(); if (text) this.toast(text); route(); },
   taps: [],
   tap() {
     if (!document.body.classList.contains("season-halloween")) return;
     const now = Date.now();
     this.taps = this.taps.filter(t => now - t < 3000).concat(now);
-    if (this.taps.length >= 5) { this.taps = []; this.set(!this.on, this.on ? "The candy's all eaten." : "🍬 Trick or treat! The stones are candy."); }
+    if (this.taps.length < 5) return;
+    this.taps = [];
+    if (Events.owns("stones-candy")) this.set(!this.on, this.on ? "The candy's all eaten." : "🍬 Trick or treat! The stones are candy.");
+    else this.toast("🍬 Candy stones are in the Halloween shop (Events)");
   },
 };
 document.addEventListener("DOMContentLoaded", () => {
   const title = document.querySelector("header h1");
   if (title) title.addEventListener("click", () => Candy.tap());
-  // the candy pictures, once the page has its season
-  setTimeout(() => { if (document.body.classList.contains("season-halloween")) Candy.load(); }, 600);
+  // the candy pictures, when they're worn
+  setTimeout(() => { if (Candy.on) Candy.load(); }, 600);
 });
 
 /* ================= router & keys ================= */

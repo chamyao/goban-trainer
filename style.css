@@ -1000,3 +1000,7 @@ svg.pl-counting .last-move { display: none; }
 .player-title { font-weight: 650; }
 @media (max-width: 600px) { .event-hero-icon { font-size: 40px; } .event-when { min-width: 0; } }
 @media (max-width: 600px) { .event-row .event-what .meta-sub { display: none; } }
+.event-preview { display: flex; justify-content: center; align-items: center; min-height: 112px; margin-bottom: 8px; }
+.event-preview svg { max-width: 112px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
+.event-hat { width: 88px; image-rendering: pixelated; }
+.event-title-chip { display: inline-block; padding: 6px 12px; border-radius: 999px; }

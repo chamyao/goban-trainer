@@ -68,6 +68,7 @@ const Events = (() => {
   const ITEMS = [
     { id: "board-haunted", ev: "halloween", type: "board", name: "Haunted board", price: 15,
       board: { id: "haunted", name: "Haunted", wood: ["#4a3763", "#3e2d55", "#332447"], line: "#e9dcff", label: "#d6c3f5", stone: "rgba(255,255,255,.35)" } },
+    { id: "stones-candy", ev: "halloween", type: "stones", name: "Candy stones", icon: "🍬", price: 20 },
     { id: "title-pumpkin-king", ev: "halloween", type: "title", name: "Pumpkin King", icon: "🎃", price: 10 },
     { id: "hat-witch", ev: "halloween", type: "hat", name: "Witch hat for Sun Wukong", price: 25 },
   ];
@@ -125,6 +126,7 @@ const Events = (() => {
     if (it.type === "board") { try { on ? localStorage.setItem(BoardTheme.KEY, it.board.id) : localStorage.removeItem(BoardTheme.KEY); } catch {} BoardTheme.paintAll(); BoardTheme.label(); return; }
     store(E => { if (on) E.eq[it.type] = id; else if (E.eq[it.type] === id) E.eq[it.type] = ""; });
     if (it.type === "title" && typeof Sync !== "undefined") Sync.renderChip();
+    if (it.type === "stones") { if (on) Candy.load(); route(); }
   }
   // (asked by Sun Wukong every frame: the ledger is read at most once a second)
   let eqAt = 0, eqL = null;
@@ -140,6 +142,33 @@ const Events = (() => {
     const o = { earn: {}, own: { ...(r.own || {}), ...(l.own || {}) }, eq: { ...(r.eq || {}), ...(l.eq || {}) } };
     for (const src of [r.earn || {}, l.earn || {}]) for (const ev in src) o.earn[ev] = { ...(o.earn[ev] || {}), ...src[ev] };
     return o;
+  }
+
+  // what a prize looks like, in the shop (the user: "show off what the prizes look like in the shop")
+  function preview(it) {
+    const box = h("div", { class: `event-preview event-preview-${it.type}` });
+    if (it.type === "board" || it.type === "stones") {
+      const t = it.type === "board" ? it.board : BoardTheme.LIST[0], n = 5, cell = 22, pad = 14, W = pad * 2 + cell * (n - 1);
+      const stones = [[1, 1, 1], [2, 1, 2], [3, 2, 1], [1, 3, 2], [2, 2, 2], [3, 3, 1]];
+      let svg = `<svg viewBox="0 0 ${W} ${W}" width="${W}" height="${W}"><rect width="${W}" height="${W}" rx="6" fill="${t.wood[1]}"/>`;
+      for (let i = 0; i < n; i++) svg += `<line x1="${pad}" y1="${pad + i * cell}" x2="${W - pad}" y2="${pad + i * cell}" stroke="${t.line}"/><line x1="${pad + i * cell}" y1="${pad}" x2="${pad + i * cell}" y2="${W - pad}" stroke="${t.line}"/>`;
+      for (const [c, r, col] of stones) {
+        const x = pad + c * cell, y = pad + r * cell;
+        svg += it.type === "stones" ? `<image href="${Candy.sprite(col, c, r) || ""}" x="${x - cell / 2}" y="${y - cell / 2}" width="${cell}" height="${cell}"/>`
+          : `<circle cx="${x}" cy="${y}" r="${cell * .46}" fill="${col === 1 ? "#1b1b1b" : "#f4f4ee"}" stroke="${t.stone}"/>`;
+      }
+      box.innerHTML = svg + "</svg>";
+      if (it.type === "stones") Candy.load();
+    } else if (it.type === "title") {
+      box.append(h("span", { class: "auth-chip event-title-chip" }, [h("span", {}, `Playing as ${(typeof Sync !== "undefined" && Sync.username) || "you"}`),
+        h("span", { class: "player-title" }, ` · ${it.icon || ""} ${it.name}`)]));
+    } else if (it.type === "hat" && typeof WK !== "undefined") {
+      const rows = WK.HAT_ROWS(it.id), cv = document.createElement("canvas");
+      cv.width = 22; cv.height = rows + 15; cv.className = "event-hat";
+      WK.drawHatted(cv.getContext("2d"), it.id);
+      box.append(cv);
+    }
+    return box;
   }
 
   function toast(text) {
@@ -163,6 +192,7 @@ const Events = (() => {
   const fmt = d => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   const left = end => { const days = Math.ceil((end - now()) / 864e5); return days <= 1 ? "ends today" : `${days} days left`; };
   function view() {
+    Candy.load();   // (the candy stones' picture in the shop)
     crumbs.innerHTML = "";
     crumbs.append(h("a", { href: "#/" }, "Library"), " / Events");
     root.innerHTML = "";
@@ -192,8 +222,9 @@ const Events = (() => {
               `${ev.ci} ${it.price}`);
         if (!own && bal < it.price) { btn.disabled = true; btn.title = `${it.price - bal} more ${ev.cur[1]}`; }
         return h("div", { class: "book event-item" + (own ? " owned" : "") }, [
+          preview(it),
           h("div", { class: "t" }, `${it.icon ? it.icon + " " : ""}${it.name}`),
-          h("div", { class: "n" }, { board: "A board", title: "A title by your name", hat: "Sun Wukong wears it" }[it.type] + (own ? " · yours" : "")),
+          h("div", { class: "n" }, { board: "A board", title: "A title by your name", hat: "Sun Wukong wears it", stones: "Candy corn and chocolate truffles for stones" }[it.type] + (own ? " · yours" : "")),
           h("div", { class: "row" }, [btn]),
         ]);
       })));
