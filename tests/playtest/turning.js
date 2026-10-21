@@ -47,7 +47,7 @@ await p.evaluate(([c,r])=>window.__turning.play(c,r),gm);
 await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
 check(/the move you played in the game/.test(await p.textContent('#status')),`the game move is called the game move: "${await p.textContent('#status')}"`);
 // KataGo's top move, from a fresh search of the position
-const top=await p.evaluate(async()=>{const t=window.__turning,g=gameFromSgf(t.item.sgf),a=await Turning.search(g,t.pos.k,200);return [a.moves[0].x,a.moves[0].y];});
+const top=await p.evaluate(async()=>{const a=await window.__turning.deep;return [a.moves[0].x,a.moves[0].y];});
 await p.click('text=Try again');
 await p.evaluate(([c,r])=>window.__turning.play(c,r),top);
 await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
@@ -62,6 +62,9 @@ const rv0=await p.evaluate(k=>({at:Review.node===Review.mainNodes[k],marks:[...d
 check(rv0.hash==='#/turning'&&rv0.at&&rv0.eph&&rv0.chart&&rv0.an===rv0.n+1,`solved: the board becomes the game's review in place, on this position, analyzed (${rv0.an} of ${rv0.n+1})`);
 check(rv0.marks.length===3&&rv0.marks.some(f=>/34,160,90/.test(f))&&rv0.marks.some(f=>/176,65,62/.test(f)),`the first frame marks KataGo's move, the game move and the try (${rv0.marks.length})`);
 check(rv0.kids===2,'the try is kept as a branch');
+const agree=await p.evaluate(k=>{const d=Review.details.get(`${Review.curTurn()}:${Review.node.key}`)||Review.details.get(`${Review.toMoveAt(k)}:${Review.mainNodes[k].key}`);const t=window.__turning;
+  return {top:d&&d.moves[0]&&[d.moves[0].x,d.moves[0].y],best:t.pos.best};},it.k);
+check(agree.top&&agree.top[0]===agree.best[0]&&agree.top[1]===agree.best[1],`the answer is KataGo's top move in the review (${agree.best} / ${agree.top})`);
 await p.evaluate(()=>Review.forward());
 check(await p.evaluate(k=>Review.node===Review.mainNodes[k+1]&&!document.querySelector('.review .turn-mark'),it.k),'▶ steps on through the game (the marks stay on the first frame)');
 s=await S();const solved=s.items.find(x=>x.gid===it.gid&&x.kind==='turn');
@@ -89,7 +92,7 @@ if(waiting.length>=1){
   if(await p.$('.player svg')){
     const k=await p.evaluate(()=>window.__turning.pos.k);
     // right on the first move: candy
-    const top2=await p.evaluate(async()=>{const t=window.__turning,g=gameFromSgf(Turning.view(t.item.gid).sgf),r=await Turning.search(g,t.pos.k,200);return [r.moves[0].x,r.moves[0].y];});
+    const top2=await p.evaluate(async()=>{const r=await window.__turning.deep;return [r.moves[0].x,r.moves[0].y];});
     await p.evaluate(([c,r])=>window.__turning.play(c,r),top2);
     await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
     const paid=await p.evaluate(gid=>Object.entries((loadProgress().ev||{earn:{}}).earn.halloween||{}).filter(([k])=>k.startsWith('tp:'+gid)).map(([,v])=>v),await p.evaluate(()=>window.__turning.item.gid));

@@ -2917,6 +2917,16 @@ function viewTurning(kind = "turn", at = 0) {
   Object.assign(item, Turning.view(item.gid));   // (the SGF and the reads, from the game's record)
   const g = gameFromSgf(item.sgf), me = item.me, k = pos.k;
   const mover = pos.me === false ? 3 - me : me, playable = mover === me;
+  // the position's own search, deeper than the reading's (400 visits against 100), started as it opens: the answer, the
+  // judge of a try and the review's KataGo moves here are all this one search, so they always agree (the user, vs
+  // Cagnano: "the solution is worse than the top engine move": the reading's best, beside a deeper search's)
+  let deepA = null;
+  const deep = Turning.search(g, k, 400).then(a => {
+    deepA = a;
+    const top = (a.moves || [])[0];
+    if (top) { pos.best = [top.x, top.y]; pos.bestW = mover === BLACK ? top.winRate : 1 - top.winRate; }
+    return a;
+  });
   const pct = w => `${Math.round(100 * w)}%`;
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" }, [svg]);
@@ -2953,7 +2963,7 @@ function viewTurning(kind = "turn", at = 0) {
     busy = true; tried = { c, r, grid: g2 }; draw();
     result.textContent = "KataGo is reading your move…";
     try {
-      const a = await Turning.search(g, k, 200);
+      const a = await deep;
       const mine = w => me === BLACK ? w : 1 - w;
       const hit = (a.moves || []).find(m => m.x === c && m.y === r);
       let w;
@@ -3013,6 +3023,7 @@ function viewTurning(kind = "turn", at = 0) {
     if (item.losses) Review.losses = item.losses.slice();
     Review.showHints = true;
     const at0 = Review.mainNodes[k];
+    if (deepA) Review.details.set(`${mover}:${at0.key}`, deepA);   // (KataGo's moves here: the answer's search)
     Review.node = at0;
     show = "marks";
     const marked = marks();
@@ -3029,7 +3040,7 @@ function viewTurning(kind = "turn", at = 0) {
     if (tried && !(tried.c === gm.c && tried.r === gm.r)) { Review.click(tried.c, tried.r); Review.setNode(at0); }
   };
   draw();
-  window.__turning = { play, item, pos, toReview };
+  window.__turning = { play, item, pos, toReview, deep };
 
   const header = kind === "key"
     ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`
@@ -3055,7 +3066,10 @@ function viewTurning(kind = "turn", at = 0) {
       h("h2", {}, "Controls"),
       h("div", { class: "controls" }, [
         playable ? h("button", { onclick: () => { if (busy) return; tried = null; show = null; result.className = ""; result.textContent = prompt; draw(); } }, "Try again") : null,
-        h("button", { onclick: () => { if (busy) return; show = "marks";
+        h("button", { onclick: async () => { if (busy) return; busy = true;
+          if (!deepA) result.textContent = "KataGo is reading…";
+          try { await deep; } catch (e) { console.error(e); }
+          busy = false; show = "marks";
           result.textContent = `Green: KataGo's move (${pct(pos.bestW)} for you). Red: the game move (${pct(pos.after)}).${tried && tried.w != null ? ` Blue: this try (${pct(tried.w)}).` : ""}`;
           toReview(); } }, "Show answer"),
         h("button", { class: "primary", onclick: next }, "Next →"),
