@@ -1,0 +1,56 @@
+/* The seasonal looks (app.js Theme: the "Seasonal" choice, the default, picks one by the calendar; the user: "make
+   the website seasonal themed by default, similar to DragonVale's schedule"). Each season is body.season-<name>.
+   The boards stay wood, so problems read the same in every season. Never on a story playthrough. */
+
+/* ===== Halloween (Oct 1 – Nov 2): night purples, pumpkin orange, bats and a cobweb ===== */
+body.season-halloween {
+  --bg: #15101d; --card: #211a2c; --ink: #efe6fb; --muted: #a596bb; --accent: #ff8a1f; --danger: #ff5d5d;
+  --chip: #2d2340; --border: #3a2d50;
+  background:
+    radial-gradient(ellipse 80% 45% at 50% 100%, rgba(255, 120, 20, .16), transparent 70%),
+    radial-gradient(circle at 88% 6%, rgba(255, 236, 190, .10) 0 40px, transparent 41px),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--ink);
+}
+/* a cobweb in the top left corner, under everything */
+body.season-halloween::before {
+  content: ""; position: fixed; left: 0; top: 0; width: 220px; height: 220px; pointer-events: none; z-index: 0; opacity: .32;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220' fill='none' stroke='%23d9cdf0' stroke-width='1.2'%3E%3Cpath d='M0 0L220 60M0 0L190 150M0 0L120 210M0 0L50 220'/%3E%3Cpath d='M55 15Q48 40 52 45Q40 45 13 50'/%3E%3Cpath d='M110 30Q96 70 104 90Q80 92 26 101'/%3E%3Cpath d='M165 45Q144 105 156 135Q118 140 39 152'/%3E%3Cpath d='M30 48Q24 52 12 53M80 70Q62 82 22 95'/%3E%3C/svg%3E") no-repeat;
+}
+/* bats crossing the sky now and then */
+body.season-halloween::after {
+  content: "🦇"; position: fixed; top: 14vh; left: -60px; font-size: 26px; pointer-events: none; z-index: 1; opacity: .85;
+  animation: hw-bat 23s linear infinite; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .5));
+}
+@keyframes hw-bat {
+  0% { transform: translate(0, 0) scale(.8); } 8% { transform: translate(18vw, -4vh) scale(1); }
+  16% { transform: translate(36vw, 3vh) scale(.9); } 24% { transform: translate(54vw, -5vh) scale(1.05); }
+  32% { transform: translate(72vw, 2vh) scale(.9); } 40% { transform: translate(110vw, -3vh) scale(1); }
+  100% { transform: translate(110vw, -3vh) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { body.season-halloween::after { animation: none; display: none; } }
+body.season-halloween header { background: rgba(22, 15, 32, .92); border-bottom: 2px solid #ff8a1f; backdrop-filter: blur(6px); }
+body.season-halloween header h1 a::after { content: " 🎃"; }
+body.season-halloween #tabs a.active { background: #ff8a1f; color: #1b1024; }
+body.season-halloween .cat-title { color: #ffb066; letter-spacing: .08em; }
+body.season-halloween .cat-title::before { content: "🎃 "; }
+body.season-halloween .book, body.season-halloween .panel, body.season-halloween .history-item, body.season-halloween .sgf-loader,
+body.season-halloween .modal, body.season-halloween .games-list {
+  background: var(--card); color: var(--ink); border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
+}
+body.season-halloween .book:hover { box-shadow: 0 0 0 1px #ff8a1f, 0 0 18px rgba(255, 138, 31, .35); }
+body.season-halloween .badge { background: #3a2a52; color: #f3e6ff; }
+body.season-halloween .badge.dan { background: #ff8a1f; color: #1b1024; }
+body.season-halloween .bar { background: #3a2d50; } body.season-halloween .bar > div { background: #ff8a1f; }
+body.season-halloween button, body.season-halloween select, body.season-halloween input, body.season-halloween textarea {
+  background-color: #2d2340; color: var(--ink); border-color: #4a3a66;
+}
+body.season-halloween button.primary { background: #ff8a1f; border-color: #ff8a1f; color: #1b1024; font-weight: 700; }
+body.season-halloween .engine-chip, body.season-halloween .auth-chip, body.season-halloween .theme-chip { background: #2d2340; color: var(--ink); }
+body.season-halloween a { color: #ffb066; }
+body.season-halloween .book a, body.season-halloween #tabs a, body.season-halloween header h1 a { color: inherit; }
+/* the board keeps its wood, with a little candlelight */
+body.season-halloween .board-card { background: #211a2c; box-shadow: 0 0 0 1px #3a2d50, 0 0 28px rgba(255, 138, 31, .18); }
+body.season-halloween label.file { background: #2d2340; color: var(--ink); border-color: #4a3a66; }
+body.season-halloween .sgf-loader { padding: 16px; }

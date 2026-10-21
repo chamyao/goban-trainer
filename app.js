@@ -4618,20 +4618,38 @@ function viewFeedback() {
 // Opt-in from the header's chip, kept per device (a look, not progress); theme-tavern.css does the rest. Never on a
 // story page (#/tk/...): those keep their own look.
 const Theme = {
+  // the site's look: Seasonal (the default: the season's look by the calendar, as DragonVale runs its events; the
+  // user: "make the website seasonal themed by default ... so now should be Halloween"), Classic, or the Tavern
   KEY: "gt-theme",
-  get on() { try { return localStorage.getItem(this.KEY) === "tavern"; } catch { return false; } },
-  set on(v) { try { v ? localStorage.setItem(this.KEY, "tavern") : localStorage.removeItem(this.KEY); } catch {} },
+  get choice() { try { const v = localStorage.getItem(this.KEY); return v === "tavern" || v === "classic" ? v : "seasonal"; } catch { return "seasonal"; } },
+  set choice(v) { try { v === "seasonal" ? localStorage.removeItem(this.KEY) : localStorage.setItem(this.KEY, v); } catch {} },
+  get on() { return this.choice === "tavern"; },   // (the Tavern look; kept for the code that asks)
+  // the calendar: [season, from (month, day), to (month, day)], the first that holds today; a season without its own
+  // look yet shows Classic. (A season's art: theme-seasonal.css, body.season-<name>.)
+  SEASONS: [["halloween", [10, 1], [11, 2]]],
+  season(d = new Date()) {
+    try { const f = localStorage.getItem("gt-season-force"); if (f) return f; } catch {}   // (tests, previews)
+    const md = (d.getMonth() + 1) * 100 + d.getDate();
+    for (const [name, [m1, d1], [m2, d2]] of this.SEASONS) {
+      const a = m1 * 100 + d1, b = m2 * 100 + d2;
+      if (a <= b ? md >= a && md <= b : md >= a || md <= b) return name;   // (a season across New Year wraps)
+    }
+    return "";
+  },
   apply(story) {
-    document.body.classList.toggle("theme-tavern", this.on && !story);
+    const c = this.choice, season = c === "seasonal" ? this.season() : "";
+    document.body.classList.toggle("theme-tavern", c === "tavern" && !story);
+    for (const cl of [...document.body.classList]) if (cl.startsWith("season-")) document.body.classList.remove(cl);
+    if (season && !story) document.body.classList.add("season-" + season);
     const chip = document.getElementById("themeChip"), sel = document.getElementById("themeSelect");
-    if (sel) sel.value = this.on ? "tavern" : "classic";
+    if (sel) sel.value = c;
     if (chip) chip.hidden = !!story;
   },
 };
 // the site's theme (the user: "get rid of the tavern on / off and just have a site theme option"): Classic or Tavern
 document.addEventListener("DOMContentLoaded", () => {
   const sel = document.getElementById("themeSelect");
-  if (sel) sel.addEventListener("change", () => { Theme.on = sel.value === "tavern"; route(); });
+  if (sel) sel.addEventListener("change", () => { Theme.choice = sel.value; route(); });
 });
 
 /* ================= router & keys ================= */

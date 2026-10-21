@@ -7,7 +7,8 @@ let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL
 p.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
 const on=()=>p.evaluate(()=>document.body.classList.contains('theme-tavern'));
 await p.goto('http://localhost:8765/#/');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});await p.waitForSelector('.book');
-check(!(await on()),'off by default');
+check((await p.inputValue('#themeSelect'))==='seasonal','Seasonal is the default theme');
+check(!(await on()),'the Tavern is off by default');
 await p.selectOption('#themeSelect','tavern');await p.waitForTimeout(300);
 check(await on()&&!(await p.$('.tavern-hero')),'the Theme picker turns it on (and there is no tavern banner: the user asked it gone)');
 await p.reload();await p.waitForSelector('.book');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});check(await on(),'it stays on after a reload');
