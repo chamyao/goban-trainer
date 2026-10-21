@@ -213,7 +213,8 @@ const Avatars = (() => {
   }
   // the board pages: a board card beside its side panel (not the Review tab: the user wanted the boards one plays on)
   const boardRow = () => !location.hash.startsWith("#/review") && [...document.querySelectorAll("#root .board-card")]
-    .map(b => b.parentNode.classList.contains("avatar-stage") ? b.parentNode.parentNode : b.parentNode).find(r => r.querySelector(":scope > aside"));
+    .map(b => { let r = b.parentNode; while (r.classList.contains("avatar-stage") || r.classList.contains("board-col")) r = r.parentNode; return r; })   // (the Stream's board stands in a column with its controls)
+    .find(r => r.querySelector(":scope > aside"));
   function mount() {
     pending = false;
     const who = picked(), row = who && boardRow(), playing = !!who && /^#\/(play|friend)/.test(location.hash);
@@ -233,7 +234,7 @@ const Avatars = (() => {
     if (playing && !row && lastHash !== location.hash) setTimeout(() => say(moment("play")), 200);
     lastHash = location.hash;
     // the column keeping the board clear of it, on a wide screen
-    const board = row && row.querySelector(":scope > .board-card");   // (the Play screen without a game: no board)
+    const board = row && row.querySelector(":scope > .board-card, :scope > .board-col");   // (the Play screen without a game: no board)
     if (board) { const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" })]); row.insertBefore(stage, board); stage.append(board); }
   }
   const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(mount); } };

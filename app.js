@@ -809,6 +809,10 @@ class Trainer {
     return g;
   }
 
+  // the Reset button and key: out of explore, back to the attempt (cryptoderes reset to leave explore, and the attempt went
+  // with it: the solve after it was rated a miss); otherwise the problem from the start
+  restart() { if (this.explore) return this.toggleExplore(); this.reset(); }
+
   reset() {
     clearTimeout(this.replyTimer);
     this.grid = this.freshGrid();
@@ -1082,7 +1086,9 @@ class Trainer {
     // the event's currency (events.js): a problem never solved before, first try, pays once
     if (kind === "ok" && !this.flawed && !solvedBefore && typeof Events !== "undefined") Events.earn(`${this.book.id}:${this.p.id}`, 1);
     const zh = this.els.noEngine;  // the Three Kingdoms campaign leads with Chinese
-    this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? (zh ? "正确 Correct" : "Correct") : (zh ? "错误 Wrong" : "Wrong"));
+    // (a solve that doesn't count as first try says why, where it's rated)
+    const why = kind === "ok" && this.flawed && this.els.strict && !zh ? ` (not first try: ${this.flawed})` : "";
+    this.setStatus(kind, kind === "ok" ? "✓" : "✗", kind === "ok" ? (zh ? "正确 Correct" : "Correct" + why) : (zh ? "错误 Wrong" : "Wrong"));
     this.render();
     window.dispatchEvent(new CustomEvent("tczw:result", { detail: kind }));  // Sun Wukong reacts
   }
@@ -1172,11 +1178,11 @@ class Trainer {
       this.posHistory.length = s.posLen;
       this.explore = null;
     } else {
+      // (judged: a look after the answer costs nothing; before it, only a stone actually tried does, exploreClick)
       this.explore = { grid: this.grid, played: this.played.slice(), lastMove: this.lastMove,
-                       done: this.done, history: this.history, posLen: this.posHistory.length };
+                       done: this.done, history: this.history, posLen: this.posHistory.length, judged: this.done === "ok" || this.done === "bad" };
       this.history = [];
       this.exploreTurn = this.turnColor();
-      this.flawed = this.flawed || "used explore";
     }
     this.ownership = null;
     this.setStatus("", "", "");
@@ -1188,6 +1194,7 @@ class Trainer {
     const g2 = applyMove(this.grid, c, r, this.exploreTurn);
     if (!g2) return;
     if (this.koViolation(g2)) { this.setStatus("off", "◌", "Ko"); return; }
+    if (!this.explore.judged) this.flawed = this.flawed || "used explore";   // (reading it out on the board before answering)
     this.history.push({ grid: this.grid, lastMove: this.lastMove, turn: this.exploreTurn,
                         posLen: this.posHistory.length });
     this.grid = g2;
@@ -2436,7 +2443,7 @@ async function viewPlayer(id, num) {
       h("div", { class: "controls" }, [
         h("button", { onclick: () => trainer.undo() }, "Undo"),
         h("button", { onclick: () => trainer.hint() }, "Hint"),
-        h("button", { onclick: () => trainer.reset() }, "Reset"),
+        h("button", { onclick: () => trainer.restart() }, "Reset"),
         btnExplore,
         h("button", { class: "wide", title: "Answer key wrong, or you found another solution? Count it as solved.",
                       onclick: () => trainer.claimSolved() }, "Claim solved"),
@@ -2516,6 +2523,21 @@ async function viewStream() {
   const next = (x = 1) => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1;
     st.streamX = x > 1 ? { n: st.stream, x } : null; TK.saveProg(q); viewStream(); };
 
+  // the controls under the board, not at the foot of the side panel (cryptoderes: "on desktop in streaming mode, it would
+  // be nice if the controls could move under the go board so I don't have to scroll down to advance")
+  const controlsPanel = h("div", { class: "panel stream-controls" }, [
+      h("h2", {}, "Controls"),
+      h("div", { class: "controls" }, [
+        h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
+        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
+                      onclick: () => next(5) }, "High roller ×5 →"),
+        h("button", { onclick: () => trainer.undo() }, "Undo"),
+        h("button", { onclick: () => trainer.hint() }, "Hint"),
+        h("button", { onclick: () => trainer.restart() }, "Reset"),
+        btnExplore,
+        aiBtn,
+      ]),
+    ]);
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
@@ -2524,24 +2546,11 @@ async function viewStream() {
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
     treePanel,
-    h("div", { class: "panel" }, [
-      h("h2", {}, "Controls"),
-      h("div", { class: "controls" }, [
-        h("button", { onclick: () => trainer.undo() }, "Undo"),
-        h("button", { onclick: () => trainer.hint() }, "Hint"),
-        h("button", { onclick: () => trainer.reset() }, "Reset"),
-        btnExplore,
-        h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
-        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
-                      onclick: () => next(5) }, "High roller ×5 →"),
-        aiBtn,
-      ]),
-    ]),
     h("div", { class: "panel keys" },
       [["N / →", "next problem"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
         .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
   ]);
-  root.append(h("div", { class: "player" }, [boardCard, aside]));
+  root.append(h("div", { class: "player" }, [h("div", { class: "board-col" }, [boardCard, controlsPanel]), aside]));
 
   // strict, as the story mode's boards: a move off the answer key is a miss (else KataGo took over and it was never rated)
   const t = trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, strict: true });
@@ -5414,7 +5423,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowLeft" && book && parts[2] > 1) location.hash = `#/book/${parts[1]}/${+parts[2] - 1}`;
   else if (e.key === "ArrowRight" && book) location.hash = `#/book/${parts[1]}/${+parts[2] + 1}`;
   else if (e.key === "u") trainer.undo();
-  else if (e.key === "r") trainer.reset();
+  else if (e.key === "r") trainer.restart();
   else if (e.key === "h") trainer.hint();
   else if (e.key === "e") trainer.toggleExplore();
 });
