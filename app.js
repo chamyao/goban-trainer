@@ -2523,21 +2523,6 @@ async function viewStream() {
   const next = (x = 1) => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1;
     st.streamX = x > 1 ? { n: st.stream, x } : null; TK.saveProg(q); viewStream(); };
 
-  // the controls under the board, not at the foot of the side panel (cryptoderes: "on desktop in streaming mode, it would
-  // be nice if the controls could move under the go board so I don't have to scroll down to advance")
-  const controlsPanel = h("div", { class: "panel stream-controls" }, [
-      h("h2", {}, "Controls"),
-      h("div", { class: "controls" }, [
-        h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
-        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
-                      onclick: () => next(5) }, "High roller ×5 →"),
-        h("button", { onclick: () => trainer.undo() }, "Undo"),
-        h("button", { onclick: () => trainer.hint() }, "Hint"),
-        h("button", { onclick: () => trainer.restart() }, "Reset"),
-        btnExplore,
-        aiBtn,
-      ]),
-    ]);
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
@@ -2546,11 +2531,25 @@ async function viewStream() {
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
     treePanel,
+    h("div", { class: "panel" }, [
+      h("h2", {}, "Controls"),
+      h("div", { class: "controls" }, [
+        h("button", { onclick: () => trainer.undo() }, "Undo"),
+        h("button", { onclick: () => trainer.hint() }, "Hint"),
+        h("button", { onclick: () => trainer.restart() }, "Reset"),
+        btnExplore,
+        h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
+        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
+                      onclick: () => next(5) }, "High roller ×5 →"),
+        aiBtn,
+      ]),
+    ]),
     h("div", { class: "panel keys" },
       [["N / →", "next problem"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
         .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
   ]);
-  root.append(h("div", { class: "player" }, [h("div", { class: "board-col" }, [boardCard, controlsPanel]), aside]));
+  // (the controls stay in the side panel: under the board was tried and taken back, cryptoderes: "it's worse than before")
+  root.append(h("div", { class: "player" }, [boardCard, aside]));
 
   // strict, as the story mode's boards: a move off the answer key is a miss (else KataGo took over and it was never rated)
   const t = trainer = new Trainer(book, idx, { svg, boardCard, status, turnBadge, btnExplore, treePanel, treeBox, note, strict: true });

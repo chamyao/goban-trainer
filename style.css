@@ -168,9 +168,6 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
 .source-note { margin-top: 6px; font-size: 14.5px; font-style: italic; color: #7a5a1c; }
 
 .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-/* the Stream: the board and its controls in one column */
-.board-col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.stream-controls .controls { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
 .controls button {
   font: inherit; font-size: 14px; font-weight: 600; padding: 9px 0; border-radius: 10px;
   border: 1px solid #ddd6c6; background: #faf8f2; color: var(--ink); cursor: pointer;
@@ -332,7 +329,6 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   .prob-grid { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); }
   .player, .review { gap: 14px; }
   .board-card { padding: 6px; border-radius: 12px; width: 100%; }
-  .board-col { width: 100%; }
   .board-card svg { width: 100%; }
   aside, .review aside { width: 100%; }
   .keys { display: none; }

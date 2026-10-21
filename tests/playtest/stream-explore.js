@@ -1,7 +1,6 @@
 // The Stream: Explore opened mid-problem and left with Reset doesn't cost the first try (cryptoderes: "when I'm in stream
 // mode, exploring a problem, and I hit reset to exit explore mode, it deducts rating points even though I got the answer
-// on the first try"); a stone actually tried in Explore before answering still does, and the status says why. And the
-// controls stand under the board ("so I don't have to scroll down to advance").
+// on the first try"); a stone actually tried in Explore before answering still does, and the status says why.
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 (async()=>{const b=await chromium.launch();
 let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+what);};
@@ -18,7 +17,7 @@ const run=async(tryStone)=>{const p=await b.newPage({viewport:{width:1440,height
     if(await p.evaluate(()=>window.__trainer.done)===null){
       await p.click('button:has-text("Explore")');
       if(tryStone)await p.evaluate(()=>{const t=window.__trainer;for(let c=0;c<19;c++)for(let r=0;r<19;r++)if(t.grid[r][c]===0){t.exploreClick(c,r);return;}});
-      await p.click('.stream-controls button:has-text("Reset")');
+      await p.click('.controls button:has-text("Reset")');
       const back=await p.evaluate(()=>!window.__trainer.explore&&window.__trainer.played.length>0);
       const res=await solve(), r1=await r(), msg=await p.textContent('#status');await p.close();return {r0,r1,res,back,msg};}
     await p.evaluate(()=>window.__trainer.streamNext());}
@@ -28,8 +27,4 @@ check(a&&a.back,'Reset in Explore: back to the attempt, its moves kept');
 check(a&&a.res==='ok'&&a.r1>a.r0,`Explore looked at, then solved: rated first try (${a&&a.r0} → ${a&&a.r1})`);
 const s=await run(true);
 check(s&&s.res==='ok'&&s.r1<s.r0&&/not first try: used explore/.test(s.msg),`a stone tried in Explore first: not first try, and it says so (${s&&s.r0} → ${s&&s.r1}, "${s&&s.msg.trim()}")`);
-const p=await b.newPage({viewport:{width:1440,height:900}});
-await p.goto('http://localhost:8765/#/stream');await p.waitForSelector('.stream-controls .primary');
-const g=await p.evaluate(()=>{const bc=document.querySelector('.board-card').getBoundingClientRect(),n=document.querySelector('.stream-controls .primary').getBoundingClientRect();return {under:n.top>=bc.bottom&&Math.abs(n.left+n.width/2-(bc.left+bc.width/2))<bc.width/2,fits:n.bottom<=innerHeight};});
-check(g.under&&g.fits,'the controls under the board, Next on screen without scrolling (1440×900)');
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);})();
