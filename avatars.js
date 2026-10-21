@@ -83,8 +83,64 @@ const Avatars = (() => {
   // standing on the board's foot (its waist cut flush on that edge, nothing cropped above), in front of the board's
   // edge with taps passing through, and the word on a result in a dark box over its head (from 1280px, where a column
   // fits beside the board and its side panel); narrower, a small portrait beside the box under the board
+  // each in their own voice (the user: "did you match the avatar dialogues to their personality"); the Misaeng cast in
+  // English, as their book; anyone not here, the plain lines
   const LINES = { ok: [["妙！", "Brilliant!"], ["好棋。", "A fine move."], ["正是此处。", "Exactly there."]],
                   bad: [["可惜。", "A pity."], ["再想想。", "Think again."], ["不是这里。", "Not there."]] };
+  const VOICE = {
+    liubei: { ok: [["此乃众人之功。", "The credit belongs to all of us."], ["仁者无敌。", "The benevolent have no enemy."]],
+              bad: [["备之过也。", "The fault is mine."], ["莫急，从长计议。", "No haste. We think it through."]] },
+    diaochan: { ok: [["一着妙手，胜过千军。", "One fine move outweighs a thousand soldiers."], ["妾身早知如此。", "I knew it would come to this."], ["连环之计，便在此处。", "The chain of stratagems turns right here."]],
+                bad: [["此计未成，再图之。", "This plan failed; then another."], ["妾身……一时大意了。", "I was careless, for a moment."]] },
+    wangyun: { ok: [["汉室有望矣！", "There is hope for the Han!"], ["老夫此计，天衣无缝。", "This old man's plan has no seam."]],
+               bad: [["老夫失算了。", "This old man miscalculated."], ["事不密则害成……", "A plan not kept close comes to harm…"]] },
+    caocao: { ok: [["哈哈哈！此一手，天下谁能当之？", "Ha! Who under heaven could answer that?"], ["天下英雄，皆在吾算中。", "Every hero under heaven, in my reckoning."]],
+              bad: [["胜败乃兵家常事。", "Victory and defeat are a soldier's daily fare."], ["吾自失之，非人之过。", "I lost it myself. No one else to blame."]] },
+    lvbu: { ok: [["人中吕布！", "Among men, Lü Bu!"], ["谁敢与我争锋？", "Who dares cross blades with me?"]],
+            bad: [["可恶！再来！", "Curse it! Again!"], ["吕布岂会败于此？", "Would Lü Bu lose to this?"]] },
+    lisu: { ok: [["三寸之舌，胜于百万之师。", "Three inches of tongue beat a million troops."], ["说得通，下得也通。", "Well argued, well played."]],
+            bad: [["此言……未能说动。", "That argument… didn't carry."], ["待我再想一番说辞。", "Let me find better words."]] },
+    jiaxu: { ok: [["算无遗策。", "Nothing left uncalculated."], ["正合我算。", "Exactly as I reckoned."]],
+             bad: [["嗯……此处，吾亦未算到。", "Hm. Even I didn't see that one."], ["不急。再算。", "No hurry. Reckon again."]] },
+    lijue: { ok: [["痛快！", "Satisfying!"], ["哼，杀得好！", "Hah! A good kill!"]],
+             bad: [["混账！", "Damn it all!"], ["老子不服！", "I don't accept it!"]] },
+    chenliu: { ok: [["朕……下对了吗？", "Did I… get it right?"], ["朕明白了！", "I understand now!"]],
+               bad: [["朕不明白……", "I don't understand…"], ["再教朕一次。", "Teach me once more."]] },
+    dongzhuo: { ok: [["顺我者昌！", "Those who follow me prosper!"], ["天下都是我的！", "All under heaven is mine!"]],
+                bad: [["谁敢笑我？！", "Who dares laugh?!"], ["哼！再来！", "Hmph! Again!"]] },
+    chengong: { ok: [["此一着，可定大局。", "This move settles the whole game."], ["谋定而后动，正是如此。", "Plan first, then move. Just so."]],
+                bad: [["公台失策了……", "Gongtai has erred…"], ["可惜，良策不用。", "A pity: the good plan went unused."]] },
+    yanshi: { ok: [["夫君，你看。", "Look, husband."], ["原来如此，妾身也会。", "So that's it. I can do it too."]],
+              bad: [["妾身不懂这些……", "I don't understand these things…"], ["还是小心些好。", "Better to be careful."]] },
+    zhangliao: { ok: [["张辽在此！", "Zhang Liao is here!"], ["八百破十万，何况此局！", "Eight hundred broke a hundred thousand. This is nothing!"]],
+                 bad: [["败而不馁。", "Beaten, not broken."], ["整军再战。", "Regroup and fight again."]] },
+    chendeng: { ok: [["正中下怀。", "Just as I'd hoped."], ["一切尽在掌握。", "All in hand."]],
+                bad: [["失算一着。", "One move miscounted."], ["且看下回。", "We'll see next time."]] },
+    houcheng: { ok: [["这一手，我早看准了。", "I had my eye on that one."], ["好！", "Good!"]],
+                bad: [["唉，又是这般……", "Ugh, this again…"], ["不该如此。", "It shouldn't go like this."]] },
+    zhaoyun: { ok: [["吾乃常山赵子龙也！", "I am Zhao Zilong of Changshan!"], ["一身是胆。", "All courage."]],
+               bad: [["子龙惭愧。", "Zilong is ashamed."], ["再闯一回！", "I'll charge through again!"]] },
+    ladysun: { ok: [["哼，不过如此！", "Hmph, is that all?"], ["本小姐出手，岂有不胜？", "When I play, how could I lose?"]],
+               bad: [["再来一局！", "One more game!"], ["哼，下次可不会了。", "Hmph. Not next time."]] },
+    daiyu: { ok: [["这一手倒也有几分意思。", "There's something to that move."], ["原来如此，不过尔尔。", "So that's all it was."]],
+             bad: [["花谢花飞……罢了。", "Petals fall and fly… never mind."], ["我原说不会下的。", "I did say I couldn't play."]] },
+    grannyliu: { ok: [["哎哟，老婆子也下着了！", "Well I never! This old woman got one!"], ["阿弥陀佛，这可巧了！", "Bless me, what luck!"]],
+                 bad: [["庄稼人，哪懂这个。", "A farm woman, what do I know of this?"], ["老婆子眼花了。", "My old eyes are going."]] },
+    ms_jang: { ok: [["", "Baduk taught me this one."], ["", "One more stone that lives."]],
+               bad: [["", "I'm not there yet. I'll get there."], ["", "I didn't read it out. Again."]] },
+    ms_oh: { ok: [["", "Good. That's our guy."], ["", "See? Hard work pays."]],
+             bad: [["", "Hey. Focus."], ["", "We're not finished yet."]] },
+    ms_oh_hike: { ok: [["", "Good. Keep climbing."], ["", "That's the summit."]],
+                  bad: [["", "Breathe. One step at a time."], ["", "Slipped. Get up."]] },
+    ms_ahn: { ok: [["", "Done."], ["", "As expected."]],
+              bad: [["", "I'll fix it."], ["", "Again. Properly this time."]] },
+    ms_parkjg: { ok: [["", "See? Leave it to me."], ["", "That's how a pro handles it."]],
+                 bad: [["", "That's… not on me."], ["", "Let's keep that between us."]] },
+    ms_sun: { ok: [["", "Nicely done."], ["", "Good work. Go home on time."]],
+              bad: [["", "Let's look again, calmly."], ["", "It happens. Next one."]] },
+    ms_han: { ok: [["", "That's how it's done!"], ["", "Ha! Too easy."]],
+              bad: [["", "Damn it."], ["", "Whatever. Next."]] },
+  };
   function mount() {
     const player = document.querySelector("#root .player"), who = picked();
     if (!player || !who || player.querySelector(".avatar-stage")) return;
@@ -103,8 +159,8 @@ const Avatars = (() => {
   addEventListener("tczw:result", e => {
     const boxes = document.querySelectorAll("#root .avatar-dlg");
     if (!boxes.length) return;
-    const set = LINES[e.detail === "ok" ? "ok" : "bad"], [zh, en] = set[Math.floor(Math.random() * set.length)];
-    for (const b of boxes) { b.querySelector(".avatar-say").textContent = `${zh} ${en}`; b.hidden = false; }
+    const kind = e.detail === "ok" ? "ok" : "bad", set = (VOICE[picked()] || LINES)[kind] || LINES[kind], [zh, en] = set[Math.floor(Math.random() * set.length)];
+    for (const b of boxes) { b.querySelector(".avatar-say").textContent = zh ? `${zh} ${en}` : en; b.hidden = false; }
   });
 
   // the collection (#/avatars): everyone, the ones yet to come as silhouettes
@@ -142,5 +198,5 @@ const Avatars = (() => {
     const r = document.getElementById("root");
     if (r) new MutationObserver(() => mount()).observe(r, { childList: true });
   });
-  return { unlock, cleared, owns, picked, leads, catchUp, mount, view, merge, count, norm };
+  return { VOICE, unlock, cleared, owns, picked, leads, catchUp, mount, view, merge, count, norm };
 })();
