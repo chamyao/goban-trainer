@@ -113,6 +113,13 @@
    72
   ]
  },
+ "bat": {
+  "file": "bat.png",
+  "size": [
+   205,
+   96
+  ]
+ },
  "stone-white-1": {
   "file": "stone-white-1.webp",
   "size": [
@@ -125,13 +132,6 @@
   "size": [
    128,
    128
-  ]
- },
- "bat": {
-  "file": "bat.png",
-  "size": [
-   205,
-   96
   ]
  }
 }

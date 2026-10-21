@@ -5,6 +5,8 @@ hover/pressed states here. No logos, no text, nothing traced from any game.
       scrolls, jade and gold.
   halloween (body.season-halloween, assets/ui/halloween/): a haunted go hall: manor stone, gnarled wood, wrought iron,
       cobwebs, pumpkins and bone.
+  harvest (body.season-harvest, assets/ui/harvest/): a harvest barn at Thanksgiving: barn wood, wicker, wheat,
+      maple leaves, acorns, gourds, cranberry and amber.
   A new season is a PAINT block, a build function and a SLICES entry in SETS below, plus its CSS block in
   theme-seasonal.css (body.season-<name>, urls into assets/ui/<name>/).
 
@@ -109,6 +111,41 @@ HW_PAINT = {
                    "with soft purple highlights, simple silhouette. " + ON_WHITE + " " + HW_LOOK),
 }
 HW_SLICES = {"btn-pumpkin": [0, 48], "btn-bone": [0, 48], "ribbon": [0, 72]}   # the frames: measured in build
+
+HV_LOOK = ("Painterly hand-painted game UI art, chunky and warm, in the style of a cosy fantasy card game's autumn harvest "
+           "festival: golden-hour amber light, russet, burnt orange, deep cranberry red and wheat gold, rustic weathered "
+           "barn wood, woven wicker, wheat sheaves, maple and oak leaves, acorns, small gourds. Warm and homely. No text, "
+           "no letters, no logos, no people, no turkeys.")
+HV_PAINT = {
+    "wall": ("1:1", "A flat, front-on texture of a rustic harvest barn wall: weathered warm brown wooden boards running "
+                    "vertically, a few small bundles of dried wheat and autumn leaves hung on nails, evenly lit by warm "
+                    "lantern light, no windows, fills the whole frame edge to edge, seamless texture. " + HV_LOOK),
+    "parchment": ("1:1", "A flat, front-on texture of soft warm cream linen paper, pale wheat and light honey tones with "
+                         "gentle fibres and faint mottling, light overall, evenly lit, no marks, no border, no objects, "
+                         "fills the whole frame edge to edge, seamless texture. " + HV_LOOK),
+    "header-beam": ("21:9", "A flat, front-on texture of one long rustic wooden beam running horizontally across the whole "
+                            "frame with a garland of red and orange autumn maple leaves, acorns and wheat draped along "
+                            "it, evenly lit, fills the whole frame edge to edge, seamless texture. " + HV_LOOK),
+    "board-frame": ("1:1", "A square ornate picture frame, front-on: thick woven golden wicker and braided wheat with "
+                           "russet autumn maple leaves along each side, a small cluster of mini pumpkins, gourds and "
+                           "acorns on each of the four corners, the centre an empty plain white square, the frame only. "
+                           + ON_WHITE + " " + HV_LOOK),
+    "panel-frame": ("1:1", "A thin square decorative border, front-on: a slim braided wheat-straw line with a small "
+                           "cluster of oak leaves and an acorn in each of the four corners, the centre empty plain "
+                           "white, the border only. " + ON_WHITE + " " + HV_LOOK),
+    "btn-wheat": ("21:9", "A single wide chunky game button plate, front-on, rounded rectangle: polished warm honey-gold "
+                          "amber with a dark walnut-wood bevelled rim, a warm glossy highlight on top, a small wheat-ear "
+                          "ornament at each end, empty in the middle. " + ON_WHITE + " " + HV_LOOK),
+    "btn-cranberry": ("21:9", "A single wide chunky game button plate, front-on, rounded rectangle: polished deep "
+                              "cranberry red with a thin golden-wheat bevelled rim, a soft glossy highlight on top, a "
+                              "small acorn ornament at each end, empty in the middle. " + ON_WHITE + " " + HV_LOOK),
+    "ribbon": ("21:9", "A single long woven burlap and russet plaid cloth banner for a title, front-on, flat in the "
+                       "middle with folded swallow-tail ends at both sides, a thin golden stitched trim along its edges, "
+                       "empty in the middle. " + ON_WHITE + " " + HV_LOOK),
+    "leaf": ("1:1", "A single red-orange autumn maple leaf, seen flat from above, with a short stem, rich glowing "
+                    "colours, simple bold shape. " + ON_WHITE + " " + HV_LOOK),
+}
+HV_SLICES = {"btn-wheat": [0, 48], "btn-cranberry": [0, 48], "ribbon": [0, 72]}   # the frames: measured in build
 
 
 def paint(names):
@@ -266,10 +303,13 @@ def candy_stone(im, size=128, fill=.92):
     return out
 
 
-def build_halloween(save):
-    wall = Image.open(RAW / "wall.webp").convert("RGB")   # stone and candle sconces: mirrored, as the tavern planks
+def build_skin(save, buttons, sprite):
+    """A season's skin (see the Halloween set): the wall and parchment tiled by mirroring, the header beam repeated
+    sideways, the board and panel frames as 9-slices with measured insets, two button plates with their states, the
+    banner, and a small ambient sprite (bat, leaf, snowflake ...)."""
+    wall = Image.open(RAW / "wall.webp").convert("RGB")
     save("wall", mirrored(wall, 1024))
-    parch = Image.open(RAW / "parchment.webp").convert("RGB")   # the edit's plain parchment, softened for reading
+    parch = Image.open(RAW / "parchment.webp").convert("RGB")   # its plain middle, softened for reading
     W, H = parch.size
     parch = parch.crop((int(W * .15), int(H * .15), int(W * .85), int(H * .85)))
     parch = ImageEnhance.Contrast(ImageEnhance.Brightness(parch).enhance(1.06)).enhance(.75)
@@ -282,15 +322,23 @@ def build_halloween(save):
         im = clear_window(cutout(n)).resize((size, size), Image.LANCZOS)
         SET["slices"][n] = window_inset(im)
         save(n, im, "png")
-    for b in ("btn-pumpkin", "btn-bone"):
+    for b in buttons:
         for suf, im in states(cutout(b)).items():
             save(b + suf, im, "png")
     rib = cutout("ribbon")
     save("ribbon", rib.resize((round(rib.width * 72 / rib.height), 72), Image.LANCZOS), "png")
-    for c in ("white", "black"):   # the candy Easter egg's stones: centred, 92% of a 128 square, a soft shadow inside
+    sp = cutout(sprite)
+    save(sprite, sp.resize((round(sp.width * 96 / sp.height), 96), Image.LANCZOS), "png")
+
+
+def build_halloween(save):   # a haunted go hall; its candy stones for the Easter egg
+    build_skin(save, ("btn-pumpkin", "btn-bone"), "bat")
+    for c in ("white", "black"):   # centred, 92% of a 128 square, a soft shadow inside
         save(f"stone-{c}-1", candy_stone(cutout(f"stone-{c}")), "webp")
-    bat = cutout("bat")
-    save("bat", bat.resize((round(bat.width * 96 / bat.height), 96), Image.LANCZOS), "png")
+
+
+def build_harvest(save):   # a harvest barn at Thanksgiving
+    build_skin(save, ("btn-wheat", "btn-cranberry"), "leaf")
 
 
 def sheet(out):
@@ -319,6 +367,7 @@ def sheet(out):
 SETS = {
     "tavern": {"dir": UI, "paint": PAINT, "slices": SLICES, "build": build_tavern},
     "halloween": {"dir": UI / "halloween", "paint": HW_PAINT, "slices": HW_SLICES, "build": build_halloween},
+    "harvest": {"dir": UI / "harvest", "paint": HV_PAINT, "slices": HV_SLICES, "build": build_harvest},
 }
 SET = SETS["tavern"]
 

@@ -1,0 +1,123 @@
+{
+ "wall": {
+  "file": "wall.webp",
+  "size": [
+   1024,
+   1024
+  ]
+ },
+ "parchment": {
+  "file": "parchment.webp",
+  "size": [
+   512,
+   512
+  ]
+ },
+ "header-beam": {
+  "file": "header-beam.webp",
+  "size": [
+   744,
+   160
+  ]
+ },
+ "board-frame": {
+  "file": "board-frame.png",
+  "size": [
+   512,
+   512
+  ],
+  "slice": 122
+ },
+ "panel-frame": {
+  "file": "panel-frame.png",
+  "size": [
+   256,
+   256
+  ],
+  "slice": 41
+ },
+ "btn-wheat": {
+  "file": "btn-wheat.png",
+  "size": [
+   192,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-wheat-hover": {
+  "file": "btn-wheat-hover.png",
+  "size": [
+   192,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-wheat-pressed": {
+  "file": "btn-wheat-pressed.png",
+  "size": [
+   192,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-cranberry": {
+  "file": "btn-cranberry.png",
+  "size": [
+   197,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-cranberry-hover": {
+  "file": "btn-cranberry-hover.png",
+  "size": [
+   197,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-cranberry-pressed": {
+  "file": "btn-cranberry-pressed.png",
+  "size": [
+   197,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "ribbon": {
+  "file": "ribbon.png",
+  "size": [
+   231,
+   72
+  ],
+  "slice": [
+   0,
+   72
+  ]
+ },
+ "leaf": {
+  "file": "leaf.png",
+  "size": [
+   100,
+   96
+  ]
+ }
+}

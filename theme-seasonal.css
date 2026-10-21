@@ -135,6 +135,139 @@ html:has(body.season-halloween)::after { top: 26vh; width: 44px; height: 21px; a
   body.season-halloween::after, html:has(body.season-halloween)::after { display: none; }
   body.season-halloween .book { transition: none; } }
 
+/* ===== Harvest (Thanksgiving, Events.LIST "harvest"): a harvest barn in the golden hour. Graphics' painted set,
+   assets/ui/harvest/ (tools/gen_ui.py --set harvest): barn boards hung with wheat and leaves, a leaf-and-acorn garland
+   on the beam, cream linen panels in braided wheat, a wicker board frame with pumpkins and gourds on its corners,
+   honey-amber (main) and cranberry plates, a plaid banner, maple leaves drifting down. Built on the Halloween block's
+   rules; the boards stay wood; motion is transform and opacity only, none under prefers-reduced-motion. ===== */
+body.season-harvest {
+  --bg: #1e130b; --card: #f6ecd8; --ink: #3a2410; --muted: #ecd6b0; --chip: #3c2412; --border: #6b4a2a;
+  --accent: #d08a1c; --danger: #b8322a;
+  color: #f8ead2;
+  background-color: #1e130b;
+  background-image:
+    radial-gradient(circle at 86% 9%, rgba(255, 210, 130, .22) 0 46px, rgba(255, 210, 130, .07) 47px 120px, transparent 121px),
+    linear-gradient(180deg, rgba(24, 14, 6, .62), rgba(24, 14, 6, .45) 40%, rgba(24, 14, 6, .70)),
+    url("assets/ui/harvest/wall.webp");
+  background-repeat: no-repeat, no-repeat, repeat; background-size: auto, auto, 640px 640px;
+  background-attachment: fixed;
+}
+body.season-harvest a { color: #ffc77a; }
+body.season-harvest .book a, body.season-harvest #tabs a, body.season-harvest header h1 a { color: inherit; }
+
+/* --- the header: the gnarled beam, its embers flickering --- */
+body.season-harvest header { position: relative; background: #24160b url("assets/ui/harvest/header-beam.webp") left center / auto 100% repeat-x;
+  border-bottom: 0; box-shadow: 0 3px 0 #d08a1c, 0 5px 0 #3a1f0c, 0 10px 24px rgba(0, 0, 0, .6); }
+body.season-harvest header::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 30% 120% at 20% 50%, rgba(255, 140, 40, .16), transparent 70%),
+              radial-gradient(ellipse 30% 120% at 75% 50%, rgba(255, 140, 40, .14), transparent 70%);
+  animation: hw-flicker 3.1s ease-in-out infinite; }
+@keyframes hw-flicker { 0%, 100% { opacity: .75; } 30% { opacity: 1; } 55% { opacity: .6; } 80% { opacity: .95; } }
+body.season-harvest header > * { position: relative; z-index: 1; }
+body.season-harvest header h1 a { color: #ffd59a; font-family: "Cinzel", Georgia, serif; letter-spacing: .04em;
+  text-shadow: 0 2px 0 #1a0d05, 0 0 16px rgba(255, 140, 40, .55); }
+body.season-harvest #tabs a { color: #f8ead2; font: 600 14px/1 "Cinzel", Georgia, serif; letter-spacing: .05em; padding: 9px 16px; border-radius: 6px;
+  background: linear-gradient(180deg, #6b4524, #4b2e15); box-shadow: inset 0 1px 0 rgba(255, 220, 160, .2), 0 0 0 1px #1d1007, 0 2px 0 #1d1007; }
+body.season-harvest #tabs a:hover:not(.active) { background: linear-gradient(180deg, #7d532c, #583619); }
+body.season-harvest #tabs a.active { color: #2a1206; background: linear-gradient(180deg, #ffc27a 0%, #f08a2c 50%, #b9530f 100%);
+  box-shadow: inset 0 1px 0 #ffe2b8, 0 0 0 1px #4a1d05, 0 2px 0 #4a1d05, 0 0 16px rgba(255, 140, 40, .6); }
+body.season-harvest #crumbs, body.season-harvest #crumbs a { color: #f0d9a8; }
+body.season-harvest :is(.engine-chip, .auth-chip, .theme-chip, .music-btn) {
+  color: #f8ead2; background: linear-gradient(180deg, #3c2412, #2a180b); box-shadow: inset 0 0 0 1px #b08a4a, 0 2px 4px rgba(0, 0, 0, .5); }
+
+/* --- section titles: the tattered banner --- */
+body.season-harvest .cat-title { display: inline-block; margin: 28px 0 12px 6px; height: 40px; line-height: 30px; padding: 0 10px;
+  font: 700 14px "Cinzel", Georgia, serif; letter-spacing: .14em; text-transform: uppercase; text-align: center; color: #ffe0b8;
+  text-shadow: 0 1px 0 #3a1206, 0 0 8px rgba(0, 0, 0, .6);
+  border-style: solid; border-color: transparent; border-width: 0 34px;
+  border-image: url("assets/ui/harvest/ribbon.png") 0 72 fill / 0 34px stretch; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .55)); }
+
+/* --- cards and panels: aged parchment in wrought iron (corner candles and pumpkins in the slice) --- */
+body.season-harvest :is(.book, .panel, .modal, .games-list, .history-item) {
+  color: var(--ink); border-radius: 0;
+  background: linear-gradient(rgba(250, 242, 226, .38), rgba(250, 242, 226, .38)), url("assets/ui/harvest/parchment.webp") center / 512px 512px repeat;
+  border-style: solid; border-color: transparent; border-width: 14px;
+  border-image: url("assets/ui/harvest/panel-frame.png") 41 / 14px round;
+  box-shadow: inset 0 0 24px rgba(120, 70, 20, .25), 0 8px 18px rgba(0, 0, 0, .55); }
+body.season-harvest .book { transition: transform .2s ease; }
+body.season-harvest .book:hover { transform: translateY(-3px); box-shadow: inset 0 0 24px rgba(120, 70, 20, .2), 0 0 22px rgba(255, 140, 40, .5), 0 10px 18px rgba(0, 0, 0, .55); }
+/* inside the parchment: dark ink, dark muted text, links in a deep pumpkin; key caps as bone */
+body.season-harvest :is(.book, .panel, .modal, .games-list, .history-item) { --muted: #6b4a2a; }
+body.season-harvest :is(.book, .panel, .modal, .games-list, .history-item) a:not(.book) { color: #9a3f08; }
+body.season-harvest .keys b { background: #f0dfb8; color: #2a1d33; box-shadow: inset 0 0 0 1px #b08a4a; }
+body.season-harvest .book .t { font: 700 15px/1.25 "Cinzel", Georgia, serif; color: #3a2210; }
+body.season-harvest .book .n, body.season-harvest :is(.meta-sub, .source-note) { color: var(--muted); }   /* light on the wall, dark in the parchment */
+body.season-harvest .panel h2 { font: 700 13px/1 "Cinzel", Georgia, serif; letter-spacing: .14em; color: #7a2a10;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(154, 111, 34, .35); }
+body.season-harvest :is(.games-head, .book-head) h2 { font-family: "Cinzel", Georgia, serif; color: #ffd59a; text-shadow: 0 2px 0 #1a0d05; }
+body.season-harvest :is(.games-head .meta-sub, .book-head .sub) { color: #f0d9a8; }
+body.season-harvest .badge { background: #f0dfb8; color: #4a2c10; box-shadow: inset 0 0 0 1px #b08a4a; }
+body.season-harvest :is(.badge.dan, .badge.turn) { background: linear-gradient(180deg, #3c2412, #2a180b); color: #ffd59a; box-shadow: inset 0 0 0 1px #d08a1c; }
+body.season-harvest .book .bar { background: rgba(120, 70, 20, .2); } body.season-harvest .book .bar div { background: linear-gradient(90deg, #d9631a, #ffa23c); }
+body.season-harvest .book .star.on { color: #d08a1c; text-shadow: 0 0 8px rgba(255, 140, 40, .7); }
+body.season-harvest .games-row { border-top-color: rgba(154, 111, 34, .3); }
+body.season-harvest .games-row:hover { background: rgba(255, 170, 90, .25); }
+body.season-harvest .tk-card { box-shadow: 0 8px 18px rgba(0, 0, 0, .55), 0 0 24px rgba(255, 140, 40, .25); }
+body.season-harvest :is(input, textarea, select) { color: var(--ink); background: #f6eedf; border: 1px solid #a07a2c; border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(120, 70, 20, .2); }
+body.season-harvest #status.ok { color: #2a6e3c; } body.season-harvest #status.bad { color: #a8281e; } body.season-harvest #status.off { color: #8a4a10; }
+body.season-harvest .err { color: #ffb4a6; } body.season-harvest :is(.panel, .modal) .err { color: #a8281e; }
+body.season-harvest .nav-row .pos { white-space: nowrap; color: #6b4a2a; }
+body.season-harvest .loading { color: #f0d9a8; font-family: "Cinzel", Georgia, serif; letter-spacing: .1em; }
+
+/* --- buttons: bone-rimmed violet plates, the main one a pumpkin (caps 48 of 64; the middle stretches) --- */
+body.season-harvest :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button,
+body.season-harvest .sgf-loader label.file, body.season-harvest .book-head .reset-book {
+  font: 700 13.5px/1 "Cinzel", Georgia, serif; letter-spacing: .04em; color: #fff3dc; text-shadow: 0 1px 1px rgba(0, 0, 0, .7);
+  background: none; box-shadow: none; border-radius: 0; min-height: 42px; padding: 9px 4px 11px; white-space: nowrap; text-align: center;
+  border-style: solid; border-color: transparent; border-width: 0 20px;
+  border-image: url("assets/ui/harvest/btn-cranberry.png") 0 48 fill / 0 20px stretch; }
+body.season-harvest .sgf-loader label.file { display: flex; align-items: center; justify-content: center; }
+body.season-harvest :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:hover:not(:disabled) { border-image-source: url("assets/ui/harvest/btn-cranberry-hover.png"); }
+body.season-harvest :is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button:active:not(:disabled) { border-image-source: url("assets/ui/harvest/btn-cranberry-pressed.png"); }
+body.season-harvest :is(.controls, .rv-actions, .sgf-loader, .modal) button.primary {
+  color: #2a1206; text-shadow: 0 1px 0 rgba(255, 220, 170, .6); border-image-source: url("assets/ui/harvest/btn-wheat.png");
+  filter: drop-shadow(0 0 10px rgba(255, 140, 40, .45)); }
+body.season-harvest :is(.controls, .rv-actions, .sgf-loader, .modal) button.primary:hover:not(:disabled) { border-image-source: url("assets/ui/harvest/btn-wheat-hover.png"); }
+body.season-harvest :is(.controls, .rv-actions, .sgf-loader, .modal) button.primary:active:not(:disabled) { border-image-source: url("assets/ui/harvest/btn-wheat-pressed.png"); }
+body.season-harvest :is(.controls, .rv-actions) button.active { border-image-source: url("assets/ui/harvest/btn-wheat.png"); color: #2a1206; text-shadow: none; }
+body.season-harvest :is(.controls, .nav-row, .rv-nav, .rv-actions) button:disabled { filter: grayscale(.7) brightness(.8); opacity: .6; }
+/* the plain buttons elsewhere (no painted plate): night violet with an orange edge */
+body.season-harvest button:not(:is(.controls, .nav-row, .rv-nav, .rv-actions, .sgf-loader, .modal) button):not(.theme-chip):not(.engine-chip):not(.auth-chip):not(.music-btn) {
+  background-color: #3c2412; color: #f8ead2; border-color: #b08a4a; }
+
+/* --- the board in the haunted-wood frame: a jack-o'-lantern on each corner; the board itself stays wood --- */
+body.season-harvest .board-card { position: relative; padding: 0; border-radius: 0; box-shadow: none;
+  background: linear-gradient(#3a2412, #3a2412) center / calc(100% - 64px) calc(100% - 64px) no-repeat border-box;
+  border-style: solid; border-color: transparent; border-width: 44px;
+  border-image: url("assets/ui/harvest/board-frame.png") 122 / 44px stretch;
+  filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .6)) drop-shadow(0 0 18px rgba(255, 140, 40, .18)); }
+@media (max-width: 640px) {
+  body.season-harvest .board-card { border-width: 28px; border-image-width: 28px; background-size: calc(100% - 40px) calc(100% - 40px); } }
+
+body.season-harvest .cat-title { color: #fff1d6; text-shadow: 0 1px 0 #3a1206, 0 0 4px #3a1206, 0 0 10px rgba(40, 15, 5, .8); }   /* on the plaid */
+/* --- ambient: a warm haze along the foot of the page, two maple leaves drifting down --- */
+body.season-harvest::before {
+  content: ""; position: fixed; left: -10%; right: -10%; bottom: 0; height: 20vh; pointer-events: none; z-index: -1;
+  background: radial-gradient(ellipse 45% 70% at 30% 100%, rgba(255, 190, 110, .16), transparent 70%),
+              radial-gradient(ellipse 45% 70% at 75% 100%, rgba(255, 170, 90, .14), transparent 70%);
+  animation: hv-haze 24s ease-in-out infinite alternate; }
+@keyframes hv-haze { from { opacity: .7; } to { opacity: 1; } }
+body.season-harvest::after, html:has(body.season-harvest)::after {
+  content: ""; position: fixed; top: 0; left: 18vw; width: 34px; height: 34px; pointer-events: none; z-index: 2;
+  background: url("assets/ui/harvest/leaf.png") center / contain no-repeat; opacity: 0;
+  animation: hv-leaf 19s linear infinite; will-change: transform, opacity; }
+html:has(body.season-harvest)::after { left: 68vw; width: 26px; height: 26px; animation-duration: 25s; animation-delay: -11s; }
+@keyframes hv-leaf {
+  0% { transform: translate(0, -60px) rotate(0deg); opacity: 0; } 3% { opacity: .9; }
+  15% { transform: translate(6vw, 16vh) rotate(70deg); } 30% { transform: translate(-3vw, 34vh) rotate(150deg); }
+  45% { transform: translate(7vw, 52vh) rotate(230deg); } 60% { transform: translate(-2vw, 72vh) rotate(310deg); opacity: .9; }
+  70% { transform: translate(4vw, 92vh) rotate(380deg); opacity: 0; } 100% { transform: translate(4vw, 92vh); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  body.season-harvest::before, body.season-harvest header::after { animation: none; }
+  body.season-harvest::after, html:has(body.season-harvest)::after { display: none; }
+  body.season-harvest .book { transition: none; } }
+
 /* the candy Easter egg's note */
 .candy-toast { position: fixed; left: 50%; top: 84px; transform: translateX(-50%); z-index: 50; padding: 10px 18px; border-radius: 999px;
   background: #ff8a1f; color: #1b1024; font-weight: 700; box-shadow: 0 6px 20px rgba(0, 0, 0, .4); animation: candy-in .3s ease-out; }

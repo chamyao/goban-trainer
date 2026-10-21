@@ -62,7 +62,7 @@ const Events = (() => {
   for (const e of LIST) e.ci = e.ci || e.icon;   // (the currency's icon: the event's, unless it has its own)
   const KINDS = { west: "Holiday", china: "Chinese festival", go: "Go event" };
   // the seasons with a look of their own (theme-seasonal.css: body.season-<id>); the others show Classic until painted
-  const RESKINS = ["halloween"];
+  const RESKINS = ["halloween", "harvest"];
 
   // the shops: looks only. board: a board look (BoardTheme), title: by the player's name, hat: on Sun Wukong
   const ITEMS = [
