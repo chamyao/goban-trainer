@@ -216,7 +216,9 @@ const WK = (() => {
     }
   }
   const drawHead = (g, x = 0, y = 0) => blit(g, HEAD, x, y);
-  return { PAL, FRAMES, render, drawHead, SIZE: 44 };
+  // his head in a hat, for the event shop's picture of it (events.js)
+  const drawHatted = (g, id, x = 0, y = 0) => { const hat = HATS[id] || []; blit(g, HEAD, x, y + hat.length - 3); blit(g, hat, x, y); };
+  return { PAL, FRAMES, render, drawHead, drawHatted, HAT_ROWS: id => (HATS[id] || []).length, SIZE: 44 };
 })();
 
 (() => {
