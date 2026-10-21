@@ -130,26 +130,6 @@ body.theme-tavern .theme-chip { font-family: "Cinzel", Georgia, serif; color: #f
 
 @media (prefers-reduced-motion: reduce) { body.theme-tavern .book, body.theme-tavern button { transition: none !important; } }
 
-/* --- the Library's hero banner: the tavern itself (Graphics' painting goes in --t-hero) --- */
-.tavern-hero { display: none; }
-body.theme-tavern .tavern-hero { display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; position: relative; overflow: hidden;
-  height: 210px; margin: -8px 0 22px; padding: 22px 28px; border-radius: 14px;
-  background: var(--t-hero),
-    radial-gradient(ellipse 35% 60% at 82% 70%, rgba(255, 150, 60, .55), transparent 70%),
-    radial-gradient(ellipse 50% 70% at 18% 30%, rgba(255, 200, 120, .18), transparent 70%),
-    linear-gradient(180deg, #3e2614, #1d1008);
-  background-size: cover; background-position: center;
-  box-shadow: inset 0 0 0 2px #c9a14a, inset 0 0 0 6px #2a170a, inset 0 0 0 7px #8a6227, inset 0 -60px 60px rgba(0, 0, 0, .55), 0 14px 30px rgba(0, 0, 0, .55); }
-body.theme-tavern .tavern-hero::after { content: ""; position: absolute; right: 9%; bottom: 18%; width: 70px; height: 90px; border-radius: 40% 40% 10% 10%;
-  background: radial-gradient(ellipse at 50% 80%, #fff2b0, #ffb347 40%, rgba(255, 90, 30, .0) 72%); filter: blur(2px); opacity: .85;
-  animation: tavern-fire 2.2s ease-in-out infinite; will-change: transform, opacity; }   /* the hearth */
-@keyframes tavern-fire { 0%, 100% { transform: scale(1, 1); opacity: .8; } 40% { transform: scale(1.06, .94); opacity: .95; } 70% { transform: scale(.95, 1.07); opacity: .85; } }
-body.theme-tavern .tavern-hero b { font: 700 46px/1 "Noto Serif SC", "Songti SC", serif; color: #ffe3a3; text-shadow: 0 3px 0 #2a170a, 0 0 24px rgba(255, 190, 90, .55); }
-body.theme-tavern .tavern-hero div span { margin-left: 14px; font: 700 30px/1 "Cinzel", Georgia, serif; letter-spacing: .06em; color: #ffe3a3; text-shadow: 0 3px 0 #2a170a; }
-body.theme-tavern .tavern-hero small { font: italic 500 18px/1.2 "Cormorant Garamond", Georgia, serif; color: #f3d9a4; }
-@media (max-width: 640px) { body.theme-tavern .tavern-hero { height: 160px; padding: 16px 18px; }
-  body.theme-tavern .tavern-hero b { font-size: 34px; } body.theme-tavern .tavern-hero div span { font-size: 21px; margin-left: 8px; } }
-@media (prefers-reduced-motion: reduce) { body.theme-tavern .tavern-hero::after { animation: none; } }
 
 /* ===== Graphics' art (assets/ui, tools/gen_ui.py; slices in assets/ui/ui.json): it takes over from the gradients ===== */
 body.theme-tavern {
@@ -163,10 +143,6 @@ body.theme-tavern :is(.book, .panel, .modal, .games-list, .history-item) {
   border: 10px solid transparent; border-image: url("assets/ui/panel-trim.png") 24 / 10px round;
   box-shadow: inset 0 0 26px rgba(120, 70, 20, .28), 0 8px 18px rgba(0, 0, 0, .5); }
 body.theme-tavern .book:hover { box-shadow: inset 0 0 22px rgba(120, 70, 20, .22), 0 0 22px rgba(255, 200, 90, .55), 0 10px 18px rgba(0, 0, 0, .55); }
-/* the hearth: the painting itself (the gradient's flame goes) */
-body.theme-tavern .tavern-hero { background: linear-gradient(90deg, rgba(20, 10, 4, .70), rgba(20, 10, 4, .15) 55%, transparent),
-  url("assets/ui/hearth-hero.webp") center / cover no-repeat; height: 240px; }
-body.theme-tavern .tavern-hero::after { display: none; }
 /* section titles on the red silk ribbon (its jade tassels hang in the caps) */
 body.theme-tavern .cat-title { clip-path: none; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .5)); background: none; padding: 0 6px;
   border: 0 34px solid transparent; border-image: url("assets/ui/banner-ribbon.png") 0 72 fill / 0 34px stretch; line-height: 40px; height: 40px; }

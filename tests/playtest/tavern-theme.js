@@ -9,7 +9,7 @@ const on=()=>p.evaluate(()=>document.body.classList.contains('theme-tavern'));
 await p.goto('http://localhost:8765/#/');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});await p.waitForSelector('.book');
 check(!(await on()),'off by default');
 await p.selectOption('#themeSelect','tavern');await p.waitForTimeout(300);
-check(await on()&&(await p.evaluate(()=>getComputedStyle(document.querySelector('.tavern-hero')).display))!=='none','the Theme picker turns it on (the tavern banner shows)');
+check(await on()&&!(await p.$('.tavern-hero')),'the Theme picker turns it on (and there is no tavern banner: the user asked it gone)');
 await p.reload();await p.waitForSelector('.book');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});check(await on(),'it stays on after a reload');
 for(const hsh of ['#/review','#/play','#/feedback','#/book/redmond-life-and-death/1','#/stream']){await p.goto('http://localhost:8765/'+hsh);await p.waitForTimeout(500);check(await on(),`on at ${hsh}`);}
 await p.goto('http://localhost:8765/#/tk/1');await p.waitForTimeout(2000);

@@ -2163,8 +2163,6 @@ async function viewLibrary() {
   const prog = loadProgress();
   const favs = loadFavorites();
   root.innerHTML = "";
-  root.append(h("div", { class: "tavern-hero" }, [h("div", {}, [h("b", {}, "棋馆"), h("span", {}, "The Go Tavern")]),
-    h("small", {}, "Pull up a stool. Pick a book, or a story.")]));   // shown only in the Tavern look
   const cats = { tsumego: "Tsumego", tesuji: "Tesuji", endgame: "Endgame" };
   // the story campaigns: a Stories section of ordinary book entries, first (the user: "have the stories appear as
   // normal book entries in their section"; before, banners above the shelves). tk-card / tk-card-<id> stay as hooks.
