@@ -66,14 +66,25 @@ await p.click('button.primary');await p.waitForTimeout(800);
 check(!(await p.textContent('.tk-stakes')).includes('×5'),'Next problem after it is back to ×1');
 // the ten-minute clock (the user: "timing out is a fail"): it counts down, and a problem left past ten minutes is a miss
 await p.click('button.primary:has-text("Next problem")');await p.waitForTimeout(800);
+check(!(await p.isVisible('.stream-timer'))&&(await p.textContent('.clock-btn'))==='Show clock','the clock is hidden by default, with a Show clock button');
+await p.click('.clock-btn');
 const clk=await p.evaluate(()=>{const e=document.querySelector('.stream-timer');return e&&e.textContent;});
-check(/⏱ (10:00|9:5\d)/.test(clk||''),`a fresh problem shows the ten-minute clock: "${clk}"`);
+check(await p.isVisible('.stream-timer')&&/⏱ (10:00|9:5\d)/.test(clk||''),`Show clock shows the ten-minute clock: "${clk}"`);
 const rr=()=>p.evaluate(()=>JSON.parse(localStorage.getItem('gt-progress')).tkElo.r);const r0t=await rr();
 await p.evaluate(()=>{const q=JSON.parse(localStorage.getItem('gt-progress'));q.tkElo.streamT.at-=601000;localStorage.setItem('gt-progress',JSON.stringify(q));});
 await p.reload();await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
 await p.waitForFunction(()=>window.__trainer&&window.__trainer.done==='bad',null,{timeout:20000});
 const r1t=await rr(), sttxt=await p.evaluate(()=>document.getElementById('status').textContent);
 check(r1t<r0t&&/Time's up/.test(sttxt),`past ten minutes it's a miss: rating ${r0t} → ${r1t}, "${sttxt.trim()}"`);
+// AI analysis once answered (the user: "after a problem is done, have an enable AI analysis"): hidden before, then KataGo's top moves
+await p.click('button.primary:has-text("Next problem")');await p.waitForTimeout(800);
+check(await p.isHidden('button.ai-btn'),'no AI analysis before the problem is answered');
+await p.evaluate(()=>window.__trainer.finish('bad'));await p.waitForTimeout(300);
+check(await p.isVisible('button.ai-btn'),'once answered, the AI analysis button appears');
+await p.click('button.ai-btn');
+const ai=await p.waitForFunction(()=>document.querySelectorAll('.board-card .ai-move').length>0,null,{timeout:120000}).then(()=>true,()=>false);
+const lbl=await p.evaluate(()=>[...document.querySelectorAll('.board-card .ai-pct')].map(t=>t.textContent));await p.locator('.board-card').screenshot({path:'/tmp/claude-0/-home-user-call-agent/5c72aecd-1e1f-5f3c-b786-40ac9c4571a8/scratchpad/stream-ai.png'});
+check(ai&&lbl.length>0&&lbl.every(x=>+x>=0&&+x<=100),`KataGo's top moves show with win rates (${lbl.join(', ')})`);
 console.log(fails?`stream: ${fails} failed`:'stream: all ok');await b.close();process.exit(fails?1:0);
 })();
 function TKof(rank){return 600+rank*50;}

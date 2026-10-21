@@ -1171,8 +1171,41 @@ class Trainer {
     this.els.turnBadge.textContent = this.explore
       ? (this.exploreTurn === BLACK ? "Explore · Black" : "Explore · White")
       : this.done ? "—" : this.engineBusy ? "White thinking…" : this.els.noEngine ? "黑先 Black to play" : "Black to play";
+    if (this.ai) this.renderAI();
     this.renderNote();
     this.renderSolutionTree();
+  }
+
+  // AI analysis (the Stream, once answered; the user: "after a problem is done, have an enable AI analysis"):
+  // KataGo's top moves for the side to play on the board as it stands (inside the problem's frame), each marked
+  // with that side's win rate; Explore lets you play the lines out and it reads each new position
+  renderAI() {
+    const turn = this.explore ? this.exploreTurn : this.turnColor(), key = this.serialize(this.grid) + turn;
+    if (this.aiKey !== key) { this.aiKey = key; this.aiMoves = null; this.analyzeHere(key, turn); }
+    const gb = this.goban, { c0, c1, r0, r1 } = gb.crop;
+    if (!this.aiMoves) {
+      gb.el("text", { x: gb.px(c0), y: gb.py(r0) - gb.cell * .55, "font-size": gb.cell * .4, fill: "var(--muted)" }).textContent = "KataGo is reading…";
+      return;
+    }
+    this.aiMoves.forEach((m, i) => {
+      if (m.x < c0 || m.x > c1 || m.y < r0 || m.y > r1 || this.grid[m.y][m.x] !== EMPTY) return;
+      const x = gb.px(m.x), y = gb.py(m.y), pct = Math.round(100 * (turn === BLACK ? m.winRate : 1 - m.winRate));
+      gb.el("circle", { cx: x, cy: y, r: gb.cell * .44, fill: i ? "rgba(59,130,246,.35)" : "rgba(34,160,90,.75)", stroke: i ? "none" : "#fff", "stroke-width": 2, "pointer-events": "none", class: "ai-move" });
+      gb.el("text", { x, y: y + gb.cell * .14, "text-anchor": "middle", "font-size": gb.cell * .36, "font-weight": 700, fill: "#fff", "pointer-events": "none", class: "ai-pct" }).textContent = pct;
+    });
+  }
+  async analyzeHere(key, turn) {
+    try {
+      const frame = this.frame();
+      const a = await Engine.analyze({
+        board: gridToBoardState(this.grid, frame), currentPlayer: turn === BLACK ? "black" : "white", moveHistory: [],
+        visits: 200, ownershipMode: "none", topK: 5, analysisPvLen: 1, reuseTree: false,
+        regionOfInterest: frame && frame.region ? frame.region : null,
+      });
+      if (!this.alive || this.aiKey !== key) return;
+      this.aiMoves = (a.moves || []).filter(m => m.x >= 0 && m.x < N && m.y >= 0 && m.y < N).slice(0, 5);
+      this.render();
+    } catch (e) { console.error(e); if (this.aiKey === key) { this.aiMoves = []; this.render(); } }
   }
 
   // The source's comment on the position on the board ("Dead", "see the
@@ -2387,16 +2420,34 @@ async function viewStream() {
   ]);
   // ten minutes a problem (the user: "a ten minute timer; timing out is a fail"): from when it was first shown, kept
   // with the progress so a reload doesn't restart it; run out unanswered and it's rated a miss
-  const LIMIT = 600, key0 = `${bookId}:${pid}`, timer = h("div", { class: "stream-timer" });
+  // hidden unless asked for (the user: "have the clock be default hidden and have a show clock"); it runs either way
+  const LIMIT = 600, key0 = `${bookId}:${pid}`, timer = h("span", { class: "stream-timer" });
+  const CLOCK_KEY = "gt-stream-clock", clockOn = () => { try { return localStorage.getItem(CLOCK_KEY) === "on"; } catch { return false; } };
+  const clockBtn = h("button", { type: "button", class: "clock-btn" });
+  const clockRow = h("div", { class: "stream-clock" }, [clockBtn, " ", timer]);
+  const showClock = () => { const on = clockOn(); timer.style.display = on ? "" : "none"; clockBtn.textContent = on ? "Hide clock" : "Show clock"; };
+  clockBtn.addEventListener("click", () => { try { localStorage.setItem(CLOCK_KEY, clockOn() ? "off" : "on"); } catch {} showClock(); });
+  showClock();
   { const q = loadProgress(), st = TKElo.state(q);
     if (st.streamRated !== key0 && (!st.streamT || st.streamT.k !== key0)) { st.streamT = { k: key0, at: Date.now() }; TK.saveProg(q); } }
+  // AI analysis, once the problem is answered (before, it would give the answer away)
+  const aiBtn = h("button", { class: "ai-btn", hidden: "", title: "KataGo's best moves here, with their win rates; play moves to see more",
+    onclick: () => {
+      const tr = trainer;
+      tr.ai = !tr.ai;
+      if (tr.ai && !tr.explore) tr.toggleExplore();
+      aiBtn.textContent = tr.ai ? "AI analysis: on" : "AI analysis";
+      aiBtn.classList.toggle("active", tr.ai);
+      tr.render();
+    } }, "AI analysis");
+  if (p.sz) aiBtn.title = "KataGo reads 19×19 boards only";
   const next = (x = 1) => { const q = loadProgress(), st = TKElo.state(q); st.stream = (st.stream || 0) + 1;
     st.streamX = x > 1 ? { n: st.stream, x } : null; TK.saveProg(q); viewStream(); };
 
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [
       h("h2", {}, "Stream"),
-      rating, h("div", {}, [stakes]), timer, source,
+      rating, h("div", {}, [stakes]), clockRow, source,
       h("div", { class: "badges" }, [turnBadge]),
     ]),
     h("div", { class: "panel" }, [h("h2", {}, "Status"), status, note]),
@@ -2411,6 +2462,7 @@ async function viewStream() {
         h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
         h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
                       onclick: () => next(5) }, "High roller ×5 →"),
+        aiBtn,
       ]),
     ]),
     h("div", { class: "panel keys" },
@@ -2430,6 +2482,7 @@ async function viewStream() {
     if (trainer !== t) return window.removeEventListener("tczw:result", onResult);
     window.removeEventListener("tczw:result", onResult);
     source.style.visibility = "";
+    if (!p.sz) aiBtn.hidden = false;
     const q = loadProgress(), st = TKElo.state(q);
     if (st.streamRated === key) return;
     st.streamRated = key; TK.saveProg(q);
@@ -2441,9 +2494,9 @@ async function viewStream() {
   const tick = () => {
     if (trainer !== t || !timer.isConnected) return clearInterval(clock);
     const st = TKElo.state();
-    if (st.streamRated === key) { clearInterval(clock); timer.textContent = ""; timer.hidden = true; return; }   // answered
+    if (st.streamRated === key) { clearInterval(clock); clockRow.hidden = true; if (!p.sz) aiBtn.hidden = false; return; }   // answered
     const left = LIMIT - (Date.now() - ((st.streamT && st.streamT.k === key && st.streamT.at) || Date.now())) / 1000;
-    timer.hidden = false;
+    clockRow.hidden = false;
     timer.textContent = `⏱ ${fmt(Math.max(0, left))}`;
     timer.classList.toggle("low", left <= 60);
     if (left <= 0 && !t.done) { clearInterval(clock); t.flawed = "out of time"; t.finish("bad"); t.setStatus("bad", "⏱", "Time's up"); }

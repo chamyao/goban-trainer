@@ -979,3 +979,9 @@ svg.pl-counting .last-move { display: none; }
 /* the Stream's ten-minute clock */
 .stream-timer { font-variant-numeric: tabular-nums; font-weight: 600; margin: 4px 0; }
 .stream-timer.low { color: var(--danger, #c0392b); }
+
+.controls button[hidden] { display: none; }
+.controls button.ai-btn.active { background: #1f7a4d; color: #fff; border-color: #1f7a4d; }
+.stream-clock { margin: 4px 0; display: flex; align-items: center; gap: 8px; }
+.stream-clock[hidden] { display: none; }
+.stream-clock .clock-btn { padding: 2px 10px; font-size: 12.5px; }
