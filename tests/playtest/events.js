@@ -21,7 +21,7 @@ const up=Object.fromEntries(cal.up.map(([id,s,e])=>[id,[s.slice(0,10),e.slice(0,
 console.log('  coming:',cal.up.map(([id,s])=>`${id} ${s.slice(5,10)}`).join(', '));
 check(up.harvest&&up.harvest[0].startsWith('2026-11-1'),`Harvest around Thanksgiving (Nov 26 2026): from ${up.harvest&&up.harvest[0]}`);
 check(!!up['spring-festival']&&up['spring-festival'][0]==='2027-01-30',`Spring Festival 2027 (Feb 6) from a week before: ${up['spring-festival']&&up['spring-festival'][0]}`);
-check(await p.evaluate(()=>/🎃 \d+/.test(document.getElementById('eventChip').textContent)),'the header chip shows the event and the balance');
+check(await p.evaluate(()=>/🍬 \d+/.test(document.getElementById('eventChip').textContent)),'the header chip shows the event and the balance');
 // earning
 const solve=async(book,pid,flawed)=>p.evaluate(([book,pid,flawed])=>{const before=Events.balance('halloween');
   const t={book:{id:book},p:{id:pid},flawed:flawed?'a hint':null,done:null,els:{},nextBranch(){return null;},setStatus(){},render(){}};Trainer.prototype.finish.call(t,'ok');return Events.balance('halloween')-before;},[book,pid,flawed]);
