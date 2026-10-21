@@ -216,6 +216,7 @@ const Events = (() => {
       const t = it.type === "board" ? it.board : BoardTheme.LIST[0], n = 5, cell = 22, pad = 14, W = pad * 2 + cell * (n - 1);
       const stones = [[1, 1, 1], [2, 1, 2], [3, 2, 1], [1, 3, 2], [2, 2, 2], [3, 3, 1]];
       let svg = `<svg viewBox="0 0 ${W} ${W}" width="${W}" height="${W}"><rect width="${W}" height="${W}" rx="6" fill="${t.wood[1]}"/>`;
+      if (t.tex) svg += `<clipPath id="pv-${t.id}"><rect width="${W}" height="${W}" rx="6"/></clipPath><image href="${t.tex}" width="${W}" height="${W}" preserveAspectRatio="xMidYMid slice" clip-path="url(#pv-${t.id})"/>`;
       for (let i = 0; i < n; i++) svg += `<line x1="${pad}" y1="${pad + i * cell}" x2="${W - pad}" y2="${pad + i * cell}" stroke="${t.line}"/><line x1="${pad + i * cell}" y1="${pad}" x2="${pad + i * cell}" y2="${W - pad}" stroke="${t.line}"/>`;
       for (const [c, r, col] of stones) {
         const x = pad + c * cell, y = pad + r * cell;

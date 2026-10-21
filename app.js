@@ -565,7 +565,24 @@ const BoardTheme = {
     this.paintAll(); this.label();
   },
   // recolor a board already drawn by Goban.render
+  // a board with a painting of its own (t.tex, an event board's: assets/boards/<id>.webp, by Graphics): the picture,
+  // clipped to the board's rounded corners, over the colours, under the lines and stones
+  texture(svg, t = this.current) {
+    for (const e of svg.querySelectorAll(".bt-tex, .bt-tex-clip")) e.remove();
+    const board = svg.querySelector(".bt-board");
+    if (!t.tex || !board) return;
+    const W = board.getAttribute("width"), H = board.getAttribute("height"), NS = "http://www.w3.org/2000/svg";
+    const clip = document.createElementNS(NS, "clipPath"), id = "btclip" + Math.random().toString(36).slice(2, 7);
+    clip.setAttribute("id", id); clip.setAttribute("class", "bt-tex-clip");
+    const r = document.createElementNS(NS, "rect");
+    for (const [k, v] of Object.entries({ x: 0, y: 0, width: W, height: H, rx: 10 })) r.setAttribute(k, v);
+    clip.append(r); (svg.querySelector("defs") || svg).append(clip);
+    const img = document.createElementNS(NS, "image");
+    for (const [k, v] of Object.entries({ href: t.tex, x: 0, y: 0, width: W, height: H, preserveAspectRatio: "xMidYMid slice", "clip-path": `url(#${id})`, class: "bt-tex", "pointer-events": "none" })) img.setAttribute(k, v);
+    board.after(img);
+  },
   paint(svg, t = this.current) {
+    this.texture(svg, t);
     const stops = svg.querySelectorAll("#wood stop");
     stops.forEach((s, i) => s.setAttribute("stop-color", t.wood[i] || t.wood[1]));
     for (const e of svg.querySelectorAll(".bt-line")) e.setAttribute(e.tagName === "line" ? "stroke" : "fill", t.line);
@@ -616,7 +633,8 @@ class Goban {
       <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stop-color="${t.wood[0]}"/><stop offset="55%" stop-color="${t.wood[1]}"/><stop offset="100%" stop-color="${t.wood[2]}"/>
       </linearGradient>`;
-    this.el("rect", { x: 0, y: 0, width: this.W, height: this.H, rx: 10, fill: "url(#wood)" });
+    this.el("rect", { x: 0, y: 0, width: this.W, height: this.H, rx: 10, fill: "url(#wood)", class: "bt-board" });
+    BoardTheme.texture(this.svg, t);   // (a painted board: its picture over the colours)
 
     const ext = this.pad * 0.55;
     for (let r = r0; r <= r1; r++)
