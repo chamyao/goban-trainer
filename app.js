@@ -3020,6 +3020,8 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
         : w > pos.after ? `Better than the game (${pct(pos.after)}), but ${pct(w)}, and there's a move worth ${pct(topW)}. Try again?`
         : `${pct(w)}: no better than the game move (${pct(pos.after)}). Try again?`;
       result.className = fixed ? "ok" : "bad";
+      // the result for whoever listens, as a problem's (the avatar's word, Sun Wukong: the user, "dialogue didn't change after pass / fail on turning points")
+      window.dispatchEvent(new CustomEvent("tczw:result", { detail: fixed ? "ok" : "bad" }));
       if (fixed && !show) { show = "solved"; result.textContent += " Red: your move in the game."; }
       const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
       const firstTry = !!it && !it.tries && !it.fixed;   // (before this try is counted)

@@ -63,6 +63,18 @@ check((await p.textContent('.avatar-fixed .avatar-say')).length>0,`tapping her: 
 await p.setViewportSize({width:390,height:844});await p.evaluate(()=>location.hash='#/stream');await p.waitForTimeout(1500);
 const ph=await p.evaluate(()=>{const l=document.querySelector(".avatar-lead").getBoundingClientRect();return {x:l.left,fx:document.querySelector(".avatar-fixed").getBoundingClientRect().left,h:l.height,bottom:Math.abs(l.bottom-innerHeight)<2,left:l.left<10,fixed:getComputedStyle(document.querySelector('.avatar-fixed')).position};});
 check(ph.fixed==="fixed"&&ph.bottom&&ph.left&&ph.h>844*.25,`on a phone: held to the corner, ${Math.round(ph.h)}px tall (${JSON.stringify(ph)})`);
+// Turning points: the prompt is hers, and a judged try gets her word
+await p.setViewportSize({width:1366,height:850});
+const sgf='(;GM[1]SZ[19]KM[6.5]'+Array.from({length:40},(_,i)=>`;${i%2?'W':'B'}[${String.fromCharCode(97+i%19)}${String.fromCharCode(97+Math.floor(i/19)*3)}]`).join('')+')';
+await p.evaluate(sgf=>{const reads=Array.from({length:41},()=>[0.5,3,3,0.6,0.4]);localStorage.setItem('goban.turning',JSON.stringify({v:4,user:'me',uid:7,scanned:{101:1},games:{101:{sgf,me:1,lost:true,gap:0,opp:'X',date:'2026-10-10',reads}},
+  items:[{kind:'turn',gid:101,me:1,opp:'X',date:'2026-10-10',won:false,k:20,before:0.7,after:0.3,bestW:0.72,best:[3,3],loss:40,real:20}],next:null,played:{},th:'4:closing:open0.4'}));
+  Turning.scan=()=>{};location.hash='#/turning';},sgf);
+await p.waitForSelector('.player svg');await p.waitForTimeout(400);
+check(/keep the advantage/.test(await p.textContent('.avatar-fixed .avatar-say')),`Turning points: the prompt in her box: "${await p.textContent('.avatar-fixed .avatar-say')}"`);
+await p.evaluate(()=>window.dispatchEvent(new CustomEvent('tczw:result',{detail:'bad'})));
+check(!/keep the advantage/.test(await p.textContent('.avatar-fixed .avatar-say')),`a judged try: her word changes ("${await p.textContent('.avatar-fixed .avatar-say')}")`);
+const judged=await p.evaluate(()=>/dispatchEvent\(new CustomEvent\("tczw:result"/.test(viewTurning.toString()));
+check(judged,'Turning points sends its result');
 const m=await p.evaluate(()=>Avatars.merge({own:{a:1},pick:'a'},{own:{b:1},pick:'b'}));
 check(m.own.a&&m.own.b&&m.pick==='a','two copies: owned by union, this browser\'s pick');
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);
