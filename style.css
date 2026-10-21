@@ -975,3 +975,7 @@ svg.pl-counting .last-move { display: none; }
 .controls button.high-roller:hover { background: #6f480e; }
 
 .byo-voice { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; color: var(--muted); cursor: pointer; }
+
+/* the Stream's ten-minute clock */
+.stream-timer { font-variant-numeric: tabular-nums; font-weight: 600; margin: 4px 0; }
+.stream-timer.low { color: var(--danger, #c0392b); }
