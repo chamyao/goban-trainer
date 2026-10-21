@@ -156,7 +156,8 @@ const Sync = {
         continue;
       }
       if (bookId === "tkElo") { local.tkElo = this.mergeElo(local.tkElo, remote.tkElo); continue; }
-      if (bookId === "ev") { local.ev = Events.merge(local.ev, remote.ev); continue; }   // the event ledger (events.js)
+      if (bookId === "ev") { local.ev = Events.merge(local.ev, remote.ev); continue; }   // (events.js)
+      if (bookId === "av") { local.av = Avatars.merge(local.av, remote.av); continue; }   // the avatars collected (avatars.js)   // the event ledger (events.js)
       const b = local[bookId] || (local[bookId] = {});
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
     }
@@ -2237,6 +2238,12 @@ async function viewLibrary() {
     h("div", { class: "t" }, fe ? `${fe.ev.icon} ${fe.ev.name} · ${fe.ev.native}` : "📅 Event calendar"),
     h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · sign-in, goals and the shop` : "Between events"),
     h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? `${fe.ev.ci} ${Events.balance(fe.ev.id)}` : "")]),
+  ]),
+  // the protagonists collected from the stories (avatars.js)
+  h("a", { class: "book avatar-card-book", href: "#/avatars" }, [
+    h("div", { class: "t" }, "🎭 Avatars"),
+    h("div", { class: "n" }, "the stories' protagonists, collected by playing as them"),
+    h("div", { class: "row" }, [h("span", { class: "badge" }, "collection"), h("span", { class: "cnt" }, `${Avatars.count()}`)]),
   ])]));
   root.append(h("div", { class: "cat-title" }, "Stories"));
   root.append(h("div", { class: "book-list" }, stories.map(([href, cls, title, native, grade, cnt]) =>
@@ -5360,6 +5367,7 @@ async function route() {
     a.classList.toggle("active", a.dataset.tab === tab);
   if (parts[0] === "stream") await viewStream();
   else if (parts[0] === "events") Events.view();
+  else if (parts[0] === "avatars") await Avatars.view();
   else if ((parts[0] === "turning" || parts[0] === "keymoves") && parts[1] === "all") viewTurningList(parts[0] === "turning" ? "turn" : "key");
   else if (parts[0] === "turning") viewTurning("turn", 0, +parts[1] || null);
   else if (parts[0] === "keymoves") viewTurning("key", 0, +parts[1] || null);

@@ -856,7 +856,8 @@ const TK = {
   // cleared, unless undone since (a replay or a start over: "tkUndo", dated, so another device's or the server's old
   // copy can't bring a beat back; clearing it again later, "tkAt", wins)
   cleared(key) { const p = loadProgress(); return (p.tk || {})[key] === 1 && !(((p.tkUndo || {})[key] || 0) > ((p.tkAt || {})[key] || 0)); },
-  markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; (p.tkAt || (p.tkAt = {}))[key] = Date.now(); this.saveProg(p); },
+  markCleared(key) { const p = loadProgress(); (p.tk || (p.tk = {}))[key] = 1; (p.tkAt || (p.tkAt = {}))[key] = Date.now(); this.saveProg(p);
+    if (typeof Avatars !== "undefined") Avatars.cleared(key); },   // (whoever you're playing as joins your avatars)
   undoCleared(p, key) { if (p.tk) delete p.tk[key]; (p.tkUndo || (p.tkUndo = {}))[key] = Date.now(); },
   // A world rolled back (Replay from…, Start over): dated in the progress (synced, the later wins), and this
   // device's place, party and things in that world marked as made after it ("tk-seen"). Another device's

@@ -1021,3 +1021,15 @@ svg.pl-counting .last-move { display: none; }
 .goal-bar { margin-top: 6px; max-width: 320px; }
 @media (max-width: 600px) { .cal-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; } .cal-day { padding: 6px 2px; min-height: 76px; } .cal-coins { font-size: 15px; } .cal-what { display: none; } }
 .turning-row { text-decoration: none; color: inherit; display: block; } .turning-row.solved .t { color: var(--muted); }
+/* avatars (avatars.js): the card beside a board, and the collection */
+.avatar-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin-bottom: 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--border, #e3dccb); }
+.avatar-pic { width: 72px; height: 72px; object-fit: cover; object-position: top; border-radius: 12px; background: rgba(0,0,0,.06); flex: none; }
+.avatar-name { font-weight: 700; }
+.avatar-say { margin-top: 4px; padding: 6px 10px; border-radius: 10px; background: rgba(0,0,0,.06); font-size: 14px; }
+.avatar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+.avatar-tile { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border-radius: 14px; background: var(--card); border: 1px solid var(--border, #e3dccb); cursor: pointer; font: inherit; color: inherit; }
+.avatar-tile img { width: 96px; height: 96px; object-fit: cover; object-position: top; border-radius: 12px; }
+.avatar-tile.locked { cursor: default; }
+.avatar-tile.locked img { filter: brightness(0) opacity(.35); }
+.avatar-tile.on { outline: 3px solid var(--accent); }
+.avatar-none { width: 96px; height: 96px; display: grid; place-items: center; font-size: 40px; color: var(--muted); }
