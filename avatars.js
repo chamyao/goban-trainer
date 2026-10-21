@@ -141,26 +141,49 @@ const Avatars = (() => {
     ms_han: { ok: [["", "That's how it's done!"], ["", "Ha! Too easy."]],
               bad: [["", "Damn it."], ["", "Whatever. Next."]] },
   };
+  // One avatar for the whole site, held to the window's bottom-left corner whatever the scroll (the user: "make the
+  // anchor the actual window", "anchor avatar and bigger on mobile too"), on every page with a board and its side panel:
+  // problems, the Stream, Turning points, games in Play ("have avatar appear on play boards too"). Made once, so a page
+  // that redraws on every move (a live game) doesn't bring it in again each time; hidden on other pages. On a wide
+  // screen the board's row keeps a column clear for it.
+  let fixed = null, fixedWho = "", pending = false;
+  function figure(who) {
+    if (fixed && fixedWho === who) return fixed;
+    if (fixed) fixed.remove();
+    const lead = h("img", { class: "avatar-lead", alt: "" });
+    loadPortraits().then(m => { if (m[who]) lead.src = img(m[who]); });
+    fixed = h("div", { class: "avatar-fixed", hidden: "" }, [h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]), lead]);
+    fixedWho = who;
+    document.body.append(fixed);
+    return fixed;
+  }
+  // the board pages: a board card beside its side panel (not the Review tab: the user wanted the boards one plays on)
+  const boardRow = () => !location.hash.startsWith("#/review") && [...document.querySelectorAll("#root .board-card")]
+    .map(b => b.parentNode.classList.contains("avatar-stage") ? b.parentNode.parentNode : b.parentNode).find(r => r.querySelector(":scope > aside"));
   function mount() {
-    const player = document.querySelector("#root .player"), who = picked();
-    if (!player || !who || player.querySelector(".avatar-stage")) return;
-    const board = player.querySelector(":scope > .board-card");
-    if (!board) return;
-    const lead = h("img", { class: "avatar-lead", alt: "" }), small = h("img", { class: "avatar-small", alt: "" });
-    loadPortraits().then(m => { if (m[who]) lead.src = small.src = img(m[who]); });
-    const box = () => h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]);
-    // the lead held to the window's bottom-left corner, its word over its head (the user: "make the anchor the actual
-    // window, not the board, so scrolling should not change her spot"); the column only keeps the board clear of it
-    const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" }), h("div", { class: "avatar-fixed" }, [box(), lead])]);
-    player.insertBefore(stage, board);
-    stage.insertBefore(board, stage.querySelector(".avatar-fixed"));
-    stage.append(h("div", { class: "avatar-row" }, [small, box()]));   // (narrower: under the board, in its width)
+    pending = false;
+    const who = picked(), row = who && boardRow();
+    document.body.classList.toggle("has-avatar", !!row);
+    if (!row) { if (fixed) fixed.hidden = true; return; }
+    const f = figure(who);
+    if (f.hidden) { f.hidden = false; const l = f.querySelector(".avatar-lead"); l.style.animation = "none"; void l.offsetWidth; l.style.animation = ""; }
+    // the column keeping the board clear of it, on a wide screen
+    const board = row.querySelector(":scope > .board-card");
+    if (board) { const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" })]); row.insertBefore(stage, board); stage.append(board); }
+  }
+  const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(mount); } };
+  // a word from it: a page's own (Turning points' "You're White. Find a move to keep the advantage.": the user, "this
+  // line can be a dialogue for the avatar"), or one on a result
+  function say(text) {
+    if (!fixed || fixed.hidden) return false;
+    const b = fixed.querySelector(".avatar-dlg");
+    b.querySelector(".avatar-say").textContent = text; b.hidden = !text;
+    return true;
   }
   addEventListener("tczw:result", e => {
-    const boxes = document.querySelectorAll("#root .avatar-dlg");
-    if (!boxes.length) return;
+    if (!fixed || fixed.hidden) return;
     const kind = e.detail === "ok" ? "ok" : "bad", set = (VOICE[picked()] || LINES)[kind] || LINES[kind], [zh, en] = set[Math.floor(Math.random() * set.length)];
-    for (const b of boxes) { b.querySelector(".avatar-say").textContent = zh ? `${zh} ${en}` : en; b.hidden = false; }
+    say(zh ? `${zh} ${en}` : en);
   });
 
   // the collection (#/avatars): everyone, the ones yet to come as silhouettes
@@ -196,7 +219,8 @@ const Avatars = (() => {
     setTimeout(() => { if (Object.keys(loadProgress().tk || {}).length) catchUp().catch(e => console.error("[avatars]", e)); }, 3000);
     // a page drawn (by the router, or a page redrawing itself): the card goes in
     const r = document.getElementById("root");
-    if (r) new MutationObserver(() => mount()).observe(r, { childList: true });
+    if (r) new MutationObserver(schedule).observe(r, { childList: true, subtree: true });
+    addEventListener("hashchange", schedule);
   });
-  return { VOICE, unlock, cleared, owns, picked, leads, catchUp, mount, view, merge, count, norm };
+  return { VOICE, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();

@@ -3073,7 +3073,7 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     h("div", { class: "panel" }, [
       h("h2", {}, "Controls"),
       h("div", { class: "controls" }, [
-        playable ? h("button", { onclick: () => { if (busy) return; tried = null; show = null; result.className = ""; result.textContent = prompt; draw(); } }, "Try again") : null,
+        playable ? h("button", { onclick: () => { if (busy) return; tried = null; show = null; result.className = ""; result.textContent = prompt; ask(); draw(); } }, "Try again") : null,
         h("button", { onclick: async () => { if (busy) return; busy = true;
           if (!deepA) result.textContent = "KataGo is reading…";
           try { await deep; } catch (e) { console.error(e); }
@@ -3086,6 +3086,10 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     ]),
   ]);
   root.append(h("div", { class: "player" }, [boardCard, aside]));
+  // the prompt is the avatar's to say, when there is one (the user: "'You're White. Find a move to keep the advantage.':
+  // this line can be a dialogue for the avatar")
+  const ask = () => { if (playable && Avatars.picked() && Avatars.mount() && Avatars.say(prompt)) result.textContent = ""; };
+  ask();
   Turning.scan();   // the next ones get read while this one's played, and on after the page is left
 }
 
