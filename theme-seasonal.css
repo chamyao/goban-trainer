@@ -277,3 +277,5 @@ html:has(body.season-harvest)::after { left: 68vw; width: 26px; height: 26px; an
 body.season-halloween .event-row { background: #efe3c8; color: #2e2219; border-color: #8c6a3c; }
 body.season-halloween .event-row .event-when, body.season-halloween .event-row .meta-sub { color: #6b5338; }
 body.season-halloween .event-toast { background: #ff8a1f; color: #1b1024; }
+body.season-halloween .cal-day { background: #efe3c8; color: #2e2219; border-color: #8c6a3c; }
+body.season-halloween .cal-day .cal-n, body.season-halloween .cal-day .cal-what { color: #6b5338; }

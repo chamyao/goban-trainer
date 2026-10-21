@@ -71,6 +71,23 @@ const Events = (() => {
     { id: "stones-candy", ev: "halloween", type: "stones", name: "Candy stones", icon: "🍬", price: 20 },
     { id: "title-pumpkin-king", ev: "halloween", type: "title", name: "Pumpkin King", icon: "🎃", price: 10 },
     { id: "hat-witch", ev: "halloween", type: "hat", name: "Witch hat for Sun Wukong", price: 25 },
+    // not for sale: the sign-in calendar's prizes (slot) and the event goals' (goals)
+    { id: "hat-pumpkin", ev: "halloween", type: "hat", name: "Pumpkin hat for Sun Wukong", price: 0, gift: true, slot: 5 },
+    { id: "board-moonlit", ev: "halloween", type: "board", name: "Moonlit board", price: 0, gift: true, slot: 10,
+      board: { id: "moonlit", name: "Moonlit", wood: ["#26365a", "#1f2d4c", "#19253f"], line: "#cdd9f3", label: "#bccbea", stone: "rgba(255,255,255,.35)" } },
+    { id: "title-trick-or-treater", ev: "halloween", type: "title", name: "Trick-or-Treater", icon: "🍭", price: 0, gift: true, goals: true },
+  ];
+
+  // The sign-in calendar, DragonVale's (the user: "a calendar by event with sign-in bonus and special event, similar to
+  // DragonVale"): a day the site is opened in an event fills its calendar's next slot, so a missed day only waits;
+  // ten slots, the fifth and tenth the event's own prizes (or more of its currency, for an event without)
+  const CAL = [3, 3, 5, 3, "prize", 3, 3, 5, 3, "prize"];
+  const CAL_FINAL_BONUS = 10;
+  // the special event's goals, the same in every event; all three done: the event's goal prize
+  const GOALS = [
+    { id: "solve10", need: 10, of: "solved", pay: 10, text: "Solve 10 problems you've never solved, first try" },
+    { id: "turn3", need: 3, of: "turning", pay: 10, text: "Find 3 turning points or key moves, first try" },
+    { id: "signin5", need: 5, of: "signins", pay: 5, text: "Sign in on 5 days" },
   ];
 
   // the event windows of the years around d
@@ -88,8 +105,8 @@ const Events = (() => {
   const upcoming = (d = now(), days = 366) => windows(d).filter(w => w.start > d && +w.start - d < days * 864e5).sort((a, b) => a.start - b.start);
 
   // the ledger
-  const ledger = () => { const p = loadProgress(); return p.ev || { earn: {}, own: {}, eq: {} }; };
-  const store = f => { const p = loadProgress(); p.ev = p.ev || { earn: {}, own: {}, eq: {} }; for (const k of ["earn", "own", "eq"]) p.ev[k] = p.ev[k] || {}; f(p.ev); TK.saveProg(p); eqAt = 0; };
+  const ledger = () => { const p = loadProgress(); return p.ev || { earn: {}, own: {}, eq: {}, days: {} }; };
+  const store = f => { const p = loadProgress(); p.ev = p.ev || {}; for (const k of ["earn", "own", "eq", "days"]) p.ev[k] = p.ev[k] || {}; f(p.ev); TK.saveProg(p); eqAt = 0; };
   const earned = (L, ev) => Object.values((L.earn || {})[ev] || {}).reduce((a, b) => a + b, 0);
   const spent = (L, ev) => ITEMS.filter(it => it.ev === ev && (L.own || {})[it.id]).reduce((a, it) => a + it.price, 0);
   const balance = (ev, L = ledger()) => Math.max(0, earned(L, ev) - spent(L, ev));
@@ -111,9 +128,55 @@ const Events = (() => {
     if (got) { toast(`${f.ev.ci} +${got} ${f.ev.cur[got === 1 ? 0 : 1]}`); chip(); }
     return got;
   }
+  // what the event's goals count, from the ledger
+  function counts(ev, L = ledger()) {
+    const keys = Object.keys((L.earn || {})[ev] || {});
+    return { solved: keys.filter(k => !/^(tp|day|cal|goal):/.test(k)).length, turning: keys.filter(k => k.startsWith("tp:")).length,
+             signins: Object.keys((L.days || {})[ev] || {}).length };
+  }
+  const prizes = ev => ITEMS.filter(it => it.ev === ev && it.gift && it.slot).sort((a, b) => a.slot - b.slot);
+  // a slot's reward: [currency, prize item or null]
+  function slotReward(ev, i) {
+    const r = CAL[i - 1];
+    if (r !== "prize") return [r, null];
+    const it = prizes(ev).find(x => x.slot === i);
+    return it ? [i === CAL.length ? CAL_FINAL_BONUS : 0, it] : [10, null];
+  }
+  // today's sign-in, and any slot the days signed in have reached and not yet paid (two devices: each day once)
+  function checkIn() {
+    const f = featured();
+    if (!f) return;
+    const ev = f.ev.id, got = [];
+    store(E => {
+      const days = E.days[ev] = E.days[ev] || {}, book = E.earn[ev] = E.earn[ev] || {};
+      days[today()] = 1;
+      const n = Math.min(CAL.length, Object.keys(days).length);
+      for (let i = 1; i <= n; i++) {
+        if (book[`cal:${i}`] != null) continue;
+        const [coins, it] = slotReward(ev, i);
+        book[`cal:${i}`] = coins;
+        if (it) E.own[it.id] = 1;
+        got.push([i, coins, it]);
+      }
+    });
+    for (const [i, coins, it] of got) toast(`📅 Day ${i}: ${coins ? `${f.ev.ci} +${coins}` : ""}${it ? ` ${it.icon || "🎁"} ${it.name}` : ""}`);
+    if (got.length) { chip(); if (location.hash === "#/events") view(); }
+  }
+  function claimGoal(id) {
+    const f = featured(), g = GOALS.find(x => x.id === id);
+    if (!f || !g) return false;
+    const ev = f.ev.id, c = counts(ev);
+    if (c[g.of] < g.need) return false;
+    let ok = false;
+    store(E => { const book = E.earn[ev] = E.earn[ev] || {}; if (book[`goal:${id}`] == null) { book[`goal:${id}`] = g.pay; ok = true; }
+      // all of them: the goal prize
+      if (GOALS.every(x => book[`goal:${x.id}`] != null)) for (const it of ITEMS.filter(x => x.ev === ev && x.goals)) E.own[it.id] = 1; });
+    if (ok) { toast(`${f.ev.ci} +${g.pay} ${f.ev.cur[1]}`); chip(); }
+    return ok;
+  }
   function buy(id) {
     const it = ITEMS.find(x => x.id === id);
-    if (!it || owns(id) || balance(it.ev) < it.price) return false;
+    if (!it || it.gift || owns(id) || balance(it.ev) < it.price) return false;
     const f = featured();
     if (!f || f.ev.id !== it.ev) return false;   // (a shop is open only in its event)
     store(E => { E.own[id] = 1; });
@@ -139,14 +202,16 @@ const Events = (() => {
   function merge(l, r) {
     if (!r) return l;
     if (!l) return r;
-    const o = { earn: {}, own: { ...(r.own || {}), ...(l.own || {}) }, eq: { ...(r.eq || {}), ...(l.eq || {}) } };
+    const o = { earn: {}, days: {}, own: { ...(r.own || {}), ...(l.own || {}) }, eq: { ...(r.eq || {}), ...(l.eq || {}) } };
     for (const src of [r.earn || {}, l.earn || {}]) for (const ev in src) o.earn[ev] = { ...(o.earn[ev] || {}), ...src[ev] };
+    o.days = {};
+    for (const src of [r.days || {}, l.days || {}]) for (const ev in src) o.days[ev] = { ...(o.days[ev] || {}), ...src[ev] };
     return o;
   }
 
   // what a prize looks like, in the shop (the user: "show off what the prizes look like in the shop")
-  function preview(it) {
-    const box = h("div", { class: `event-preview event-preview-${it.type}` });
+  function preview(it, small) {
+    const box = h("div", { class: `event-preview event-preview-${it.type}${small ? " small" : ""}` });
     if (it.type === "board" || it.type === "stones") {
       const t = it.type === "board" ? it.board : BoardTheme.LIST[0], n = 5, cell = 22, pad = 14, W = pad * 2 + cell * (n - 1);
       const stones = [[1, 1, 1], [2, 1, 2], [3, 2, 1], [1, 3, 2], [2, 2, 2], [3, 3, 1]];
@@ -212,7 +277,35 @@ const Events = (() => {
           h("p", { class: "meta-sub" }, `Earn ${ev.cur[1]} by solving: 1 for a problem you've never solved, first try (no hint, no wrong move); 3 for a turning point or key move you find; 2 more for the day's first. Each problem pays once.`),
         ].filter(Boolean)),
       ]));
-      const items = shopFor(ev);
+      // the sign-in calendar
+      const L = ledger(), book = (L.earn || {})[ev.id] || {}, signed = Object.keys((L.days || {})[ev.id] || {}).length;
+      root.append(h("div", { class: "cat-title" }, "Daily sign-in"));
+      root.append(h("p", { class: "meta-sub" }, `Open the site on a day of ${ev.name} to fill the next day. Missed days just wait. ${signed} of ${CAL.length} so far.`));
+      root.append(h("div", { class: "cal-grid" }, CAL.map((_, j) => {
+        const i = j + 1, [coins, it] = slotReward(ev.id, i), done = book[`cal:${i}`] != null;
+        return h("div", { class: "cal-day" + (done ? " done" : "") + (i === signed + 1 ? " next" : "") + (it ? " prize" : "") }, [
+          h("div", { class: "cal-n" }, `Day ${i}`),
+          it ? preview(it, true) : h("div", { class: "cal-coins" }, `${ev.ci} ${coins}`),
+          it ? h("div", { class: "cal-what" }, `${it.name}${coins ? ` + ${ev.ci} ${coins}` : ""}`) : null,
+          done ? h("div", { class: "cal-check" }, "✓") : null,
+        ].filter(Boolean));
+      })));
+      // the special event's goals
+      const c = counts(ev.id), allDone = GOALS.every(g => book[`goal:${g.id}`] != null), goalPrize = ITEMS.find(x => x.ev === ev.id && x.goals);
+      root.append(h("div", { class: "cat-title" }, `${ev.name} goals`));
+      root.append(h("div", { class: "event-list" }, [...GOALS.map(g => {
+        const have = Math.min(g.need, c[g.of]), claimed = book[`goal:${g.id}`] != null;
+        return h("div", { class: "event-row goal-row" }, [
+          h("span", { class: "event-what" }, [h("b", {}, g.text), h("div", { class: "bar goal-bar" }, [h("div", { style: `width:${100 * have / g.need}%` })])]),
+          h("span", { class: "event-when" }, `${have} / ${g.need}`),
+          claimed ? h("span", { class: "badge" }, "✓ claimed") : Object.assign(h("button", { class: have >= g.need ? "primary" : "",
+            onclick: () => { if (claimGoal(g.id)) view(); } }, `${ev.ci} ${g.pay}`), { disabled: have < g.need }),
+        ]);
+      }), goalPrize ? h("div", { class: "event-row goal-row" }, [preview(goalPrize, true),
+        h("span", { class: "event-what" }, [h("b", {}, `All three: ${goalPrize.icon || ""} ${goalPrize.name}`), h("span", { class: "meta-sub" }, " · not in the shop")]),
+        allDone ? h("span", { class: "badge" }, "✓ yours") : null].filter(Boolean)) : null].filter(Boolean)));
+
+      const items = shopFor(ev).filter(it => !it.gift);
       root.append(h("div", { class: "cat-title" }, `${ev.name} shop`));
       if (!items.length) root.append(h("p", { class: "meta-sub" }, "This event's shop is still being stocked."));
       else root.append(h("div", { class: "book-list" }, items.map(it => {
@@ -249,6 +342,6 @@ const Events = (() => {
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => setTimeout(chip, 0));
-  return { LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
+  document.addEventListener("DOMContentLoaded", () => { setTimeout(chip, 0); setTimeout(checkIn, 1500); });   // (the day's sign-in, once the page is up)
+  return { CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
 })();

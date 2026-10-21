@@ -1004,3 +1004,19 @@ svg.pl-counting .last-move { display: none; }
 .event-preview svg { max-width: 112px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
 .event-hat { width: 88px; image-rendering: pixelated; }
 .event-title-chip { display: inline-block; padding: 6px 12px; border-radius: 999px; }
+/* the sign-in calendar and the event goals (events.js) */
+.cal-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+.cal-day { position: relative; padding: 10px 6px; border-radius: 12px; text-align: center; background: var(--card); border: 1px solid var(--border, #e3dccb); min-height: 92px; }
+.cal-day.next { outline: 2px dashed var(--accent); }
+.cal-day.done { opacity: .6; }
+.cal-day.prize { border-color: var(--accent); }
+.cal-n { font-size: 12px; color: var(--muted); font-weight: 600; }
+.cal-coins { font-size: 20px; font-weight: 700; margin-top: 14px; }
+.cal-what { font-size: 11px; color: var(--muted); }
+.cal-check { position: absolute; top: 6px; right: 8px; color: var(--accent); font-weight: 800; }
+.event-preview.small { min-height: 0; margin: 4px 0; }
+.event-preview.small svg { max-width: 56px; }
+.event-preview.small .event-hat { width: 44px; }
+.event-preview.small .event-title-chip { font-size: 11px; padding: 3px 8px; }
+.goal-bar { margin-top: 6px; max-width: 320px; }
+@media (max-width: 600px) { .cal-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; } .cal-day { padding: 6px 2px; min-height: 76px; } .cal-coins { font-size: 15px; } .cal-what { display: none; } }

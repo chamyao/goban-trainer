@@ -49,6 +49,17 @@ const WK = (() => {
   const HEAD_BACK = HEAD.map((r, i) => i < 8 ? r : i < 16 ? r.replace(/[wrebp]/g, "y").replace(/n/g, "n") : r);
   // hats (events.js shop), 22 wide like the head: v purple, V shade, O orange band
   const HATS = {
+    "hat-pumpkin": [
+      "..........kGk.........",
+      ".........kGGk.........",
+      "......kkkkGkkkk.......",
+      "....kkOOOoOOOoOOkk....",
+      "...kOOOOoOOOOOoOOOk...",
+      "..kOOOOOoOOOOOoOOOOk..",
+      "..kOOOOOoOOOOOoOOOOk..",
+      "..kooOOOoOOOOOoOOOok..",
+      "...kkooooooooooooookk.",
+    ],
     "hat-witch": [
       "..............kk......",
       ".............kvk......",

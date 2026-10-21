@@ -50,6 +50,33 @@ await p.evaluate(()=>{Sync.username=null;localStorage.removeItem('gt-username');
 const m=await p.evaluate(()=>Events.merge({earn:{halloween:{a:1}},own:{x:1},eq:{hat:'x'}},{earn:{halloween:{b:2},harvest:{c:1}},own:{y:1},eq:{hat:'y',title:'t'}}));
 check(m.earn.halloween.a===1&&m.earn.halloween.b===2&&m.earn.harvest.c===1&&m.own.x&&m.own.y&&m.eq.hat==='x'&&m.eq.title==='t','two ledgers merge: earnings and items by union, what\'s worn this browser\'s');
 await p.close();
+// the sign-in calendar: a day signed in fills the next slot; the 5th is the pumpkin hat, the 10th the Moonlit board
+p=await open('2026-10-21T12:00:00');
+await p.evaluate(()=>{const q=loadProgress();delete q.ev;TK.saveProg(q);});
+const signIn=async d=>p.evaluate(d=>{localStorage.setItem('gt-event-date',d);const b=Events.balance('halloween');Events.checkIn();return Events.balance('halloween')-b;},d);
+check(await signIn('2026-10-21T12:00:00')===3,'day 1 signed in: 3 candy');
+check(await signIn('2026-10-21T18:00:00')===0,'the same day again: nothing');
+for(const d of ['2026-10-22','2026-10-24','2026-10-25'])await signIn(d+'T12:00:00');   // (the 23rd missed: it only waits)
+check(!await p.evaluate(()=>Events.owns('hat-pumpkin')),'four days: no prize yet');
+await signIn('2026-10-27T12:00:00');
+check(await p.evaluate(()=>Events.owns('hat-pumpkin')),'the fifth day signed in: the pumpkin hat');
+for(const d of ['2026-10-28','2026-10-29','2026-10-30','2026-10-31'])await signIn(d+'T12:00:00');
+check(!await p.evaluate(()=>Events.owns('board-moonlit')),'nine days: not the board yet');
+check(await signIn('2026-11-01T12:00:00')===10&&await p.evaluate(()=>Events.owns('board-moonlit')),'the tenth: the Moonlit board and 10 candy');
+check(await p.evaluate(()=>!Events.buy('hat-pumpkin')),'calendar prizes are not for sale');
+// two devices: days by union, each slot paid once
+const m2=await p.evaluate(()=>{const a={earn:{halloween:{'cal:1':3}},days:{halloween:{'2026-10-1':1}},own:{},eq:{}},b={earn:{halloween:{'cal:1':3}},days:{halloween:{'2026-10-2':1}},own:{},eq:{}};const m=Events.merge(a,b);return Object.keys(m.days.halloween).length;});
+check(m2===2,'two devices\' sign-ins merge by union');
+// the goals
+await p.evaluate(()=>{localStorage.setItem('gt-event-date','2026-10-21T12:00:00');const q=loadProgress();q.ev.earn.halloween=Object.assign(q.ev.earn.halloween,{'b:1':1,'b:2':1,'b:3':1,'b:4':1,'b:5':1,'b:6':1,'b:7':1,'b:8':1,'b:9':1,'tp:1:turn':3,'tp:2:key':3});TK.saveProg(q);});
+check(await p.evaluate(()=>!Events.claimGoal('solve10')),'9 problems: the 10-problem goal not yet');
+await p.evaluate(()=>{const q=loadProgress();q.ev.earn.halloween['b:10']=1;q.ev.earn.halloween['tp:3:turn']=3;TK.saveProg(q);});
+check(await p.evaluate(()=>Events.claimGoal('solve10')&&!Events.claimGoal('solve10')),'10: claimed once');
+check(await p.evaluate(()=>Events.claimGoal('turn3')&&Events.claimGoal('signin5')&&Events.owns('title-trick-or-treater')),'all three goals: the Trick-or-Treater title');
+await p.evaluate(()=>location.hash='#/events');await p.waitForSelector('.cal-day');
+check(await p.$$eval('.cal-day',e=>e.length)===10&&await p.$$eval('.cal-day.done',e=>e.length)===10,'the page shows the ten days, all signed');
+check((await p.$$eval('.goal-row',e=>e.length))===4,'and the three goals and their prize');
+await p.close();
 // Feb 12 2027: Spring Festival and Valentine's both on; the shorter is featured; no look painted yet: Classic
 p=await open('2027-02-12T12:00:00');
 const fe=await p.evaluate(()=>({f:Events.featured().ev.id,on:Events.active().map(w=>w.ev.id),cls:document.body.className}));
