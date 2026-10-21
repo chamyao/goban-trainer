@@ -15,9 +15,16 @@ await p.waitForSelector('.avatar-tile',{timeout:30000});
 const own=await p.evaluate(()=>Object.keys(loadProgress().av.own).sort());
 check(['diaochan','wangyun','lvbu','lisu','jiaxu','lijue'].every(x=>own.includes(x)),`Book 12 finished: all its leads (${own.join(', ')})`);
 check(own.includes('daiyu')&&!own.includes('grannyliu'),'Red Chamber begun: Daiyu, not yet Granny Liu');
-const tiles=await p.evaluate(()=>({all:document.querySelectorAll('.avatar-tile').length,locked:document.querySelectorAll('.avatar-tile.locked').length,
+const tiles=await p.evaluate(()=>({all:document.querySelectorAll('.avatar-tile:not(.item-tile)').length,locked:document.querySelectorAll('.avatar-tile.locked:not(.item-tile)').length,
   jang:[...document.querySelectorAll('.avatar-tile')].filter(t=>/Jang/.test(t.title+t.textContent)).length}));
 check(tiles.all>=25&&tiles.locked===tiles.all-own.length,`the collection: ${tiles.all} protagonists, ${tiles.locked} still to come as silhouettes`);
+// the items beside them: every board, stone set, title and hat; the ones not owned dimmed, with where they come from
+const sec=await p.evaluate(()=>[...document.querySelectorAll('.cat-title')].map(e=>e.textContent));
+check(['Boards','Stones','Titles',"Sun Wukong's hats"].every(t=>sec.includes(t)),`the items: ${sec.join(' / ')}`);
+const locked=await p.evaluate(()=>[...document.querySelectorAll('.item-tile.locked .meta-sub')].map(e=>e.textContent));
+check(locked.some(t=>/Halloween shop · .* 15/.test(t))&&locked.some(t=>/sign-in, day 5/.test(t)),`not yet owned: where from (${locked.slice(0,3).join(' | ')})`);
+await p.click('.item-tile:has-text("Walnut")');
+check(await p.evaluate(()=>BoardTheme.current.id==='walnut'&&!!document.querySelector('.item-tile.on')),'wearing a board from here');
 // playing: a board completed as Jang at eighteen joins the one Jang Geu-rae
 await p.evaluate(async()=>{await TK.load();TK.setParty(TK.world(21),['ms_jang_young']);TK.markCleared('21-m2');});
 check(await p.evaluate(()=>Avatars.owns('ms_jang')&&!loadProgress().av.own.ms_jang_young),'a board completed as Jang at eighteen: Jang Geu-rae (the one avatar)');

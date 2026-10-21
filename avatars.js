@@ -247,7 +247,7 @@ const Avatars = (() => {
   // the collection (#/avatars): everyone, the ones yet to come as silhouettes
   async function view() {
     crumbs.innerHTML = "";
-    crumbs.append(h("a", { href: "#/" }, "Library"), " / Avatars");
+    crumbs.append(h("a", { href: "#/" }, "Library"), " / Avatars & items");
     root.innerHTML = `<div class="loading">Loading…</div>`;
     const [all, m] = await Promise.all([leads(), loadPortraits()]);
     await catchUp();
@@ -265,6 +265,36 @@ const Avatars = (() => {
         h("div", { class: "meta-sub" }, mine ? (on ? "✓ yours" : x.novel) : x.novel),
       ]);
     })));
+    items();
+  }
+  // the items, beside the avatars (the user: "expand avatars to avatars / items"): every board, stone set, title and
+  // hat, each with its picture; the ones owned to wear or take off, the rest dimmed with where they come from
+  function items() {
+    const E = typeof Events !== "undefined" ? Events : null;
+    if (!E) return;
+    const evName = id => (E.LIST.find(e => e.id === id) || {}).name || id;
+    const evIcon = id => (E.LIST.find(e => e.id === id) || {}).ci || "";
+    const whence = it => it.gift ? (it.slot ? `${evName(it.ev)} sign-in, day ${it.slot}` : `${evName(it.ev)} goals, all three`) : `${evName(it.ev)} shop · ${evIcon(it.ev)} ${it.price}`;
+    const tile = (it, own, on, toggle, sub) => h("button", { type: "button", class: "avatar-tile item-tile" + (own ? "" : " locked") + (on ? " on" : ""),
+      onclick: () => { if (own && toggle) { toggle(); view(); } } }, [E.preview(it, true), h("div", { class: "avatar-name" }, it.name), h("div", { class: "meta-sub" }, sub)]);
+    const section = (title, tiles) => { root.append(h("div", { class: "cat-title" }, title)); root.append(h("div", { class: "avatar-grid" }, tiles)); };
+    // boards: the standard ones are everyone's; the events' to collect
+    const cur = BoardTheme.current.id;
+    section("Boards", [
+      ...BoardTheme.LIST.map(t => tile({ type: "board", name: t.name, board: t }, true, cur === t.id, () => {
+        try { t.id === "kaya" ? localStorage.removeItem(BoardTheme.KEY) : localStorage.setItem(BoardTheme.KEY, t.id); } catch {} BoardTheme.paintAll(); BoardTheme.label(); }, cur === t.id ? "✓ on" : "standard")),
+      ...E.ITEMS.filter(it => it.type === "board").map(it => { const own = E.owns(it.id), on = own && E.isOn(it);
+        return tile(it, own, on, () => E.equip(it.id, !on), own ? (on ? "✓ on" : evName(it.ev)) : whence(it)); }),
+    ]);
+    for (const [type, title, none] of [["stones", "Stones", "Classic stones"], ["title", "Titles", "No title"], ["hat", "Sun Wukong's hats", "No hat"]]) {
+      const list = E.ITEMS.filter(it => it.type === type), worn = E.equipped(type);
+      section(title, [
+        h("button", { type: "button", class: "avatar-tile item-tile" + (worn ? "" : " on"), onclick: () => { if (worn) { E.equip(worn.id, false); view(); } } },
+          [h("div", { class: "event-preview small item-none" }, "—"), h("div", { class: "avatar-name" }, none), h("div", { class: "meta-sub" }, worn ? "" : "✓ on")]),
+        ...list.map(it => { const own = E.owns(it.id), on = own && E.isOn(it);
+          return tile(it, own, on, () => E.equip(it.id, !on), own ? (on ? "✓ on" : evName(it.ev)) : whence(it)); }),
+      ]);
+    }
   }
   // two copies: what's owned by union; the pick, this browser's unless it has none
   function merge(l, r) {

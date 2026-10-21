@@ -226,8 +226,9 @@ const Events = (() => {
       box.innerHTML = svg + "</svg>";
       if (it.type === "stones") Candy.load();
     } else if (it.type === "title") {
-      box.append(h("span", { class: "auth-chip event-title-chip" }, [h("span", {}, `Playing as ${(typeof Sync !== "undefined" && Sync.username) || "you"}`),
-        h("span", { class: "player-title" }, ` · ${it.icon || ""} ${it.name}`)]));
+      box.append(small ? h("span", { class: "auth-chip event-title-chip" }, `${it.icon || ""} ${it.name}`)   // (a small tile: the title alone)
+        : h("span", { class: "auth-chip event-title-chip" }, [h("span", {}, `Playing as ${(typeof Sync !== "undefined" && Sync.username) || "you"}`),
+          h("span", { class: "player-title" }, ` · ${it.icon || ""} ${it.name}`)]));
     } else if (it.type === "hat" && typeof WK !== "undefined") {
       const rows = WK.HAT_ROWS(it.id), cv = document.createElement("canvas");
       cv.width = 22; cv.height = rows + 15; cv.className = "event-hat";
@@ -335,5 +336,5 @@ const Events = (() => {
   }
 
   document.addEventListener("DOMContentLoaded", () => { setTimeout(chip, 0); setTimeout(checkIn, 1500); });   // (the day's sign-in, once the page is up)
-  return { CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
+  return { preview, isOn, CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
 })();

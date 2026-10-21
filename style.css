@@ -1053,3 +1053,7 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .avatar-tile.locked img { filter: brightness(0) opacity(.35); }
 .avatar-tile.on { outline: 3px solid var(--accent); }
 .avatar-none { width: 96px; height: 96px; display: grid; place-items: center; font-size: 40px; color: var(--muted); }
+.item-tile .event-preview.small { min-height: 72px; display: flex; align-items: center; justify-content: center; }
+.item-tile.locked .event-preview { filter: grayscale(1) opacity(.45); }
+.item-tile.locked .avatar-name { opacity: .6; }
+.item-none { font-size: 28px; color: var(--muted); }

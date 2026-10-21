@@ -2241,8 +2241,8 @@ async function viewLibrary() {
   ]),
   // the protagonists collected from the stories (avatars.js)
   h("a", { class: "book avatar-card-book", href: "#/avatars" }, [
-    h("div", { class: "t" }, "🎭 Avatars"),
-    h("div", { class: "n" }, "the stories' protagonists, collected by playing as them"),
+    h("div", { class: "t" }, "🎭 Avatars & items"),
+    h("div", { class: "n" }, "the stories' protagonists, boards, stones, titles and hats: collect and wear"),
     h("div", { class: "row" }, [h("span", { class: "badge" }, "collection"), h("span", { class: "cnt" }, `${Avatars.count()}`)]),
   ])]));
   root.append(h("div", { class: "cat-title" }, "Stories"));
