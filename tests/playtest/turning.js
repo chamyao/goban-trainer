@@ -54,19 +54,12 @@ await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').te
 const st=await p.textContent('#status');
 check(await p.evaluate(()=>Object.keys((loadProgress().ev||{earn:{}}).earn.halloween||{}).every(k=>!k.startsWith('tp:'))),'solved on the second try: no candy');
 check(/KataGo's top choice/.test(st)&&await p.evaluate(()=>document.getElementById('status').className)==='ok',`KataGo's top move gets the credit: "${st}"`);
-// solved: the board becomes the review in place, on this position with the marks, the try a branch
-const histBefore=await p.evaluate(()=>Review.loadHistory().length);
-await p.waitForSelector('.review .board-card svg',{timeout:10000});
-const rv0=await p.evaluate(k=>({at:Review.node===Review.mainNodes[k],marks:[...document.querySelectorAll('.review .turn-mark')].map(e=>e.getAttribute('fill')),kids:Review.mainNodes[k].children.length,
-  an:Review.analyses.filter(Boolean).length,n:Review.game.n,eph:Review.ephemeral,chart:!!document.querySelector('.review .chart-wrap svg'),hash:location.hash}),it.k);
-check(rv0.hash==='#/turning'&&rv0.at&&rv0.eph&&rv0.chart&&rv0.an===rv0.n+1,`solved: the board becomes the game's review in place, on this position, analyzed (${rv0.an} of ${rv0.n+1})`);
-check(rv0.marks.length===3&&rv0.marks.some(f=>/34,160,90/.test(f))&&rv0.marks.some(f=>/176,65,62/.test(f)),`the first frame marks KataGo's move, the game move and the try (${rv0.marks.length})`);
-check(rv0.kids===2,'the try is kept as a branch');
-const agree=await p.evaluate(k=>{const d=Review.details.get(`${Review.curTurn()}:${Review.node.key}`)||Review.details.get(`${Review.toMoveAt(k)}:${Review.mainNodes[k].key}`);const t=window.__turning;
-  return {top:d&&d.moves[0]&&[d.moves[0].x,d.moves[0].y],best:t.pos.best};},it.k);
-check(agree.top&&agree.top[0]===agree.best[0]&&agree.top[1]===agree.best[1],`the answer is KataGo's top move in the review (${agree.best} / ${agree.top})`);
-await p.evaluate(()=>Review.forward());
-check(await p.evaluate(k=>Review.node===Review.mainNodes[k+1]&&!document.querySelector('.review .turn-mark'),it.k),'▶ steps on through the game (the marks stay on the first frame)');
+// solved: it stays the problem, the game move marked in red beside the try (the review on this page undone)
+const solvedMarks=await p.evaluate(()=>[...document.querySelectorAll('.player .turn-mark')].map(e=>e.getAttribute('fill')));
+check(!(await p.$('.review'))&&solvedMarks.some(f=>/176,65,62/.test(f)),`solved: still the problem, the game move marked in red (${solvedMarks.length} marks)`);
+await p.click('text=Show answer');
+const ans=await p.evaluate(async()=>{const a=await window.__turning.deep;const t=window.__turning;return {marks:document.querySelectorAll('.player .turn-mark').length,top:[a.moves[0].x,a.moves[0].y],best:t.pos.best};});
+check(ans.marks===3&&ans.top[0]===ans.best[0]&&ans.top[1]===ans.best[1],`Show answer: KataGo's move (the position's own search), the game move and the try (${ans.marks})`);
 s=await S();const solved=s.items.find(x=>x.gid===it.gid&&x.kind==='turn');
 check(solved.fixed&&!solved.done,'solved: marked solved at once, without pressing Next (and it can come back as review)');
 await p.reload();await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});await fast();
@@ -97,17 +90,11 @@ if(waiting.length>=1){
     await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
     const paid=await p.evaluate(gid=>Object.entries((loadProgress().ev||{earn:{}}).earn.halloween||{}).filter(([k])=>k.startsWith('tp:'+gid)).map(([,v])=>v),await p.evaluate(()=>window.__turning.item.gid));
     check(paid.length===1&&paid[0]===3,`solved on the first try: 3 candy (${paid})`);
-    // solved: the review, KataGo's moves on, branches
-    await p.waitForSelector('.review .board-card svg',{timeout:10000});
-    check(await p.evaluate(k=>Review.node===Review.mainNodes[k]&&Review.showHints,k),'the review opens on the position, KataGo\'s moves on');
-    // a branch: a move of one's own on an empty point
-    const br=await p.evaluate(()=>{const g=Review.curGrid();for(let r=0;r<19;r++)for(let c=0;c<19;c++)if(g[r][c]===0){Review.click(c,r);return {main:Review.node.main,move:Review.node.move};}});
-    check(br&&br.main===undefined&&br.move,'a move on the board makes a branch');
-    await p.waitForFunction(()=>Review.details.size>0,null,{timeout:120000}).catch(()=>{});
-    check(await p.evaluate(()=>Review.details.size>0),'KataGo reads the branch (its moves on the board)');
-    await p.click('.review button:has-text("Try again")');await p.waitForTimeout(300);
-    const after=await p.evaluate(()=>({eph:Review.ephemeral,game:!!Review.game,hist:Review.loadHistory().length,prob:!!document.querySelector('.player svg')&&!!window.__turning}));
-    check(!after.eph&&after.prob&&after.hist===histBefore,`Try again: back to the problem; the Review tab's list is as it was (${after.hist})`);
+    // Open in Review: the Review tab, on the move, analyzed
+    const k2=await p.evaluate(()=>window.__turning.pos.k);
+    await p.click('text=Open in Review');await p.waitForTimeout(800);
+    const rv=await p.evaluate(()=>({h:location.hash,k:Review.node&&Review.node.main,an:Review.analyses.filter(Boolean).length,n:Review.game.n}));
+    check(rv.h==='#/review'&&rv.k===k2&&rv.an===rv.n+1,`Open in Review: the Review tab on the move (${rv.k}), analyzed (${rv.an} of ${rv.n+1})`);
   }
 }
 s=await S();

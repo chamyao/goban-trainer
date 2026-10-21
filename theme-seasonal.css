@@ -284,3 +284,8 @@ body.season-halloween .cal-day .cal-n, body.season-halloween .cal-day .cal-what 
 body.season-halloween .cat-title, body.season-harvest .cat-title { line-height: 38px; padding: 0 calc(10px - .07em) 0 calc(10px + .07em); }
 body.season-halloween .avatar-card, body.season-halloween .avatar-tile { background: #efe3c8; color: #2e2219; border-color: #8c6a3c; }
 body.season-harvest .avatar-tile, body.season-harvest .avatar-card { color: #2e2219; }
+/* the side panel's buttons inside their panel (the user: "Controls: banners don't fit"): the two columns can't grow past
+   it, and a long label ("High roller ×5 →") wraps onto two lines instead of pushing its button out */
+body:is(.season-halloween, .season-harvest) .controls { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+body:is(.season-halloween, .season-harvest) .controls button { min-width: 0; white-space: normal; line-height: 1.15; letter-spacing: .02em; }
+body:is(.season-halloween, .season-harvest) .controls button:is(.primary, .high-roller) { grid-column: 1 / -1; white-space: nowrap; }   /* (the long ones, a row each) */

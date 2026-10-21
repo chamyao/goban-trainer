@@ -3028,7 +3028,6 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
       if (fixed && firstTry && typeof Events !== "undefined") Events.earn(`tp:${item.gid}:${kind}`, 3);
     } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
     busy = false; draw();
-    if (result.className === "ok" && location.hash.startsWith(K.route)) toReview();   // (solved: the board becomes the review)
   };
   const next = () => {
     const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
@@ -3036,38 +3035,20 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
     Turning.save(st); Turning.pushGame(item.gid);
     if (location.hash !== K.route) location.hash = K.route; else viewTurning(kind);   // (from the list: on to the feed)
   };
-  // Solved, or the answer shown, the board becomes the game's review in place (the user: "it shouldn't even have to be
-  // a button, can't the board just become a review board with the slight difference of the game move / solution
-  // appearing at the first frame, and then the game navigable after that"): the Review's own view (KataGo's moves,
-  // branches, the chart, the mistakes), opened on this position with the marks on it, the try kept as a branch,
-  // analyzed from the reading's searches. The Review tab's own game is put back after (Review.giveBack).
-  let reviewing = false;
-  const toReview = () => {
-    if (reviewing) return;
-    reviewing = true;
-    Review.borrow(item.sgf);
+  // the game in the Review tab, analyzed from the reading's searches, on this move, KataGo's moves here from the answer's
+  // search (the user undid the review on this page: "undo the review / same window changes")
+  const openInReview = () => {
+    Review.giveBack();
+    Review.load(item.sgf); Review.currentId = Review.newId();
     if (item.w) item.w.forEach((x, j) => { Review.analyses[j] = { w: x, v: 2 }; });
     if (item.losses) Review.losses = item.losses.slice();
-    Review.showHints = true;
-    const at0 = Review.mainNodes[k];
-    if (deepA) Review.details.set(`${mover}:${at0.key}`, deepA);   // (KataGo's moves here: the answer's search)
-    Review.node = at0;
-    show = "marks";
-    const marked = marks();
-    Review.overlay = { node: at0, draw: gb => { for (const [c, r, color, label] of marked) {
-      const x = gb.px(c), y = gb.py(r);
-      gb.el("circle", { cx: x, cy: y, r: gb.cell * .44, fill: color, stroke: "#fff", "stroke-width": 2, "pointer-events": "none", class: "turn-mark" });
-      gb.el("text", { x, y: y + gb.cell * .14, "text-anchor": "middle", "font-size": gb.cell * .34, "font-weight": 700, fill: "#fff", "pointer-events": "none" }).textContent = label;
-    } } };
-    root.innerHTML = "";
-    mountReview(root, { top: [infoPanel, h("div", { class: "panel" }, [h("h2", {}, "Status"), result])],
-      buttons: [h("button", { class: "primary", onclick: () => { Review.giveBack(); next(); } }, "Next →")],
-      closeLabel: playable ? "Try again" : "Back", onClose: () => { Review.giveBack(); viewTurning(kind, at); } });
-    // the try, a branch off this position (it stays on the board's first frame, at the position itself)
-    if (tried && !(tried.c === gm.c && tried.r === gm.r)) { Review.click(tried.c, tried.r); Review.setNode(at0); }
+    Review.node = Review.mainNodes[k];
+    if (deepA) Review.details.set(`${mover}:${Review.node.key}`, deepA);
+    Review.saveState();
+    location.hash = "#/review";
   };
   draw();
-  window.__turning = { play, item, pos, toReview, deep };
+  window.__turning = { play, item, pos, deep, openInReview };
 
   const header = kind === "key"
     ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`
@@ -3098,7 +3079,8 @@ function viewTurning(kind = "turn", at = 0, gid = null) {
           try { await deep; } catch (e) { console.error(e); }
           busy = false; show = "marks";
           result.textContent = `Green: KataGo's move (${pct(pos.bestW)} for you). Red: the game move (${pct(pos.after)}).${tried && tried.w != null ? ` Blue: this try (${pct(tried.w)}).` : ""}`;
-          toReview(); } }, "Show answer"),
+          draw(); } }, "Show answer"),
+        h("button", { onclick: openInReview }, "Open in Review"),
         h("button", { class: "primary", onclick: next }, "Next →"),
       ].filter(Boolean)),
     ]),
