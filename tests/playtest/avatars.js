@@ -9,7 +9,7 @@ let fails=0;const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL
 p.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
 // before: Book 12 finished (its last board, 12-a18: only Books 1–3 have an N-boss), Red Chamber begun
 await p.addInitScript(()=>{if(sessionStorage.getItem('s'))return;sessionStorage.setItem('s',1);
-  localStorage.setItem('gt-progress',JSON.stringify({tk:{'12-a18':1,'12-a3':1,'31-g1':1}}));});
+  localStorage.setItem('gt-progress',JSON.stringify({tk:{'12-a18':1,'12-a3':1,'31-g1':1},tkUndo:{'12-a18':5,'12-a3':5}}));   /* (Book 12 since started over: still counts) */});
 await p.goto('http://localhost:8765/#/avatars');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
 await p.waitForSelector('.avatar-tile',{timeout:30000});
 const own=await p.evaluate(()=>Object.keys(loadProgress().av.own).sort());
@@ -26,11 +26,15 @@ check(await p.evaluate(()=>!!Avatars.picked()),'the first collected is picked');
 await p.evaluate(()=>{const q=loadProgress();q.av.pick='diaochan';TK.saveProg(q);});
 await p.evaluate(()=>location.hash='#/stream');
 await p.waitForSelector('.player .avatar-stage .avatar-lead',{timeout:30000});
+await p.waitForFunction(()=>document.querySelector('.avatar-lead').naturalWidth>0);
 const lay=await p.evaluate(()=>{const l=document.querySelector('.avatar-lead'),b=document.querySelector('.avatar-stage > .board-card');const lr=l.getBoundingClientRect(),br=b.getBoundingClientRect();
-  return {left:lr.left<br.left,foot:Math.abs(lr.bottom-br.bottom)<2,tall:lr.height>br.height*.6,through:getComputedStyle(l).pointerEvents==='none',src:/diaochan/.test(l.src),name:document.querySelector('.avatar-col .avatar-name').textContent};});
-check(lay.left&&lay.foot&&lay.tall&&lay.through&&lay.src,`the lead at the board's bottom left, standing on its foot, big, taps passing through (${JSON.stringify(lay)})`);
+  return {left:lr.right<br.left+50,foot:Math.abs(lr.bottom-innerHeight)<2,tall:lr.height>250,through:getComputedStyle(l.parentNode).pointerEvents==='none',src:/diaochan/.test(l.src)};});
+check(lay.left&&lay.foot&&lay.tall&&lay.through&&lay.src,`the lead at the window's bottom left, left of the board, big, taps passing through (${JSON.stringify(lay)})`);
+const y0=await p.evaluate(()=>document.querySelector('.avatar-lead').getBoundingClientRect().bottom);
+await p.evaluate(()=>scrollTo(0,400));await p.waitForTimeout(200);
+check(await p.evaluate(y0=>Math.abs(document.querySelector('.avatar-lead').getBoundingClientRect().bottom-y0)<1,y0),'scrolling doesn\'t move her');
 await p.evaluate(()=>window.__trainer.finish('ok'));
-check(!(await p.evaluate(()=>document.querySelector('.avatar-col .avatar-dlg').hidden))&&(await p.textContent('.avatar-col .avatar-say')).length>2,`a word on the result, over its head: "${await p.textContent('.avatar-col .avatar-say')}"`);
+check(!(await p.evaluate(()=>document.querySelector('.avatar-fixed .avatar-dlg').hidden))&&(await p.textContent('.avatar-fixed .avatar-say')).length>2,`a word on the result, over its head: "${await p.textContent('.avatar-fixed .avatar-say')}"`);
 await p.keyboard.press('n');await p.waitForTimeout(800);
 check(await p.evaluate(()=>!!document.querySelector('.player .avatar-lead')),'the next problem keeps it');
 // a phone: the small portrait beside the box, under the board

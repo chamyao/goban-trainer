@@ -1026,7 +1026,7 @@ svg.pl-counting .last-move { display: none; }
    the board's foot, over the frame (not the points), taps passing through */
 .avatar-stage { position: relative; display: flex; flex-direction: column; align-items: stretch; }
 .avatar-stage > .board-card { position: relative; z-index: 1; }
-.avatar-col, .avatar-lead { display: none; }
+.avatar-col, .avatar-lead, .avatar-fixed { display: none; }
 .avatar-dlg { position: relative; z-index: 3; padding: 8px 11px; border-radius: 12px; background: linear-gradient(180deg, rgba(28, 22, 34, .92), rgba(16, 12, 20, .92));
   color: #f4ecff; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); font-size: 14px; }
 .avatar-dlg .avatar-name { font-weight: 700; color: #ffd98a; margin-bottom: 2px; }
@@ -1037,11 +1037,16 @@ svg.pl-counting .last-move { display: none; }
 @media (min-width: 1280px) {
   main:has(.avatar-stage) { max-width: 1340px; }   /* (room for the lead's column beside the board and its panel) */
   .avatar-stage { flex-direction: row; align-items: flex-end; }
-  .avatar-col { display: block; flex: 0 0 clamp(150px, 14vw, 230px); align-self: stretch; position: relative; }
-  .avatar-lead { display: block; position: absolute; left: 0; bottom: 0; height: 90%; max-width: calc(clamp(150px, 14vw, 230px) + 44px);   /* (over the frame, not the points) */
-    object-fit: contain; object-position: bottom left; z-index: 2; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
-  .avatar-col > .avatar-dlg { position: absolute; left: 0; right: 6px; top: 0; }
+  .avatar-col { display: block; flex: 0 0 clamp(150px, 14vw, 230px); }
+  /* the lead, held to the window's bottom-left (at the page's left edge), whatever the scroll */
+  .avatar-fixed { display: flex; flex-direction: column; align-items: stretch; gap: 8px; position: fixed; bottom: 0; z-index: 5; pointer-events: none;
+    left: max(8px, calc((100vw - 1340px) / 2 + 24px)); width: calc(clamp(150px, 14vw, 230px) + 44px); }
+  .avatar-lead { display: block; width: 100%; height: auto; max-height: 72vh; object-fit: contain; object-position: bottom left;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); animation: tkPortraitIn .35s ease-out; }
+  .avatar-fixed > .avatar-dlg { margin-right: 44px; }
+  .avatar-fixed > .avatar-dlg[hidden] { display: block; visibility: hidden; }
   .avatar-row { display: none; }
+  .avatar-fixed .avatar-lead { -webkit-mask-image: none; mask-image: none; }   /* (its waist cut on the window's edge, as the story's on its frame) */
 }
 .avatar-name { font-weight: 700; }
 .avatar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }

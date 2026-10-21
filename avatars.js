@@ -58,14 +58,16 @@ const Avatars = (() => {
   // boards won before avatars existed: who led then isn't known, so each book's first lead for a book begun, and all
   // of its leads for a book finished
   async function catchUp() {
-    const p = loadProgress(), done = Object.keys(p.tk || {}).filter(k => TK.cleared(k));
+    // a board ever completed counts, a book since started over included (a rebuilt book's start-over keeps an undo on
+    // every board: apo110's Book 12, beaten before it, read as unfinished, and Diaochan stayed locked)
+    const p = loadProgress(), ever = k => (p.tk || {})[k] === 1, done = Object.keys(p.tk || {}).filter(ever);
     if (!done.length) return;
     const all = await leads();
     for (const w of TK.data.worlds) {
       const mine = done.filter(k => parseInt(k, 10) === w.n);
       if (!mine.length) continue;
       // finished: its last board cleared (a board nothing follows; only Books 1–3 call theirs N-boss)
-      const finished = TK.cleared(`${w.n}-boss`) || w.nodes.some(n => !TK.isStart(n.key) && !w.edges.some(e => e[0] === n.key) && TK.cleared(n.key));
+      const finished = ever(`${w.n}-boss`) || w.nodes.some(n => !TK.isStart(n.key) && !w.edges.some(e => e[0] === n.key) && ever(n.key));
       if (finished) for (const x of all.filter(x => x.books.includes(w.n))) unlock(x.who, true);
       else unlock((w.party || [])[0], true);
     }
@@ -91,9 +93,11 @@ const Avatars = (() => {
     const lead = h("img", { class: "avatar-lead", alt: "" }), small = h("img", { class: "avatar-small", alt: "" });
     loadPortraits().then(m => { if (m[who]) lead.src = small.src = img(m[who]); });
     const box = () => h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]);
-    const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" }, [box()]), lead]);
+    // the lead held to the window's bottom-left corner, its word over its head (the user: "make the anchor the actual
+    // window, not the board, so scrolling should not change her spot"); the column only keeps the board clear of it
+    const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" }), h("div", { class: "avatar-fixed" }, [box(), lead])]);
     player.insertBefore(stage, board);
-    stage.insertBefore(board, lead);
+    stage.insertBefore(board, stage.querySelector(".avatar-fixed"));
     stage.append(h("div", { class: "avatar-row" }, [small, box()]));   // (narrower: under the board, in its width)
   }
   addEventListener("tczw:result", e => {
