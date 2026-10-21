@@ -44,6 +44,7 @@ await p.evaluate(()=>window.__trainer.finish('ok'));
 check(!(await p.evaluate(()=>document.querySelector('.avatar-fixed .avatar-dlg').hidden))&&(await p.textContent('.avatar-fixed .avatar-say')).length>2,`a word on the result, over its head: "${await p.textContent('.avatar-fixed .avatar-say')}"`);
 await p.keyboard.press('n');await p.waitForTimeout(800);
 check(await p.evaluate(()=>document.querySelectorAll('.avatar-fixed').length===1&&!document.querySelector('.avatar-fixed').hidden),'the next problem keeps her (one, not another)');
+check(await p.evaluate(()=>document.querySelector('.avatar-fixed .avatar-dlg').hidden),'and the last problem\'s word is gone');
 // a page without a board: gone; a Play board: there
 await p.evaluate(()=>location.hash='#/');await p.waitForTimeout(400);
 check(await p.evaluate(()=>document.querySelector('.avatar-fixed').hidden),'the Library: not shown');

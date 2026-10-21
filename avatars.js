@@ -199,7 +199,7 @@ const Avatars = (() => {
   // problems, the Stream, Turning points, games in Play ("have avatar appear on play boards too"). Made once, so a page
   // that redraws on every move (a live game) doesn't bring it in again each time; hidden on other pages. On a wide
   // screen the board's row keeps a column clear for it.
-  let fixed = null, fixedWho = "", pending = false, lastHash = "";
+  let fixed = null, fixedWho = "", pending = false, lastHash = "", lastRow = null;
   function figure(who) {
     if (fixed && fixedWho === who) return fixed;
     if (fixed) fixed.remove();
@@ -220,6 +220,10 @@ const Avatars = (() => {
     document.body.classList.toggle("has-avatar", !!(row || playing));
     if (!row && !playing) { if (fixed) fixed.hidden = true; lastHash = ""; return; }
     const f = figure(who);
+    // a new board (the next problem, another page): the last word goes (the user: "completion dialogue shouldn't persist to
+    // the next problem"); a page's own line (Turning points' prompt) is said right after
+    if (row && row !== lastRow) { const b = f.querySelector(".avatar-dlg"); b.hidden = true; b.querySelector(".avatar-say").textContent = ""; }
+    lastRow = row || null;
     // the Play screen, arrived at without a game: "what to play?"
     if (playing && !row && lastHash !== location.hash) setTimeout(() => say(moment("play")), 200);
     lastHash = location.hash;
