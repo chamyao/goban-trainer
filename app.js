@@ -5252,7 +5252,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Black's stones become chocolate truffles and White's candy corn. One visit in eight it's on from the start
 // ("Trick or treat!"); tapping the site's name five times quickly turns it on or off. Only in the Halloween look.
 const Candy = {
-  on: false,
+  on: true,   // on through the season (the user: "just make the easter egg default"); five taps on the title still turn it off
   STONES: `<radialGradient id="bs" cx="35%" cy="30%"><stop offset="0%" stop-color="#a8703f"/><stop offset="45%" stop-color="#5c3219"/><stop offset="100%" stop-color="#26120a"/></radialGradient>
       <linearGradient id="ws" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fffaf0"/><stop offset="32%" stop-color="#fff3dc"/>
         <stop offset="33%" stop-color="#ff9124"/><stop offset="65%" stop-color="#ff8a1f"/><stop offset="66%" stop-color="#ffd43b"/><stop offset="100%" stop-color="#f5c22a"/></linearGradient>`,
@@ -5291,8 +5291,8 @@ const Candy = {
 document.addEventListener("DOMContentLoaded", () => {
   const title = document.querySelector("header h1");
   if (title) title.addEventListener("click", () => Candy.tap());
-  // a lucky visit: candy from the start (once the page has its season)
-  setTimeout(() => { if (document.body.classList.contains("season-halloween") && Math.random() < 1 / 8) Candy.set(true, "🍬 Trick or treat! The stones are candy today."); }, 600);
+  // the candy pictures, once the page has its season
+  setTimeout(() => { if (document.body.classList.contains("season-halloween")) Candy.load(); }, 600);
 });
 
 /* ================= router & keys ================= */
