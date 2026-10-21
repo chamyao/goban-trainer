@@ -16,8 +16,9 @@ const Avatars = (() => {
   const picked = () => { const w = L().pick; return w && owns(w) ? w : ""; };
   const name = who => (typeof tkName === "function" ? tkName(who) : who);
   let portraits = null;
-  const loadPortraits = () => portraits || (portraits = fetch("assets/tk/portraits/portraits.json?v=18").then(r => r.json()).catch(() => ({})));
-  const img = (file) => `assets/tk/portraits/${file}?v=18`;
+  const PV = () => (typeof TownUI !== "undefined" && TownUI.PORTRAIT_V) || 0;   // (the portraits' version, tk-town.js)
+  const loadPortraits = () => portraits || (portraits = fetch(`assets/tk/portraits/portraits.json?v=${PV()}`).then(r => r.json()).catch(() => ({})));
+  const img = (file) => `assets/tk/portraits/${file}?v=${PV()}`;
 
   // every protagonist, by book, from the story's data
   let leadsP = null;
