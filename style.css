@@ -1051,3 +1051,6 @@ svg.pl-counting .last-move { display: none; }
 .avatar-tile.locked img { filter: brightness(0) opacity(.35); }
 .avatar-tile.on { outline: 3px solid var(--accent); }
 .avatar-none { width: 96px; height: 96px; display: grid; place-items: center; font-size: 40px; color: var(--muted); }
+/* the portrait's waist cut stands on nothing on a board page (in the story it sits on the box's frame): fade it out
+   instead of a hard edge (the user, a screenshot of the cut: "try to get rid of this") */
+.avatar-lead, .avatar-small { -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); }
