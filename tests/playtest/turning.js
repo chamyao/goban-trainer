@@ -41,7 +41,7 @@ function Turning_pending(s){return s.items.filter(x=>!x.fixed&&x.kind==='turn');
 check(it&&it.me===1&&it.k%2===0&&lostIds.includes(it.gid),`the turning point is the player's own move in a lost game (move ${it&&it.k+1})`);
 check(it.before>=0.4&&it.loss>=10&&it.real>0,`a real drop: ${Math.round(it.before*100)}% → ${Math.round(it.after*100)}%, ${Math.round(it.loss)} engine points, ${it.real} real`);
 check(/games read \(kept on this device\) · \d+ turning points found · 0 solved/.test(await p.textContent('.turning-tally')),`the tally: "${await p.textContent('.turning-tally')}"`);
-const gm=await p.evaluate(([sgf,k])=>{const m=gameFromSgf(sgf).moves[k];return [m.c,m.r];},[it.sgf,it.k]);
+const gm=await p.evaluate(([gid,k])=>{const m=gameFromSgf(Turning.view(gid).sgf).moves[k];return [m.c,m.r];},[it.gid,it.k]);
 await p.evaluate(([c,r])=>window.__turning.play(c,r),gm);
 await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});
 check(/the move you played in the game/.test(await p.textContent('#status')),`the game move is called the game move: "${await p.textContent('#status')}"`);
@@ -67,7 +67,7 @@ check(unsolvedLeft?shown&&!shown.fixed:(!shown||shown.gid===it.gid),`after a rel
 await p.waitForFunction(id=>{const s=JSON.parse(localStorage.getItem('goban.turning'));return s.scanned[id]!==undefined;},lostIds[2],{timeout:900000});
 s=await S();const old=s.items.find(x=>x.gid===lostIds[2]&&x.kind==='turn');
 check(!old||old.fixed,`a game solved before the reread stays solved (${old?'found again, solved':'no turning point this time'})`);
-check(s.v===3&&!s.items.some(x=>x.k===5&&x.gid===lostIds[2]),'the old state is read again under the new version');
+check(s.v===4&&!s.items.some(x=>x.k===5&&x.gid===lostIds[2]),'the old state is read again under the new version');
 // Next on an unsolved one: behind the unseen ones
 await p.waitForSelector('.player svg',{timeout:900000});
 s=await S();const waiting=Turning_pending(s);
@@ -80,12 +80,29 @@ if(waiting.length>=1){
   check(x.seen&&(x.fixed?order[order.length-1][0]===a:uns[uns.length-1]===a),`Next puts it at the back of its group, unsolved before solved (${order.map(y=>y[0]+(y[1]?'✓':'')).join(', ')})`);
   if(await p.$('.player svg')){
     const k=await p.evaluate(()=>window.__turning.pos.k);
-    await p.click('text=Open in Review');await p.waitForTimeout(800);
+    // reviewing the game on this page
+    await p.click('text=Review game');await p.waitForTimeout(300);
+    const rvw=await p.evaluate(()=>({vis:getComputedStyle(document.querySelector('.turn-review')).display!=='none',t:document.querySelector('.turn-review .meta-title').textContent,
+      sub:document.querySelector('.turn-review .meta-sub').textContent,marks:document.querySelectorAll('.turn-mark').length,ctl:[...document.querySelectorAll('aside .panel')].filter(e=>getComputedStyle(e).display!=='none').length}));
+    check(rvw.vis&&/this problem/.test(rvw.t)&&/win rate \d+% → \d+%/.test(rvw.sub)&&rvw.marks>=1,`Review game opens on the problem's move: "${rvw.t}" / "${rvw.sub}" (${rvw.marks} marks)`);
+    await p.click('.turn-review button:has-text("▶|")');
+    check(/End of the game/.test(await p.textContent('.turn-review .meta-title')),'▶| goes to the end');
+    await p.click('.turn-review button:has-text("◀ Your mistake")');
+    const back=await p.textContent('.turn-review .meta-title');
+    check(/Move \d+: you/.test(back),`◀ Your mistake jumps to one of the player's mistakes: "${back}"`);
+    await p.click('text=Back to the problem');
+    check(await p.evaluate(()=>getComputedStyle(document.querySelector('.turn-review')).display==='none'&&!!document.querySelector('aside button.primary')),'Back to the problem');
+    await p.click('text=Review game');await p.click('text=Open in the Review tab');await p.waitForTimeout(800);
     const rv=await p.evaluate(()=>({h:location.hash,k:Review.node&&Review.node.main,an:Review.analyses.filter(Boolean).length,n:Review.game.n}));
     check(rv.h==='#/review'&&rv.k===k&&rv.an===rv.n+1,`Open in Review lands on the move (${rv.k}), already analyzed (${rv.an} of ${rv.n+1} positions)`);
   }
 }
 s=await S();
+// new lines (as the noise test will set): the positions are found again from the kept reads, no search
+const re=await p.evaluate(()=>{let calls=0;const o=Engine.analyze.bind(Engine);Engine.analyze=(...x)=>{calls++;return o(...x);};
+  const n10=Turning.state().items.length;Turning.NOISE_PTS=30;const st=Turning.state(),n30=st.items.length;Turning.NOISE_PTS=10;const back=Turning.state().items.length;
+  Engine.analyze=o;return {n10,n30,back,calls,th:st.th};});
+check(re.th==='30'&&re.n30<=re.n10&&re.back===re.n10&&re.calls===0,`a new noise line finds the positions again from the kept reads, without a search (${re.n10} at 10 points, ${re.n30} at 30)`);
 console.log(`  turning points: ${s.items.filter(x=>x.kind==='turn').length}, key moves: ${s.items.filter(x=>x.kind==='key').length}, of ${Object.keys(s.scanned).length} games read`);
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);
 })();

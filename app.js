@@ -401,10 +401,28 @@ const Engine = {
     }
   },
 
+  // One engine call at a time, what's on screen first: a background reading (Turning's, of the player's OGS games,
+  // which goes on after its page is left: the user, "it should load and cache even while I leave the book") waits
+  // behind anything a page asks for, and the worker never gets a second request while one runs (it would cancel it)
+  _queue: { fg: [], bg: [] }, _running: false,
+  schedule(fn, background) {
+    return new Promise((resolve, reject) => { this._queue[background ? "bg" : "fg"].push({ fn, resolve, reject }); this._pump(); });
+  },
+  async _pump() {
+    if (this._running) return;
+    const job = this._queue.fg.shift() || this._queue.bg.shift();
+    if (!job) return;
+    this._running = true;
+    try { job.resolve(await job.fn()); } catch (e) { job.reject(e); }
+    finally { this._running = false; this._pump(); }
+  },
+  evaluate(fields, opts = {}) { return this.schedule(() => this._evaluate(fields), opts.background); },
+  analyze(fields, opts = {}) { return this.schedule(() => this._analyze(fields), opts.background); },
+
   // Single forward pass of the network, no search. Scores are Black-perspective.
   // Unlike analyze(), the result isn't averaged over search children, so it
   // doesn't drift toward the side that just moved.
-  async evaluate(fields) {
+  async _evaluate(fields) {
     await this.ensure();
     const id = ++this.seq;
     return new Promise((resolve, reject) => {
@@ -416,7 +434,7 @@ const Engine = {
     });
   },
 
-  async analyze(fields) {
+  async _analyze(fields) {
     await this.ensure();
     this.setStatus("busy");
     const id = ++this.seq;
@@ -1627,7 +1645,7 @@ const Review = {
   async pullRemoteFallback() {
     if (!Sync.username) return false;
     const remote = await Sync.fetchRemote("review");
-    const remoteGames = Array.isArray(remote.games) ? remote.games : [];
+    const remoteGames = (Array.isArray(remote.games) ? remote.games : []).filter(g => g && !g.tp);   // (tp: Turning's rows)
     if (!remoteGames.length) return false;
     const byId = new Map(this.loadHistory().map(g => [g.id, g]));
     let changed = false;
@@ -2509,76 +2527,175 @@ const GRADE_NAMES = Array.from({ length: 44 }, (_, i) => i < 30 ? `${15 - Math.f
 // - a key move (any game): a point that was KataGo's best in several positions where the mover played elsewhere and
 //   gave up 10 points or more, missed by both players at least once. The feed shows the player's first miss of it.
 const Turning = {
-  KEY: "goban.turning", V: 3,
+  KEY: "goban.turning", V: 4,
   KINDS: {
     turn: { route: "#/turning", title: "Turning points", blurb: "KataGo reads the 19×19 games you lost on OGS and finds where each one slipped away: your biggest drop from your last lead. You get that position to play again." },
     key: { route: "#/keymoves", title: "Key moves", blurb: "KataGo reads your 19×19 OGS games, won or lost, for a point you and your opponent both kept missing: a group's life or death, a cut neither side saw. You get the position to find it." },
   },
-  fresh(user = "", uid = 0) { return { v: this.V, user, uid, scanned: {}, items: [], next: null, played: {} }; },
+  // the state: the games read (games: each one's SGF and KataGo's reads of every position, kept whatever was found, so
+  // new lines need no new searches: the user, "so the AI reads are preserved?"), the positions found in them (items,
+  // with what was played), and the OGS name. th: the lines the items were found with; when they change, the items are
+  // found again from the reads (what was played carries over where the position is the same)
+  fresh(user = "", uid = 0) { return { v: this.V, user, uid, scanned: {}, games: {}, items: [], next: null, played: {}, th: this.th() }; },
+  th() { return `${this.NOISE_PTS}`; },
   state() {
     try {
       const s = JSON.parse(localStorage.getItem(this.KEY));
       if (s && s.items) {
-        // (versions 1–2 read with the network's quick look and searched only some moves: read them again, keeping what
-        // was played, so a position already solved or tried doesn't come back as new)
+        // (versions 1–3 kept no reads, or not all of them: read again, keeping what was played, so a position already
+        // solved or tried doesn't come back as new)
         if (s.v !== this.V) {
           s.played = s.played || {};
           for (const x of s.items) if (x.done || x.tries || x.fixed) s.played[`${x.gid}:${x.kind || "turn"}`] = { fixed: !!x.fixed, tries: x.tries || 0, seen: Date.now() };
-          Object.assign(s, { v: this.V, scanned: {}, next: null, items: [] });
+          Object.assign(s, { v: this.V, scanned: {}, games: {}, next: null, items: [], th: this.th() });
         }
-        s.played = s.played || {};
+        s.played = s.played || {}; s.games = s.games || {};
+        if (s.th !== this.th()) this.refind(s);
         return s;
       }
-    } catch {}
+    } catch (e) { console.error("[turning] state", e); }
     return this.fresh();
   },
-  save(s) { try { localStorage.setItem(this.KEY, JSON.stringify(s)); } catch (e) { console.error("[turning] save failed", e); } },
-  // the feed's order: unsolved first, then the solved ones come back as review; in each, the longest unshown first
-  // (never shown: the newest game first). The user: "it's showing me ones I already solved first", "solved can come
-  // back, just favor unsolved"
+  // (a browser out of room: the oldest games' reads stay only on the sheet, the newest 60 here)
+  save(s) {
+    try { localStorage.setItem(this.KEY, JSON.stringify(s)); }
+    catch (e) {
+      const ids = Object.keys(s.games).sort((a, b) => String(s.games[b].date).localeCompare(String(s.games[a].date)));
+      for (const id of ids.slice(60)) delete s.games[id].reads;
+      try { localStorage.setItem(this.KEY, JSON.stringify(s)); } catch (e2) { console.error("[turning] save failed", e2); }
+    }
+  },
+  // the items found again from the reads (new lines): what was played stays with the same position
+  refind(s) {
+    const old = new Map(s.items.map(x => [`${x.gid}:${x.kind}:${x.k}`, x]));
+    s.items = s.items.filter(x => !(s.games[x.gid] && s.games[x.gid].reads));   // (a game whose reads are only on the sheet keeps its items)
+    for (const [gid, gm] of Object.entries(s.games)) {
+      if (!gm.reads) continue;
+      const got = this.derive(gameFromSgf(gm.sgf), gm.reads, gm.me, gm.lost, gm.gap || 0);
+      for (const kd of Object.keys(this.KINDS)) {
+        if (!got[kd]) continue;
+        const was = old.get(`${gid}:${kd}:${got[kd].k}`) || {};
+        s.items.push({ kind: kd, gid: +gid, me: gm.me, opp: gm.opp, date: gm.date, won: !gm.lost, ...got[kd],
+                       ...Object.fromEntries(["fixed", "tries", "seen", "skipped"].filter(f => was[f] != null).map(f => [f, was[f]])) });
+      }
+    }
+    s.th = this.th();
+  },
+  // a game's reads as the review wants them: Black's win rate, what each move gave up, KataGo's best, by position
+  view(gid) {
+    const gm = this.state().games[gid];
+    if (!gm) return {};
+    if (!gm.reads) return { sgf: gm.sgf };
+    const g = gameFromSgf(gm.sgf), R = gm.reads, pov = (w, c) => c === BLACK ? w : 1 - w;
+    return { sgf: gm.sgf, w: R.map(r => r[0]), bests: R.map(r => r[1] >= 0 ? [r[1], r[2]] : null),
+             losses: g.moves.map((m, k) => m.pass || R[k][4] == null ? 0 : Math.max(0, 100 * (pov(R[k][3], m.color) - pov(R[k][4], m.color)))) };
+  },
+
+  // The record is the sheet, under the site's username (the user: "cache it to the user on the sheet, don't rely on
+  // browser cache"): a row per game read (its SGF, KataGo's reads of every position, and what was played of it), and
+  // an index row (the OGS name, the games looked at, what was played before a reread). They ride the Review's per-game
+  // rows (ids tp-…, marked tp, which the Review's list leaves out), so the Apps Script needs nothing new. This
+  // browser's copy is the working copy: merged with the sheet once a session, before any reading.
+  _sync: Promise.resolve(),
+  queueSync(fn) { if (!Sync.username) return; this._sync = this._sync.then(fn).catch(e => console.error("[turning] sync", e)); },
+  pushGame(gid) {
+    this.queueSync(() => { const s = this.state();
+      const prog = s.items.filter(x => x.gid === gid).map(x => ({ kind: x.kind, k: x.k, fixed: x.fixed, tries: x.tries, seen: x.seen, skipped: x.skipped }));
+      return Sync.save("review", { tp: 1, v: this.V, uid: s.uid, gid, game: s.games[gid], prog }, { id: `tp-${gid}` }); });
+  },
+  pushIndex() {
+    this.queueSync(() => { const s = this.state();
+      return Sync.save("review", { tp: 1, index: 1, v: this.V, user: s.user, uid: s.uid, scanned: s.scanned, next: s.next, played: s.played }, { id: "tp-index" }); });
+  },
+  async pull() {
+    if (!Sync.username) return false;
+    const rows = ((await Sync.fetchRemote("review")).games || []).filter(g => g && g.tp);
+    const s = this.state(), before = JSON.stringify(s);
+    const idx = rows.find(g => g.index);
+    if (idx && idx.uid && (!s.uid || s.uid === idx.uid)) {
+      if (!s.uid) Object.assign(s, { user: idx.user, uid: idx.uid });
+      Object.assign(s.played, idx.played || {});
+      if (idx.v === this.V) { Object.assign(s.scanned, idx.scanned || {}); if (!s.next) s.next = idx.next || null; }
+    }
+    let added = false;
+    for (const row of rows) {
+      if (row.index || (row.uid && row.uid !== s.uid)) continue;   // (another OGS name's)
+      if (row.v !== this.V || !row.game) {   // (an older version's row: only what was played carries over)
+        for (const r of row.items || []) if (r.fixed || r.tries) s.played[`${r.gid}:${r.kind}`] = { fixed: !!r.fixed, tries: r.tries || 0, seen: r.seen || 0 };
+        continue;
+      }
+      if (!s.games[row.gid] || (!s.games[row.gid].reads && row.game.reads)) { s.games[row.gid] = row.game; added = true; }
+      s.scanned[row.gid] = s.scanned[row.gid] || 1;
+      row.prog.forEach(p => { const k = `${row.gid}:${p.kind}`; s.played[k] = { ...(s.played[k] || {}), ...p, at: p.k }; });
+    }
+    if (added) this.refind(s);
+    // what was played elsewhere joins this browser's: solved sticks, the latest look wins
+    for (const x of s.items) {
+      const p = s.played[`${x.gid}:${x.kind}`];
+      if (!p || (p.at != null && p.at !== x.k)) continue;
+      x.fixed = !!(x.fixed || p.fixed);
+      for (const f of ["tries", "seen", "skipped"]) if (p[f] != null) x[f] = Math.max(x[f] || 0, p[f]);
+    }
+    this.save(s);
+    return JSON.stringify(s) !== before;
+  },
+  // the feed's order: unsolved first, the biggest first (what it cost in real winning chances: the user, "it should
+  // favor the big ones over the 50% ones"); one passed over in the last hour waits behind the rest; then the solved
+  // ones come back as review, the longest unshown first. The user: "favor unsolved", "solved can come back"
+  size(x) { return x.kind === "key" ? x.cost || 0 : x.real != null ? x.real : x.loss || 0; },
   pending(s, kind) {
+    const recent = x => x.skipped && Date.now() - x.skipped < 3600e3;
     return s.items.filter(x => x.kind === kind)
-      .sort((a, b) => (a.fixed ? 1 : 0) - (b.fixed ? 1 : 0) || (a.seen || 0) - (b.seen || 0) || String(b.date).localeCompare(String(a.date)));
+      .sort((a, b) => (a.fixed ? 1 : 0) - (b.fixed ? 1 : 0)
+        || (a.fixed ? (a.seen || 0) - (b.seen || 0) : (recent(a) ? 1 : 0) - (recent(b) ? 1 : 0) || this.size(b) - this.size(a)));
   },
   unsolved(s, kind) { return s.items.filter(x => x.kind === kind && !x.fixed); },
-  // the feed's tally: games read (kept on this device, never read twice), found, solved, waiting
+  // the feed's tally: games read (kept on the sheet, never read twice), found, solved, waiting
   cardCount(kind) { const s = this.state(); if (!s.uid) return "OGS"; const t = this.tally(s, kind); return t.found ? `${t.solved}/${t.found}` : "OGS"; },
   tally(s, kind) {
     const all = s.items.filter(x => x.kind === kind);
-    return { read: Object.keys(s.scanned).length, found: all.length, solved: all.filter(x => x.fixed).length,
+    return { read: Object.keys(s.games).length, found: all.length, solved: all.filter(x => x.fixed).length,
              waiting: all.filter(x => !x.fixed).length, fresh: all.filter(x => !x.fixed && !x.seen).length };
   },
   turnAt(g, k) { return k < g.n ? g.moves[k].color : 3 - g.moves[g.n - 1].color; },
 
   VISITS: 100,   // per position (tests lower it)
-  async search(g, k, visits = this.VISITS) {
+  async search(g, k, visits = this.VISITS, background = false) {
     const hist = [];
     for (let j = Math.max(0, k - 6); j < k; j++) { const q = g.moves[j]; if (!q.pass) hist.push({ x: q.c, y: q.r, player: q.color === BLACK ? "black" : "white" }); }
-    return Review.enqueue(() => Engine.analyze({
+    return Engine.analyze({
       board: gridToBoardState(g.grids[k]), currentPlayer: this.turnAt(g, k) === BLACK ? "black" : "white", moveHistory: hist,
       komi: g.meta.engineKomi, visits, ownershipMode: "none", topK: 10, analysisPvLen: 1, reuseTree: false,
-    }));
+    }, { background });
   },
 
-  // reads one game for the player `me` (gap: the player's OGS rank minus the opponent's, 0 when unknown); returns
-  // { turn, key, w, losses } (turn and key may be null; w and losses go to the Review when the game's opened there)
-  async read(sgf, me, lost, gap = 0, onPos = () => {}) {
+  // KataGo's reads of every position, both players' moves, none skipped (the user: "don't skimp on compute"): per
+  // position [Black's win rate, KataGo's best x, y, its win rate, the win rate of the move played] (Black's; the
+  // played move's from the same search, or the next position's when it isn't among the top 10)
+  async read(sgf, onPos = () => {}) {
     const g = gameFromSgf(sgf);
-    if (g.n < 20) return { turn: null, key: null };
-    const pov = (w, c) => c === BLACK ? w : 1 - w;
-    // a search of every position, both players' moves, none skipped (the user: "don't skimp on compute")
     const S = [];
-    for (let k = 0; k <= g.n; k++) { onPos(k, g.n); S.push(await this.search(g, k)); }
-    const w = S.map(a => a.rootWinRate);
+    for (let k = 0; k <= g.n; k++) { onPos(k, g.n); S.push(await this.search(g, k, this.VISITS, true)); }
+    const r4 = x => +x.toFixed(4);
+    return S.map((a, k) => {
+      const top = (a.moves || [])[0], m = g.moves[k];
+      const played = m && !m.pass && top ? a.moves.find(c => c.x === m.c && c.y === m.r) : null;
+      const after = !m || m.pass || !top ? null : played ? played.winRate : S[k + 1].rootWinRate;
+      return [r4(a.rootWinRate), top ? top.x : -1, top ? top.y : -1, top ? r4(top.winRate) : null, after == null ? null : r4(after)];
+    });
+  },
+
+  // the turning point and key move of a game for the player `me`, from the reads (gap: the player's OGS rank minus
+  // the opponent's, 0 when unknown); either may be null
+  derive(g, R, me, lost, gap = 0) {
+    if (g.n < 20 || !R || R.length !== g.n + 1) return { turn: null, key: null };
+    const pov = (w, c) => c === BLACK ? w : 1 - w;
+    const w = R.map(r => r[0]);
     const misses = [];   // every move: what its mover gave up against KataGo's best, from the search before it
-    const losses = g.moves.map((m, k) => {
-      const top = (S[k].moves || [])[0];
-      if (m.pass || !top) return 0;
-      const played = S[k].moves.find(c => c.x === m.c && c.y === m.r);
-      const afterB = played ? played.winRate : w[k + 1];
-      const loss = 100 * (pov(top.winRate, m.color) - pov(afterB, m.color));
-      misses.push({ k, color: m.color, before: w[k], after: afterB, bestW: top.winRate, best: [top.x, top.y], loss });
-      return Math.max(0, loss);
+    g.moves.forEach((m, k) => {
+      const r = R[k];
+      if (m.pass || r[4] == null || r[1] < 0) return;
+      misses.push({ k, color: m.color, before: r[0], after: r[4], bestW: r[3], best: [r[1], r[2]], loss: 100 * (pov(r[3], m.color) - pov(r[4], m.color)) });
     });
     // what an engine win rate means for players at this level: the win-rate study's fit on 15–5k OGS games (logit of the
     // real chance = 0.427 × logit of KataGo's + 0.144 for Black + 0.182 per rank of difference), for the player
@@ -2627,21 +2744,22 @@ const Turning = {
       key = { ...mineOf(mine[0]), cost: Math.round(100 * score), mine: mine.length, theirs: theirs.length,
               times: gp.misses.map(r => ({ me: r.color === me, ...mineOf(r) })) };
     }
-    return { turn, key, w: w.map(x => +x.toFixed(4)), losses: losses.map(x => +x.toFixed(1)) };
+    return { turn, key };
   },
   // the lines a move must clear, in win-rate points: provisional until the noise test measures them
   NOISE_PTS: 10,
   TOL_PTS: 5,   // a replayed move this close to the best counts as finding it (the engine noise, once measured)
 
-  // reads the player's 19×19 games, newest first, until `want` of `kind` wait unplayed; it reports to the page
-  // showing now (Turning.onStatus), since a scan outlives the position it started under
-  async scan(kind, want = 3) {
+  // reads the player's 19×19 games, newest first, until both feeds have `want` unsolved; it reports to the page
+  // showing now (Turning.onStatus), since a scan outlives the position it started under, and the page it started on
+  async scan(want = 5) {
     if (this.scanning) return;
     this.scanning = true;
     const onStatus = (t, frac) => this.onStatus && this.onStatus(t, frac);
-    const alive = () => location.hash === this.KINDS[kind].route;
-    const enough = () => this.unsolved(this.state(), kind).length >= want;
+    const alive = () => !!this.state().uid;   // (it goes on when the page is left; it stops if the OGS name is changed)
+    const enough = () => { const s = this.state(); return Object.keys(this.KINDS).every(kd => this.unsolved(s, kd).length >= want); };
     try {
+      if (!this.pulled) { this.pulled = true; try { if (await this.pull()) onStatus(null); } catch (e) { console.error("[turning] pull", e); } }
       await Engine.ensure();
       let s = this.state();
       let url = s.next || OGS.firstPageUrl(s.uid).replace("page_size=15", "page_size=20");
@@ -2657,25 +2775,30 @@ const Turning = {
           const opp = (me === BLACK ? gm.players.white : gm.players.black).username;
           const what = `your game against ${opp} (${new Date(gm.ended).toLocaleDateString()})`;
           onStatus(`Reading ${what}…`);
-          let got = null, sgf = null;
           const rk = side => typeof gm.players[side].ranking === "number" ? gm.players[side].ranking : null;
-          const rb = rk("black"), rw = rk("white"), gap = rb != null && rw != null ? (me === BLACK ? rb - rw : rw - rb) : 0;
-          try { sgf = await OGS.sgf(gm.id); got = await this.read(sgf, me, lost, Math.max(-9, Math.min(9, gap)),
-            (k, n) => { if (k % 5 === 0) onStatus(`Reading ${what}: move ${k} of ${n}`, k / n); }); }
-          catch (e) { console.error("[turning]", gm.id, e); }
-          if (!alive() && !got) break;   // (left mid-read: read it again next time)
+          const rb = rk("black"), rw = rk("white"), gap = Math.max(-9, Math.min(9, rb != null && rw != null ? (me === BLACK ? rb - rw : rw - rb) : 0));
+          let reads = null, sgf = null, g = null;
+          try {
+            sgf = await OGS.sgf(gm.id); g = gameFromSgf(sgf);
+            if (g.n >= 20) reads = await this.read(sgf, (k, n) => { if (k % 5 === 0) onStatus(`Reading ${what}: move ${k} of ${n}`, k / n); });
+          } catch (e) { console.error("[turning]", gm.id, e); }
+          if (!alive() || this.state().uid !== s.uid) break;   // (the OGS name changed mid-read)
           s = this.state();
-          s.scanned[gm.id] = got && (got.turn || got.key) ? 1 : 0;
-          const base = { gid: gm.id, sgf, me, opp, date: gm.ended, won: !lost, w: got && got.w, losses: got && got.losses };
-          for (const kd of ["turn", "key"]) {
-            if (!got || !got[kd] || s.items.some(x => x.gid === gm.id && x.kind === kd)) continue;
+          if (!reads) { s.scanned[gm.id] = 0; this.save(s); this.pushIndex(); continue; }
+          s.games[gm.id] = { sgf, me, lost: !!lost, gap, opp, date: gm.ended, reads };
+          const got = this.derive(g, reads, me, lost, gap);
+          s.scanned[gm.id] = got.turn || got.key ? 1 : 0;
+          for (const kd of Object.keys(this.KINDS)) {
+            if (!got[kd] || s.items.some(x => x.gid === gm.id && x.kind === kd)) continue;
             const was = s.played[`${gm.id}:${kd}`];   // (played before a reread: solved stays solved, tried goes behind the new)
-            s.items.push({ kind: kd, ...base, ...got[kd], ...(was ? { fixed: was.fixed, tries: was.tries, seen: was.seen } : {}) });
+            s.items.push({ kind: kd, gid: gm.id, me, opp, date: gm.ended, won: !lost, ...got[kd],
+                           ...(was && (was.at == null || was.at === got[kd].k) ? { fixed: !!was.fixed, tries: was.tries, seen: was.seen } : {}) });
           }
           this.save(s);
-          if (got && got[kind]) onStatus(null);
+          this.pushGame(gm.id); this.pushIndex();   // (every game read goes to the sheet, found or not: its reads are kept)
+          onStatus(null);
         }
-        if (alive() && !enough()) { url = d.next; s = this.state(); s.next = url; this.save(s); }
+        if (alive() && !enough()) { url = d.next; s = this.state(); s.next = url; this.save(s); this.pushIndex(); }
       }
       onStatus(url ? "" : "That's every game on your OGS account so far.");
     } catch (e) {
@@ -2691,6 +2814,13 @@ function viewTurning(kind = "turn", at = 0) {
   root.innerHTML = "";
   const s = Turning.state();
 
+  // a fresh browser: the sheet may know the OGS name and the games already read
+  if (!s.uid && Sync.username && !Turning.pulled) {
+    Turning.pulled = true;
+    root.append(h("div", { class: "loading" }, "Loading your games from the sheet…"));
+    Turning.pull().catch(e => console.error("[turning] pull", e)).then(() => { if (location.hash === K.route) viewTurning(kind); });
+    return;
+  }
   if (!s.uid) {
     const input = h("input", { class: "rec-field", placeholder: "OGS username", value: OGS.remembered() });
     const err = h("div", { class: "meta-sub" });
@@ -2701,7 +2831,7 @@ function viewTurning(kind = "turn", at = 0) {
       try {
         const p = await OGS.findPlayer(name);
         OGS.remember(p.username);
-        Turning.save(Turning.fresh(p.username, p.id));
+        Turning.save(Turning.fresh(p.username, p.id)); Turning.pushIndex();
         viewTurning(kind);
       } catch (e) { err.textContent = e.message === "Failed to fetch" ? "Couldn't reach OGS." : e.message; }
     };
@@ -2719,7 +2849,7 @@ function viewTurning(kind = "turn", at = 0) {
   const noun = kind === "key" ? "key moves" : "turning points";
   const tallyEl = h("div", { class: "meta-sub turning-tally" });
   const showTally = () => { const t = Turning.tally(Turning.state(), kind);
-    tallyEl.textContent = `${t.read} games read (kept on this device) · ${t.found} ${noun} found · ${t.solved} solved · ${t.waiting} unsolved${t.fresh ? ` (${t.fresh} new)` : ""}`; };
+    tallyEl.textContent = `${t.read} games read (kept ${Sync.username ? "on your sheet" : "on this device"}) · ${t.found} ${noun} found · ${t.solved} solved · ${t.waiting} unsolved${t.fresh ? ` (${t.fresh} new)` : ""}`; };
   showTally();
   const statusText = h("span"), bar = h("div", { class: "bar turning-bar", style: "display:none" }, [h("div", { style: "width:0%" })]);
   const status = h("div", { class: "meta-sub turning-scan" }, [statusText, bar]);
@@ -2740,13 +2870,14 @@ function viewTurning(kind = "turn", at = 0) {
       h("p", {}, "Reading your games: KataGo searches every position, so a game takes a few minutes. The next ones are read while you play."),
       status,
     ]));
-    Turning.scan(kind);
+    Turning.scan();
     return;
   }
 
   // the position: the item's own, or (a key move) another time the point was missed
   const times = item.times || [item];
   const pos = times[Math.min(at, times.length - 1)] || item;
+  Object.assign(item, Turning.view(item.gid));   // (the SGF and the reads, from the game's record)
   const g = gameFromSgf(item.sgf), me = item.me, k = pos.k;
   const mover = pos.me === false ? 3 - me : me, playable = mover === me;
   const pct = w => `${Math.round(100 * w)}%`;
@@ -2768,7 +2899,24 @@ function viewTurning(kind = "turn", at = 0) {
     [gm.c, gm.r, "rgba(176,65,62,.85)", Math.round(100 * (playable ? pos.after : 1 - pos.after))],
     ...(tried && tried.w != null ? [[tried.c, tried.r, "rgba(53,102,176,.85)", Math.round(100 * tried.w)]] : []),
   ];
+  // reviewing the whole game on this page (the user: "let's just allow the user to do review straight from the book
+  // screen"): rv is the position shown; KataGo's best there in green, the move played in red, each with its mover's
+  // win rate, from the reading's own searches
+  let rv = null;
+  const moverAt = j => j < g.n ? g.moves[j].color : 3 - g.moves[g.n - 1].color;
+  const povAt = (wb, c) => c === BLACK ? wb : 1 - wb;
   const draw = () => {
+    if (rv != null) {
+      const lm = rv > 0 ? g.moves[rv - 1] : null;
+      goban.render(g.grids[rv], lm && !lm.pass ? [lm.c, lm.r] : null, false);
+      const dot = (c, r, color, label) => { const x = goban.px(c), y = goban.py(r);
+        goban.el("circle", { cx: x, cy: y, r: goban.cell * .44, fill: color, stroke: "#fff", "stroke-width": 2, "pointer-events": "none", class: "turn-mark" });
+        goban.el("text", { x, y: y + goban.cell * .14, "text-anchor": "middle", "font-size": goban.cell * .34, "font-weight": 700, fill: "#fff", "pointer-events": "none" }).textContent = label; };
+      const c = moverAt(rv), m = g.moves[rv], b = item.bests && item.bests[rv];
+      if (item.w && b) dot(b[0], b[1], "rgba(34,160,90,.85)", Math.round(100 * povAt(item.w[rv], c)));
+      if (item.w && m && !m.pass && !(b && b[0] === m.c && b[1] === m.r)) dot(m.c, m.r, "rgba(176,65,62,.85)", Math.round(100 * povAt(item.w[rv + 1], c)));
+      return;
+    }
     const grid = tried ? tried.grid : g.grids[k];
     const last = tried ? [tried.c, tried.r] : prev && !prev.pass ? [prev.c, prev.r] : null;
     goban.render(grid, last, playable && !tried && !busy);
@@ -2818,14 +2966,14 @@ function viewTurning(kind = "turn", at = 0) {
       result.className = fixed ? "ok" : "bad";
       if (fixed && !show) { show = "solved"; result.textContent += " Red: your move in the game."; }
       const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
-      if (it) { it.tries = (it.tries || 0) + 1; it.fixed = it.fixed || fixed; it.seen = Date.now(); Turning.save(st); showTally(); }
+      if (it) { it.tries = (it.tries || 0) + 1; it.fixed = it.fixed || fixed; it.seen = Date.now(); Turning.save(st); Turning.pushGame(item.gid); showTally(); }
     } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
     busy = false; draw();
   };
   const next = () => {
     const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
-    if (it) it.seen = Date.now();   // (to the back of its group: the unsolved, or the solved)
-    Turning.save(st); viewTurning(kind);
+    if (it) { it.seen = Date.now(); if (!it.fixed) it.skipped = Date.now(); }   // (passed over: behind the rest for an hour)
+    Turning.save(st); Turning.pushGame(item.gid); viewTurning(kind);
   };
   const openInReview = () => {
     Review.load(item.sgf); Review.currentId = Review.newId();
@@ -2834,8 +2982,53 @@ function viewTurning(kind = "turn", at = 0) {
     Review.saveState();
     Review.node = Review.mainNodes[k]; location.hash = "#/review";
   };
+  const rvText = h("div", { class: "meta-title" }), rvSub = h("div", { class: "meta-sub" });
+  const chart = document.createElementNS(SVGNS, "svg");
+  chart.setAttribute("viewBox", "0 0 300 60"); chart.setAttribute("class", "turn-chart"); chart.setAttribute("preserveAspectRatio", "none");
+  const drawChart = () => {
+    if (!item.w) return;
+    const X = j => 300 * j / g.n, Y = wb => 60 - 60 * povAt(wb, me);
+    chart.innerHTML = `<line x1="0" y1="30" x2="300" y2="30" stroke="currentColor" stroke-opacity=".25"/>
+      <polyline fill="none" stroke="#3566b0" stroke-width="1.6" points="${item.w.map((x, j) => `${X(j).toFixed(1)},${Y(x).toFixed(1)}`).join(" ")}"/>
+      <line x1="${X(k)}" y1="0" x2="${X(k)}" y2="60" stroke="#b0413e" stroke-dasharray="3 2"/>
+      ${rv != null ? `<line x1="${X(rv)}" y1="0" x2="${X(rv)}" y2="60" stroke="currentColor" stroke-width="1.5"/>` : ""}`;
+  };
+  chart.addEventListener("click", e => { const r = chart.getBoundingClientRect(); goTo(Math.round((e.clientX - r.left) / r.width * g.n)); });
+  const goTo = j => {
+    rv = Math.max(0, Math.min(g.n, j));
+    const m = g.moves[rv], c = moverAt(rv), name = c === me ? "you" : item.opp;
+    if (!m) { rvText.textContent = `End of the game · ${pct(povAt(item.w ? item.w[rv] : 0.5, me))} for you`; rvSub.textContent = ""; }
+    else {
+      const coord = m.pass ? "pass" : COLS[m.c] + (N - m.r), loss = item.losses ? item.losses[rv] : null;
+      rvText.textContent = `Move ${rv + 1}: ${name} (${c === BLACK ? "B" : "W"}) played ${coord}${rv === k ? "  ← this problem" : ""}`;
+      rvSub.textContent = item.w ? `${c === me ? "Your" : "Their"} win rate ${pct(povAt(item.w[rv], c))} → ${pct(povAt(item.w[rv + 1], c))}`
+        + (loss >= Turning.NOISE_PTS ? ` · gave up ${Math.round(loss)} points` : "") + (item.bests && item.bests[rv] ? ` · green: KataGo's move` : "") : "";
+    }
+    draw(); drawChart();
+  };
+  // your own moves that gave up more than the noise, to jump between
+  const myMistakes = item.losses ? item.losses.map((l, j) => l >= Turning.NOISE_PTS && g.moves[j].color === me ? j : -1).filter(j => j >= 0) : [];
+  const jump = dir => { const j = dir > 0 ? myMistakes.find(x => x > rv) : [...myMistakes].reverse().find(x => x < rv); if (j != null) goTo(j); };
+  const problemPanels = [], reviewPanel = h("div", { class: "panel turn-review", style: "display:none" }, [
+    h("h2", {}, "Review the game"), rvText, rvSub, chart,
+    h("div", { class: "rv-nav" }, [
+      h("button", { onclick: () => goTo(0) }, "|◀"), h("button", { onclick: () => goTo(rv - 1) }, "◀"),
+      h("button", { onclick: () => goTo(rv + 1) }, "▶"), h("button", { onclick: () => goTo(g.n) }, "▶|"),
+    ]),
+    h("div", { class: "controls" }, [
+      myMistakes.length ? h("button", { onclick: () => jump(-1) }, "◀ Your mistake") : null,
+      myMistakes.length ? h("button", { onclick: () => jump(1) }, "Your mistake ▶") : null,
+      h("button", { onclick: openInReview }, "Open in the Review tab"),
+      h("button", { class: "primary", onclick: () => { rv = null; reviewPanel.style.display = "none"; for (const el of problemPanels) el.style.display = ""; draw(); } }, "Back to the problem"),
+    ].filter(Boolean)),
+  ]);
+  const startReview = () => {
+    if (busy) return;
+    for (const el of problemPanels) el.style.display = "none";
+    reviewPanel.style.display = ""; goTo(k);
+  };
   draw();
-  window.__turning = { play, item, pos };
+  window.__turning = { play, item, pos, goTo, startReview };
 
   const header = kind === "key"
     ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`)
@@ -2861,13 +3054,15 @@ function viewTurning(kind = "turn", at = 0) {
         playable ? h("button", { onclick: () => { if (busy) return; tried = null; show = null; result.className = ""; result.textContent = prompt; draw(); } }, "Try again") : null,
         h("button", { onclick: () => { if (busy) return; show = "marks"; draw();
           result.textContent = `Green: KataGo's move (${pct(pos.bestW)} for you). Red: the game move (${pct(pos.after)}).${tried && tried.w != null ? ` Blue: this try (${pct(tried.w)}).` : ""}`; } }, "Show answer"),
-        h("button", { onclick: openInReview }, "Open in Review"),
+        h("button", { onclick: startReview }, "Review game"),
         h("button", { class: "primary", onclick: next }, "Next →"),
       ].filter(Boolean)),
     ]),
+    reviewPanel,
   ]);
+  problemPanels.push(...[...aside.children].slice(1, 3));   // (Status and Controls give way to the review)
   root.append(h("div", { class: "player" }, [boardCard, aside]));
-  Turning.scan(kind);   // the next ones get read while this one's played
+  Turning.scan();   // the next ones get read while this one's played, and on after the page is left
 }
 
 /* ---- Spotify: a small player in the header ---- */
