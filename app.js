@@ -2537,7 +2537,7 @@ const Turning = {
   // with what was played), and the OGS name. th: the lines the items were found with; when they change, the items are
   // found again from the reads (what was played carries over where the position is the same)
   fresh(user = "", uid = 0) { return { v: this.V, user, uid, scanned: {}, games: {}, items: [], next: null, played: {}, th: this.th() }; },
-  th() { return `${this.NOISE_PTS}`; },
+  th() { return `${this.NOISE_PTS}:closing`; },   // (":closing": key moves' points close when played)
   state() {
     try {
       const s = JSON.parse(localStorage.getItem(this.KEY));
@@ -2728,13 +2728,19 @@ const Turning = {
     // point (the same point or one beside it); a point counts when both players missed it. Ranked by what the player's
     // own misses of it cost in real chances: the size of the point times how often the player didn't see it (the user:
     // "blindness is indicative of real human play"); the opponent's misses only handed it back
+    // A point stays open until someone plays on it or beside it; later misses there are a new point (else a corner
+    // that stays urgent all game gathered a hundred moves' misses into one)
     let key = null, keyScore = 0;
-    const groups = [];
-    for (const r of misses) {
-      if (r.loss < this.NOISE_PTS) continue;
-      const gp = groups.find(x => Math.max(Math.abs(x.best[0] - r.best[0]), Math.abs(x.best[1] - r.best[1])) <= 1);
-      if (gp) gp.misses.push(r); else groups.push({ best: r.best, misses: [r] });
-    }
+    const groups = [], near = (a, c, r) => Math.max(Math.abs(a[0] - c), Math.abs(a[1] - r)) <= 1;
+    const byK = new Map(misses.map(r => [r.k, r]));
+    g.moves.forEach((m, k) => {
+      const r = byK.get(k);
+      if (r && r.loss >= this.NOISE_PTS) {
+        const gp = groups.find(x => x.open && near(x.best, r.best[0], r.best[1]));
+        if (gp) gp.misses.push(r); else groups.push({ best: r.best, misses: [r], open: true });
+      }
+      if (!m.pass) for (const x of groups) if (x.open && near(x.best, m.c, m.r)) { x.open = false; x.playedAt = k; x.playedBy = m.color; }
+    });
     for (const gp of groups) {
       const mine = gp.misses.filter(r => r.color === me), theirs = gp.misses.filter(r => r.color !== me);
       if (!mine.length || !theirs.length) continue;
@@ -2742,13 +2748,17 @@ const Turning = {
       if (score <= keyScore) continue;
       keyScore = score;
       key = { ...mineOf(mine[0]), cost: Math.round(100 * score), mine: mine.length, theirs: theirs.length,
+              playedAt: gp.playedAt, playedBy: gp.playedBy == null ? null : gp.playedBy === me ? "you" : "them",
               times: gp.misses.map(r => ({ me: r.color === me, ...mineOf(r) })) };
     }
     return { turn, key };
   },
-  // the lines a move must clear, in win-rate points: provisional until the noise test measures them
-  NOISE_PTS: 10,
-  TOL_PTS: 5,   // a replayed move this close to the best counts as finding it (the engine noise, once measured)
+  // the engine's noise, measured (calib/noise.js: 15–5k OGS games, every position searched at 100 visits): a search
+  // of the same position again differs by 1.2 points at most (95%), KataGo's own move moves the next search's win
+  // rate 3.7 at most, and a move's loss read from its own search or the next one's agrees within 3.8. A move must give
+  // up more than that to count as a miss; a replayed move within it of KataGo's best counts as finding it
+  NOISE_PTS: 4,
+  TOL_PTS: 4,
 
   // reads the player's 19×19 games, newest first, until both feeds have `want` unsolved; it reports to the page
   // showing now (Turning.onStatus), since a scan outlives the position it started under, and the page it started on
@@ -3031,7 +3041,8 @@ function viewTurning(kind = "turn", at = 0) {
   window.__turning = { play, item, pos, goTo, startReview };
 
   const header = kind === "key"
-    ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`)
+    ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`
+        + (item.playedAt != null ? ` · finally played by ${item.playedBy === "you" ? "you" : item.opp} at move ${item.playedAt + 1}` : " · never played"))
     : null;
   const timeNav = times.length > 1 ? h("div", { class: "turn-times" }, [
     h("span", { class: "meta-sub" }, `Time ${Math.min(at, times.length - 1) + 1} of ${times.length}: ${pos.me === false ? "theirs" : "yours"} · `),

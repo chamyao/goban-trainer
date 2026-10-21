@@ -39,7 +39,7 @@ let s=await S();
 const it=Turning_pending(s)[0];
 function Turning_pending(s){return s.items.filter(x=>!x.fixed&&x.kind==='turn');}
 check(it&&it.me===1&&it.k%2===0&&lostIds.includes(it.gid),`the turning point is the player's own move in a lost game (move ${it&&it.k+1})`);
-check(it.before>=0.4&&it.loss>=10&&it.real>0,`a real drop: ${Math.round(it.before*100)}% → ${Math.round(it.after*100)}%, ${Math.round(it.loss)} engine points, ${it.real} real`);
+check(it.before>=0.4&&it.loss>=4&&it.real>0,`a real drop: ${Math.round(it.before*100)}% → ${Math.round(it.after*100)}%, ${Math.round(it.loss)} engine points, ${it.real} real`);
 check(/games read \(kept on this device\) · \d+ turning points found · 0 solved/.test(await p.textContent('.turning-tally')),`the tally: "${await p.textContent('.turning-tally')}"`);
 const gm=await p.evaluate(([gid,k])=>{const m=gameFromSgf(Turning.view(gid).sgf).moves[k];return [m.c,m.r];},[it.gid,it.k]);
 await p.evaluate(([c,r])=>window.__turning.play(c,r),gm);
@@ -100,9 +100,9 @@ if(waiting.length>=1){
 s=await S();
 // new lines (as the noise test will set): the positions are found again from the kept reads, no search
 const re=await p.evaluate(()=>{let calls=0;const o=Engine.analyze.bind(Engine);Engine.analyze=(...x)=>{calls++;return o(...x);};
-  const n10=Turning.state().items.length;Turning.NOISE_PTS=30;const st=Turning.state(),n30=st.items.length;Turning.NOISE_PTS=10;const back=Turning.state().items.length;
+  const n10=Turning.state().items.length;Turning.NOISE_PTS=30;const st=Turning.state(),n30=st.items.length;Turning.NOISE_PTS=4;const back=Turning.state().items.length;
   Engine.analyze=o;return {n10,n30,back,calls,th:st.th};});
-check(re.th==='30'&&re.n30<=re.n10&&re.back===re.n10&&re.calls===0,`a new noise line finds the positions again from the kept reads, without a search (${re.n10} at 10 points, ${re.n30} at 30)`);
+check(re.th.startsWith('30')&&re.n30<=re.n10&&re.back===re.n10&&re.calls===0,`a new noise line finds the positions again from the kept reads, without a search (${re.n10} at 4 points, ${re.n30} at 30)`);
 console.log(`  turning points: ${s.items.filter(x=>x.kind==='turn').length}, key moves: ${s.items.filter(x=>x.kind==='key').length}, of ${Object.keys(s.scanned).length} games read`);
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);
 })();
