@@ -220,14 +220,18 @@ const Avatars = (() => {
     document.body.classList.toggle("has-avatar", !!(row || playing));
     if (!row && !playing) { if (fixed) fixed.hidden = true; lastHash = ""; return; }
     const f = figure(who);
+    if (f.hidden) { f.hidden = false; const l = f.querySelector(".avatar-lead"); l.style.animation = "none"; void l.offsetWidth; l.style.animation = ""; }
     // a new board (the next problem, another page): the last word goes (the user: "completion dialogue shouldn't persist to
     // the next problem"); a page's own line (Turning points' prompt) is said right after
-    if (row && row !== lastRow) { const b = f.querySelector(".avatar-dlg"); b.hidden = true; b.querySelector(".avatar-say").textContent = ""; }
+    if (row && row !== lastRow) {
+      const b = f.querySelector(".avatar-dlg"); b.hidden = true; b.querySelector(".avatar-say").textContent = "";
+      const t = window.__trainer;
+      if (t && t.alive !== false && t.goban && row.contains(t.goban.svg) && typeof t.turnColor === "function") say(intro(t.turnColor()));
+    }
     lastRow = row || null;
     // the Play screen, arrived at without a game: "what to play?"
     if (playing && !row && lastHash !== location.hash) setTimeout(() => say(moment("play")), 200);
     lastHash = location.hash;
-    if (f.hidden) { f.hidden = false; const l = f.querySelector(".avatar-lead"); l.style.animation = "none"; void l.offsetWidth; l.style.animation = ""; }
     // the column keeping the board clear of it, on a wide screen
     const board = row && row.querySelector(":scope > .board-card");   // (the Play screen without a game: no board)
     if (board) { const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" })]); row.insertBefore(stage, board); stage.append(board); }
@@ -251,6 +255,7 @@ const Avatars = (() => {
     win: [["赢了！", "We won!"], ["这一局，漂亮。", "A beautiful game."]],
     lose: [["下次再来。", "Next time."], ["输了……复盘吧。", "Lost… let's review it."]],
     idle: [["慢慢想。", "Take your time."], ["想好了吗？", "Decided yet?"]],
+    intro: [["请。", "Your move."], ["看仔细了。", "Look carefully."], ["这一题，你来。", "This one's yours."]],
     tap: [["嗯？", "Hm?"], ["专心下棋。", "Focus on the board."], ["我在看着呢。", "I'm watching."]],
   };
   const SAY = {
@@ -301,6 +306,40 @@ const Avatars = (() => {
     ms_sun: { play: [["", "Pick a game. We'll do it properly."]], tap: [["", "Take a break if you need one."]] },
     ms_han: { play: [["", "Who's my next victim?"]], win: [["", "Obviously."]], lose: [["", "That one was rigged."]], tap: [["", "What?"]] },
   };
+  // a problem as it opens (the user: "dialogue for the problem intro as well"): whose move, then the character's word
+  const INTRO = {
+    liubei: [["请赐教。", "Please, show me."], ["共勉之。", "Let us strive together."], ["莫急，看清楚。", "No haste; see it clearly."]],
+    diaochan: [["妾身看你的了。", "I'm watching you."], ["这一着，可有妙计？", "Is there a clever plan here?"], ["慢慢来，妾身等着。", "Take your time; I'll wait."]],
+    wangyun: [["老夫且看你如何应对。", "Let this old man see how you answer."], ["此局关乎社稷。", "The realm hangs on this one."]],
+    caocao: [["来，让孤看看你的本事。", "Come, show me what you've got."], ["天下大势，便在此局。", "The fate of the realm is in this one."], ["速决。", "Decide quickly."]],
+    lvbu: [["来！一击定胜负！", "Come! One blow decides it!"], ["别让我失望。", "Don't disappoint me."]],
+    lisu: [["此局，且听我一言：先看清楚。", "On this one, a word: look first."], ["好好说服这盘棋。", "Talk this board round."]],
+    jiaxu: [["算清楚了再下。", "Reckon it out, then play."], ["急不得。", "No rushing."]],
+    lijue: [["上！", "Go!"], ["别磨蹭！", "Quit dawdling!"]],
+    chenliu: [["朕来试试！", "Let me try!"], ["这一题难吗？", "Is this one hard?"]],
+    dongzhuo: [["给咱家拿下！", "Take it for me!"], ["快下！", "Hurry up!"]],
+    chengong: [["谋定而后动。", "Plan first, then move."], ["此题，有正有奇。", "This one has a straight way and a tricky one."]],
+    yanshi: [["夫君，这一题呢？", "Husband, what about this one?"], ["小心些。", "Be careful."]],
+    zhangliao: [["张辽为先锋！", "Zhang Liao leads the charge!"], ["看准了再冲。", "Aim true, then charge."]],
+    chendeng: [["且看此题。", "Let's see this one."], ["不慌不忙。", "No hurry, no worry."]],
+    houcheng: [["这个我在行。", "I'm good at these."], ["来吧。", "Here we go."]],
+    zhaoyun: [["子龙在此，放手一搏！", "Zilong is here; go for it!"], ["看准破绽。", "Find the gap."]],
+    ladysun: [["这题难不倒我们！", "This won't stop us!"], ["快，让我看看你的本事。", "Come on, show me."]],
+    daiyu: [["这一题倒有些意思。", "This one's rather interesting."], ["又来了，你先想。", "Another one. You think first."], ["别看我，看棋。", "Don't look at me, look at the board."]],
+    grannyliu: [["哎哟，这又是什么阵势？", "Oh my, what kind of setup is this?"], ["老婆子跟着看看。", "This old woman will watch along."]],
+    ms_jang: [["", "Read it out first."], ["", "Every stone has a reason."]],
+    ms_oh: [["", "Alright, let's see this one."], ["", "Focus. You've got this."]],
+    ms_oh_hike: [["", "Next ridge. Let's go."]],
+    ms_ahn: [["", "Next."], ["", "Read it carefully."]],
+    ms_parkjg: [["", "Easy one, I bet."]],
+    ms_sun: [["", "Take a breath, then look."]],
+    ms_han: [["", "Bet you can't get this one."]],
+  };
+  function intro(color) {
+    const who = picked(), set = INTRO[who] || MOMENTS.intro, [zh, en] = set[Math.floor(Math.random() * set.length)];
+    const turn = color === WHITE ? ["白先。", "White to play."] : color === BLACK ? ["黑先。", "Black to play."] : ["", ""];
+    return who.startsWith("ms_") ? [turn[1], en].filter(Boolean).join(" ") : [turn[0] + zh, [turn[1], en].filter(Boolean).join(" ")].filter(Boolean).join(" ");
+  }
   // a moment's line, in the picked avatar's voice
   function moment(kind) {
     const who = picked(), mine = (SAY[who] || {})[kind], set = mine && mine.length ? mine : MOMENTS[kind];
@@ -400,5 +439,5 @@ const Avatars = (() => {
     if (r) new MutationObserver(schedule).observe(r, { childList: true, subtree: true });
     addEventListener("hashchange", schedule);
   });
-  return { VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
+  return { INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();
