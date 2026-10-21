@@ -1021,11 +1021,29 @@ svg.pl-counting .last-move { display: none; }
 .goal-bar { margin-top: 6px; max-width: 320px; }
 @media (max-width: 600px) { .cal-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; } .cal-day { padding: 6px 2px; min-height: 76px; } .cal-coins { font-size: 15px; } .cal-what { display: none; } }
 .turning-row { text-decoration: none; color: inherit; display: block; } .turning-row.solved .t { color: var(--muted); }
-/* avatars (avatars.js): the card beside a board, and the collection */
-.avatar-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; margin-bottom: 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--border, #e3dccb); }
-.avatar-pic { width: 72px; height: 72px; object-fit: cover; object-position: top; border-radius: 12px; background: rgba(0,0,0,.06); flex: none; }
+/* avatars (avatars.js): the lead beside a board, as the story's duel (.tk-duel-lead), and the collection. Narrow (the
+   default): a small portrait and its box under the board; from 1280px a column left of the board, the cut-out standing on
+   the board's foot, over the frame (not the points), taps passing through */
+.avatar-stage { position: relative; display: flex; flex-direction: column; align-items: stretch; }
+.avatar-stage > .board-card { position: relative; z-index: 1; }
+.avatar-col, .avatar-lead { display: none; }
+.avatar-dlg { position: relative; z-index: 3; padding: 8px 11px; border-radius: 12px; background: linear-gradient(180deg, rgba(28, 22, 34, .92), rgba(16, 12, 20, .92));
+  color: #f4ecff; box-shadow: 0 4px 14px rgba(0, 0, 0, .35); font-size: 14px; }
+.avatar-dlg .avatar-name { font-weight: 700; color: #ffd98a; margin-bottom: 2px; }
+.avatar-row { display: flex; align-items: flex-end; gap: 10px; margin-top: 8px; }
+.avatar-row > .avatar-dlg { flex: 1; }
+.avatar-row > .avatar-dlg[hidden] { display: block; visibility: hidden; }
+.avatar-small { width: 76px; max-height: 120px; object-fit: contain; object-position: bottom; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); flex: none; }
+@media (min-width: 1280px) {
+  main:has(.avatar-stage) { max-width: 1340px; }   /* (room for the lead's column beside the board and its panel) */
+  .avatar-stage { flex-direction: row; align-items: flex-end; }
+  .avatar-col { display: block; flex: 0 0 clamp(150px, 14vw, 230px); align-self: stretch; position: relative; }
+  .avatar-lead { display: block; position: absolute; left: 0; bottom: 0; height: 90%; max-width: calc(clamp(150px, 14vw, 230px) + 44px);   /* (over the frame, not the points) */
+    object-fit: contain; object-position: bottom left; z-index: 2; filter: drop-shadow(0 6px 16px rgba(0, 0, 0, .45)); pointer-events: none; animation: tkPortraitIn .35s ease-out; }
+  .avatar-col > .avatar-dlg { position: absolute; left: 0; right: 6px; top: 0; }
+  .avatar-row { display: none; }
+}
 .avatar-name { font-weight: 700; }
-.avatar-say { margin-top: 4px; padding: 6px 10px; border-radius: 10px; background: rgba(0,0,0,.06); font-size: 14px; }
 .avatar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
 .avatar-tile { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; border-radius: 14px; background: var(--card); border: 1px solid var(--border, #e3dccb); cursor: pointer; font: inherit; color: inherit; }
 .avatar-tile img { width: 96px; height: 96px; object-fit: cover; object-position: top; border-radius: 12px; }

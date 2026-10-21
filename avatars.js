@@ -76,29 +76,32 @@ const Avatars = (() => {
     document.body.append(t);
     setTimeout(() => t.remove(), 2800);
   }
-  // the card beside a board: the portrait, the name, and a word on a result
+  // the avatar on a board page, as the story's duel has its lead (Graphics: style.css .tk-duel-lead; the user: "on the
+  // bottom left and bigger, similar to the stories"): on a wide screen a column left of the board, the painted cut-out
+  // standing on the board's foot (its waist cut flush on that edge, nothing cropped above), in front of the board's
+  // edge with taps passing through, and the word on a result in a dark box over its head (from 1280px, where a column
+  // fits beside the board and its side panel); narrower, a small portrait beside the box under the board
   const LINES = { ok: [["妙！", "Brilliant!"], ["好棋。", "A fine move."], ["正是此处。", "Exactly there."]],
                   bad: [["可惜。", "A pity."], ["再想想。", "Think again."], ["不是这里。", "Not there."]] };
-  function card() {
-    const who = picked();
-    if (!who) return null;
-    const pic = h("img", { class: "avatar-pic", alt: "" }), say = h("div", { class: "avatar-say", hidden: "" });
-    loadPortraits().then(m => { if (m[who]) pic.src = img(m[who]); });
-    return h("div", { class: "avatar-card", "data-who": who }, [pic, h("div", { class: "avatar-txt" }, [h("div", { class: "avatar-name" }, name(who)), say])]);
+  function mount() {
+    const player = document.querySelector("#root .player"), who = picked();
+    if (!player || !who || player.querySelector(".avatar-stage")) return;
+    const board = player.querySelector(":scope > .board-card");
+    if (!board) return;
+    const lead = h("img", { class: "avatar-lead", alt: "" }), small = h("img", { class: "avatar-small", alt: "" });
+    loadPortraits().then(m => { if (m[who]) lead.src = small.src = img(m[who]); });
+    const box = () => h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]);
+    const stage = h("div", { class: "avatar-stage" }, [h("div", { class: "avatar-col" }, [box()]), lead]);
+    player.insertBefore(stage, board);
+    stage.insertBefore(board, lead);
+    stage.append(h("div", { class: "avatar-row" }, [small, box()]));   // (narrower: under the board, in its width)
   }
   addEventListener("tczw:result", e => {
-    const c = document.querySelector("#root .avatar-card .avatar-say");
-    if (!c) return;
+    const boxes = document.querySelectorAll("#root .avatar-dlg");
+    if (!boxes.length) return;
     const set = LINES[e.detail === "ok" ? "ok" : "bad"], [zh, en] = set[Math.floor(Math.random() * set.length)];
-    c.textContent = `${zh} ${en}`; c.hidden = false;
+    for (const b of boxes) { b.querySelector(".avatar-say").textContent = `${zh} ${en}`; b.hidden = false; }
   });
-  // after a page is drawn: the card at the top of its side panel (a page with a board and an aside)
-  function mount() {
-    const aside = document.querySelector("#root .player > aside");
-    if (!aside || aside.querySelector(".avatar-card")) return;
-    const c = card();
-    if (c) aside.prepend(c);
-  }
 
   // the collection (#/avatars): everyone, the ones yet to come as silhouettes
   async function view() {
@@ -135,5 +138,5 @@ const Avatars = (() => {
     const r = document.getElementById("root");
     if (r) new MutationObserver(() => mount()).observe(r, { childList: true });
   });
-  return { unlock, cleared, owns, picked, leads, catchUp, card, mount, view, merge, count, norm };
+  return { unlock, cleared, owns, picked, leads, catchUp, mount, view, merge, count, norm };
 })();
