@@ -419,7 +419,7 @@ const Engine = {
     finally { this._running = false; this._pump(); }
   },
   evaluate(fields, opts = {}) { return this.schedule(() => this._evaluate(fields), opts.background); },
-  analyze(fields, opts = {}) { return this.schedule(() => this._analyze(fields), opts.background); },
+  analyze(fields, opts = {}) { return this.schedule(() => this._analyze(fields, opts.background), opts.background); },
 
   // Single forward pass of the network, no search. Scores are Black-perspective.
   // Unlike analyze(), the result isn't averaged over search children, so it
@@ -436,9 +436,9 @@ const Engine = {
     });
   },
 
-  async _analyze(fields) {
+  async _analyze(fields, quiet) {
     await this.ensure();
-    this.setStatus("busy");
+    if (!quiet) this.setStatus("busy");   // (a background reading doesn't show: the user, "a seamless background thing")
     const id = ++this.seq;
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
@@ -2798,14 +2798,12 @@ const Turning = {
           const lost = me === BLACK ? gm.black_lost && !gm.white_lost : gm.white_lost && !gm.black_lost;
           if (gm.annulled || gm.black_lost === gm.white_lost) { s.scanned[gm.id] = 0; this.save(s); continue; }
           const opp = (me === BLACK ? gm.players.white : gm.players.black).username;
-          const what = `your game against ${opp} (${new Date(gm.ended).toLocaleDateString()})`;
-          onStatus(`Reading ${what}…`);
           const rk = side => typeof gm.players[side].ranking === "number" ? gm.players[side].ranking : null;
           const rb = rk("black"), rw = rk("white"), gap = Math.max(-9, Math.min(9, rb != null && rw != null ? (me === BLACK ? rb - rw : rw - rb) : 0));
           let reads = null, sgf = null, g = null;
           try {
             sgf = await OGS.sgf(gm.id); g = gameFromSgf(sgf);
-            if (g.n >= 20) reads = await this.read(sgf, (k, n) => { if (k % 5 === 0) onStatus(`Reading ${what}: move ${k} of ${n}`, k / n); });
+            if (g.n >= 20) reads = await this.read(sgf);   // (unseen: the user, "don't expose the reading progress")
           } catch (e) { console.error("[turning]", gm.id, e); }
           if (!alive() || this.state().uid !== s.uid) break;   // (the OGS name changed mid-read)
           s = this.state();
@@ -2874,16 +2872,13 @@ function viewTurning(kind = "turn", at = 0) {
   const noun = kind === "key" ? "key moves" : "turning points";
   const tallyEl = h("div", { class: "meta-sub turning-tally" });
   const showTally = () => { const t = Turning.tally(Turning.state(), kind);
-    tallyEl.textContent = `${t.read} games read (kept ${Sync.username ? "on your sheet" : "on this device"}) · ${t.found} ${noun} found · ${t.solved} solved · ${t.waiting} unsolved${t.fresh ? ` (${t.fresh} new)` : ""}`; };
+    tallyEl.textContent = t.found ? `${t.solved} solved · ${t.waiting} unsolved` : ""; };
   showTally();
-  const statusText = h("span"), bar = h("div", { class: "bar turning-bar", style: "display:none" }, [h("div", { style: "width:0%" })]);
-  const status = h("div", { class: "meta-sub turning-scan" }, [statusText, bar]);
-  const setStatus = (t, frac) => {
+  // the reading goes on unseen; the page hears only that something new is ready, or that it can't reach OGS
+  const status = h("div", { class: "meta-sub turning-scan" });
+  const setStatus = t => {
     if (t === null) { showTally(); if (!item && location.hash === K.route) viewTurning(kind); return; }
-    statusText.textContent = t;
-    bar.style.display = frac == null ? "none" : "";
-    if (frac != null) bar.firstChild.style.width = `${Math.round(100 * frac)}%`;
-    if (frac == null) showTally();
+    status.textContent = item ? "" : t;   // (with a position to play, nothing about the reading at all)
   };
   Turning.onStatus = setStatus;
   const who = h("div", { class: "meta-sub" }, [`OGS: ${s.user} · `,
@@ -2892,7 +2887,7 @@ function viewTurning(kind = "turn", at = 0) {
   if (!item) {
     root.append(h("div", { class: "sgf-loader" }, [
       h("div", { class: "cat-title" }, K.title), who, tallyEl,
-      h("p", {}, "Reading your games: KataGo searches every position, so a game takes a few minutes. The next ones are read while you play."),
+      h("p", {}, `Your ${noun} are on their way. They'll appear here; you can do something else meanwhile.`),
       status,
     ]));
     Turning.scan();

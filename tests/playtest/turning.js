@@ -31,8 +31,9 @@ await p.waitForSelector('.book-turning',{timeout:20000});
 check(!!(await p.$('.book-keymoves')),'a Key moves card sits beside Turning points');
 await fast();
 await p.click('.book-turning');
-const sawBar=p.waitForFunction(()=>{const b=document.querySelector('.turning-bar');return b&&b.style.display!=='none'&&/move \d+ of \d+/.test(document.querySelector('.turning-scan').textContent);},null,{timeout:900000}).then(()=>true,()=>false);
-check(await sawBar,'reading shows its progress: the game, move k of n, and a bar');
+// the reading is unseen: no progress, no game names, no busy engine chip
+const seen=await p.waitForFunction(()=>Turning.scanning,null,{timeout:120000}).then(()=>p.evaluate(()=>({scan:document.querySelector('.turning-scan').textContent,chip:document.getElementById('engineChipText').textContent,bar:!!document.querySelector('.turning-bar')})));
+check(!/move \d+ of|Reading/.test(seen.scan)&&!seen.bar&&!/thinking/.test(seen.chip),`the reading doesn't show: "${seen.scan}", chip "${seen.chip}"`);
 await p.waitForSelector('.player svg',{timeout:900000});
 const S=()=>p.evaluate(()=>JSON.parse(localStorage.getItem('goban.turning')));
 let s=await S();
@@ -40,7 +41,7 @@ const it=Turning_pending(s)[0];
 function Turning_pending(s){return s.items.filter(x=>!x.fixed&&x.kind==='turn');}
 check(it&&it.me===1&&it.k%2===0&&lostIds.includes(it.gid),`the turning point is the player's own move in a lost game (move ${it&&it.k+1})`);
 check(it.before>=0.4&&it.loss>=4&&it.real>0,`a real drop: ${Math.round(it.before*100)}% → ${Math.round(it.after*100)}%, ${Math.round(it.loss)} engine points, ${it.real} real`);
-check(/games read \(kept on this device\) · \d+ turning points found · 0 solved/.test(await p.textContent('.turning-tally')),`the tally: "${await p.textContent('.turning-tally')}"`);
+check(/^0 solved · \d+ unsolved$/.test(await p.textContent('.turning-tally')),`the tally, solving only: "${await p.textContent('.turning-tally')}"`);
 const gm=await p.evaluate(([gid,k])=>{const m=gameFromSgf(Turning.view(gid).sgf).moves[k];return [m.c,m.r];},[it.gid,it.k]);
 await p.evaluate(([c,r])=>window.__turning.play(c,r),gm);
 await p.waitForFunction(()=>!/reading/.test(document.getElementById('status').textContent),null,{timeout:120000});

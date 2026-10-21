@@ -16,7 +16,7 @@ await p.route('https://online-go.com/**',r=>{const u=r.request().url();
 await p.addInitScript(()=>{if(!sessionStorage.getItem('s')){sessionStorage.setItem('s',1);localStorage.setItem('goban.turning',JSON.stringify({v:3,user:'me',uid:7,scanned:{},items:[],next:null,played:{}}));}});
 await p.goto(URL+'#/');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;Turning.VISITS=20;});
 await p.evaluate(()=>location.hash='#/turning');
-await p.waitForFunction(()=>/move [1-9]\d* of/.test((document.querySelector('.turning-scan')||{}).textContent||''),null,{timeout:600000});
+await p.waitForFunction(()=>Turning.scanning&&Engine._running,null,{timeout:600000});
 await p.evaluate(()=>location.hash='#/');await p.waitForSelector('.book-turning');
 const n0=await p.evaluate(()=>Object.keys(Turning.state().scanned).length);
 // a page's own call while the reading runs: it doesn't wait for the reading
