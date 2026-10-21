@@ -1582,7 +1582,7 @@ const Review = {
   // pushes just this one game to its own synced row — no shared-cell size
   // limit to worry about, since each game is its own row.
   saveState() {
-    if (!this.game) return;
+    if (!this.game || this.ephemeral) return;   // (a game reviewed on another page isn't kept in the Review's list)
     if (!this.currentId) this.currentId = this.newId();
     const entry = this.buildEntry();
     const hist = [entry, ...this.loadHistory().filter(g => g.id !== entry.id)].slice(0, this.MAX_LOCAL);
@@ -1592,6 +1592,17 @@ const Review = {
   scheduleSave() {
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.saveState(), 800);
+  },
+  // a game reviewed on another page for a while (Turning points): the Review's own game is put back after
+  borrow(sgf) {
+    if (!this.ephemeral) { if (this.game) { clearTimeout(this.saveTimer); this.saveState(); } this.prevId = this.game ? this.currentId : null; }
+    this.load(sgf); this.ephemeral = true; this.currentId = null;
+  },
+  giveBack() {
+    if (!this.ephemeral) return;
+    this.ephemeral = false; this.game = null; this.currentId = null; this.runId++; this.els = null;
+    if (this.prevId) this.openFromHistory(this.prevId);
+    this.prevId = null;
   },
 
   openFromHistory(id) {
@@ -2919,24 +2930,7 @@ function viewTurning(kind = "turn", at = 0) {
     [gm.c, gm.r, "rgba(176,65,62,.85)", Math.round(100 * (playable ? pos.after : 1 - pos.after))],
     ...(tried && tried.w != null ? [[tried.c, tried.r, "rgba(53,102,176,.85)", Math.round(100 * tried.w)]] : []),
   ];
-  // reviewing the whole game on this page (the user: "let's just allow the user to do review straight from the book
-  // screen"): rv is the position shown; KataGo's best there in green, the move played in red, each with its mover's
-  // win rate, from the reading's own searches
-  let rv = null;
-  const moverAt = j => j < g.n ? g.moves[j].color : 3 - g.moves[g.n - 1].color;
-  const povAt = (wb, c) => c === BLACK ? wb : 1 - wb;
   const draw = () => {
-    if (rv != null) {
-      const lm = rv > 0 ? g.moves[rv - 1] : null;
-      goban.render(g.grids[rv], lm && !lm.pass ? [lm.c, lm.r] : null, false);
-      const dot = (c, r, color, label) => { const x = goban.px(c), y = goban.py(r);
-        goban.el("circle", { cx: x, cy: y, r: goban.cell * .44, fill: color, stroke: "#fff", "stroke-width": 2, "pointer-events": "none", class: "turn-mark" });
-        goban.el("text", { x, y: y + goban.cell * .14, "text-anchor": "middle", "font-size": goban.cell * .34, "font-weight": 700, fill: "#fff", "pointer-events": "none" }).textContent = label; };
-      const c = moverAt(rv), m = g.moves[rv], b = item.bests && item.bests[rv];
-      if (item.w && b) dot(b[0], b[1], "rgba(34,160,90,.85)", Math.round(100 * povAt(item.w[rv], c)));
-      if (item.w && m && !m.pass && !(b && b[0] === m.c && b[1] === m.r)) dot(m.c, m.r, "rgba(176,65,62,.85)", Math.round(100 * povAt(item.w[rv + 1], c)));
-      return;
-    }
     const grid = tried ? tried.grid : g.grids[k];
     const last = tried ? [tried.c, tried.r] : prev && !prev.pass ? [prev.c, prev.r] : null;
     goban.render(grid, last, playable && !tried && !busy);
@@ -2986,8 +2980,10 @@ function viewTurning(kind = "turn", at = 0) {
       result.className = fixed ? "ok" : "bad";
       if (fixed && !show) { show = "solved"; result.textContent += " Red: your move in the game."; }
       const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
+      const firstTry = !!it && !it.tries && !it.fixed;   // (before this try is counted)
       if (it) { it.tries = (it.tries || 0) + 1; it.fixed = it.fixed || fixed; it.seen = Date.now(); Turning.save(st); Turning.pushGame(item.gid); showTally(); }
-      if (fixed && typeof Events !== "undefined") Events.earn(`tp:${item.gid}:${kind}`, 3);
+      // the event's currency only for the first move being right (the user: "getting candy for a non first try solve")
+      if (fixed && firstTry && typeof Events !== "undefined") Events.earn(`tp:${item.gid}:${kind}`, 3);
     } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
     busy = false; draw();
   };
@@ -2996,60 +2992,21 @@ function viewTurning(kind = "turn", at = 0) {
     if (it) { it.seen = Date.now(); if (!it.fixed) it.skipped = Date.now(); }   // (passed over: behind the rest for an hour)
     Turning.save(st); Turning.pushGame(item.gid); viewTurning(kind);
   };
-  const openInReview = () => {
-    Review.load(item.sgf); Review.currentId = Review.newId();
-    if (item.w) item.w.forEach((x, j) => { Review.analyses[j] = { w: x, v: 2 }; });   // (already searched: the Review opens analyzed)
-    if (item.losses) Review.losses = item.losses.slice();
-    Review.saveState();
-    Review.node = Review.mainNodes[k]; location.hash = "#/review";
-  };
-  const rvText = h("div", { class: "meta-title" }), rvSub = h("div", { class: "meta-sub" });
-  const chart = document.createElementNS(SVGNS, "svg");
-  chart.setAttribute("viewBox", "0 0 300 60"); chart.setAttribute("class", "turn-chart"); chart.setAttribute("preserveAspectRatio", "none");
-  const drawChart = () => {
-    if (!item.w) return;
-    const X = j => 300 * j / g.n, Y = wb => 60 - 60 * povAt(wb, me);
-    chart.innerHTML = `<line x1="0" y1="30" x2="300" y2="30" stroke="currentColor" stroke-opacity=".25"/>
-      <polyline fill="none" stroke="#3566b0" stroke-width="1.6" points="${item.w.map((x, j) => `${X(j).toFixed(1)},${Y(x).toFixed(1)}`).join(" ")}"/>
-      <line x1="${X(k)}" y1="0" x2="${X(k)}" y2="60" stroke="#b0413e" stroke-dasharray="3 2"/>
-      ${rv != null ? `<line x1="${X(rv)}" y1="0" x2="${X(rv)}" y2="60" stroke="currentColor" stroke-width="1.5"/>` : ""}`;
-  };
-  chart.addEventListener("click", e => { const r = chart.getBoundingClientRect(); goTo(Math.round((e.clientX - r.left) / r.width * g.n)); });
-  const goTo = j => {
-    rv = Math.max(0, Math.min(g.n, j));
-    const m = g.moves[rv], c = moverAt(rv), name = c === me ? "you" : item.opp;
-    if (!m) { rvText.textContent = `End of the game · ${pct(povAt(item.w ? item.w[rv] : 0.5, me))} for you`; rvSub.textContent = ""; }
-    else {
-      const coord = m.pass ? "pass" : COLS[m.c] + (N - m.r), loss = item.losses ? item.losses[rv] : null;
-      rvText.textContent = `Move ${rv + 1}: ${name} (${c === BLACK ? "B" : "W"}) played ${coord}${rv === k ? "  ← this problem" : ""}`;
-      rvSub.textContent = item.w ? `${c === me ? "Your" : "Their"} win rate ${pct(povAt(item.w[rv], c))} → ${pct(povAt(item.w[rv + 1], c))}`
-        + (loss >= Turning.NOISE_PTS ? ` · gave up ${Math.round(loss)} points` : "") + (item.bests && item.bests[rv] ? ` · green: KataGo's move` : "") : "";
-    }
-    draw(); drawChart();
-  };
-  // your own moves that gave up more than the noise, to jump between
-  const myMistakes = item.losses ? item.losses.map((l, j) => l >= Turning.NOISE_PTS && g.moves[j].color === me ? j : -1).filter(j => j >= 0) : [];
-  const jump = dir => { const j = dir > 0 ? myMistakes.find(x => x > rv) : [...myMistakes].reverse().find(x => x < rv); if (j != null) goTo(j); };
-  const problemPanels = [], reviewPanel = h("div", { class: "panel turn-review", style: "display:none" }, [
-    h("h2", {}, "Review the game"), rvText, rvSub, chart,
-    h("div", { class: "rv-nav" }, [
-      h("button", { onclick: () => goTo(0) }, "|◀"), h("button", { onclick: () => goTo(rv - 1) }, "◀"),
-      h("button", { onclick: () => goTo(rv + 1) }, "▶"), h("button", { onclick: () => goTo(g.n) }, "▶|"),
-    ]),
-    h("div", { class: "controls" }, [
-      myMistakes.length ? h("button", { onclick: () => jump(-1) }, "◀ Your mistake") : null,
-      myMistakes.length ? h("button", { onclick: () => jump(1) }, "Your mistake ▶") : null,
-      h("button", { onclick: openInReview }, "Open in the Review tab"),
-      h("button", { class: "primary", onclick: () => { rv = null; reviewPanel.style.display = "none"; for (const el of problemPanels) el.style.display = ""; draw(); } }, "Back to the problem"),
-    ].filter(Boolean)),
-  ]);
+  // the game's review on this page, the Review's own (KataGo's moves, branches, the chart, the mistakes): the user, "let's
+  // just allow the user to do review straight from the book screen", "no reason not to have AI etc and branching on the
+  // screen". It opens on this move, analyzed from the reading's searches; the Review tab's own game is put back after
   const startReview = () => {
     if (busy) return;
-    for (const el of problemPanels) el.style.display = "none";
-    reviewPanel.style.display = ""; goTo(k);
+    Review.borrow(item.sgf);
+    if (item.w) item.w.forEach((x, j) => { Review.analyses[j] = { w: x, v: 2 }; });
+    if (item.losses) Review.losses = item.losses.slice();
+    Review.showHints = true;
+    Review.node = Review.mainNodes[k];
+    root.innerHTML = "";
+    mountReview(root, { closeLabel: "Back to the problem", onClose: () => { Review.giveBack(); viewTurning(kind, at); } });
   };
   draw();
-  window.__turning = { play, item, pos, goTo, startReview };
+  window.__turning = { play, item, pos, startReview };
 
   const header = kind === "key"
     ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`
@@ -3080,9 +3037,7 @@ function viewTurning(kind = "turn", at = 0) {
         h("button", { class: "primary", onclick: next }, "Next →"),
       ].filter(Boolean)),
     ]),
-    reviewPanel,
   ]);
-  problemPanels.push(...[...aside.children].slice(1, 3));   // (Status and Controls give way to the review)
   root.append(h("div", { class: "player" }, [boardCard, aside]));
   Turning.scan();   // the next ones get read while this one's played, and on after the page is left
 }
@@ -3803,6 +3758,13 @@ function viewReview() {
     return;
   }
 
+  mountReview(root);
+}
+
+// the game's review into target: the Review tab's (viewReview), or another page's (Turning points' "Review game",
+// the user: "no reason not to have AI etc and branching on the screen without having to link to the Review tab"),
+// which gives its own way back (opts.onClose, opts.closeLabel)
+function mountReview(target, opts = {}) {
   const g = Review.game;
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" });
@@ -3869,7 +3831,8 @@ function viewReview() {
         btnHints,
         btnMain,
         btnDelete,
-        h("button", { onclick: () => { Review.close(); viewReview(); } }, "Close game"),
+        opts.onClose ? h("button", { class: "primary", onclick: opts.onClose }, opts.closeLabel || "Back")
+          : h("button", { onclick: () => { Review.close(); viewReview(); } }, "Close game"),
       ]),
       progress,
     ]),
@@ -3877,7 +3840,7 @@ function viewReview() {
 
   const wrap = h("div", { class: "review" });
   wrap.append(boardCard, aside);
-  root.append(wrap);
+  target.append(wrap);
 
   Review.els = { chart, tip, pos, progress, mistakes, moves: movesEl, movesToggle, note,
                  btnAnalyze, btnMain, btnDelete, btnHints };
@@ -5325,6 +5288,7 @@ async function route() {
   if (trainer) trainer.alive = false;
   trainer = null;
   Review.els = null;
+  Review.giveBack();   // (a game borrowed by another page)
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   Theme.apply(parts[0] === "tk");
   // a story's opening scroll left open when you leave the story (the Library tab, Back) stayed over the page and
