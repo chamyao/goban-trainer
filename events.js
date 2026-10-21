@@ -321,17 +321,8 @@ const Events = (() => {
           h("div", { class: "row" }, [btn]),
         ]);
       })));
-    } else root.append(h("div", { class: "panel" }, [h("h2", {}, "Between events"), h("p", { class: "meta-sub" }, "No event is on right now; the next one is below.")]));
+    } else root.append(h("div", { class: "panel" }, [h("h2", {}, "Between events"), h("p", { class: "meta-sub" }, "No event is on right now.")]));
 
-    // the year ahead
-    root.append(h("div", { class: "cat-title" }, "Coming up"));
-    const seen = new Set();
-    root.append(h("div", { class: "event-list" }, upcoming(d).filter(w => !seen.has(w.ev.id) && seen.add(w.ev.id)).map(w => h("div", { class: "event-row" }, [
-      h("span", { class: "event-icon" }, w.ev.icon),
-      h("span", { class: "event-when" }, `${fmt(w.start)} – ${fmt(w.end)}`),
-      h("span", { class: "event-what" }, [h("b", {}, w.ev.name), ` ${w.ev.native}`, w.ev.blurb ? h("span", { class: "meta-sub" }, ` · ${w.ev.blurb}`) : ""]),
-      h("span", { class: `badge event-kind event-${w.ev.kind}` }, KINDS[w.ev.kind]),
-    ]))));
     // what's been collected, by event (the album)
     const mine = ITEMS.filter(it => owns(it.id));
     if (mine.length) {

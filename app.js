@@ -2217,7 +2217,7 @@ async function viewLibrary() {
   root.append(h("div", { class: "cat-title" }, "Events"));
   root.append(h("div", { class: "book-list" }, [h("a", { class: "book event-card", href: "#/events" }, [
     h("div", { class: "t" }, fe ? `${fe.ev.icon} ${fe.ev.name} · ${fe.ev.native}` : "📅 Event calendar"),
-    h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · its shop and the year's events` : "The year's events"),
+    h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · sign-in, goals and the shop` : "Between events"),
     h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? `${fe.ev.ci} ${Events.balance(fe.ev.id)}` : "")]),
   ])]));
   root.append(h("div", { class: "cat-title" }, "Stories"));
