@@ -160,11 +160,14 @@ BD_PAINT = {   # the event boards' surfaces (Events ITEMS board.tex): drawn unde
 }
 
 
+BD_SOFTEN = {"haunted": .15}   # less softening where the grain is the point (the user: 'look like wood grain')
+
+
 def build_boards(save):
     """Each board 1024 square, its detail softened a little so lines and both colours of stone read on it."""
     for n in BD_PAINT:
         im = Image.open(RAW / f"{n}.webp").convert("RGB").resize((1024, 1024), Image.LANCZOS)
-        im = Image.blend(im, im.filter(ImageFilter.GaussianBlur(5)), .45)
+        im = Image.blend(im, im.filter(ImageFilter.GaussianBlur(5)), BD_SOFTEN.get(n, .45))
         im.save(UI / f"{n}.webp", quality=80, method=6)
         save.meta[n] = {"file": f"{n}.webp", "size": [1024, 1024]}
 

@@ -67,7 +67,7 @@ const Events = (() => {
   // the shops: looks only. board: a board look (BoardTheme), title: by the player's name, hat: on Sun Wukong
   const ITEMS = [
     { id: "board-haunted", ev: "halloween", type: "board", name: "Haunted board", price: 15,
-      board: { id: "haunted", name: "Haunted", wood: ["#8a78a6", "#7d6b99", "#705e8c"], tex: "assets/boards/haunted.webp", line: "#1c1228", label: "#f0e6ff", stone: "rgba(0,0,0,.45)" } },
+      board: { id: "haunted", name: "Haunted", wood: ["#8a78a6", "#7d6b99", "#705e8c"], tex: "assets/boards/haunted.webp?v=2", line: "#1c1228", label: "#f0e6ff", stone: "rgba(0,0,0,.45)" } },
     { id: "stones-candy", ev: "halloween", type: "stones", name: "Candy stones", icon: "🍬", price: 20 },
     { id: "title-pumpkin-king", ev: "halloween", type: "title", name: "Pumpkin King", icon: "🎃", price: 10 },
     { id: "hat-witch", ev: "halloween", type: "hat", name: "Witch hat for Sun Wukong", price: 25 },
