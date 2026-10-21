@@ -1596,11 +1596,11 @@ const Review = {
   // a game reviewed on another page for a while (Turning points): the Review's own game is put back after
   borrow(sgf) {
     if (!this.ephemeral) { if (this.game) { clearTimeout(this.saveTimer); this.saveState(); } this.prevId = this.game ? this.currentId : null; }
-    this.load(sgf); this.ephemeral = true; this.currentId = null;
+    this.load(sgf); this.ephemeral = true; this.currentId = null; this.overlay = null;
   },
   giveBack() {
     if (!this.ephemeral) return;
-    this.ephemeral = false; this.game = null; this.currentId = null; this.runId++; this.els = null;
+    this.ephemeral = false; this.game = null; this.currentId = null; this.runId++; this.els = null; this.overlay = null;
     if (this.prevId) this.openFromHistory(this.prevId);
     this.prevId = null;
   },
@@ -1943,6 +1943,7 @@ const Review = {
       const detail = this.details.get(this.detailKey());
       if (detail) this.renderSuggestions(detail);
     }
+    if (this.overlay && this.overlay.node === this.node) this.overlay.draw(this.goban);   // (another page's marks on one position)
   },
 
   renderSuggestions(detail) {
@@ -2563,7 +2564,7 @@ const Turning = {
   // with what was played), and the OGS name. th: the lines the items were found with; when they change, the items are
   // found again from the reads (what was played carries over where the position is the same)
   fresh(user = "", uid = 0) { return { v: this.V, user, uid, scanned: {}, games: {}, items: [], next: null, played: {}, th: this.th() }; },
-  th() { return `${this.NOISE_PTS}:closing`; },   // (":closing": key moves' points close when played)
+  th() { return `${this.NOISE_PTS}:closing:open${this.OPEN}`; },   // (":closing": key moves' points close when played)
   state() {
     try {
       const s = JSON.parse(localStorage.getItem(this.KEY));
@@ -2736,7 +2737,7 @@ const Turning = {
       const s = w.map((x, k) => pov(k < g.n ? (x + w[k + 1]) / 2 : x, me));
       let kc = -1;
       for (let k = g.n; k >= 0; k--) if (s[k] >= 0.5) { kc = k; break; }
-      if (kc >= 0) {
+      if (kc >= 0 && kc < g.n - 1) {   // (still ahead at the end: lost on time, or resigned a won game; nothing turned)
         let ks = kc;
         while (ks > 0 && s[ks - 1] >= 0.5) ks--;
         let peak = ks;
@@ -2745,7 +2746,8 @@ const Turning = {
         // 16 real points, 55→43% 5); a move must also clear the engine's noise
         const realLoss = r => real(pov(r.bestW, me)) - real(pov(r.after, me));
         if (s[peak] >= 0.6)
-          for (const r of misses) if (r.k >= peak && r.color === me && r.loss >= this.NOISE_PTS && (!turn || realLoss(r) > realLoss(turn))) turn = r;
+          for (const r of misses) if (r.k >= peak && r.color === me && r.loss >= this.NOISE_PTS && pov(r.before, me) >= this.OPEN
+                                      && (!turn || realLoss(r) > realLoss(turn))) turn = r;
         if (turn) turn = { ...mineOf(turn), real: Math.round(100 * realLoss(turn)) };
       }
     }
@@ -2784,11 +2786,15 @@ const Turning = {
   // rate 3.7 at most, and a move's loss read from its own search or the next one's agrees within 3.8. A move must give
   // up more than that to count as a miss; a replayed move within it of KataGo's best counts as finding it
   NOISE_PTS: 4,
+  // a turning point is a move from a game still open: 40% or more before it (else the real-chance scale, which at kyu
+  // level reads a 4% position as 19%, picked a 4→1% move long after the game was lost: the user, apo110 vs Virago,
+  // "the actual turning point is move 75 but we chose one much later when the position was already lost")
+  OPEN: 0.4,
   TOL_PTS: 4,
 
   // reads the player's 19×19 games, newest first, until both feeds have `want` unsolved; it reports to the page
   // showing now (Turning.onStatus), since a scan outlives the position it started under, and the page it started on
-  async scan(want = 5) {
+  async scan(want = Infinity) {   // (every game: the user, "is it still reading games?"; it gives way to the page)
     if (this.scanning) return;
     this.scanning = true;
     const onStatus = (t, frac) => this.onStatus && this.onStatus(t, frac);
@@ -2916,7 +2922,7 @@ function viewTurning(kind = "turn", at = 0) {
   const boardCard = h("div", { class: "board-card" }, [svg]);
   // (no win rate before a move: the user, "don't display win % at problem start")
   const prompt = kind === "key" ? `You're ${me === BLACK ? "Black" : "White"}. There's a point here you both kept missing. Find it.`
-    : `You're ${me === BLACK ? "Black" : "White"}. Find a better move than the one you played.`;
+    : `You're ${me === BLACK ? "Black" : "White"}. Find a move to keep the advantage.`;
   const result = h("div", { id: "status" }, playable ? prompt
     : `Their turn: they missed it too, and played the red move (${pct(1 - pos.after)} for them, where the green one keeps ${pct(1 - pos.bestW)}).`);
   const goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => play(c, r));
@@ -2986,27 +2992,44 @@ function viewTurning(kind = "turn", at = 0) {
       if (fixed && firstTry && typeof Events !== "undefined") Events.earn(`tp:${item.gid}:${kind}`, 3);
     } catch (e) { console.error(e); result.textContent = "KataGo couldn't read that one."; tried = null; }
     busy = false; draw();
+    if (result.className === "ok" && location.hash === K.route) toReview();   // (solved: the board becomes the review)
   };
   const next = () => {
     const st = Turning.state(), it = st.items.find(x => x.gid === item.gid && x.kind === kind);
     if (it) { it.seen = Date.now(); if (!it.fixed) it.skipped = Date.now(); }   // (passed over: behind the rest for an hour)
     Turning.save(st); Turning.pushGame(item.gid); viewTurning(kind);
   };
-  // the game's review on this page, the Review's own (KataGo's moves, branches, the chart, the mistakes): the user, "let's
-  // just allow the user to do review straight from the book screen", "no reason not to have AI etc and branching on the
-  // screen". It opens on this move, analyzed from the reading's searches; the Review tab's own game is put back after
-  const startReview = () => {
-    if (busy) return;
+  // Solved, or the answer shown, the board becomes the game's review in place (the user: "it shouldn't even have to be
+  // a button, can't the board just become a review board with the slight difference of the game move / solution
+  // appearing at the first frame, and then the game navigable after that"): the Review's own view (KataGo's moves,
+  // branches, the chart, the mistakes), opened on this position with the marks on it, the try kept as a branch,
+  // analyzed from the reading's searches. The Review tab's own game is put back after (Review.giveBack).
+  let reviewing = false;
+  const toReview = () => {
+    if (reviewing) return;
+    reviewing = true;
     Review.borrow(item.sgf);
     if (item.w) item.w.forEach((x, j) => { Review.analyses[j] = { w: x, v: 2 }; });
     if (item.losses) Review.losses = item.losses.slice();
     Review.showHints = true;
-    Review.node = Review.mainNodes[k];
+    const at0 = Review.mainNodes[k];
+    Review.node = at0;
+    show = "marks";
+    const marked = marks();
+    Review.overlay = { node: at0, draw: gb => { for (const [c, r, color, label] of marked) {
+      const x = gb.px(c), y = gb.py(r);
+      gb.el("circle", { cx: x, cy: y, r: gb.cell * .44, fill: color, stroke: "#fff", "stroke-width": 2, "pointer-events": "none", class: "turn-mark" });
+      gb.el("text", { x, y: y + gb.cell * .14, "text-anchor": "middle", "font-size": gb.cell * .34, "font-weight": 700, fill: "#fff", "pointer-events": "none" }).textContent = label;
+    } } };
     root.innerHTML = "";
-    mountReview(root, { closeLabel: "Back to the problem", onClose: () => { Review.giveBack(); viewTurning(kind, at); } });
+    mountReview(root, { top: [infoPanel, h("div", { class: "panel" }, [h("h2", {}, "Status"), result])],
+      buttons: [h("button", { class: "primary", onclick: () => { Review.giveBack(); next(); } }, "Next →")],
+      closeLabel: playable ? "Try again" : "Back", onClose: () => { Review.giveBack(); viewTurning(kind, at); } });
+    // the try, a branch off this position (it stays on the board's first frame, at the position itself)
+    if (tried && !(tried.c === gm.c && tried.r === gm.r)) { Review.click(tried.c, tried.r); Review.setNode(at0); }
   };
   draw();
-  window.__turning = { play, item, pos, startReview };
+  window.__turning = { play, item, pos, toReview };
 
   const header = kind === "key"
     ? h("div", { class: "meta-sub" }, `Missed ${item.mine + item.theirs} times: ${item.mine} by you, ${item.theirs} by ${item.opp}${item.won ? " (a game you won)" : ""}`
@@ -3016,8 +3039,7 @@ function viewTurning(kind = "turn", at = 0) {
     h("span", { class: "meta-sub" }, `Time ${Math.min(at, times.length - 1) + 1} of ${times.length}: ${pos.me === false ? "theirs" : "yours"} · `),
     h("button", { onclick: () => viewTurning(kind, (at + 1) % times.length) }, "Other times →"),
   ]) : null;
-  const aside = h("aside", {}, [
-    h("div", { class: "panel" }, [
+  const infoPanel = h("div", { class: "panel" }, [
       h("h2", {}, kind === "key" ? "Key move" : "Turning point"), who, tallyEl,
       h("div", { class: "meta-title" }, `vs ${item.opp} · move ${k + 1}`),
       h("div", { class: "meta-sub" }, [`${new Date(item.date).toLocaleDateString()} · `,
@@ -3025,15 +3047,17 @@ function viewTurning(kind = "turn", at = 0) {
       header, timeNav,
       h("div", { class: "badges" }, [h("span", { class: "badge turn" }, `${mover === BLACK ? "Black" : "White"} to play`),
         item.fixed ? h("span", { class: "badge" }, "solved before · review") : null].filter(Boolean)),
-    ].filter(Boolean)),
+    ].filter(Boolean));
+  const aside = h("aside", {}, [
+    infoPanel,
     h("div", { class: "panel" }, [h("h2", {}, "Status"), result, status]),
     h("div", { class: "panel" }, [
       h("h2", {}, "Controls"),
       h("div", { class: "controls" }, [
         playable ? h("button", { onclick: () => { if (busy) return; tried = null; show = null; result.className = ""; result.textContent = prompt; draw(); } }, "Try again") : null,
-        h("button", { onclick: () => { if (busy) return; show = "marks"; draw();
-          result.textContent = `Green: KataGo's move (${pct(pos.bestW)} for you). Red: the game move (${pct(pos.after)}).${tried && tried.w != null ? ` Blue: this try (${pct(tried.w)}).` : ""}`; } }, "Show answer"),
-        h("button", { onclick: startReview }, "Review game"),
+        h("button", { onclick: () => { if (busy) return; show = "marks";
+          result.textContent = `Green: KataGo's move (${pct(pos.bestW)} for you). Red: the game move (${pct(pos.after)}).${tried && tried.w != null ? ` Blue: this try (${pct(tried.w)}).` : ""}`;
+          toReview(); } }, "Show answer"),
         h("button", { class: "primary", onclick: next }, "Next →"),
       ].filter(Boolean)),
     ]),
@@ -3798,11 +3822,11 @@ function mountReview(target, opts = {}) {
                  g.meta.result ? `· ${g.meta.result}` : ""].join(" ");
 
   const aside = h("aside", {}, [
-    h("div", { class: "panel" }, [
+    ...(opts.top || [h("div", { class: "panel" }, [   // (another page's own panels in place of the game's)
       h("h2", {}, "Game"),
       h("div", { class: "meta-title" }, title),
       h("div", { class: "meta-sub" }, `${g.n} moves · komi ${g.meta.komi}`),
-    ]),
+    ])]),
     h("div", { class: "panel" }, [
       h("div", { class: "rv-nav" }, [
         h("button", { onclick: () => Review.jump(0) }, "|◀"),
@@ -3831,7 +3855,8 @@ function mountReview(target, opts = {}) {
         btnHints,
         btnMain,
         btnDelete,
-        opts.onClose ? h("button", { class: "primary", onclick: opts.onClose }, opts.closeLabel || "Back")
+        ...(opts.buttons || []),
+        opts.onClose ? h("button", { onclick: opts.onClose }, opts.closeLabel || "Back")
           : h("button", { onclick: () => { Review.close(); viewReview(); } }, "Close game"),
       ]),
       progress,
@@ -5400,3 +5425,6 @@ if (loginParams.get("state") && (loginParams.get("code") || loginParams.get("err
     .catch(e => { OGSPlay.loginError = e.message; })
     .finally(() => { history.replaceState(null, "", location.pathname + (back || "#/play")); route(); });
 } else route();
+// the reading starts with the site, not with the page (the user: "is it still reading games? I don't see the number
+// increasing"): every game, in the background, giving way to whatever the page asks of the engine
+document.addEventListener("DOMContentLoaded", () => setTimeout(() => { try { if (Turning.state().uid) Turning.scan(); } catch (e) { console.error(e); } }, 5000));
