@@ -3,6 +3,7 @@ Pro), so the face, hair, pose, framing and style stay and only the clothes chang
 (851-labs/background-remover) onto a canvas the size of the source, the figure where it stood, so a skin swaps in 1:1.
 
     python3 tools/gen_skins.py [SKIN ...]     # -> assets/tk/portraits/skins/<skin>.webp (+ raw/<skin>.png), ~$0.05 each
+    python3 tools/gen_skins.py --fix SKIN "instruction"   # an edit of the skin itself; the old one kept as raw/<skin>.orig.webp
 
 REPLICATE_API_TOKEN comes from the environment. One try each; fix a skin by editing it again, never by repainting.
 """
@@ -37,11 +38,17 @@ SKINS = {   # skin: (source portrait, the new outfit)
 }
 
 
-def edit(skin):
+def edit(skin, fix=None):
     from gen_stills import fetch, http
     from build_portraits import cut_851
     src_id, outfit = SKINS[skin]
     src = Image.open(PORT / f"{src_id}.webp").convert("RGBA")
+    if fix:   # edit the skin as it stands, not the plain portrait
+        (OUT / "raw").mkdir(parents=True, exist_ok=True)
+        orig = OUT / "raw" / f"{skin}.orig.webp"
+        if not orig.exists():
+            Image.open(OUT / f"{skin}.webp").save(orig, quality=95)
+        src, outfit = Image.open(OUT / f"{skin}.webp").convert("RGBA"), fix + " Keep the outfit otherwise exactly as it is."
     W, H = src.size
     # on white, padded to 3:4 (the figure bottom-left as it stands), so the edit comes back the same shape
     PW, PH = max(W, round(H * 3 / 4)), max(H, round(W * 4 / 3))
@@ -65,5 +72,9 @@ def edit(skin):
 
 
 if __name__ == "__main__":
-    for s in sys.argv[1:] or SKINS:
-        edit(s)
+    a = sys.argv[1:]
+    if a[:1] == ["--fix"]:
+        edit(a[1], a[2])
+    else:
+        for s in a or SKINS:
+            edit(s)
