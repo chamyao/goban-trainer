@@ -739,19 +739,50 @@ class Goban {
                                 stroke: grid[r][c] === BLACK ? "#fff" : "#333", "stroke-width": 2 });
         }
 
+    this.spots = null; this.lit = null;
     if (!interactive) return;
+    this.spots = new Map();
     for (let r = r0; r <= r1; r++)
       for (let c = c0; c <= c1; c++) {
         if (this.only && !this.only.has(String.fromCharCode(97 + c) + String.fromCharCode(97 + r))) continue;   // a multiple-choice board: only its letters take a tap
         const t = this.el("circle", { cx: this.px(c), cy: this.py(r), r: this.cell * .48,
                                       fill: "transparent", cursor: "pointer" });
-        if (!Goban.TOUCH) t.addEventListener("mouseenter", () => {   // (no hover on a phone: a hover that changes the board can make a phone's browser hold the tap back)
-          if (grid[r][c] === EMPTY)
-            t.setAttribute("fill", this.hoverColor === BLACK ? "rgba(20,20,20,.3)" : "rgba(255,255,255,.5)");
-        });
-        if (!Goban.TOUCH) t.addEventListener("mouseleave", () => t.setAttribute("fill", "transparent"));
+        if (grid[r][c] === EMPTY) this.spots.set(r * N + c, t);
         t.addEventListener("click", () => this.tap(c, r, grid));
       }
+    this.hoverWatch();
+    // drawn again under a still mouse: the stone where the mouse is once the page around it has settled (two frames:
+    // the avatar's column goes back in the first)
+    if (!Goban.TOUCH) requestAnimationFrame(() => requestAnimationFrame(() => this.hoverAt && this.hoverAt(Goban.ptr)));
+  }
+  // The hover stone: the point under the pointer, worked out from where the pointer is at each move, not from which
+  // point it last entered. A board drawn again under a still mouse (a live game's every move; the avatar's column put
+  // back beside it a frame later) moved the board under the pointer, and the point entered in that frame stayed lit:
+  // a ghost stone a few points off (the user: "when I hover over the play board a ghost stone appears a few squares
+  // left"). No hover on a phone: a hover that changes the board can make a phone's browser hold the tap back.
+  hoverWatch() {
+    if (Goban.TOUCH || this.watching) return;
+    if (!Goban.ptr) { Goban.ptr = { clientX: -1, clientY: -1 }; addEventListener("mousemove", e => { Goban.ptr = { clientX: e.clientX, clientY: e.clientY }; }, { passive: true, capture: true }); }
+    this.watching = true;
+    const show = this.hoverAt = e => {
+      let t = null;
+      if (e && this.spots && this.svg.isConnected) {
+        const m = this.svg.getScreenCTM(), pt = this.svg.createSVGPoint();
+        if (m) {
+          pt.x = e.clientX; pt.y = e.clientY;
+          const p = pt.matrixTransform(m.inverse()), c = Math.round((p.x - this.pad) / this.cell) + this.crop.c0, r = Math.round((p.y - this.pad) / this.cell) + this.crop.r0;
+          if (Math.hypot(p.x - this.px(c), p.y - this.py(r)) <= this.cell * .48) t = this.spots.get(r * N + c) || null;
+        }
+      }
+      if (t === this.lit) return;
+      if (this.lit) this.lit.setAttribute("fill", "transparent");
+      this.lit = t;
+      if (t) t.setAttribute("fill", this.hoverColor === BLACK ? "rgba(20,20,20,.3)" : "rgba(255,255,255,.5)");
+    };
+    this.svg.addEventListener("mousemove", show);
+    this.svg.addEventListener("mouseleave", () => show(null));
+    // the board moved under a still pointer (drawn again, or the page around it shifted): ask again at the next move
+    addEventListener("scroll", () => show(null), { passive: true, capture: true });
   }
 
   // On a touch screen where the points are closer than a fingertip (a wide crop on a small phone),
