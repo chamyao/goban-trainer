@@ -20,7 +20,7 @@ const Avatars = (() => {
   const loadPortraits = () => portraits || (portraits = fetch(`assets/tk/portraits/portraits.json?v=${PV()}`).then(r => r.json()).catch(() => ({})));
   const img = (file) => `assets/tk/portraits/${file}?v=${PV()}`;
   // a character's picture: in the skin worn for them (events.js, a skin per character), else their portrait
-  const face = (who, m) => { const sk = typeof Events !== "undefined" && Events.equipped(`skin:${who}`); return sk ? img(sk.file) : m[who] ? img(m[who]) : null; };
+  const face = (who, m) => { const sk = typeof Events !== "undefined" && Events.equipped(`skin:${who}`); return sk ? `${img(sk.file)}.${sk.v || 1}` : m[who] ? img(m[who]) : null; };
 
   // every protagonist, by book, from the story's data
   let leadsP = null;

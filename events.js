@@ -80,7 +80,7 @@ const Events = (() => {
     // Halloween"), one worn per character; priced for a player who earns 15–20 a day (the user: "I earned enough to buy out
     // the whole store in 1–2 days, price the new stuff to make it more challenging"): the three, 220, about the rest of
     // the event played daily
-    { id: "skin-diaochan-fox", rar: "SSR", ev: "halloween", type: "skin", who: "diaochan", file: "skins/diaochan-fox.webp", name: "Diaochan · Fox spirit", price: 90 },
+    { id: "skin-diaochan-fox", rar: "SSR", ev: "halloween", type: "skin", who: "diaochan", file: "skins/diaochan-fox.webp", v: 2, name: "Diaochan · Fox spirit", price: 90 },   // (v: the picture redone: the lantern from her sash)
     { id: "skin-caocao-armor", rar: "SR", ev: "halloween", type: "skin", who: "caocao", file: "skins/caocao-armor.webp", name: "Cao Cao · Battle armour", price: 70 },
     { id: "skin-ahn-weekend", rar: "SR", ev: "halloween", type: "skin", who: "ms_ahn", file: "skins/ahn-weekend.webp", name: "Ahn Young-ji · Autumn weekend", price: 60 },
   ];
@@ -246,7 +246,7 @@ const Events = (() => {
         : h("span", { class: "auth-chip event-title-chip" }, [h("span", {}, `Playing as ${(typeof Sync !== "undefined" && Sync.username) || "you"}`),
           h("span", { class: "player-title" }, ` · ${it.name}`)]));
     } else if (it.type === "skin") {   // the character in it
-      box.append(h("img", { class: "event-skin", src: `assets/tk/portraits/${it.file}?v=${(typeof TownUI !== "undefined" && TownUI.PORTRAIT_V) || 0}`, alt: it.name }));
+      box.append(h("img", { class: "event-skin", src: `assets/tk/portraits/${it.file}?v=${(typeof TownUI !== "undefined" && TownUI.PORTRAIT_V) || 0}.${it.v || 1}`, alt: it.name }));
     } else if (it.type === "hat" && typeof WK !== "undefined") {
       const rows = WK.HAT_ROWS(it.id), cv = document.createElement("canvas");
       cv.width = 22; cv.height = rows + 15; cv.className = "event-hat";
