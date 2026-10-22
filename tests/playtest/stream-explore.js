@@ -27,4 +27,13 @@ check(a&&a.back,'Reset in Explore: back to the attempt, its moves kept');
 check(a&&a.res==='ok'&&a.r1>a.r0,`Explore looked at, then solved: rated first try (${a&&a.r0} → ${a&&a.r1})`);
 const s=await run(true);
 check(s&&s.res==='ok'&&s.r1<s.r0&&/not first try: used explore/.test(s.msg),`a stone tried in Explore first: not first try, and it says so (${s&&s.r0} → ${s&&s.r1}, "${s&&s.msg.trim()}")`);
+// the high roller by key (cryptoderes: "a keyboard shortcut ... for the next problem as a high-roller problem")
+{const p=await b.newPage();p.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
+  await p.goto('http://localhost:8765/#/stream');await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});
+  await p.waitForFunction(()=>window.__trainer&&window.__trainer.p);
+  for(const k of ['Shift+N','Shift+ArrowRight','x']){const n0=await p.evaluate(()=>TKElo.state().stream||0);await p.keyboard.press(k);
+    await p.waitForFunction(n0=>(TKElo.state().stream||0)>n0,n0);await p.waitForSelector('.stream-rating');
+    check(await p.evaluate(()=>{const s=TKElo.state();return s.streamX&&s.streamX.x===5&&s.streamX.n===s.stream;}),`${k}: the next problem, as a high roller (×5)`);}
+  const n0=await p.evaluate(()=>TKElo.state().stream||0);await p.keyboard.press('n');await p.waitForFunction(n0=>(TKElo.state().stream||0)>n0,n0);
+  check(await p.evaluate(()=>!TKElo.state().streamX),'N: the next at ×1, as before');await p.close();}
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);})();

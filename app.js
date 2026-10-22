@@ -2622,13 +2622,13 @@ async function viewStream() {
         h("button", { onclick: () => trainer.restart() }, "Reset"),
         btnExplore,
         h("button", { class: "primary", onclick: () => next() }, "Next problem →"),
-        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not",
+        h("button", { class: "high-roller", title: "The next problem counts five times over: five times the gain if you solve it first try, five times the loss if not (⇧N, ⇧→ or X)",
                       onclick: () => next(5) }, "High roller ×5 →"),
         aiBtn,
       ]),
     ]),
     h("div", { class: "panel keys" },
-      [["N / →", "next problem"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
+      [["N / →", "next problem"], ["⇧N / ⇧→ / X", "next, high roller ×5"], ["U", "undo"], ["R", "reset"], ["H", "hint"], ["E", "explore"]]
         .map(([k, v]) => h("div", {}, [h("b", {}, k), v]))),
   ]);
   // (the controls stay in the side panel: under the board was tried and taken back, cryptoderes: "it's worse than before")
@@ -5500,6 +5500,8 @@ document.addEventListener("keydown", e => {
   }
   if (!trainer) return;
   const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  // the next as a high roller, ×5 (cryptoderes: "a keyboard shortcut in streaming mode for the next problem as a high-roller problem")
+  if (parts[0] === "stream" && (e.key === "N" || e.key === "x" || (e.key === "ArrowRight" && e.shiftKey))) return trainer.streamNext && trainer.streamNext(5);
   if (parts[0] === "stream" && (e.key === "n" || e.key === "ArrowRight")) return trainer.streamNext && trainer.streamNext();
   const book = parts[0] === "book";  // campaign levels have no next or previous problem
   if (e.key === "ArrowLeft" && book && parts[2] > 1) location.hash = `#/book/${parts[1]}/${+parts[2] - 1}`;
