@@ -76,7 +76,16 @@ const Events = (() => {
     { id: "board-moonlit", rar: "SSR", ev: "halloween", type: "board", name: "Moonlit board", price: 0, gift: true, slot: 10,
       board: { id: "moonlit", name: "Moonlit", wood: ["#3d5584", "#344a75", "#2c4067"], tex: "assets/boards/moonlit.webp", line: "#e6eeff", label: "#d4e0fa", stone: "rgba(255,255,255,.45)" } },
     { id: "title-trick-or-treater", rar: "SR", ev: "halloween", type: "title", name: "Trick-or-Treater", icon: "🍭", price: 0, gift: true, goals: true },
+    // the avatars' skins (Graphics, assets/tk/portraits/skins; the user: "give Ahn Young-ji, Diaochan, Cao Cao skins, not all
+    // Halloween"), one worn per character; priced for a player who earns 15–20 a day (the user: "I earned enough to buy out
+    // the whole store in 1–2 days, price the new stuff to make it more challenging"): the three, 220, about the rest of
+    // the event played daily
+    { id: "skin-diaochan-fox", rar: "SSR", ev: "halloween", type: "skin", who: "diaochan", file: "skins/diaochan-fox.webp", name: "Diaochan · Fox spirit", price: 90 },
+    { id: "skin-caocao-armor", rar: "SR", ev: "halloween", type: "skin", who: "caocao", file: "skins/caocao-armor.webp", name: "Cao Cao · Battle armour", price: 70 },
+    { id: "skin-ahn-weekend", rar: "SR", ev: "halloween", type: "skin", who: "ms_ahn", file: "skins/ahn-weekend.webp", name: "Ahn Young-ji · Autumn weekend", price: 60 },
   ];
+  // what an item is worn in: one of each type, but a skin per character
+  const slot = it => it.type === "skin" ? `skin:${it.who}` : it.type;
 
   // The sign-in calendar, DragonVale's (the user: "a calendar by event with sign-in bonus and special event, similar to
   // DragonVale"): a day the site is opened in an event fills its calendar's next slot, so a missed day only waits;
@@ -193,7 +202,8 @@ const Events = (() => {
     const it = ITEMS.find(x => x.id === id);
     if (!it || !owns(id)) return;
     if (it.type === "board") { try { on ? localStorage.setItem(BoardTheme.KEY, it.board.id) : localStorage.removeItem(BoardTheme.KEY); } catch {} BoardTheme.paintAll(); BoardTheme.label(); return; }
-    store(E => { if (on) E.eq[it.type] = id; else if (E.eq[it.type] === id) E.eq[it.type] = ""; });
+    store(E => { const k = slot(it); if (on) E.eq[k] = id; else if (E.eq[k] === id) E.eq[k] = ""; });
+    if (it.type === "skin" && typeof Avatars !== "undefined") Avatars.mount();   // (the figure by the board in its new clothes)
     if (it.type === "title" && typeof Sync !== "undefined") Sync.renderChip();
     if (it.type === "stones") { if (on) Candy.load(); route(); }
   }
@@ -203,7 +213,7 @@ const Events = (() => {
     if (Date.now() - eqAt > 1000) { eqL = ledger(); eqAt = Date.now(); }
     const id = (eqL.eq || {})[type]; return id && (eqL.own || {})[id] ? ITEMS.find(x => x.id === id) : null;
   };
-  const isOn = it => it.type === "board" ? BoardTheme.current.id === it.board.id : !!(equipped(it.type) && equipped(it.type).id === it.id);
+  const isOn = it => it.type === "board" ? BoardTheme.current.id === it.board.id : !!(equipped(slot(it)) && equipped(slot(it)).id === it.id);
   // two copies of the ledger: earnings and items by union; what's worn, this browser's unless it has nothing
   function merge(l, r) {
     if (!r) return l;
@@ -235,6 +245,8 @@ const Events = (() => {
       box.append(small ? h("span", { class: "auth-chip event-title-chip" }, it.name)   // (a small tile: the title alone)
         : h("span", { class: "auth-chip event-title-chip" }, [h("span", {}, `Playing as ${(typeof Sync !== "undefined" && Sync.username) || "you"}`),
           h("span", { class: "player-title" }, ` · ${it.name}`)]));
+    } else if (it.type === "skin") {   // the character in it
+      box.append(h("img", { class: "event-skin", src: `assets/tk/portraits/${it.file}?v=${(typeof TownUI !== "undefined" && TownUI.PORTRAIT_V) || 0}`, alt: it.name }));
     } else if (it.type === "hat" && typeof WK !== "undefined") {
       const rows = WK.HAT_ROWS(it.id), cv = document.createElement("canvas");
       cv.width = 22; cv.height = rows + 15; cv.className = "event-hat";
@@ -252,9 +264,9 @@ const Events = (() => {
   const icon = (name, cls = "") => h("img", { class: `ev-icon ${cls}`, src: art(`${name}.png`), alt: "", draggable: "false" });
   const evOf = it => LIST.find(e => e.id === it.ev);
   const RAR = { R: "Rare", SR: "Super rare", SSR: "Legendary" };
-  const TYPE = { board: "Board", title: "Title by your name", hat: "Sun Wukong's hat", stones: "Stones" };
+  const TYPE = { board: "Board", title: "Title by your name", hat: "Sun Wukong's hat", stones: "Stones", skin: "Avatar skin" };
   const DESC = { board: "A board to play on, in the board cycle.", title: "Shown by your name, everywhere.", hat: "Sun Wukong wears it in the story.",
-                 stones: "Candy corn and chocolate truffles for stones." };
+                 stones: "Candy corn and chocolate truffles for stones.", skin: "Your avatar wears it beside your boards, when you play as them." };
 
   // a passing note (a coin earned): the currency's own picture, not an emoji
   function toast(ev, text) {
@@ -460,5 +472,5 @@ const Events = (() => {
   }
 
   document.addEventListener("DOMContentLoaded", () => { setTimeout(chip, 0); setTimeout(checkIn, 1500); });   // (the day's sign-in, once the page is up)
-  return { reward, details, preview, isOn, CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
+  return { slot, reward, details, preview, isOn, CAL, GOALS, checkIn, claimGoal, counts, LIST, ITEMS, RESKINS, featured, active, upcoming, balance, earn, buy, equip, equipped, owns, merge, chip, view, ledger, windows };
 })();

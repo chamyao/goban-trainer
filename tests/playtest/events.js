@@ -37,7 +37,7 @@ check(await p.evaluate(()=>/banner-halloween/.test(document.querySelector('.ev-b
 check(await p.$$eval('.ev-tab',e=>e.map(x=>x.textContent).join('|'))==='Sign-in|Tasks|Shop|Collection','its tabs: Sign-in, Tasks, Shop, Collection');
 await p.evaluate(()=>Events.view('shop'));await p.waitForSelector('.event-item');
 const items=await p.$$eval('.event-item .t',e=>e.map(x=>x.textContent));
-check(items.length===4,`the Halloween shop: ${items.join(' / ')}`);
+check(items.length===7&&items.filter(t=>/·/.test(t)).length===3,`the Halloween shop: ${items.join(' / ')}`);
 const bal0=await p.evaluate(()=>Events.balance('halloween'));
 check(await p.evaluate(()=>!Candy.active()),'no candy stones before they\'re bought');
 check(await p.evaluate(()=>Events.buy('title-pumpkin-king')&&Events.buy('board-haunted')&&Events.buy('hat-witch')&&Events.buy('stones-candy')),'buy all four');
@@ -49,6 +49,16 @@ await p.evaluate(()=>{localStorage.setItem('gt-username','tester');Sync.username
 check(/Pumpkin King/.test(await p.textContent('#authChip')),`the title by the name: "${await p.textContent('#authChip')}"`);
 check(await p.evaluate(()=>Events.equipped('hat')&&Events.equipped('hat').id==='hat-witch'),'Sun Wukong wears the hat');
 await p.evaluate(()=>{Sync.username=null;localStorage.removeItem('gt-username');});
+// a skin (the user: skins for the major avatars; "price the new stuff to make it more challenging"): priced high, worn for
+// its own character only, the figure by the board and the Events host in it
+check(await p.evaluate(()=>Events.ITEMS.filter(it=>it.type==='skin').reduce((a,it)=>a+it.price,0))===220,'the three skins cost 220 in all');
+await p.evaluate(()=>{const q=loadProgress();q.ev.earn.halloween.gift2=200;q.av={own:{diaochan:1,caocao:1},pick:'diaochan'};TK.saveProg(q);});
+check(await p.evaluate(()=>Events.buy('skin-diaochan-fox')&&Events.buy('skin-caocao-armor')),'two skins bought');
+check(await p.evaluate(()=>Events.isOn(Events.ITEMS.find(x=>x.id==='skin-diaochan-fox'))&&Events.isOn(Events.ITEMS.find(x=>x.id==='skin-caocao-armor'))),'each worn for its own character, both at once');
+const host=await p.evaluate(async()=>(await Avatars.host()).src);
+check(/skins\/diaochan-fox/.test(host),`Diaochan, picked, in her skin (${host.split('/').pop()})`);
+await p.evaluate(()=>Events.equip('skin-diaochan-fox',false));
+check(!/skins/.test(await p.evaluate(async()=>(await Avatars.host()).src)),'taken off: her own portrait again');
 // merge: earnings and items by union
 const m=await p.evaluate(()=>Events.merge({earn:{halloween:{a:1}},own:{x:1},eq:{hat:'x'}},{earn:{halloween:{b:2},harvest:{c:1}},own:{y:1},eq:{hat:'y',title:'t'}}));
 check(m.earn.halloween.a===1&&m.earn.halloween.b===2&&m.earn.harvest.c===1&&m.own.x&&m.own.y&&m.eq.hat==='x'&&m.eq.title==='t','two ledgers merge: earnings and items by union, what\'s worn this browser\'s');

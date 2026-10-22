@@ -1153,6 +1153,9 @@ svg.pl-counting .last-move { display: none; }
 .event-preview { display: flex; justify-content: center; align-items: center; min-height: 112px; margin-bottom: 8px; }
 .event-preview svg { max-width: 112px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
 .event-hat { width: 88px; image-rendering: pixelated; }
+.event-skin { height: 128px; width: auto; object-fit: contain; filter: drop-shadow(0 3px 6px rgba(0,0,0,.35)); }
+.event-preview.small .event-skin { height: 64px; }
+.ev-modal-pic .event-skin { height: 240px; } .cal-pic .event-skin { height: 60px; }
 .event-title-chip { display: inline-block; padding: 6px 12px; border-radius: 999px; }
 .event-preview.small { min-height: 0; margin: 4px 0; }
 .event-preview.small svg { max-width: 56px; }

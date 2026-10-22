@@ -19,6 +19,8 @@ const Avatars = (() => {
   const PV = () => (typeof TownUI !== "undefined" && TownUI.PORTRAIT_V) || 0;   // (the portraits' version, tk-town.js)
   const loadPortraits = () => portraits || (portraits = fetch(`assets/tk/portraits/portraits.json?v=${PV()}`).then(r => r.json()).catch(() => ({})));
   const img = (file) => `assets/tk/portraits/${file}?v=${PV()}`;
+  // a character's picture: in the skin worn for them (events.js, a skin per character), else their portrait
+  const face = (who, m) => { const sk = typeof Events !== "undefined" && Events.equipped(`skin:${who}`); return sk ? img(sk.file) : m[who] ? img(m[who]) : null; };
 
   // every protagonist, by book, from the story's data
   let leadsP = null;
@@ -201,13 +203,14 @@ const Avatars = (() => {
   // screen the board's row keeps a column clear for it.
   let fixed = null, fixedWho = "", pending = false, lastHash = "", lastRow = null;
   function figure(who) {
-    if (fixed && fixedWho === who) return fixed;
+    const sk = typeof Events !== "undefined" && Events.equipped(`skin:${who}`), id = who + (sk ? `:${sk.id}` : "");
+    if (fixed && fixedWho === id) { if (!fixed.isConnected) document.body.append(fixed); return fixed; }
     if (fixed) fixed.remove();
     const lead = h("img", { class: "avatar-lead", alt: "" });
-    loadPortraits().then(m => { if (m[who]) lead.src = img(m[who]); });
+    loadPortraits().then(m => { const f = face(who, m); if (f) lead.src = f; });
     lead.addEventListener("click", () => say(moment("tap")));   // (tappable where it stands clear of the board: a wide screen)
     fixed = h("div", { class: "avatar-fixed", hidden: "" }, [h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]), lead]);
-    fixedWho = who;
+    fixedWho = id;
     document.body.append(fixed);
     return fixed;
   }
@@ -390,7 +393,7 @@ const Avatars = (() => {
       const mine = owns(x.who), on = pick === x.who;
       return h("button", { class: "avatar-tile" + (mine ? "" : " locked") + (on ? " on" : ""), type: "button", title: mine ? (on ? "Your avatar" : "Pick") : `Play as them in ${x.novel}`,
         onclick: () => { if (!mine) return; store(A => { A.pick = on ? "" : x.who; }); view(); } }, [
-        m[x.who] ? h("img", { src: img(m[x.who]), alt: "" }) : h("div", { class: "avatar-none" }, "?"),
+        face(x.who, m) ? h("img", { src: face(x.who, m), alt: "" }) : h("div", { class: "avatar-none" }, "?"),
         h("div", { class: "avatar-name" }, mine ? name(x.who) : "？"),
         h("div", { class: "meta-sub" }, mine ? (on ? "✓ yours" : x.novel) : x.novel),
       ]);
@@ -416,6 +419,10 @@ const Avatars = (() => {
       ...E.ITEMS.filter(it => it.type === "board").map(it => { const own = E.owns(it.id), on = own && E.isOn(it);
         return tile(it, own, on, () => E.equip(it.id, !on), own ? (on ? "✓ on" : evName(it.ev)) : whence(it)); }),
     ]);
+    // the avatars' skins: each worn for its own character (only one of a character's at a time), or not
+    const skins = E.ITEMS.filter(it => it.type === "skin");
+    if (skins.length) section("Avatar skins", skins.map(it => { const own = E.owns(it.id), on = own && E.isOn(it);
+      return tile(it, own, on, () => E.equip(it.id, !on), own ? (on ? "✓ on" : owns(it.who) ? "tap to wear" : `wear when ${name(it.who)} joins`) : whence(it)); }));
     for (const [type, title, none] of [["stones", "Stones", "Classic stones"], ["title", "Titles", "No title"], ["hat", "Sun Wukong's hats", "No hat"]]) {
       const list = E.ITEMS.filter(it => it.type === type), worn = E.equipped(type);
       section(title, [
@@ -441,6 +448,6 @@ const Avatars = (() => {
     addEventListener("hashchange", schedule);
   });
   // the picked one's portrait and name, for another page's own use (the Events page's host)
-  const host = async () => { const who = picked(); if (!who) return null; const m = await loadPortraits(); return m[who] ? { who, name: name(who), src: img(m[who]) } : null; };
+  const host = async () => { const who = picked(); if (!who) return null; const m = await loadPortraits(); const f = face(who, m); return f ? { who, name: name(who), src: f } : null; };
   return { host, INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();
