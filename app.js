@@ -72,12 +72,23 @@ const Sync = {
   async init() {
     this.username = localStorage.getItem(this.USERNAME_KEY);
     this.renderChip();
+    // a connection that comes and goes (offline.js): what waited goes when it's back, and every minute while anything waits
+    this.renderNet(); Offline.on(() => this.renderNet());
+    addEventListener("online", () => this.flush().then(() => this.username && this.pullAndMerge()).then(c => { if (c) whenIdle(route); }).catch(e => console.error("[sync]", e)));
+    setInterval(() => { if (navigator.onLine && this.waiting()) this.flush(); }, 60000);
+    if (this.waiting()) setTimeout(() => this.flush(), 2000);
+    // the website keeps every problem book, the Stream's pool and KataGo on the device, refreshed once a day while
+    // online (the user: "cache the Stream and other problems, solve without a connection, update the sheet once it's
+    // back"); the app carries them already
+    if (!Offline.app) setTimeout(() => { if (navigator.onLine && Date.now() - Offline.kept() > 864e5 && !(navigator.connection && navigator.connection.saveData))
+      Offline.prefetch().then(r => console.info(`[offline] kept ${r.files - r.failed} of ${r.files} files`)).catch(e => console.info("[offline] prefetch", e.message)); }, 12000);
     this.onStale = () => whenIdle(route);   // a rollback from another device came in while saving: redraw from it
     if (this.username) this.pullAndMerge().then(route).catch(e => console.error("[sync]", e));
     else if (!/^#\/tk/.test(location.hash)) this.promptUsername();   // not over the game's opening scroll: there the header chip offers it
     document.addEventListener("visibilitychange", () => {
       // back to this tab: pick up what another device did meanwhile (and redraw if anything came in)
       if (document.visibilityState === "visible") {
+        if (this.waiting()) this.flush();
         if (this.username && !this.saveTimer) this.pullAndMerge().then(changed => { if (changed) whenIdle(route); }).catch(e => console.error("[sync]", e));
         return;
       }
@@ -206,10 +217,48 @@ const Sync = {
   stamp() { try { return +localStorage.getItem("gt-sync-stamp") || 0; } catch { return 0; } },
   setStamp(t) { try { localStorage.setItem("gt-sync-stamp", String(t)); } catch {} },
 
+  // progress not yet on the sheet (set on every change, cleared once a save goes through): offline it waits for the
+  // connection; a row can't wait in the outbox, as it must be merged with the sheet's just before it's written
+  dirty(on) { try { if (on === undefined) return !!localStorage.getItem("gt-sync-dirty"); on ? localStorage.setItem("gt-sync-dirty", "1") : localStorage.removeItem("gt-sync-dirty"); } catch {} if (on !== undefined) this.renderNet(); },
+  waiting() { return !!this.username && this.dirty() || Offline.box().length > 0; },
+  // send what waited: the progress (merged first, as always), then the outbox in order; stops at the first that can't go
+  async flush() {
+    if (this.flushing || !navigator.onLine) return;
+    this.flushing = true; this.renderNet();
+    try {
+      if (this.username && this.dirty()) { clearTimeout(this.saveTimer); await this.saveProgress(); }   // (now, not after the save's wait)
+      for (const it of Offline.box()) {
+        let ok = false;
+        try { ok = (await fetch(this.API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(it.payload) })).ok; } catch {}
+        if (!ok) break;
+        Offline.take(it.at);
+      }
+    } finally { this.flushing = false; this.renderNet(); }
+  },
+  // the header's pill: offline, or something waiting to go
+  renderNet() {
+    let pill = document.getElementById("netChip");
+    const auth = document.getElementById("authChip");
+    if (!pill && auth) { pill = h("button", { id: "netChip", class: "net-chip", onclick: () => { this.flush(); this.netInfo(); } }); auth.before(pill); }
+    if (!pill) return;
+    const off = !navigator.onLine, n = Offline.box().length + (this.username && this.dirty() && (off || !this.saveTimer) ? 1 : 0);
+    pill.hidden = !off && !n;
+    pill.classList.toggle("off", off);
+    pill.textContent = this.flushing ? "Syncing…" : off ? (n ? `Offline · ${n} to sync` : "Offline") : `${n} to sync`;
+  },
+  netInfo() {
+    const n = Offline.box().length;
+    alert(navigator.onLine ? "Back online: sending what waited." :
+      `You're offline. Everything still works: problems, the Stream, the stories${Offline.app ? "" : " (what you've opened before)"} and KataGo. ` +
+      `Your progress${n ? ` and ${n} more thing${n > 1 ? "s" : ""}` : ""} will go to your account when the connection is back. ` +
+      "Live games, Turning points' reading of new OGS games and music need the connection.");
+  },
+
   scheduleSave() {
     if (!this.username) return;
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.saveProgress(), 3000);
+    this.dirty(true);
   },
   // read, merge, write: the row is replaced whole, so another device's newer solves are folded in first
   // (a tab left open elsewhere would otherwise write its older state over them)
@@ -222,9 +271,9 @@ const Sync = {
       localStorage.setItem(PROGRESS_KEY, JSON.stringify(local));
       // a world rolled back on another device since this one's copy: take that copy of it before writing ours over it
       if (this.catchUp(local, remote.tkLocal) && this.onStale) this.onStale();
-    } catch (e) { console.error("[sync] merge before save, not saving", e); return; }   // the sheet is the record: never write over a row we couldn't read
+    } catch (e) { console.error("[sync] merge before save, not saving", e); this.renderNet(); return; }   // the sheet is the record: never write over a row we couldn't read (offline: it waits, dirty)
     const stamp = Date.now(); this.setStamp(stamp);
-    return this.save("progress", await this.pack({ progress: loadProgress(), favorites: [...loadFavorites()], tkLocal: this.tkLocal(), stamp }));
+    if (await this.save("progress", await this.pack({ progress: loadProgress(), favorites: [...loadFavorites()], tkLocal: this.tkLocal(), stamp }))) this.dirty(false);
   },
 
   // Google Sheets caps a cell at 50,000 characters — stay well clear of it
@@ -235,26 +284,29 @@ const Sync = {
     const payload = JSON.stringify({ username: this.username, kind, data, ...extra });
     if (payload.length > 48000) { console.error("[sync] save skipped, too large", kind, payload.length); return; }
     // text/plain avoids a CORS preflight that Apps Script web apps don't handle.
-    const res = await fetch(this.API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: payload,
-    });
-    if (!res.ok) console.error("[sync] save failed", kind, res.status, await res.text());
+    let res;
+    try {
+      if (!navigator.onLine) throw new Error("offline");
+      res = await fetch(this.API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: payload });
+    } catch (e) {   // no connection: a row waits in the outbox, its newer copy replacing an older one (the progress waits as dirty)
+      if (kind !== "progress") Offline.queue(JSON.parse(payload), `${kind}:${(extra && extra.id) || ""}`);
+      return false;
+    }
+    if (!res.ok) { console.error("[sync] save failed", kind, res.status, await res.text()); return false; }
+    return true;
   },
 
   // Anonymous is fine — feedback doesn't require a username.
+  // Offline it waits in the outbox and goes with the connection: returns "queued" then.
   async sendFeedback(message, context = location.hash) {
-    const res = await fetch(this.API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        username: this.username || "",
-        kind: "feedback",
-        data: { message, context },
-      }),
-    });
+    const payload = { username: this.username || "", kind: "feedback", data: { message, context } };
+    let res;
+    try {
+      if (!navigator.onLine) throw new Error("offline");
+      res = await fetch(this.API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) });
+    } catch { Offline.queue(payload); return "queued"; }
     if (!res.ok) throw new Error(`feedback failed (${res.status})`);
+    return "sent";
   },
 
   // The campaign's chat with Claude (tk.js viewTKChat): the thread lives in the private Chat sheet behind the
@@ -5228,9 +5280,9 @@ function viewFeedback() {
       if (!text) { msg.textContent = "Write something first."; msg.className = "msg err"; return; }
       submitBtn.disabled = true; msg.textContent = ""; msg.className = "msg";
       try {
-        await Sync.sendFeedback(text);
+        const how = await Sync.sendFeedback(text);
         ta.value = "";
-        msg.textContent = "Sent — thanks!";
+        msg.textContent = how === "queued" ? "Saved — it'll send when you're back online. Thanks!" : "Sent — thanks!";
         msg.className = "msg ok";
       } catch (e) {
         console.error(e);

@@ -1451,7 +1451,7 @@ async function viewTK(worldN) {
         const text = ta.value.trim();
         if (!text) { msg.textContent = "先写几句 Write something first."; return; }
         send.disabled = true; msg.textContent = "…";
-        try { await Sync.sendFeedback(text, tkFeedbackContext(w)); ta.value = ""; msg.textContent = "已发送，谢谢！Sent, thanks!"; }
+        try { const how = await Sync.sendFeedback(text, tkFeedbackContext(w)); ta.value = ""; msg.textContent = how === "queued" ? "已存下，联网后发送 Saved: it'll send when you're back online." : "已发送，谢谢！Sent, thanks!"; }
         catch (e) { console.error(e); msg.textContent = "没发出去，再试一次 Couldn't send, try again."; }
         send.disabled = false;
       };

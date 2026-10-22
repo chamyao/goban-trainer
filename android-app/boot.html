@@ -10,6 +10,7 @@
 (async () => {
   const LIVE = "https://chamyao.github.io/goban-trainer/", LOCAL = location.origin + "/";
   const bundled = () => location.replace("app.html" + location.hash);
+  if (navigator.onLine === false) return bundled();   // (the subway: no waiting on a site that can't answer)
   try {
     const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 4000);
     const res = await fetch(LIVE + "index.html?t=" + Date.now(), { cache: "no-store", signal: ctrl.signal });

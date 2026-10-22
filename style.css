@@ -989,6 +989,9 @@ svg.pl-counting .last-move { display: none; }
    clock, a tab rail with red dots, sign-in tiles stamped when claimed, tasks with Go / Claim, an exchange shop of
    rarity-framed cards, and a reward burst. A dark stage of its own in every site theme; each event tints it (--ev-a,
    --ev-b). The art: assets/events (tools/gen_event_art.py) */
+.net-chip { padding: 4px 10px; border-radius: 999px; border: 1px solid #c9a24a; background: #3a3020; color: #ffe7a8; font: 700 12px/1.4 system-ui, sans-serif; cursor: pointer; }
+.net-chip.off { background: #4a2a2a; border-color: #d0705a; color: #ffd9cf; }
+.net-chip[hidden] { display: none; }
 .event-chip { text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
 .event-chip .ev-cur, .event-chip .ev-icon { width: 20px; height: 20px; }
 .player-title { font-weight: 650; }
