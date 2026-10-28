@@ -208,8 +208,10 @@ const Avatars = (() => {
     if (fixed) fixed.remove();
     const lead = h("img", { class: "avatar-lead", alt: "" });
     loadPortraits().then(m => { const f = face(who, m); if (f) lead.src = f; });
-    lead.addEventListener("click", () => say(moment("tap")));   // (tappable where it stands clear of the board: a wide screen)
-    fixed = h("div", { class: "avatar-fixed", hidden: "" }, [h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]), lead]);
+    lead.addEventListener("click", () => { if (tucked()) return tuck(false); say(moment("tap")); });   // (tappable where it stands clear of the board: a wide screen; tucked, anywhere)
+    const tuckBtn = h("button", { class: "avatar-tuck", type: "button", title: "Tuck the avatar away", "aria-label": "Tuck the avatar away", onclick: () => tuck(!tucked()) }, "▾");
+    fixed = h("div", { class: "avatar-fixed" + (tucked() ? " tucked" : ""), hidden: "" }, [h("div", { class: "avatar-dlg", hidden: "" }, [h("div", { class: "avatar-name" }, name(who)), h("div", { class: "avatar-say" })]), lead, tuckBtn]);
+    document.body.classList.toggle("avatar-tucked", tucked());
     fixedWho = id;
     document.body.append(fixed);
     return fixed;
@@ -243,11 +245,24 @@ const Avatars = (() => {
   const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(mount); } };
   // a word from it: a page's own (Turning points' "You're White. Find a move to keep the advantage.": the user, "this
   // line can be a dialogue for the avatar"), or one on a result
+  // (narrow screens: the word fades after a while, so it isn't left over the board: cryptoderes, "the character on the
+  // bottom and their dialogue blocks a lot of the screen")
+  let fade = null;
   function say(text) {
     if (!fixed || fixed.hidden) return false;
     const b = fixed.querySelector(".avatar-dlg");
     b.querySelector(".avatar-say").textContent = text; b.hidden = !text;
+    clearTimeout(fade);
+    if (text && matchMedia("(max-width: 1279px)").matches) fade = setTimeout(() => { b.hidden = true; }, 7000);
     return true;
+  }
+  // tucked away (narrow screens, the same reason): a small round portrait in the corner, the word hidden; a tap on the
+  // button, or on the portrait, brings it back. Remembered on this device
+  const tucked = () => { try { return localStorage.getItem("gt-avatar-tucked") === "1"; } catch { return false; } };
+  function tuck(on) {
+    try { on ? localStorage.setItem("gt-avatar-tucked", "1") : localStorage.removeItem("gt-avatar-tucked"); } catch {}
+    if (fixed) fixed.classList.toggle("tucked", on);
+    document.body.classList.toggle("avatar-tucked", on);
   }
   // moments beyond a result, as Mahjong Soul's characters talk at the table (the user: "more dialogue similar in placement
   // to Mahjong Soul ... e.g. 'what to play?' on the Play screen"): play (the Play screen), start (a game begins), win,
@@ -449,5 +464,5 @@ const Avatars = (() => {
   });
   // the picked one's portrait and name, for another page's own use (the Events page's host)
   const host = async () => { const who = picked(); if (!who) return null; const m = await loadPortraits(); const f = face(who, m); return f ? { who, name: name(who), src: f } : null; };
-  return { host, INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
+  return { tuck, tucked, host, INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();

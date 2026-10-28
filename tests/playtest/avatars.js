@@ -78,5 +78,26 @@ const judged=await p.evaluate(()=>/dispatchEvent\(new CustomEvent\("tczw:result"
 check(judged,'Turning points sends its result');
 const m=await p.evaluate(()=>Avatars.merge({own:{a:1},pick:'a'},{own:{b:1},pick:'b'}));
 check(m.own.a&&m.own.b&&m.pick==='a','two copies: owned by union, this browser\'s pick');
+// a phone (cryptoderes: "the character on the bottom and their dialogue blocks a lot of the screen, and I have to scroll
+// to the controls"): the word fades; the figure tucks to a round portrait and comes back, remembered; Status and
+// Controls first in the side panel
+{const {devices}=require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
+  const ctx=await b.newContext({...devices['iPhone 13']});const q=await ctx.newPage();q.on('pageerror',e=>{fails++;console.log('ERR',e.message);});
+  await q.goto('http://localhost:8765/#/');await q.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;const p=loadProgress();p.av={own:{diaochan:1},pick:'diaochan'};TK.saveProg(p);location.hash='#/stream';});
+  await q.waitForSelector('.avatar-fixed:not([hidden]) .avatar-lead');await q.waitForTimeout(800);
+  await q.evaluate(()=>Avatars.say('hello'));
+  check(await q.isVisible('.avatar-dlg'),'phone: she says her line');
+  await q.waitForTimeout(7500);
+  check(!(await q.isVisible('.avatar-dlg')),'and it fades after a while');
+  await q.click('.avatar-tuck');
+  const t=await q.evaluate(()=>{const r=document.querySelector('.avatar-lead').getBoundingClientRect();return {w:Math.round(r.width),h:Math.round(r.height),tucked:document.body.classList.contains('avatar-tucked')};});
+  check(t.tucked&&t.w<=64&&t.h<=64,`tucked: a round portrait, ${t.w}×${t.h}`);
+  await q.reload();await q.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});await q.waitForSelector('.avatar-fixed:not([hidden])');
+  check(await q.evaluate(()=>document.querySelector('.avatar-fixed').classList.contains('tucked')),'still tucked after a reload');
+  await q.click('.avatar-lead');
+  check(await q.evaluate(()=>!document.querySelector('.avatar-fixed').classList.contains('tucked')),'a tap on the portrait brings her back');
+  const order=await q.evaluate(()=>[...document.querySelectorAll('.player > aside > .panel')].filter(e=>e.offsetParent).sort((a,b)=>a.getBoundingClientRect().top-b.getBoundingClientRect().top).map(e=>(e.querySelector('h2')||{}).textContent));
+  check(order[0]==='Status'&&order[1]==='Controls',`phone: Status and Controls first in the side panel (${order.join(', ')})`);
+  await ctx.close();}
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);
 })();
