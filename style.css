@@ -18,7 +18,9 @@ body {
 a { color: inherit; }
 
 header {
-  display: flex; align-items: center; gap: 18px;
+  /* (wraps at any width: a chip past the window's edge made the page scroll sideways, and → for the next move scrolled it
+     too: apo110, "the top menu bar not scaled correctly makes the site move when I press right arrow") */
+  display: flex; align-items: center; gap: 10px 18px; flex-wrap: wrap;
   padding: 13px 26px; background: var(--card);
   border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 10;

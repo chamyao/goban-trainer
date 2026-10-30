@@ -5483,8 +5483,11 @@ document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target && /TEXTAREA|INPUT/.test(e.target.tagName)) return;
   if (window.__turning && /^#\/(turning|keymoves)/.test(location.hash) && !/\/all$/.test(location.hash) && /^Arrow(Left|Right)$/.test(e.key)) {
-    window.__turning.step(e.key === "ArrowLeft" ? -1 : 1); return;
+    e.preventDefault(); window.__turning.step(e.key === "ArrowLeft" ? -1 : 1); return;
   }
+  // an arrow that moves the board doesn't also scroll the page
+  if ((/^#\/review/.test(location.hash) && Review.els && Review.game && /^Arrow/.test(e.key))
+      || (/^#\/(stream|book)\//.test(location.hash + "/") && /^Arrow(Left|Right)$/.test(e.key))) e.preventDefault();
   if (Review.els && Review.game) {
     if (e.key === "ArrowLeft") Review.back();
     else if (e.key === "ArrowRight") Review.forward();
