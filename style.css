@@ -1262,3 +1262,6 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .joseki-done { margin-top: 6px; padding: 6px 10px; border-radius: 8px; background: rgba(34, 160, 90, .12); color: #1f7a4d; font-weight: 700; font-size: 13px; }
 .joseki-done[hidden] { display: none; }
 .joseki-ends { grid-column: 2 / -1; font-size: 12px; font-weight: 700; color: #1f7a4d; }
+.joseki-rejoin { margin-top: 6px; padding: 6px 10px; border-radius: 8px; background: rgba(53, 102, 176, .12); font-size: 13px; }
+.joseki-rejoin[hidden] { display: none; }
+.joseki-rejoin button { margin-left: 4px; font: inherit; font-weight: 700; cursor: pointer; }

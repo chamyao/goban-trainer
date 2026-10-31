@@ -69,6 +69,38 @@ await p.keyboard.press('ArrowUp');
 check(await p.evaluate(l=>Joseki.path.join()===l.join(),line),'↑: back to it');
 await p.keyboard.press('Home');
 check(await p.evaluate(()=>Joseki.path.length===0&&scrollX===0),'Home: the empty corner (and the page didn\'t scroll)');
+// your own line (the user: "go into a variation even if it's not a pro move")
+await p.evaluate(()=>{location.hash='#/joseki';});await p.waitForSelector('.joseki-row');await p.evaluate(()=>window.__joseki.key('Home'));
+const clickAt=(c,r)=>p.evaluate(([c,r])=>{const t=[...document.querySelectorAll('.board-card svg circle')].find(e=>e.getAttribute('cx')==String(38+44*c)&&e.getAttribute('cy')==String(38+44*r)&&e.getAttribute('fill')==='transparent');t.dispatchEvent(new MouseEvent('click',{bubbles:true}));},[c,r]);
+await clickAt(8,1);await p.waitForTimeout(200);   // (J18: no pro opens a corner there)
+const own=await p.evaluate(()=>({off:Joseki.off.length,marks:document.querySelectorAll('.joseki-mark').length,st:document.querySelector('.joseki-pick').parentNode.textContent}));
+check(own.off===1&&own.marks===0&&/your own line/.test(own.st),'a move no pro played: your own line, the pros\' marks gone');
+await clickAt(3,3);await p.waitForTimeout(150);
+check(await p.evaluate(()=>Joseki.off.length===2),'and on from there');
+await p.keyboard.press('ArrowLeft');await p.keyboard.press('ArrowLeft');
+check(await p.evaluate(()=>Joseki.off.length===0&&document.querySelectorAll('.joseki-mark').length>0),'← takes your moves back, into the pros\' book');
+// a line of your own to a position the pros reached by another order: offered back into their games, the board unturned
+const rj=await p.evaluate(async()=>{
+  const at=(c,r)=>[...document.querySelectorAll('.board-card svg circle')].find(e=>e.getAttribute('cx')==String(38+44*c)&&e.getAttribute('cy')==String(38+44*r)&&e.getAttribute('fill')==='transparent');
+  const click=(c,r)=>at(c,r).dispatchEvent(new MouseEvent('click',{bubbles:true}));
+  const lastPt=()=>{const m=document.querySelector('.board-card svg circle.last-move');return m?[(+m.getAttribute('cx')-38)/44,(+m.getAttribute('cy')-38)/44]:null;};
+  const stones=()=>[...document.querySelectorAll('.board-card svg circle.bt-stone')].map(c=>c.getAttribute('cx')+','+c.getAttribute('cy')+c.getAttribute('fill')).sort().join(' ');
+  const N=Joseki.data.nodes;
+  for(const [m1,e1] of Object.entries(N[0].e)){if(m1==='tt')continue;
+    for(const [m2,e2] of Object.entries(N[e1[0]].e||{})){if(m2==='tt')continue;
+      for(const [m3,e3] of Object.entries(N[e2[0]].e||{})){if(m3==='tt'||N[e3[0]].n<3)continue;
+        window.__joseki.key('Home');const pts=[];
+        for(const m of [m1,m2,m3]){const before=Joseki.path.length;window.__joseki.go([...Joseki.path,m]);pts.push(lastPt());}
+        const want=stones();
+        window.__joseki.key('Home');
+        for(const [c,r] of [pts[2],pts[1],pts[0]])click(c,r);
+        const rejoin=document.querySelector('.joseki-rejoin');
+        if(Joseki.off.length&&!rejoin.hidden){
+          const sameBefore=stones()===want;rejoin.querySelector('button').click();
+          return {line:[m1,m2,m3].join(' '),sameBefore,after:stones()===want,off:Joseki.off.length,n:Joseki.node().n};}
+      }}}
+  return null;});
+check(rj&&rj.sameBefore&&rj.off===0&&rj.after,`a line of your own to the pros' position (${rj&&rj.line}, played the other way round): back into their games (${rj&&rj.n} games), the board unturned`);
 // a star on every card in the Library: starred, it heads the Favorites shelf
 await p.evaluate(()=>{localStorage.removeItem('gt-favorites');location.hash='#/';});await p.waitForSelector('.book-list .book');
 const unstarred=await p.$$eval('.book',bs=>bs.filter(b=>!b.querySelector('.star')).map(b=>(b.querySelector('.t')||b).textContent.trim()));

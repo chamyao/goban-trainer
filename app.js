@@ -2413,10 +2413,37 @@ const Joseki = {
   data: null, metas: {}, path: [], KEY: "goban.joseki",
   async load() {
     if (!this.data) this.data = await (await fetch("data/joseki.json?v=3")).json();
-    try { const s = JSON.parse(localStorage.getItem(this.KEY) || "{}"); this.path = Array.isArray(s.path) ? s.path : []; this.pro = s.pro ?? -1; } catch { this.path = []; this.pro = -1; }
+    try { const s = JSON.parse(localStorage.getItem(this.KEY) || "{}"); this.path = Array.isArray(s.path) ? s.path : []; this.off = Array.isArray(s.off) ? s.off : []; this.pro = s.pro ?? -1; }
+    catch { this.path = []; this.off = []; this.pro = -1; }
     return this.data;
   },
-  save() { try { localStorage.setItem(this.KEY, JSON.stringify({ path: this.path, pro: this.pro })); } catch {} },
+  // off: your own moves past the pros' book (the user: "go into a variation even if it's not a pro move"), in the frame of
+  // the last position in it
+  save() { try { localStorage.setItem(this.KEY, JSON.stringify({ path: this.path, off: this.off, pro: this.pro })); } catch {} },
+  // a position, whichever way it faces: the stones read both ways round the diagonal, the smaller, and whose turn
+  posKey(grid, turn) {
+    let a = "", b = "";
+    for (let r = 0; r <= 10; r++) for (let c = 0; c <= 10; c++) { a += grid[r][c]; b += grid[c][r]; }
+    return (a < b ? a : b) + turn;
+  },
+  // every position in the book by its key, with a line to it (built once, the first time a line leaves the book): a line
+  // of your own that comes to a position the pros reached (another order) can rejoin them
+  index() {
+    if (this._index) return this._index;
+    const N0 = this.data.nodes, idx = new Map(), q = [[0, Array.from({ length: N }, () => new Array(N).fill(EMPTY)), []]];
+    idx.set(this.posKey(q[0][1], BLACK), { id: 0, path: [] });
+    while (q.length) {
+      const [u, g, path] = q.shift();
+      for (const [m, e] of Object.entries(N0[u].e || {})) {
+        let g2 = g;
+        if (m !== "tt") g2 = applyMove(g, "abcdefghijklmnopqrs".indexOf(m[0]), "abcdefghijklmnopqrs".indexOf(m[1]), path.length % 2 ? WHITE : BLACK) || g;
+        if (e[1]) g2 = g2.map((row, r) => row.map((_, c) => g2[c][r]));
+        const k = this.posKey(g2, (path.length + 1) % 2 ? WHITE : BLACK);
+        if (!idx.has(k)) { idx.set(k, { id: e[0], path: [...path, m] }); q.push([e[0], g2, [...path, m]]); }
+      }
+    }
+    return (this._index = idx);
+  },
   // positions, not move orders (tools/build_joseki.py): one reached by different orders is one node; a move is in its
   // position's own frame, and t on it says the next position's frame is the mirror (the board turns as it steps)
   node(path = this.path) { let n = this.data.nodes[0]; for (const m of path) { const e = n.e && n.e[m]; if (!e) return null; n = this.data.nodes[e[0]]; } return n; },
@@ -2450,78 +2477,123 @@ async function viewJoseki() {
   const nav = routeSeq;
   const data = await Joseki.load();
   if (nav !== routeSeq) return;
-  if (!Joseki.node()) Joseki.path = [];
+  if (!Joseki.node()) { Joseki.path = []; Joseki.off = []; }
   root.innerHTML = "";
   const svg = document.createElementNS(SVGNS, "svg");
   const boardCard = h("div", { class: "board-card" }, [svg]);
+  const L = "abcdefghijklmnopqrs";
   // the board keeps the orientation the line began in: D (the stored frame is the mirror of the screen's) turns moves and
-  // stones between the two, so a mirrored next position doesn't flip the board under you
-  let D = false;
-  const toScreen = mv => mv === "tt" || !D ? mv : mv[1] + mv[0];
-  const goban = new Goban(svg, { c0: 0, c1: 10, r0: 0, r1: 10 }, (c, r) => {
-    const mv = toScreen("abcdefghijklmnopqrs"[c] + "abcdefghijklmnopqrs"[r]);   // (its own inverse)
-    if (Joseki.children(Joseki.node()).some(x => x.mv === mv)) go([...Joseki.path, mv]);
-    else note.textContent = "No pro here played that.";
-  });
+  // stones between the two, so a mirrored next position doesn't flip the board under you; F, the same for a jump back
+  // into the book from a line of your own
+  let D = false, F = false;
+  const toScreen = mv => mv === "tt" || !(D !== F) ? mv : mv[1] + mv[0];
+  const toMove = len => len % 2 ? WHITE : BLACK;
+  const offBook = () => Joseki.off.length > 0;
+  // the position: the book's line, then your own moves, in the screen's orientation
+  const position = () => {
+    let grid = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null, at = data.nodes[0];
+    D = false;
+    Joseki.path.forEach((mv, i) => {
+      const e = at.e[mv], sm = toScreen(mv);
+      if (sm !== "tt") { grid = applyMove(grid, L.indexOf(sm[0]), L.indexOf(sm[1]), toMove(i)) || grid; last = [L.indexOf(sm[0]), L.indexOf(sm[1])]; }
+      if (e[1]) D = !D;
+      at = data.nodes[e[0]];
+    });
+    Joseki.off.forEach((mv, i) => {
+      const sm = toScreen(mv);
+      if (sm !== "tt") { grid = applyMove(grid, L.indexOf(sm[0]), L.indexOf(sm[1]), toMove(Joseki.path.length + i)) || grid; last = [L.indexOf(sm[0]), L.indexOf(sm[1])]; }
+    });
+    return { grid, last };
+  };
+  const goban = new Goban(svg, { c0: 0, c1: 10, r0: 0, r1: 10 }, (c, r) => play(toScreen(L[c] + L[r])));   // (toScreen is its own inverse)
   const status = h("div", { class: "meta-sub" }), note = h("div", { class: "meta-sub joseki-note" }), done = h("div", { class: "joseki-done", hidden: "" });
+  const rejoin = h("div", { class: "joseki-rejoin", hidden: "" });
   const list = h("div", { class: "joseki-list" }), gamesBox = h("div", { class: "joseki-games" });
   const proSel = h("select", { "aria-label": "Whose games" }, [h("option", { value: -1 }, "All the pros"),
     ...data.pros.map(([, name], i) => h("option", { value: i }, name))]);
   proSel.value = String(Joseki.pro);
   proSel.addEventListener("change", () => { Joseki.pro = +proSel.value; Joseki.save(); draw(); });
-  // (a line not in the tree: stay). redo: the moves stepped back over, for → to retrace; a new move clears it
+  // (a line not in the book: stay). redo: what was stepped back over, for → to retrace ({m} a book move, {o} your own); a
+  // new move clears it
   let redo = [];
-  const go = (p, keep) => { if (!Joseki.node(p)) return; if (!keep) redo = []; Joseki.path = p; Joseki.save(); note.textContent = ""; draw(); };
+  const go = (p, keep) => { if (!Joseki.node(p)) return; if (!keep) redo = []; Joseki.path = p; Joseki.off = []; Joseki.save(); note.textContent = ""; draw(); };
+  const own = (mv, keep) => { if (!keep) redo = []; Joseki.off = [...Joseki.off, mv]; Joseki.save(); note.textContent = ""; draw(); };
+  // a move: the pros' if it's theirs here, else your own line (the user: "go into a variation even if it's not a pro move")
+  function play(mv) {
+    if (!offBook() && Joseki.children(Joseki.node()).some(x => x.mv === mv)) return go([...Joseki.path, mv]);
+    if (mv !== "tt") {
+      const { grid } = position(), sm = toScreen(mv), c = L.indexOf(sm[0]), r = L.indexOf(sm[1]);
+      if (grid[r][c] !== EMPTY || !applyMove(grid, c, r, toMove(Joseki.path.length + Joseki.off.length))) { note.textContent = "Not a legal move."; return; }
+    }
+    own(mv);
+  }
   // the keys (the user: "arrow keys should go forward / back in the moves"): ← back, → forward (the line stepped back
   // over, else the most played), ↑ ↓ the last move's other choices, Home the empty corner
   const key = k => {
     const P = Joseki.path;
-    if (k === "ArrowLeft" && P.length) { redo.push(P[P.length - 1]); go(P.slice(0, -1), true); }
-    else if (k === "ArrowRight") { if (redo.length) go([...P, redo.pop()], true); else { const c = Joseki.children(Joseki.node()); if (c.length) go([...P, c[0].mv]); } }
-    else if ((k === "ArrowUp" || k === "ArrowDown") && P.length) {
+    if (k === "ArrowLeft") {
+      if (offBook()) { redo.push({ o: Joseki.off[Joseki.off.length - 1] }); Joseki.off = Joseki.off.slice(0, -1); Joseki.save(); draw(); }
+      else if (P.length) { redo.push({ m: P[P.length - 1] }); go(P.slice(0, -1), true); }
+    }
+    else if (k === "ArrowRight") {
+      const r = redo.pop();
+      if (r && r.o) own(r.o, true);
+      else if (r && r.m) go([...P, r.m], true);
+      else if (!offBook()) { const c = Joseki.children(Joseki.node()); if (c.length) go([...P, c[0].mv]); }
+    }
+    else if ((k === "ArrowUp" || k === "ArrowDown") && P.length && !offBook()) {
       const sib = Joseki.children(Joseki.node(P.slice(0, -1))), i = sib.findIndex(x => x.mv === P[P.length - 1]);
       const j = i + (k === "ArrowDown" ? 1 : -1);
       if (sib[j]) go([...P.slice(0, -1), sib[j].mv]);
     }
-    else if (k === "Home") go([]);
+    else if (k === "Home") { F = false; go([]); }
     else return false;
     return true;
   };
-  const toMove = len => len % 2 ? WHITE : BLACK;
+  // back into the book from a line of your own that came to one of the pros' positions; the board keeps facing the way it did
+  const join = found => {
+    const before = position().grid;
+    Joseki.path = found.path; Joseki.off = []; redo = [];
+    const after = position().grid;
+    if (after.some((row, r) => row.some((v, c) => v !== before[r][c]))) F = !F;
+    Joseki.save(); note.textContent = ""; draw();
+  };
 
   function draw() {
-    const node = Joseki.node(), kids = Joseki.children(node), total = kids.reduce((a, x) => a + x.n, 0) || 1;
-    // the position: the path's stones, tenukis passing the turn, in the screen's orientation (each move turned by D, D
-    // turning again where a move's t says the next position's frame is the mirror)
-    let grid = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null, at = data.nodes[0];
-    D = false;
-    Joseki.path.forEach((mv, i) => {
-      const e = at.e[mv], sm = toScreen(mv);
-      if (sm !== "tt") { const c = "abcdefghijklmnopqrs".indexOf(sm[0]), r = "abcdefghijklmnopqrs".indexOf(sm[1]);
-        grid = applyMove(grid, c, r, toMove(i)) || grid; last = [c, r]; }
-      if (e[1]) D = !D;
-      at = data.nodes[e[0]];
-    });
-    goban.hoverColor = toMove(Joseki.path.length);
+    const node = Joseki.node(), off = offBook(), kids = off ? [] : Joseki.children(node), total = kids.reduce((a, x) => a + x.n, 0) || 1;
+    const { grid, last } = position(), moveNo = Joseki.path.length + Joseki.off.length;
+    goban.hoverColor = toMove(moveNo);
     goban.render(grid, last, true);
     kids.forEach((x, i) => {
       if (x.mv === "tt") return;
-      const sm = toScreen(x.mv), c = "abcdefghijklmnopqrs".indexOf(sm[0]), r = "abcdefghijklmnopqrs".indexOf(sm[1]), share = x.n / total;
+      const sm = toScreen(x.mv), c = L.indexOf(sm[0]), r = L.indexOf(sm[1]), share = x.n / total;
       goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * .42, fill: i === 0 ? "rgba(34,160,90,.85)" : `rgba(53,102,176,${(.35 + .55 * share).toFixed(2)})`,
                            stroke: "#fff", "stroke-width": 1.5, "pointer-events": "none", class: "joseki-mark" });
       goban.el("text", { x: goban.px(c), y: goban.py(r) + goban.cell * .14, "text-anchor": "middle", "font-size": goban.cell * (x.n > 999 ? .26 : .34), "font-weight": 700,
                          fill: "#fff", "pointer-events": "none" }).textContent = x.n;
     });
-    const who = toMove(Joseki.path.length) === BLACK ? "Black" : "White";
+    const who = toMove(moveNo) === BLACK ? "Black" : "White";
     // where the pros left the corner: a line that ends in a tenuki is a whole joseki (the user: "consider the joseki full
     // depth if it ends in tenuki"); most games leaving here, it's done
     const leftAt = nd => { const t = nd && nd.e && nd.e.tt; return t && nd.n ? t[2] / nd.n : 0; };
-    const left = leftAt(node);
-    done.hidden = !(Joseki.path.length && left >= .5);
+    done.hidden = off || !(Joseki.path.length && leftAt(node) >= .5);
     done.textContent = `✓ Joseki complete: in ${node.e && node.e.tt ? node.e.tt[2] : 0} of ${node.n} games the players left the corner here.`;
-    status.textContent = Joseki.path.length ? `Move ${Joseki.path.length + 1} · ${who} (the side that ${who === "Black" ? "started" : "answered"} the corner) to play · ${node.n} games reached this position, by any order`
+    // your own line: where it left the book; and whether it has come to one of the pros' positions after all
+    rejoin.hidden = true;
+    if (off) {
+      const found = Joseki.index().get(Joseki.posKey(grid, toMove(moveNo)));
+      if (found && Joseki.data.nodes[found.id].n) {
+        rejoin.hidden = false;
+        rejoin.replaceChildren(h("span", {}, `The pros reached this position too, by another order (${data.nodes[found.id].n} games). `),
+          h("button", { type: "button", onclick: () => join(found) }, "Continue in their games"));
+      }
+    }
+    status.textContent = off ? `Move ${moveNo + 1} · ${who} to play · your own line: ${Joseki.off.length} move${Joseki.off.length === 1 ? "" : "s"} past the pros' games`
+      : Joseki.path.length ? `Move ${moveNo + 1} · ${who} (the side that ${who === "Black" ? "started" : "answered"} the corner) to play · ${node.n} games reached this position, by any order`
       : `The empty corner · ${data.games} games, ${node.n} corners`;
-    list.replaceChildren(...(kids.length ? kids.map((x, i) => {
+    list.replaceChildren(...(off ? [h("div", { class: "meta-sub" }, "Off the pros' book: play on freely, ← takes your moves back, or Start."),
+        h("button", { class: "joseki-row", type: "button", onclick: () => { Joseki.off = []; redo = []; Joseki.save(); draw(); } }, [h("b", {}, "↩"), h("span", { class: "joseki-n" }, "back to where you left the pros' games")])]
+      : kids.length ? kids.map((x, i) => {
       const e = x.e, own = Object.entries(e[5]).filter(([pi, v]) => v[1] > 0 && (Joseki.pro < 0 || +pi === Joseki.pro)).map(([pi, v]) => `${data.pros[pi][1]} ${v[1]}×`);
       const win = e[4] ? Math.round(100 * e[3] / e[4]) : null;
       const via = x.next.n > e[2] ? ` · the position after: ${x.next.n} games, by any order` : "";
@@ -2531,34 +2603,34 @@ async function viewJoseki() {
         own.length || via ? h("div", { class: "joseki-pros" }, `${own.length ? `played by ${own.join(", ")}` : ""}${via}`) : null,
         x.mv !== "tt" && leftAt(x.next) >= .5 ? h("div", { class: "joseki-ends" }, "✓ ends the joseki") : null,
       ].filter(Boolean));
-    }) : [h("div", { class: "meta-sub" }, Joseki.pro < 0 ? "The pros' games go no further together from here; the games below show how each went on." : "Not in this pro's games from here.")]));
-    // the games that came this way
-    gamesBox.replaceChildren(h("div", { class: "meta-sub" }, Joseki.path.length ? "Games that came this way (the latest):" : ""));
+    }) : [h("div", { class: "meta-sub" }, Joseki.pro < 0 ? "The pros' games go no further together from here; the games below show how each went on. Play on to make your own line." : "Not in this pro's games from here.")]));
+    // the games that came this way (the book's position: where your own line left it)
+    gamesBox.replaceChildren(h("div", { class: "meta-sub" }, Joseki.path.length ? (off ? "Games that came to where your line left the pros':" : "Games that came this way (the latest):") : ""));
     if (Joseki.path.length) (async () => {
       const seen = new Set(), refs = (node.g || []).filter(g => (Joseki.pro < 0 || g[0] === Joseki.pro) && !seen.has(`${g[0]}:${g[1]}`) && seen.add(`${g[0]}:${g[1]}`));   // (a game once, whichever corner)
       const rows = await Promise.all(refs.map(async ([pi, fi, k]) => [pi, fi, k, (await Joseki.meta(pi))[fi]]));
       if (Joseki.node() !== node) return;
       // (the records list Black then White: [file, date, Black, rank, White, rank, result, …]; the pro is whichever is him)
       gamesBox.append(...rows.map(([pi, fi, k, row]) => {
-        const last = data.pros[pi][1].split(" ").pop(), proBlack = (row[2] || "").includes(last), opp = (proBlack ? row[4] : row[2]) || "?";
+        const lastName = data.pros[pi][1].split(" ").pop(), proBlack = (row[2] || "").includes(lastName), opp = (proBlack ? row[4] : row[2]) || "?";
         return h("button", { class: "joseki-game", type: "button", title: "Open in Review at this move", onclick: () => Joseki.open(pi, fi, k) },
           [h("b", {}, `${data.pros[pi][1]} (${proBlack ? "B" : "W"})`), ` vs ${opp} · ${row[1] || ""}${row[6] ? ` · ${row[6]}` : ""} · move ${k + 1}`]); }));
     })();
-    back.disabled = !Joseki.path.length;
+    back.disabled = !Joseki.path.length && !off;
   }
   const back = h("button", { onclick: () => key("ArrowLeft") }, "◀ Back");
   const aside = h("aside", {}, [
-    h("div", { class: "panel" }, [h("h2", {}, "Joseki · 定式"), h("div", { class: "meta-sub" }, "From the pros' own games: every corner they played, in one tree."),
-      h("div", { class: "joseki-pick" }, ["Whose games: ", proSel]), status, done, note]),
+    h("div", { class: "panel" }, [h("h2", {}, "Joseki · 定式"), h("div", { class: "meta-sub" }, "From the pros' own games: every corner they played, in one tree. Any other move starts a line of your own."),
+      h("div", { class: "joseki-pick" }, ["Whose games: ", proSel]), status, done, rejoin, note]),
     h("div", { class: "panel joseki-moves" }, [h("h2", {}, "Moves played here"), list]),
-    h("div", { class: "panel" }, [h("h2", {}, "Controls"), h("div", { class: "controls" }, [back, h("button", { onclick: () => go([]) }, "⏮ Start"),
-      h("button", { onclick: () => key("ArrowRight") }, "Forward ▶")]),
+    h("div", { class: "panel" }, [h("h2", {}, "Controls"), h("div", { class: "controls" }, [back, h("button", { onclick: () => key("Home") }, "⏮ Start"),
+      h("button", { onclick: () => key("ArrowRight") }, "Forward ▶"), h("button", { onclick: () => play("tt"), title: "Play elsewhere: the other side's turn here" }, "Tenuki")]),
       h("div", { class: "meta-sub joseki-keys" }, "← back · → forward · ↑ ↓ the other moves here · Home: the empty corner")]),
     h("div", { class: "panel" }, [h("h2", {}, "Games"), gamesBox]),
   ]);
   root.append(h("div", { class: "player" }, [boardCard, aside]));
   draw();
-  window.__joseki = { go, draw, key };
+  window.__joseki = { go, draw, key, play };
 }
 
 async function viewGames(id) {
