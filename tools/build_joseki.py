@@ -3,7 +3,8 @@ off a few pros' games, like Wu Qingyuan"; "let's build without annotations for n
 the game records on the site (data/games), one tree.
 
 A corner's sequence: the moves played in its 10×10 quarter, in order, within the game's first 150 moves, up to 20 of
-them; a move elsewhere in between, by the side whose turn it was there, is a tenuki ("tt"). Turned to the top-left
+them; a move elsewhere in between, by the side whose turn it was there, is a tenuki ("tt"), and so is the corner left for
+good at its end: a line ending in a tenuki is a whole joseki (the page marks where the pros mostly left). Turned to the top-left
 corner, and folded on the diagonal by the first move off it, so the eight ways a corner can face are one. The side that
 started the corner is shown as Black.
 
@@ -51,6 +52,11 @@ def corner_seqs(moves):
                 prev = c
                 if len(toks) >= MAXLEN:
                     break
+            # the players left the corner for good (the game went on, and not back here in its opening): a tenuki ends it,
+            # so a line that ends in one is a whole joseki (the user: "consider the joseki full depth if it ends in tenuki")
+            last_i = seq[-1][3]
+            if len(toks) < MAXLEN and len(seq) < MAXLEN and last_i + 1 < len(moves):
+                toks.append(("tt", last_i + 1, "W" if prev == "B" else "B"))
             out.append((toks[:MAXLEN], first))
     return out
 

@@ -54,7 +54,7 @@ const Offline = (() => {
   // ahead of a trip (the website; the app carries it all): every problem book, the Stream's pool and KataGo
   async function prefetch(onStep) {
     const books = await (await fetch("data/index.json")).json();
-    const files = ["data/stream.json", "data/tk_vetted.json", "data/joseki.json?v=2", "engine/katago-worker.js", "engine/engine-utils.js",
+    const files = ["data/stream.json", "data/tk_vetted.json", "data/joseki.json?v=3", "engine/katago-worker.js", "engine/engine-utils.js",
       typeof Engine !== "undefined" && Engine.modelUrl, ...books.map(b => `data/books/${b.id}.json`)].filter(Boolean);
     let done = 0, failed = 0;
     for (let i = 0; i < files.length; i += 6) {

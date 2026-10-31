@@ -45,4 +45,12 @@ await p.evaluate(()=>window.__joseki.go(['dd','fc']));await p.waitForSelector('.
 await p.click('.joseki-game');await p.waitForFunction(()=>location.hash==='#/review');
 const rv=await p.evaluate(()=>({i:Review.mainNodes.indexOf(Review.node)}));
 check(rv.i>0,`a game opens in Review at the move (position ${rv.i})`);
+// a whole joseki: the players left the corner (the user: "consider the joseki full depth if it ends in tenuki")
+const done=await p.evaluate(()=>{const N=Joseki.data.nodes;const q=[[0,[]]];const seen=new Set([0]);
+  while(q.length){const [u,path]=q.shift();const nd=N[u];if(path.length&&nd.n>=20&&nd.e&&nd.e.tt&&nd.e.tt[2]/nd.n>=.6)return path;
+    for(const [m,e] of Object.entries(nd.e||{}))if(m!=='tt'&&!seen.has(e[0])&&path.length<8){seen.add(e[0]);q.push([e[0],[...path,m]]);}}return null;});
+await p.evaluate(()=>location.hash='#/joseki');await p.waitForSelector('.joseki-row');await p.evaluate(path=>window.__joseki.go(path),done);
+check(done&&await p.isVisible('.joseki-done'),`a finished joseki is marked (${await p.textContent('.joseki-done')})`);
+await p.evaluate(path=>window.__joseki.go(path.slice(0,-1)),done);
+check(await p.$$eval('.joseki-row',rs=>rs.some(r=>/ends the joseki/.test(r.textContent))),'the move before it: marked as ending the joseki');
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);})();

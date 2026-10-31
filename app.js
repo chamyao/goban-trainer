@@ -2414,7 +2414,7 @@ async function viewLibrary() {
 const Joseki = {
   data: null, metas: {}, path: [], KEY: "goban.joseki",
   async load() {
-    if (!this.data) this.data = await (await fetch("data/joseki.json?v=2")).json();
+    if (!this.data) this.data = await (await fetch("data/joseki.json?v=3")).json();
     try { const s = JSON.parse(localStorage.getItem(this.KEY) || "{}"); this.path = Array.isArray(s.path) ? s.path : []; this.pro = s.pro ?? -1; } catch { this.path = []; this.pro = -1; }
     return this.data;
   },
@@ -2465,7 +2465,7 @@ async function viewJoseki() {
     if (Joseki.children(Joseki.node()).some(x => x.mv === mv)) go([...Joseki.path, mv]);
     else note.textContent = "No pro here played that.";
   });
-  const status = h("div", { class: "meta-sub" }), note = h("div", { class: "meta-sub joseki-note" });
+  const status = h("div", { class: "meta-sub" }), note = h("div", { class: "meta-sub joseki-note" }), done = h("div", { class: "joseki-done", hidden: "" });
   const list = h("div", { class: "joseki-list" }), gamesBox = h("div", { class: "joseki-games" });
   const proSel = h("select", { "aria-label": "Whose games" }, [h("option", { value: -1 }, "All the pros"),
     ...data.pros.map(([, name], i) => h("option", { value: i }, name))]);
@@ -2498,6 +2498,12 @@ async function viewJoseki() {
                          fill: "#fff", "pointer-events": "none" }).textContent = x.n;
     });
     const who = toMove(Joseki.path.length) === BLACK ? "Black" : "White";
+    // where the pros left the corner: a line that ends in a tenuki is a whole joseki (the user: "consider the joseki full
+    // depth if it ends in tenuki"); most games leaving here, it's done
+    const leftAt = nd => { const t = nd && nd.e && nd.e.tt; return t && nd.n ? t[2] / nd.n : 0; };
+    const left = leftAt(node);
+    done.hidden = !(Joseki.path.length && left >= .5);
+    done.textContent = `✓ Joseki complete: in ${node.e && node.e.tt ? node.e.tt[2] : 0} of ${node.n} games the players left the corner here.`;
     status.textContent = Joseki.path.length ? `Move ${Joseki.path.length + 1} · ${who} (the side that ${who === "Black" ? "started" : "answered"} the corner) to play · ${node.n} games reached this position, by any order`
       : `The empty corner · ${data.games} games, ${node.n} corners`;
     list.replaceChildren(...(kids.length ? kids.map((x, i) => {
@@ -2508,6 +2514,7 @@ async function viewJoseki() {
         h("b", {}, jCoord(toScreen(x.mv))), h("span", { class: "joseki-n" }, `${x.n} game${x.n === 1 ? "" : "s"} · ${Math.round(100 * x.n / total)}%`),
         win != null ? h("span", { class: "joseki-w", title: "Games won by the side that played it" }, `${win}% won`) : null,
         own.length || via ? h("div", { class: "joseki-pros" }, `${own.length ? `played by ${own.join(", ")}` : ""}${via}`) : null,
+        x.mv !== "tt" && leftAt(x.next) >= .5 ? h("div", { class: "joseki-ends" }, "✓ ends the joseki") : null,
       ].filter(Boolean));
     }) : [h("div", { class: "meta-sub" }, Joseki.pro < 0 ? "The pros' games go no further together from here; the games below show how each went on." : "Not in this pro's games from here.")]));
     // the games that came this way
@@ -2527,7 +2534,7 @@ async function viewJoseki() {
   const back = h("button", { onclick: () => go(Joseki.path.slice(0, -1)) }, "◀ Back");
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [h("h2", {}, "Joseki · 定式"), h("div", { class: "meta-sub" }, "From the pros' own games: every corner they played, in one tree."),
-      h("div", { class: "joseki-pick" }, ["Whose games: ", proSel]), status, note]),
+      h("div", { class: "joseki-pick" }, ["Whose games: ", proSel]), status, done, note]),
     h("div", { class: "panel joseki-moves" }, [h("h2", {}, "Moves played here"), list]),
     h("div", { class: "panel" }, [h("h2", {}, "Controls"), h("div", { class: "controls" }, [back, h("button", { onclick: () => go([]) }, "⏮ Start"),
       h("button", { onclick: () => { const k = Joseki.children(Joseki.node()); if (k.length) go([...Joseki.path, k[0].mv]); } }, "Main line ▶")])]),
