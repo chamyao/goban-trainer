@@ -53,4 +53,27 @@ await p.evaluate(()=>location.hash='#/joseki');await p.waitForSelector('.joseki-
 check(done&&await p.isVisible('.joseki-done'),`a finished joseki is marked (${await p.textContent('.joseki-done')})`);
 await p.evaluate(path=>window.__joseki.go(path.slice(0,-1)),done);
 check(await p.$$eval('.joseki-row',rs=>rs.some(r=>/ends the joseki/.test(r.textContent))),'the move before it: marked as ending the joseki');
+// the keys (the user: "arrow keys should go forward / back in the moves")
+await p.evaluate(()=>{location.hash='#/joseki';});await p.waitForSelector('.joseki-row');await p.evaluate(()=>window.__joseki.go([]));
+for(let i=0;i<3;i++)await p.keyboard.press('ArrowRight');
+const line=await p.evaluate(()=>Joseki.path.slice());
+check(line.length===3,`→ three times: the most played line (${line.join(' ')})`);
+await p.keyboard.press('ArrowLeft');await p.keyboard.press('ArrowLeft');
+check(await p.evaluate(()=>Joseki.path.length)===1,'← twice: back two moves');
+await p.keyboard.press('ArrowRight');await p.keyboard.press('ArrowRight');
+check(await p.evaluate(l=>Joseki.path.join()===l.join(),line),'→ again: back along the same line');
+await p.keyboard.press('ArrowDown');
+const alt=await p.evaluate(()=>Joseki.path.slice());
+check(alt.length===3&&alt[2]!==line[2]&&alt.slice(0,2).join()===line.slice(0,2).join(),`↓: the last move's next choice (${line[2]} → ${alt[2]})`);
+await p.keyboard.press('ArrowUp');
+check(await p.evaluate(l=>Joseki.path.join()===l.join(),line),'↑: back to it');
+await p.keyboard.press('Home');
+check(await p.evaluate(()=>Joseki.path.length===0&&scrollX===0),'Home: the empty corner (and the page didn\'t scroll)');
+// a star on every card in the Library: starred, it heads the Favorites shelf
+await p.evaluate(()=>{localStorage.removeItem('gt-favorites');location.hash='#/';});await p.waitForSelector('.book-list .book');
+const unstarred=await p.$$eval('.book',bs=>bs.filter(b=>!b.querySelector('.star')).map(b=>(b.querySelector('.t')||b).textContent.trim()));
+check(unstarred.length===0,`every card in the Library has a star${unstarred.length?` (not: ${unstarred.join(', ')})`:''}`);
+await p.click('.book:has(.t:text-is("Joseki · 定式")) .star');await p.waitForTimeout(300);
+const favs=await p.evaluate(()=>{const t=[...document.querySelectorAll('.cat-title')].find(x=>/Favorites/.test(x.textContent));return t?[...t.nextElementSibling.querySelectorAll('.book .t')].map(x=>x.textContent):[];});
+check(favs.includes('Joseki · 定式')&&await p.evaluate(()=>location.hash==='#/'||location.hash===''),`starred: Joseki heads the Favorites (${favs.join(', ')}), and the star didn't open it`);
 await b.close();console.log(fails?`${fails} FAILED`:'all passed');process.exit(fails?1:0);})();

@@ -2321,86 +2321,84 @@ async function viewLibrary() {
     if (!nv.live && !(typeof TK_TEST !== "undefined" && TK_TEST)) continue;
     stories.push([`#/tk/${nv.first}`, `tk-card tk-card-${id}`, nv.title, nv.native, nv.live ? "" : "test", "story"]);
   }
+  // a star on every card (the user: "make every book starrable"): the problem books by their id, the rest by a "~" id;
+  // the starred ones of every kind gather at the top, staying in their own shelves too (synced with the favorites)
+  const fav = (el, id) => { const on = favs.has(id);
+    el.prepend(h("span", { class: "star" + (on ? " on" : ""), title: on ? "Unfavorite" : "Favorite", role: "button",
+      onclick: e => { e.preventDefault(); e.stopPropagation(); toggleFavorite(id); viewLibrary(); } }, on ? "★" : "☆"));
+    return el; };
   // the event calendar (events.js): what's on, its shop, what's coming
   const fe = Events.featured();
-  root.append(h("div", { class: "cat-title" }, "Events"));
-  // (the event's own banner behind it, its currency's picture: tools/gen_event_art.py)
-  root.append(h("div", { class: "book-list" }, [h("a", { class: "book event-card" + (fe ? " has-art" : ""), href: "#/events",
-      style: fe ? `background-image:linear-gradient(90deg,rgba(12,8,20,.86),rgba(12,8,20,.35)),url('assets/events/banner-${fe.ev.id}.webp?v=1')` : "" }, [
-    h("div", { class: "t" }, fe ? `${fe.ev.name} · ${fe.ev.native}` : "Event calendar"),
-    h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · sign-in, tasks and the shop` : "Between events"),
-    h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? [h("img", { class: "ev-cur", src: `assets/events/cur-${fe.ev.id}.png?v=1`, alt: "" }), ` ${Events.balance(fe.ev.id)}`] : "")]),
-  ]),
-  // the protagonists collected from the stories (avatars.js)
-  h("a", { class: "book avatar-card-book", href: "#/avatars" }, [
-    h("div", { class: "t" }, [h("img", { class: "ev-icon", src: "assets/events/tab-collection.png?v=1", alt: "" }), " Avatars & items"]),
-    h("div", { class: "n" }, "the stories' protagonists, boards, stones, titles and hats: collect and wear"),
-    h("div", { class: "row" }, [h("span", { class: "badge" }, "collection"), h("span", { class: "cnt" }, `${Avatars.count()}`)]),
-  ])]));
-  root.append(h("div", { class: "cat-title" }, "Stories"));
-  root.append(h("div", { class: "book-list" }, stories.map(([href, cls, title, native, grade, cnt]) =>
-    h("a", { class: `book book-story ${cls}`, href }, [
-      h("div", { class: "t" }, title),
-      h("div", { class: "n" }, `${native} · a story campaign through the novel`),
-      h("div", { class: "row" }, [...(grade ? [h("span", { class: "badge" + (/D/.test(grade) ? " dan" : "") }, grade)] : []), h("span", { class: "cnt" }, cnt)]),
-    ]))));
-  // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
-  const gameShelf = h("div", { class: "book-list" });
-  // the pros' corners in one tree (viewJoseki)
-  gameShelf.append(h("a", { class: "book book-games", href: "#/joseki" }, [
-    h("div", { class: "t" }, "Joseki · 定式"), h("div", { class: "n" }, "the corners from these pros' own games, one tree: what they played, how often, how it went"),
-    h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, "explorer")]),
-  ]));
-  for (const [id, title, native, count, years] of GAME_SHELVES)
-    gameShelf.append(h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [
-      h("div", { class: "t" }, title), h("div", { class: "n" }, `${native} · ${years}`),
-      h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, `${count} games`)]),
-    ]));
-  // Favorited books from every category come first; they stay in their category too.
-  const sections = [["Favorites", index.filter(b => favs.has(b.id))],
-                    ...Object.entries(cats).map(([cat, title]) => [title, index.filter(b => b.category === cat)])];
-  for (const [title, books] of sections) {
-    if (!books.length) continue;
-    root.append(h("div", { class: "cat-title" }, title));
-    const list = h("div", { class: "book-list" });
+  const card = {
+    // (the event's own banner behind it, its currency's picture: tools/gen_event_art.py)
+    "~events": () => h("a", { class: "book event-card" + (fe ? " has-art" : ""), href: "#/events",
+        style: fe ? `background-image:linear-gradient(90deg,rgba(12,8,20,.86),rgba(12,8,20,.35)),url('assets/events/banner-${fe.ev.id}.webp?v=1')` : "" }, [
+      h("div", { class: "t" }, fe ? `${fe.ev.name} · ${fe.ev.native}` : "Event calendar"),
+      h("div", { class: "n" }, fe ? `On now, to ${fe.end.toLocaleDateString(undefined, { month: "short", day: "numeric" })} · sign-in, tasks and the shop` : "Between events"),
+      h("div", { class: "row" }, [h("span", { class: "badge" }, "events"), h("span", { class: "cnt" }, fe ? [h("img", { class: "ev-cur", src: `assets/events/cur-${fe.ev.id}.png?v=1`, alt: "" }), ` ${Events.balance(fe.ev.id)}`] : "")]),
+    ]),
+    // the protagonists collected from the stories (avatars.js)
+    "~avatars": () => h("a", { class: "book avatar-card-book", href: "#/avatars" }, [
+      h("div", { class: "t" }, [h("img", { class: "ev-icon", src: "assets/events/tab-collection.png?v=1", alt: "" }), " Avatars & items"]),
+      h("div", { class: "n" }, "the stories' protagonists, boards, stones, titles and hats: collect and wear"),
+      h("div", { class: "row" }, [h("span", { class: "badge" }, "collection"), h("span", { class: "cnt" }, `${Avatars.count()}`)]),
+    ]),
+    // the pros' corners in one tree (viewJoseki)
+    "~joseki": () => h("a", { class: "book book-games", href: "#/joseki" }, [
+      h("div", { class: "t" }, "Joseki · 定式"), h("div", { class: "n" }, "the corners from these pros' own games, one tree: what they played, how often, how it went"),
+      h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, "explorer")]),
+    ]),
     // the Stream heads the Tsumego shelf: a book with no end, dealt by the story mode's own rating (viewStream)
-    if (title === "Tsumego") list.append(h("div", { class: "book book-stream", onclick: () => location.hash = "#/stream" }, [
+    "~stream": () => h("div", { class: "book book-stream", onclick: () => location.hash = "#/stream" }, [
       h("div", { class: "t" }, "Stream"),
       h("div", { class: "n" }, "练习 · problems at your level, one after another"),
       h("div", { class: "row" }, [h("span", { class: "badge" }, "15k–3d"), h("span", { class: "cnt" }, "∞")]),
-    ]));
-    // your own lost OGS games' decisive moves, to play again (viewTurning)
-    if (title === "Tsumego") list.append(h("div", { class: "book book-turning", onclick: () => location.hash = "#/turning" }, [
+    ]),
+    // your own OGS games' decisive moves, to play again (viewTurning)
+    "~turning": () => h("div", { class: "book book-turning", onclick: () => location.hash = "#/turning" }, [
       h("div", { class: "t" }, "Turning points"),
-      h("div", { class: "n" }, "胜负手 · your biggest drop in each lost OGS game, to play again"),
+      h("div", { class: "n" }, "胜负手 · where a clear lead slipped away in your OGS games, to play again"),
       h("div", { class: "row" }, [h("span", { class: "badge" }, "your games"), h("span", { class: "cnt" }, Turning.cardCount("turn"))]),
-    ]));
-    if (title === "Tsumego") list.append(h("div", { class: "book book-keymoves", onclick: () => location.hash = "#/keymoves" }, [
+    ]),
+    "~keymoves": () => h("div", { class: "book book-keymoves", onclick: () => location.hash = "#/keymoves" }, [
       h("div", { class: "t" }, "Key moves"),
       h("div", { class: "n" }, "急所 · the points you and your opponents both missed, to find"),
       h("div", { class: "row" }, [h("span", { class: "badge" }, "your games"), h("span", { class: "cnt" }, Turning.cardCount("key"))]),
-    ]));
-    for (const b of books) {
-      const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
-      const isFav = favs.has(b.id);
-      list.append(h("div", { class: "book", onclick: () => location.hash = `#/book/${b.id}` }, [
-        h("span", {
-          class: "star" + (isFav ? " on" : ""),
-          title: isFav ? "Unfavorite" : "Favorite",
-          onclick: e => { e.stopPropagation(); toggleFavorite(b.id); viewLibrary(); },
-        }, isFav ? "★" : "☆"),
-        h("div", { class: "t" }, b.title),
-        h("div", { class: "n" }, b.native),
-        h("div", { class: "row" }, [
-          h("span", { class: "badge" + (b.level.includes("d") ? " dan" : "") }, b.level),
-          h("div", { class: "bar" }, [h("div", { style: `width:${b.count ? 100 * solved / b.count : 0}%` })]),
-          h("span", { class: "cnt" }, `${solved}/${b.count}`),
-        ]),
-      ]));
-    }
-    root.append(list);
-  }
-  root.append(h("div", { class: "cat-title" }, "Game records"), gameShelf);
+    ]),
+  };
+  for (const [href, cls, title, native, grade, cnt] of stories)
+    card[`~story:${href}`] = () => h("a", { class: `book book-story ${cls}`, href }, [
+      h("div", { class: "t" }, title),
+      h("div", { class: "n" }, `${native} · a story campaign through the novel`),
+      h("div", { class: "row" }, [...(grade ? [h("span", { class: "badge" + (/D/.test(grade) ? " dan" : "") }, grade)] : []), h("span", { class: "cnt" }, cnt)]),
+    ]);
+  // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
+  for (const [id, title, native, count, years] of GAME_SHELVES)
+    card[`~games:${id}`] = () => h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [
+      h("div", { class: "t" }, title), h("div", { class: "n" }, `${native} · ${years}`),
+      h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, `${count} games`)]),
+    ]);
+  const show = id => fav(card[id](), id);
+  const bookCard = b => {
+    const solved = Object.values(prog[b.id] || {}).filter(v => v === 1).length;
+    return fav(h("div", { class: "book", onclick: () => location.hash = `#/book/${b.id}` }, [
+      h("div", { class: "t" }, b.title),
+      h("div", { class: "n" }, b.native),
+      h("div", { class: "row" }, [
+        h("span", { class: "badge" + (b.level.includes("d") ? " dan" : "") }, b.level),
+        h("div", { class: "bar" }, [h("div", { style: `width:${b.count ? 100 * solved / b.count : 0}%` })]),
+        h("span", { class: "cnt" }, `${solved}/${b.count}`),
+      ]),
+    ]), b.id);
+  };
+  const shelf = (title, els) => { if (!els.length) return; root.append(h("div", { class: "cat-title" }, title)); root.append(h("div", { class: "book-list" }, els)); };
+  // the starred, first: the shelves' cards in their own order, then the problem books
+  shelf("Favorites", [...Object.keys(card).filter(id => favs.has(id)).map(show), ...index.filter(b => favs.has(b.id)).map(bookCard)]);
+  shelf("Events", [show("~events"), show("~avatars")]);
+  shelf("Stories", stories.map(([href]) => show(`~story:${href}`)));
+  for (const [cat, title] of Object.entries(cats))
+    shelf(title, [...(cat === "tsumego" ? [show("~stream"), show("~turning"), show("~keymoves")] : []), ...index.filter(b => b.category === cat).map(bookCard)]);
+  shelf("Game records", [show("~joseki"), ...GAME_SHELVES.map(([id]) => show(`~games:${id}`))]);
 }
 
 // A shelf of game records (data/games/<id>.json): the games by date, a search, and each opens in the Review tab
@@ -2471,7 +2469,24 @@ async function viewJoseki() {
     ...data.pros.map(([, name], i) => h("option", { value: i }, name))]);
   proSel.value = String(Joseki.pro);
   proSel.addEventListener("change", () => { Joseki.pro = +proSel.value; Joseki.save(); draw(); });
-  const go = p => { if (!Joseki.node(p)) return; Joseki.path = p; Joseki.save(); note.textContent = ""; draw(); };   // (a line not in the tree: stay)
+  // (a line not in the tree: stay). redo: the moves stepped back over, for → to retrace; a new move clears it
+  let redo = [];
+  const go = (p, keep) => { if (!Joseki.node(p)) return; if (!keep) redo = []; Joseki.path = p; Joseki.save(); note.textContent = ""; draw(); };
+  // the keys (the user: "arrow keys should go forward / back in the moves"): ← back, → forward (the line stepped back
+  // over, else the most played), ↑ ↓ the last move's other choices, Home the empty corner
+  const key = k => {
+    const P = Joseki.path;
+    if (k === "ArrowLeft" && P.length) { redo.push(P[P.length - 1]); go(P.slice(0, -1), true); }
+    else if (k === "ArrowRight") { if (redo.length) go([...P, redo.pop()], true); else { const c = Joseki.children(Joseki.node()); if (c.length) go([...P, c[0].mv]); } }
+    else if ((k === "ArrowUp" || k === "ArrowDown") && P.length) {
+      const sib = Joseki.children(Joseki.node(P.slice(0, -1))), i = sib.findIndex(x => x.mv === P[P.length - 1]);
+      const j = i + (k === "ArrowDown" ? 1 : -1);
+      if (sib[j]) go([...P.slice(0, -1), sib[j].mv]);
+    }
+    else if (k === "Home") go([]);
+    else return false;
+    return true;
+  };
   const toMove = len => len % 2 ? WHITE : BLACK;
 
   function draw() {
@@ -2531,18 +2546,19 @@ async function viewJoseki() {
     })();
     back.disabled = !Joseki.path.length;
   }
-  const back = h("button", { onclick: () => go(Joseki.path.slice(0, -1)) }, "◀ Back");
+  const back = h("button", { onclick: () => key("ArrowLeft") }, "◀ Back");
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [h("h2", {}, "Joseki · 定式"), h("div", { class: "meta-sub" }, "From the pros' own games: every corner they played, in one tree."),
       h("div", { class: "joseki-pick" }, ["Whose games: ", proSel]), status, done, note]),
     h("div", { class: "panel joseki-moves" }, [h("h2", {}, "Moves played here"), list]),
     h("div", { class: "panel" }, [h("h2", {}, "Controls"), h("div", { class: "controls" }, [back, h("button", { onclick: () => go([]) }, "⏮ Start"),
-      h("button", { onclick: () => { const k = Joseki.children(Joseki.node()); if (k.length) go([...Joseki.path, k[0].mv]); } }, "Main line ▶")])]),
+      h("button", { onclick: () => key("ArrowRight") }, "Forward ▶")]),
+      h("div", { class: "meta-sub joseki-keys" }, "← back · → forward · ↑ ↓ the other moves here · Home: the empty corner")]),
     h("div", { class: "panel" }, [h("h2", {}, "Games"), gamesBox]),
   ]);
   root.append(h("div", { class: "player" }, [boardCard, aside]));
   draw();
-  window.__joseki = { go, draw };
+  window.__joseki = { go, draw, key };
 }
 
 async function viewGames(id) {
@@ -5628,6 +5644,7 @@ async function route() {
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target && /TEXTAREA|INPUT/.test(e.target.tagName)) return;
+  if (window.__joseki && location.hash.startsWith("#/joseki") && window.__joseki.key(e.key)) { e.preventDefault(); return; }
   if (window.__turning && /^#\/(turning|keymoves)/.test(location.hash) && !/\/all$/.test(location.hash) && /^Arrow(Left|Right)$/.test(e.key)) {
     e.preventDefault(); window.__turning.step(e.key === "ArrowLeft" ? -1 : 1); return;
   }
