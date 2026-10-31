@@ -1242,3 +1242,20 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .item-tile.locked .event-preview { filter: grayscale(1) opacity(.45); }
 .item-tile.locked .avatar-name { opacity: .6; }
 .item-none { font-size: 28px; color: var(--muted); }
+/* joseki from the pros' games (app.js viewJoseki) */
+.joseki-list { display: flex; flex-direction: column; gap: 6px; max-height: 420px; overflow: auto; }
+.joseki-row { display: grid; grid-template-columns: 64px 1fr auto; align-items: baseline; gap: 2px 10px; padding: 7px 10px; border-radius: 10px; text-align: left;
+  border: 1px solid var(--border, #e3dccb); background: var(--card); color: inherit; font: inherit; cursor: pointer; }
+.joseki-row:hover { border-color: var(--accent); }
+.joseki-row.top { border-color: rgba(34, 160, 90, .7); }
+.joseki-row b { font-size: 15px; }
+.joseki-n { color: var(--muted); font-size: 13px; }
+.joseki-w { font-size: 12px; font-weight: 700; color: var(--muted); }
+.joseki-pros { grid-column: 2 / -1; font-size: 12px; color: var(--muted); }
+.joseki-pick { margin: 6px 0; } .joseki-pick select { font: inherit; }
+.joseki-note { color: var(--danger, #b0413e); min-height: 1em; }
+.joseki-games { display: flex; flex-direction: column; gap: 4px; }
+.joseki-game { text-align: left; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--border, #e3dccb); background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
+.joseki-game:hover { border-color: var(--accent); }
+.joseki-row b { font-variant-numeric: tabular-nums; }
+@media (max-width: 720px) { .player > aside > .panel.joseki-moves { order: -1; } .joseki-list { max-height: 300px; } }

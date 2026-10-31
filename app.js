@@ -2346,6 +2346,11 @@ async function viewLibrary() {
     ]))));
   // game records (data/games, tools/build_games.py): a shelf of their own; a game opens in the Review tab
   const gameShelf = h("div", { class: "book-list" });
+  // the pros' corners in one tree (viewJoseki)
+  gameShelf.append(h("a", { class: "book book-games", href: "#/joseki" }, [
+    h("div", { class: "t" }, "Joseki · 定式"), h("div", { class: "n" }, "the corners from these pros' own games, one tree: what they played, how often, how it went"),
+    h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, "explorer")]),
+  ]));
   for (const [id, title, native, count, years] of GAME_SHELVES)
     gameShelf.append(h("div", { class: "book book-games", onclick: () => location.hash = `#/games/${id}` }, [
       h("div", { class: "t" }, title), h("div", { class: "n" }, `${native} · ${years}`),
@@ -2400,6 +2405,139 @@ async function viewLibrary() {
 
 // A shelf of game records (data/games/<id>.json): the games by date, a search, and each opens in the Review tab
 // (replay, the move list, KataGo) as a pasted SGF would.
+/* ================= joseki from the pros' games ================= */
+// The user: "curate based off a few pros' games, like Wu Qingyuan"; "build without annotations for now". The corners of
+// the game records on the site (data/games), in one tree (tools/build_joseki.py, data/joseki.json): at each position
+// the pros' moves, how often, who played them and how they did; the games behind it, each opening in Review at the
+// move. Turned to the top-left corner; the side that started the corner is Black; "tt" is a tenuki. Positions, not move
+// orders: one reached by different orders is one (the user: transpositions).
+const Joseki = {
+  data: null, metas: {}, path: [], KEY: "goban.joseki",
+  async load() {
+    if (!this.data) this.data = await (await fetch("data/joseki.json?v=2")).json();
+    try { const s = JSON.parse(localStorage.getItem(this.KEY) || "{}"); this.path = Array.isArray(s.path) ? s.path : []; this.pro = s.pro ?? -1; } catch { this.path = []; this.pro = -1; }
+    return this.data;
+  },
+  save() { try { localStorage.setItem(this.KEY, JSON.stringify({ path: this.path, pro: this.pro })); } catch {} },
+  // positions, not move orders (tools/build_joseki.py): one reached by different orders is one node; a move is in its
+  // position's own frame, and t on it says the next position's frame is the mirror (the board turns as it steps)
+  node(path = this.path) { let n = this.data.nodes[0]; for (const m of path) { const e = n.e && n.e[m]; if (!e) return null; n = this.data.nodes[e[0]]; } return n; },
+  // the moves from here, the most played first; with a pro chosen, only the moves in that pro's games
+  children(n) {
+    const pro = this.pro;
+    return Object.entries(n.e || {}).map(([mv, e]) => ({ mv, e, next: this.data.nodes[e[0]], n: pro < 0 ? e[2] : ((e[5][pro] || [0])[0]) }))
+      .filter(x => x.n > 0).sort((a, b) => b.n - a.n);
+  },
+  async meta(pi) {
+    const d = this.data.pros[pi][0];
+    return this.metas[d] || (this.metas[d] = (await (await fetch(`data/games/${d}.json`)).json()).games);
+  },
+  // the game in Review, on the move
+  async open(pi, fi, k) {
+    const d = this.data.pros[pi][0], row = (await this.meta(pi))[fi];
+    const sgf = await (await fetch(`data/games/${d}/${row[0]}`)).text();
+    Review.giveBack();
+    Review.load(sgf); Review.currentId = Review.newId();
+    Review.node = Review.mainNodes[Math.min(k + 1, Review.mainNodes.length - 1)];
+    Review.saveState();
+    location.hash = "#/review";
+  },
+};
+const jCoord = mv => mv === "tt" ? "tenuki" : `${COLS["abcdefghijklmnopqrs".indexOf(mv[0])]}${19 - "abcdefghijklmnopqrs".indexOf(mv[1])}`;
+
+async function viewJoseki() {
+  crumbs.innerHTML = "";
+  crumbs.append(h("a", { href: "#/" }, "Library"), " / Joseki");
+  root.innerHTML = `<div class="loading">Loading…</div>`;
+  const nav = routeSeq;
+  const data = await Joseki.load();
+  if (nav !== routeSeq) return;
+  if (!Joseki.node()) Joseki.path = [];
+  root.innerHTML = "";
+  const svg = document.createElementNS(SVGNS, "svg");
+  const boardCard = h("div", { class: "board-card" }, [svg]);
+  // the board keeps the orientation the line began in: D (the stored frame is the mirror of the screen's) turns moves and
+  // stones between the two, so a mirrored next position doesn't flip the board under you
+  let D = false;
+  const toScreen = mv => mv === "tt" || !D ? mv : mv[1] + mv[0];
+  const goban = new Goban(svg, { c0: 0, c1: 10, r0: 0, r1: 10 }, (c, r) => {
+    const mv = toScreen("abcdefghijklmnopqrs"[c] + "abcdefghijklmnopqrs"[r]);   // (its own inverse)
+    if (Joseki.children(Joseki.node()).some(x => x.mv === mv)) go([...Joseki.path, mv]);
+    else note.textContent = "No pro here played that.";
+  });
+  const status = h("div", { class: "meta-sub" }), note = h("div", { class: "meta-sub joseki-note" });
+  const list = h("div", { class: "joseki-list" }), gamesBox = h("div", { class: "joseki-games" });
+  const proSel = h("select", { "aria-label": "Whose games" }, [h("option", { value: -1 }, "All the pros"),
+    ...data.pros.map(([, name], i) => h("option", { value: i }, name))]);
+  proSel.value = String(Joseki.pro);
+  proSel.addEventListener("change", () => { Joseki.pro = +proSel.value; Joseki.save(); draw(); });
+  const go = p => { if (!Joseki.node(p)) return; Joseki.path = p; Joseki.save(); note.textContent = ""; draw(); };   // (a line not in the tree: stay)
+  const toMove = len => len % 2 ? WHITE : BLACK;
+
+  function draw() {
+    const node = Joseki.node(), kids = Joseki.children(node), total = kids.reduce((a, x) => a + x.n, 0) || 1;
+    // the position: the path's stones, tenukis passing the turn, in the screen's orientation (each move turned by D, D
+    // turning again where a move's t says the next position's frame is the mirror)
+    let grid = Array.from({ length: N }, () => new Array(N).fill(EMPTY)), last = null, at = data.nodes[0];
+    D = false;
+    Joseki.path.forEach((mv, i) => {
+      const e = at.e[mv], sm = toScreen(mv);
+      if (sm !== "tt") { const c = "abcdefghijklmnopqrs".indexOf(sm[0]), r = "abcdefghijklmnopqrs".indexOf(sm[1]);
+        grid = applyMove(grid, c, r, toMove(i)) || grid; last = [c, r]; }
+      if (e[1]) D = !D;
+      at = data.nodes[e[0]];
+    });
+    goban.hoverColor = toMove(Joseki.path.length);
+    goban.render(grid, last, true);
+    kids.forEach((x, i) => {
+      if (x.mv === "tt") return;
+      const sm = toScreen(x.mv), c = "abcdefghijklmnopqrs".indexOf(sm[0]), r = "abcdefghijklmnopqrs".indexOf(sm[1]), share = x.n / total;
+      goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * .42, fill: i === 0 ? "rgba(34,160,90,.85)" : `rgba(53,102,176,${(.35 + .55 * share).toFixed(2)})`,
+                           stroke: "#fff", "stroke-width": 1.5, "pointer-events": "none", class: "joseki-mark" });
+      goban.el("text", { x: goban.px(c), y: goban.py(r) + goban.cell * .14, "text-anchor": "middle", "font-size": goban.cell * (x.n > 999 ? .26 : .34), "font-weight": 700,
+                         fill: "#fff", "pointer-events": "none" }).textContent = x.n;
+    });
+    const who = toMove(Joseki.path.length) === BLACK ? "Black" : "White";
+    status.textContent = Joseki.path.length ? `Move ${Joseki.path.length + 1} · ${who} (the side that ${who === "Black" ? "started" : "answered"} the corner) to play · ${node.n} games reached this position, by any order`
+      : `The empty corner · ${data.games} games, ${node.n} corners`;
+    list.replaceChildren(...(kids.length ? kids.map((x, i) => {
+      const e = x.e, own = Object.entries(e[5]).filter(([pi, v]) => v[1] > 0 && (Joseki.pro < 0 || +pi === Joseki.pro)).map(([pi, v]) => `${data.pros[pi][1]} ${v[1]}×`);
+      const win = e[4] ? Math.round(100 * e[3] / e[4]) : null;
+      const via = x.next.n > e[2] ? ` · the position after: ${x.next.n} games, by any order` : "";
+      return h("button", { class: "joseki-row" + (i === 0 ? " top" : ""), type: "button", onclick: () => go([...Joseki.path, x.mv]) }, [
+        h("b", {}, jCoord(toScreen(x.mv))), h("span", { class: "joseki-n" }, `${x.n} game${x.n === 1 ? "" : "s"} · ${Math.round(100 * x.n / total)}%`),
+        win != null ? h("span", { class: "joseki-w", title: "Games won by the side that played it" }, `${win}% won`) : null,
+        own.length || via ? h("div", { class: "joseki-pros" }, `${own.length ? `played by ${own.join(", ")}` : ""}${via}`) : null,
+      ].filter(Boolean));
+    }) : [h("div", { class: "meta-sub" }, Joseki.pro < 0 ? "The pros' games go no further together from here; the games below show how each went on." : "Not in this pro's games from here.")]));
+    // the games that came this way
+    gamesBox.replaceChildren(h("div", { class: "meta-sub" }, Joseki.path.length ? "Games that came this way (the latest):" : ""));
+    if (Joseki.path.length) (async () => {
+      const seen = new Set(), refs = (node.g || []).filter(g => (Joseki.pro < 0 || g[0] === Joseki.pro) && !seen.has(`${g[0]}:${g[1]}`) && seen.add(`${g[0]}:${g[1]}`));   // (a game once, whichever corner)
+      const rows = await Promise.all(refs.map(async ([pi, fi, k]) => [pi, fi, k, (await Joseki.meta(pi))[fi]]));
+      if (Joseki.node() !== node) return;
+      // (the records list Black then White: [file, date, Black, rank, White, rank, result, …]; the pro is whichever is him)
+      gamesBox.append(...rows.map(([pi, fi, k, row]) => {
+        const last = data.pros[pi][1].split(" ").pop(), proBlack = (row[2] || "").includes(last), opp = (proBlack ? row[4] : row[2]) || "?";
+        return h("button", { class: "joseki-game", type: "button", title: "Open in Review at this move", onclick: () => Joseki.open(pi, fi, k) },
+          [h("b", {}, `${data.pros[pi][1]} (${proBlack ? "B" : "W"})`), ` vs ${opp} · ${row[1] || ""}${row[6] ? ` · ${row[6]}` : ""} · move ${k + 1}`]); }));
+    })();
+    back.disabled = !Joseki.path.length;
+  }
+  const back = h("button", { onclick: () => go(Joseki.path.slice(0, -1)) }, "◀ Back");
+  const aside = h("aside", {}, [
+    h("div", { class: "panel" }, [h("h2", {}, "Joseki · 定式"), h("div", { class: "meta-sub" }, "From the pros' own games: every corner they played, in one tree."),
+      h("div", { class: "joseki-pick" }, ["Whose games: ", proSel]), status, note]),
+    h("div", { class: "panel joseki-moves" }, [h("h2", {}, "Moves played here"), list]),
+    h("div", { class: "panel" }, [h("h2", {}, "Controls"), h("div", { class: "controls" }, [back, h("button", { onclick: () => go([]) }, "⏮ Start"),
+      h("button", { onclick: () => { const k = Joseki.children(Joseki.node()); if (k.length) go([...Joseki.path, k[0].mv]); } }, "Main line ▶")])]),
+    h("div", { class: "panel" }, [h("h2", {}, "Games"), gamesBox]),
+  ]);
+  root.append(h("div", { class: "player" }, [boardCard, aside]));
+  draw();
+  window.__joseki = { go, draw };
+}
+
 async function viewGames(id) {
   const nav = routeSeq;
   root.innerHTML = `<div class="loading">Loading…</div>`;
@@ -5467,6 +5605,7 @@ async function route() {
   else if (parts[0] === "turning") viewTurning("turn", 0, +parts[1] || null);
   else if (parts[0] === "keymoves") viewTurning("key", 0, +parts[1] || null);
   else if (parts[0] === "review") viewReview();
+  else if (parts[0] === "joseki") await viewJoseki();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "friend" && parts[1]) viewFriend(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
