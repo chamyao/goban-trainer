@@ -176,7 +176,7 @@
   });
 
   /* ---------- *name / *11/2 / *11/2/26: jump; the *command is erased when you go ---------- */
-  let opts = [], on = 0, tok = null;
+  let opts = [], on = 0, tok = null, armed = false;
   function parseDate(q) {
     const m = /^(\d{1,2})\/(\d{1,2})(?:\/(\d{2}|\d{4}))?$/.exec(q); if (!m) return null;
     const mo = +m[1], d = +m[2]; let y = m[3] ? +m[3] : +today().slice(0, 4); if (y < 100) y += 2000;
@@ -184,6 +184,7 @@
     return iso(y, mo, d);
   }
   function jumpCheck() {
+    armed = false;
     if (!current) return;
     const { ta } = current, before = ta.value.slice(0, ta.selectionStart);
     // *name <a name>: names the note (notes only; a day has its date)
@@ -204,8 +205,8 @@
       opts = notes().filter(n => n.k !== current.k && !db[n.k].a && (!ql || n.name.toLowerCase().includes(ql)))
         .sort((a, b) => (b.name.toLowerCase().startsWith(ql) - a.name.toLowerCase().startsWith(ql)) || b.u - a.u)
         .slice(0, 6).map(n => ({ label: n.name, h: `#/n/${n.k.slice(2)}` }));
-      if (ql === "list") opts.unshift({ label: "All notes", list: true });
-      if (ql === "page") opts.unshift({ label: "New note", page: true });
+      // *list and *page need no menu: Enter just does it
+      if (ql === "list" || ql === "page") { opts = [ql === "list" ? { list: true } : { page: true }]; on = 0; armed = true; hide(jump); return; }
     }
     if (!opts.length) { hide(jump); return; }
     drawJump(ta, start);
@@ -217,6 +218,7 @@
     const p = caretXY(ta, start); show(jump, p.x, p.y + 6);
   }
   function jumpKeys(ev) {
+    if (armed && ev.key === "Enter") { ev.preventDefault(); return take(0); }
     if (jump.hidden) return;
     if (ev.key === "ArrowDown" || ev.key === "ArrowUp") { ev.preventDefault(); on = (on + (ev.key === "ArrowDown" ? 1 : opts.length - 1)) % opts.length; jumpCheck(); }
     else if (ev.key === "Enter" || ev.key === "Tab") { ev.preventDefault(); take(on); }
@@ -228,7 +230,7 @@
     const { k, ta } = current, tok0 = tok.start;
     ta.value = ta.value.slice(0, tok.start) + ta.value.slice(tok.end); // the command leaves no trace
     put(k, { t: ta.value }); sessionStorage.setItem("notes-caret-" + k, tok.start);
-    hide(jump); on = 0; tok = null;
+    hide(jump); on = 0; tok = null; armed = false;
     if (o.list) { ta.setSelectionRange(tok0, tok0); return openList(); }
     if (o.name) { db[k] = { ...db[k], n: o.name }; put(k, {}); document.title = `${o.name} · Notes`; ta.setSelectionRange(tok0, tok0); return; }
     if (o.page) { const id = uid(); put("n:" + id, { t: "" }); return go("#/n/" + id); }
