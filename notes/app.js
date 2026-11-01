@@ -66,6 +66,7 @@
 
   /* ---------- the month ---------- */
   function month(y, m) {
+    sessionStorage.setItem("notes-month", "#/" + iso(y, m, 1).slice(0, 7));
     document.title = `${MONTHS[m - 1]} ${y} · Notes`;
     const first = new Date(y, m - 1, 1).getDay(), days = new Date(y, m, 0).getDate(), t = today();
     const cells = Math.ceil((first + days) / 7) * 7;
@@ -91,7 +92,9 @@
 
   /* ---------- a page (a day or a note) ---------- */
   let current = null; // {k, ta}
-  const back = k => { if (history.length > 1 && sessionStorage.getItem("notes-nav")) history.back(); else go(monthOf(k)); };
+  // ← from a day or a note: the calendar (a day's own month; a note, the month last looked at)
+  const lastMonth = () => sessionStorage.getItem("notes-month") || "#/";
+  const back = k => go(k.startsWith("d:") ? monthOf(k) : lastMonth());
   const camera = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5L5 20"/></svg>`;
 
   function page(k, photos) {
@@ -361,9 +364,9 @@
       <div class="bar"><button type="button" class="icon back" aria-label="Back">←</button></div>
       <div class="fb"><h1>Feedback</h1>
         <label for="fbta" class="mirror">Feedback</label>
-        <textarea id="fbta" placeholder="What should change? What's broken?"></textarea>
+        <textarea id="fbta"></textarea>
         <div class="fbrow"><button type="button" class="send">Send</button><span class="fbmsg" role="status"></span></div></div></section>`;
-    app.querySelector(".back").onclick = () => history.length > 1 ? history.back() : go("#/");
+    app.querySelector(".back").onclick = () => go(lastMonth());
     const ta = $("#fbta"), btn = app.querySelector(".send"), msg = app.querySelector(".fbmsg");
     ta.focus();
     btn.onclick = async () => {
