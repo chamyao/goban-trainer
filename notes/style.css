@@ -22,7 +22,7 @@ main { height: 100%; }
 .month h1 { margin: 0; font-size: clamp(22px, 4vw, 32px); font-weight: 700; }
 .month .nav { display: flex; gap: 8px; align-items: center; }
 .month .nav button { width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 20px; cursor: pointer; }
-.sync { min-height: 44px; padding: 0 8px; border: 0; background: none; color: var(--muted); font-size: 13px; cursor: pointer; }
+.sync { display: inline-flex; align-items: center; text-decoration: none; min-height: 44px; padding: 0 8px; border: 0; background: none; color: var(--muted); font-size: 13px; cursor: pointer; }
 .names, .grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .names { border-bottom: 1px solid var(--ink); }
 .names div { padding: 8px 6px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
@@ -64,3 +64,13 @@ main { height: 100%; }
 .pop button:hover, .pop .opt.on { background: var(--sel); }
 .pop .opt small { font-size: 12px; color: var(--muted); }
 .mirror { position: absolute; visibility: hidden; white-space: pre-wrap; overflow-wrap: break-word; top: 0; left: -9999px; }
+
+/* feedback */
+.fb { width: 100%; max-width: 640px; align-self: center; display: flex; flex-direction: column; gap: 12px; padding: 8px 0 24px; }
+.fb h1 { margin: 0; font-size: 22px; font-weight: 600; }
+.fb textarea { min-height: 200px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; resize: vertical; background: var(--bg); color: var(--ink); font: 400 16px/1.6 Inter, system-ui, sans-serif; }
+.fb textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.fbrow { display: flex; align-items: center; gap: 12px; }
+.fb .send { min-height: 44px; padding: 0 20px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font-weight: 600; cursor: pointer; }
+.fb .send:disabled { opacity: .6; }
+.fbmsg { color: var(--muted); font-size: 14px; }

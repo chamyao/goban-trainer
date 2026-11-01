@@ -55,6 +55,7 @@
     const h = location.hash.slice(2).split("/");
     if (h[0] === "d" && /^\d{4}-\d{2}-\d{2}$/.test(h[1])) return page("d:" + h[1], h[2] === "photos");
     if (h[0] === "n" && h[1]) return page("n:" + h[1], h[2] === "photos");
+    if (h[0] === "feedback") return feedback();
     const m = /^(\d{4})-(\d{2})$/.exec(h[0] || "");
     const t = today().split("-").map(Number);
     month(m ? +m[1] : t[0], m ? +m[2] : t[1]);
@@ -79,7 +80,7 @@
     const next = m === 12 ? iso(y + 1, 1, 1).slice(0, 7) : iso(y, m + 1, 1).slice(0, 7);
     app.innerHTML = `<section class="month">
       <header><h1>${MONTHS[m - 1]} ${y}</h1>
-        <div class="nav">${Sync.button()}
+        <div class="nav"><a class="sync" href="#/feedback">Feedback</a>${Sync.button()}
           <button type="button" aria-label="Previous month" data-go="#/${prev}">‹</button>
           <button type="button" aria-label="Next month" data-go="#/${next}">›</button></div></header>
       <div class="names" aria-hidden="true">${DAYS.map(n => `<div>${n}</div>`).join("")}</div>
@@ -336,6 +337,46 @@
   })();
 
   if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
-  window.__notes = { db: () => db, parseDate };
+  /* ---------- feedback: the same inbox as the go site (its Apps Script: the Feedback sheet, and a ping that wakes
+     Claude); offline it waits here and goes when the connection is back ---------- */
+  const FEEDBACK_URL = "https://script.google.com/macros/s/AKfycbxClc9eoQ4jhxT2hwGK-y_JZef-7N9S27XJqPejKic8mO47qtbI5WNMYofN7hpMb_fGdw/exec";
+  const OUT = "notes-feedback-out";
+  const outbox = () => { try { return JSON.parse(localStorage.getItem(OUT) || "[]"); } catch { return []; } };
+  const setOutbox = l => { try { localStorage.setItem(OUT, JSON.stringify(l)); } catch {} };
+  const who = () => { try { return localStorage.getItem("gt-username") || ""; } catch { return ""; } };
+  const post = payload => fetch(FEEDBACK_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload) })
+    .then(r => { if (!r.ok) throw new Error("feedback " + r.status); });
+  async function sendFeedback(message) {
+    const payload = { username: who(), kind: "feedback", data: { message, context: "notes · " + (sessionStorage.getItem("notes-from") || "#/") } };
+    try { if (!navigator.onLine) throw new Error("offline"); await post(payload); return "sent"; }
+    catch { setOutbox([...outbox(), payload]); return "queued"; }
+  }
+  async function flushFeedback() {
+    for (const p of outbox()) { try { await post(p); setOutbox(outbox().filter(x => JSON.stringify(x) !== JSON.stringify(p))); } catch { return; } }
+  }
+  addEventListener("online", flushFeedback); if (navigator.onLine) setTimeout(flushFeedback, 1500);
+  function feedback() {
+    current = null; document.title = "Feedback · Notes";
+    app.innerHTML = `<section class="page">
+      <div class="bar"><button type="button" class="icon back" aria-label="Back">←</button></div>
+      <div class="fb"><h1>Feedback</h1>
+        <label for="fbta" class="mirror">Feedback</label>
+        <textarea id="fbta" placeholder="What should change? What's broken?"></textarea>
+        <div class="fbrow"><button type="button" class="send">Send</button><span class="fbmsg" role="status"></span></div></div></section>`;
+    app.querySelector(".back").onclick = () => history.length > 1 ? history.back() : go("#/");
+    const ta = $("#fbta"), btn = app.querySelector(".send"), msg = app.querySelector(".fbmsg");
+    ta.focus();
+    btn.onclick = async () => {
+      const text = ta.value.trim();
+      if (!text) { msg.textContent = "Write something first."; return; }
+      btn.disabled = true; msg.textContent = "";
+      const how = await sendFeedback(text);
+      ta.value = ""; btn.disabled = false;
+      msg.textContent = how === "queued" ? "Saved. It'll send when you're back online. Thanks!" : "Sent. Thanks!";
+    };
+  }
+  addEventListener("hashchange", ev => { const o = new URL(ev.oldURL).hash; if (!o.startsWith("#/feedback")) sessionStorage.setItem("notes-from", o || "#/"); });
+
+  window.__notes = { db: () => db, parseDate, outbox };
   route();
 })();
