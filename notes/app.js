@@ -352,8 +352,10 @@
   /* ---------- sync, through the go site's Apps Script (kind "notes"): it only ever sees scrambled data ---------- */
   async function api(body) {
     const r = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ kind: "notes", auth: K && K.auth, ...body }) });
-    if (!r.ok) throw new Error("notes api " + r.status);
-    return r.json();
+    if (!r.ok) throw new Error("server " + r.status);
+    const text = await r.text();
+    try { return JSON.parse(text); }
+    catch { const m = /<title>([^<]*)<\/title>|class="errorMessage"[^>]*>([^<]*)/i.exec(text) || /TypeError[^<]*|Exception[^<]*|Error:[^<]*/.exec(text); throw new Error("server: " + ((m && (m[1] || m[2] || m[0])) || "not JSON").trim().slice(0, 120)); }
   }
   async function saltOf() { const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 15000); const r = await fetch(API + "?kind=notes", { signal: ctl.signal }).finally(() => clearTimeout(t)); if (!r.ok) throw new Error("notes api " + r.status); return r.json(); }
   const Sync = (() => {
@@ -393,7 +395,7 @@
         setState("Synced");
       } catch (e) {
         console.warn("[sync]", e);
-        setState(e.differs ? "Not syncing: this browser has a different password" : navigator.onLine ? "Sync paused" : "Offline, will sync");
+        setState(e.differs ? "Not syncing: this browser has a different password" : navigator.onLine ? "Sync paused: " + (e.message || e) : "Offline, will sync");
       }
       busy = false; if (again) { again = false; soon(0); }
     }

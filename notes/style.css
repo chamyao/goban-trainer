@@ -118,3 +118,4 @@ main { height: 100%; }
   .grid .tag { font-size: 10.5px; line-height: 1.25; }
   .month .sync { padding: 0 4px; font-size: 12px; }
 }
+.sync.state { max-width: 46vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
