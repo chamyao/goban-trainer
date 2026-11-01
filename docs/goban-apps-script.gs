@@ -39,7 +39,7 @@ function findGameRow_(sheet, username, gameId) {
 }
 
 function doGet(e) {
-  if (e.parameter.kind === "notes") return notesGet_();
+  if (e.parameter.kind === "notes") { try { return notesGet_(); } catch (err) { return jsonOut_({ error: "script: " + err }); } }
   const username = e.parameter.username;
   if (!username) return jsonOut_({ error: "username required" });
 
@@ -76,7 +76,7 @@ function doPost(e) {
   catch (err) { return jsonOut_({ error: "bad json" }); }
   const now = new Date().toISOString();
 
-  if (body.kind === "notes") return notesPost_(body);
+  if (body.kind === "notes") { try { return notesPost_(body); } catch (err) { return jsonOut_({ error: "script: " + err }); } }
 
   // Append-only feedback log — no username required, nothing to look up.
   if (body.kind === "feedback") {
@@ -169,6 +169,12 @@ function jsonOut_(obj) {
 }
 
 // ---------- Notes (chamyao.github.io/goban-trainer/notes/) ----------
+// Run this from the editor to check the notes storage: it makes (or finds) the Drive folder and logs it.
+// If Drive access isn't allowed yet, Google asks for it here.
+function testNotes() {
+  const f = notesFolder_();
+  Logger.log("Notes folder OK: " + f.getName() + " (" + f.getUrl() + "), files: " + (function () { let n = 0; const it = f.getFiles(); while (it.hasNext()) { it.next(); n++; } return n; })());
+}
 // The browser scrambles everything with the notes password before sending it, so this only keeps opaque files,
 // in the Drive folder "Notes (encrypted)". The password never comes here: the browser derives two things from it,
 // a key that stays in the browser and a sign-in code; the script keeps the code's SHA-256 (NOTES_VERIFIER) and the
