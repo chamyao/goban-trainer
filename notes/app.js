@@ -38,10 +38,13 @@
   const openText = async s => td.decode(await unseal(unb64(s)));
 
   // IndexedDB: "p" photos (scrambled), "k" this browser's key (kept so a known browser doesn't ask again)
+  // (a tab still open on an older version holds the old one: say so instead of waiting forever)
   const idb = new Promise((ok, no) => {
     const r = indexedDB.open("notes-photos", 2);
     r.onupgradeneeded = () => { for (const n of ["p", "k"]) if (!r.result.objectStoreNames.contains(n)) r.result.createObjectStore(n); };
-    r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error);
+    r.onsuccess = () => { const d = r.result; d.onversionchange = () => d.close(); ok(d); };
+    r.onerror = () => no(r.error);
+    r.onblocked = () => { app.innerHTML = `<section class="gate"><form><h1>One moment</h1><p class="gmsg">Notes is open in another tab. Close the other tab and this one will open.</p></form></section>`; };
   });
   const tx = async (store, mode, f) => { const d = await idb; return new Promise((ok, no) => { const t = d.transaction(store, mode); const r = f(t.objectStore(store)); t.oncomplete = () => ok(r && r.result); t.onerror = () => no(t.error); }); };
   const Keys = {
@@ -352,7 +355,7 @@
     if (!r.ok) throw new Error("notes api " + r.status);
     return r.json();
   }
-  async function saltOf() { const r = await fetch(API + "?kind=notes"); if (!r.ok) throw new Error("notes api " + r.status); return r.json(); }
+  async function saltOf() { const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 15000); const r = await fetch(API + "?kind=notes", { signal: ctl.signal }).finally(() => clearTimeout(t)); if (!r.ok) throw new Error("notes api " + r.status); return r.json(); }
   const Sync = (() => {
     let timer = 0, busy = false, again = false, state = "";
     const setState = s => { state = s; const b = document.querySelector(".sync.state"); if (b) b.textContent = state; };
@@ -427,8 +430,8 @@
     let mode = "wait", salt = null;
     const draw = (msg = "") => {
       app.innerHTML = `<section class="gate"><form autocomplete="on">
-        <h1>${mode === "create" ? "Create a password" : "Password"}</h1>
-        ${mode === "offline" ? `<p class="gmsg">Connect to the internet to open your notes on this browser.</p><button type="button" class="gbtn retry">Try again</button>` : mode === "wait" ? `<p class="gmsg">…</p>` : `
+        <h1>${mode === "create" ? "Create a password" : mode === "wait" ? "Notes" : "Password"}</h1>
+        ${mode === "offline" ? `<p class="gmsg">Connect to the internet to open your notes on this browser.</p><button type="button" class="gbtn retry">Try again</button>` : mode === "wait" ? `<p class="gmsg">Connecting…</p>` : `
         <input type="text" name="username" autocomplete="username" value="notes" hidden>
         <label for="pw" class="mirror">Password</label>
         <input id="pw" type="password" autocomplete="${mode === "create" ? "new-password" : "current-password"}">
@@ -527,8 +530,10 @@
   window.__notes = { db: () => db, parseDate, outbox };
   let started = false;
   function start() { if (started) return route(); started = true; route(); }
+  app.innerHTML = `<section class="gate"><form><h1>Notes</h1><p class="gmsg">Opening…</p></form></section>`;
   (async () => {
-    const saved = await Keys.load();
+    let saved = null;
+    try { saved = await Keys.load(); } catch (e) { console.warn("[keys]", e); }
     if (saved && saved.key) { K = saved; await loadDb(); start(); Sync.soon(300); }
     else gate();
   })();
