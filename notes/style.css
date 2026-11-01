@@ -123,3 +123,5 @@ main { height: 100%; }
 .sync.state.tap { cursor: pointer; color: var(--accent); font-weight: 600; }
 .gbtn.google { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
 .gbtn.google:hover { background: var(--off); }
+.month .nav .sync { width: auto; height: auto; min-height: 44px; border: 0; border-radius: 8px; background: none; font-size: 13px; padding: 0 8px; }
+.month .nav .sync.tap { border: 1px solid var(--accent); padding: 0 12px; }
