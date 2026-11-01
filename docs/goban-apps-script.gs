@@ -39,6 +39,7 @@ function findGameRow_(sheet, username, gameId) {
 }
 
 function doGet(e) {
+  if (e.parameter.kind === "notes") return notesGet_();
   const username = e.parameter.username;
   if (!username) return jsonOut_({ error: "username required" });
 
@@ -74,6 +75,8 @@ function doPost(e) {
   try { body = JSON.parse(e.postData.contents); }
   catch (err) { return jsonOut_({ error: "bad json" }); }
   const now = new Date().toISOString();
+
+  if (body.kind === "notes") return notesPost_(body);
 
   // Append-only feedback log — no username required, nothing to look up.
   if (body.kind === "feedback") {
@@ -163,4 +166,75 @@ function chatSecretOk_(secret) {
 
 function jsonOut_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// ---------- Notes (chamyao.github.io/goban-trainer/notes/) ----------
+// The browser scrambles everything with the notes password before sending it, so this only keeps opaque files,
+// in the Drive folder "Notes (encrypted)". The password never comes here: the browser derives two things from it,
+// a key that stays in the browser and a sign-in code; the script keeps the code's SHA-256 (NOTES_VERIFIER) and the
+// salt, set by the first browser ("create"). 20 wrong codes in an hour lock it for the hour.
+// Needs Drive access: on redeploying, Google asks to allow it.
+function notesFolder_() {
+  const it = DriveApp.getFoldersByName("Notes (encrypted)");
+  return it.hasNext() ? it.next() : DriveApp.createFolder("Notes (encrypted)");
+}
+function notesFile_(name) { const it = notesFolder_().getFilesByName(name); return it.hasNext() ? it.next() : null; }
+function notesWrite_(name, content) {
+  const f = notesFile_(name);
+  if (f) f.setContent(content); else notesFolder_().createFile(name, content, MimeType.PLAIN_TEXT);
+}
+function sha256hex_(s) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, s, Utilities.Charset.UTF_8)
+    .map(function (b) { return ((b + 256) % 256).toString(16); }).map(function (h) { return h.length < 2 ? "0" + h : h; }).join("");
+}
+function notesAuthOk_(auth) {
+  const v = PropertiesService.getScriptProperties().getProperty("NOTES_VERIFIER");
+  if (!v || !auth) return false;
+  const cache = CacheService.getScriptCache(), fails = +(cache.get("notes-fails") || 0);
+  if (fails >= 20) return false;
+  if (sha256hex_(String(auth)) === v) return true;
+  cache.put("notes-fails", String(fails + 1), 3600);
+  return false;
+}
+function notesGet_() {
+  const salt = PropertiesService.getScriptProperties().getProperty("NOTES_SALT");
+  return jsonOut_(salt ? { salt: salt } : { none: true });
+}
+function notesPost_(b) {
+  const props = PropertiesService.getScriptProperties(), lock = LockService.getScriptLock();
+  if (b.op === "create") {
+    lock.waitLock(10000);
+    try {
+      if (props.getProperty("NOTES_VERIFIER")) return jsonOut_({ error: "exists", salt: props.getProperty("NOTES_SALT") });
+      if (!b.salt || !/^[0-9a-f]{64}$/.test(String(b.verifier))) return jsonOut_({ error: "salt and verifier required" });
+      props.setProperties({ NOTES_SALT: String(b.salt), NOTES_VERIFIER: String(b.verifier), NOTES_REV: "0" });
+      return jsonOut_({ ok: true });
+    } finally { lock.releaseLock(); }
+  }
+  if (!notesAuthOk_(b.auth)) return jsonOut_({ error: "locked" });
+  const id = String(b.id || "");
+  if (b.op !== "get" && b.op !== "put" && b.op !== "plist" && !/^[a-z0-9]{4,40}$/.test(id)) return jsonOut_({ error: "bad id" });
+  if (b.op === "get") {
+    const f = notesFile_("notes.enc");
+    return jsonOut_({ data: f ? f.getBlob().getDataAsString() : "", rev: +(props.getProperty("NOTES_REV") || 0) });
+  }
+  if (b.op === "put") {   // the whole (scrambled) set; rev guards against two browsers writing over each other
+    lock.waitLock(10000);
+    try {
+      const rev = +(props.getProperty("NOTES_REV") || 0);
+      if (b.rev !== rev) return jsonOut_({ error: "conflict", rev: rev });
+      notesWrite_("notes.enc", String(b.data || ""));
+      props.setProperty("NOTES_REV", String(rev + 1));
+      return jsonOut_({ ok: true, rev: rev + 1 });
+    } finally { lock.releaseLock(); }
+  }
+  if (b.op === "plist") {
+    const ids = [], it = notesFolder_().getFiles();
+    while (it.hasNext()) { const m = /^p-([a-z0-9]+)\.enc$/.exec(it.next().getName()); if (m) ids.push(m[1]); }
+    return jsonOut_({ ids: ids });
+  }
+  if (b.op === "pput") { notesWrite_("p-" + id + ".enc", String(b.data || "")); return jsonOut_({ ok: true }); }
+  if (b.op === "pget") { const f = notesFile_("p-" + id + ".enc"); return jsonOut_({ data: f ? f.getBlob().getDataAsString() : "" }); }
+  if (b.op === "pdel") { const f = notesFile_("p-" + id + ".enc"); if (f) f.setTrashed(true); return jsonOut_({ ok: true }); }
+  return jsonOut_({ error: "unknown op" });
 }
