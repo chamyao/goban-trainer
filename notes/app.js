@@ -35,6 +35,7 @@
     get: id => tx("readonly", s => s.get(id)),
     put: (id, blob) => tx("readwrite", s => s.put(blob, id)),
     has: async id => !!(await Photos.get(id)),
+    del: id => tx("readwrite", s => s.delete(id)),
   };
   // a phone photo is large: keep it at most 2400px on its long side, as JPEG
   async function shrink(f) {
@@ -125,8 +126,28 @@
       if (!blob || !b.isConnected) continue;
       const url = URL.createObjectURL(blob);
       b.innerHTML = `<img alt="" src="${url}">`;
-      b.onclick = () => { const v = document.createElement("div"); v.className = "view"; v.innerHTML = `<img alt="Photo" src="${url}">`; v.onclick = () => v.remove(); document.body.append(v); };
+      b.onclick = () => view(k, b.dataset.id, url);
     }
+  }
+  // a photo, full screen: × closes it, the bin deletes it (a second tap to be sure)
+  function view(k, id, url) {
+    const v = document.createElement("div"); v.className = "view"; v.setAttribute("role", "dialog"); v.setAttribute("aria-label", "Photo");
+    v.innerHTML = `<img alt="Photo" src="${url}"><div class="vbar">
+      <button type="button" class="vbtn close" aria-label="Close">×</button>
+      <button type="button" class="vbtn del" aria-label="Delete photo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg><span></span></button></div>`;
+    const close = () => { v.remove(); removeEventListener("keydown", esc); };
+    const esc = ev => { if (ev.key === "Escape") close(); };
+    addEventListener("keydown", esc);
+    v.onclick = ev => { if (ev.target === v || ev.target.tagName === "IMG") close(); };
+    v.querySelector(".close").onclick = close;
+    const del = v.querySelector(".del");
+    del.onclick = async () => {
+      if (!del.classList.contains("sure")) { del.classList.add("sure"); del.querySelector("span").textContent = "Delete?"; return; }
+      close();
+      put(k, { p: (get(k).p || []).filter(x => x !== id) });
+      await Photos.del(id); Sync.forget(id); route();
+    };
+    document.body.append(v);
   }
   file.addEventListener("change", async () => {
     const k = file.dataset.k, ids = [...(get(k).p || [])];
@@ -273,6 +294,7 @@
         if (pull) { persist(); refresh(); }
         if (push) await upload("notes.json", JSON.stringify(db), "application/json");
         // photos: this device's that Drive hasn't got
+        for (const id of gone()) { if (files["p-" + id]) { await call(`${API}/${files["p-" + id]}`, { method: "DELETE" }); delete files["p-" + id]; } setGone(gone().filter(x => x !== id)); }
         for (const e of Object.values(db)) for (const id of e.p || []) {
           if (files["p-" + id]) continue;
           const b = await Photos.get(id); if (b) await upload("p-" + id, b, b.type || "image/jpeg");
@@ -289,6 +311,9 @@
       }
       route();
     }
+    const gone = () => { try { return JSON.parse(localStorage.getItem("notes-gone") || "[]"); } catch { return []; } };
+    const setGone = l => { try { localStorage.setItem("notes-gone", JSON.stringify(l)); } catch {} };
+    const forget = id => { setGone([...gone(), id]); soon(0); };
     const soon = (ms = 2500) => { clearTimeout(timer); timer = setTimeout(run, ms); };
     async function photo(id) {
       if (!ID || !wanted()) return null;
@@ -307,7 +332,7 @@
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") soon(500); else if (timer) { clearTimeout(timer); run(); } });
     // sign in quietly when the page opens (an account that already said yes gets no prompt)
     addEventListener("load", () => { if (ID && wanted()) setTimeout(() => run(), 600); });
-    return { button, connect, soon, photo };
+    return { button, connect, soon, photo, forget };
   })();
 
   if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
