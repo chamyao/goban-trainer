@@ -349,11 +349,12 @@
   addEventListener("keydown", ev => { if (ev.key === "Escape") hide(menu); });
   addEventListener("resize", closePops);
 
-  /* ---------- Google Drive: the app's hidden folder (drive.appdata); every file in it is scrambled ---------- */
+  /* ---------- Google Drive: a "Notes" folder (drive.file: the site sees only what it made); every file is scrambled ---------- */
   const Drive = (() => {
     const API = "https://www.googleapis.com/drive/v3/files", UP = "https://www.googleapis.com/upload/drive/v3/files";
-    let client = null, files = null;
-    const saved = () => { try { const t = JSON.parse(localStorage.getItem("notes-gtoken") || "null"); return t && t.exp > Date.now() ? t : null; } catch { return null; } };
+    const SCOPE = "https://www.googleapis.com/auth/drive.file", TOK = "notes-gtoken-file";
+    let client = null, files = null, folder = null;
+    const saved = () => { try { const t = JSON.parse(localStorage.getItem(TOK) || "null"); return t && t.exp > Date.now() ? t : null; } catch { return null; } };
     let tok = saved();
     const signedIn = () => { try { return localStorage.getItem("notes-google") === "1"; } catch { return false; } };
     const gsi = () => new Promise((ok, no) => { let n = 0; const t = setInterval(() => { if (window.google && google.accounts && google.accounts.oauth2) { clearInterval(t); ok(); } else if (++n > 100) { clearInterval(t); no(new Error("Google sign-in didn't load")); } }, 100); });
@@ -361,11 +362,11 @@
     async function auth(prompt = "") {
       await gsi();
       return new Promise((ok, no) => {
-        client = client || google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: "https://www.googleapis.com/auth/drive.appdata", callback: () => {} });
+        client = client || google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: SCOPE, callback: () => {} });
         client.callback = r => {
           if (r.error) return no(new Error(r.error));
           tok = { t: r.access_token, exp: Date.now() + (r.expires_in - 120) * 1000 };
-          try { localStorage.setItem("notes-gtoken", JSON.stringify(tok)); localStorage.setItem("notes-google", "1"); } catch {}
+          try { localStorage.setItem(TOK, JSON.stringify(tok)); localStorage.setItem("notes-google", "1"); } catch {}
           ok();
         };
         client.error_callback = e => no(Object.assign(new Error(e.type || "sign-in closed"), { needTap: true }));
@@ -376,13 +377,27 @@
       if (!tok || tok.exp < Date.now()) await auth("");
       const r = await fetch(url, { ...opt, headers: { ...(opt.headers || {}), Authorization: "Bearer " + tok.t } });
       if (r.status === 401 && retry) { tok = null; return call(url, opt, false); }
-      if (!r.ok) throw new Error("Drive " + r.status);
+      if (!r.ok) {
+        let why = ""; try { const j = await r.json(); why = (j.error && ((j.error.errors && j.error.errors[0] && j.error.errors[0].reason) || j.error.status || j.error.message)) || ""; } catch {}
+        if (/accessNotConfigured|SERVICE_DISABLED/i.test(why)) throw new Error("the Google Drive API isn't turned on in your Google Cloud project");
+        if (/insufficient|SCOPE/i.test(why)) { tok = null; try { localStorage.removeItem(TOK); } catch {} throw Object.assign(new Error("Drive access wasn't allowed: tick the Drive box when signing in"), { needTap: true }); }
+        throw new Error("Drive " + r.status + (why ? " " + why : ""));
+      }
       return r;
     }
+    // the folder: found (the site only ever sees the one it made) or made
+    async function dir() {
+      if (folder) return folder;
+      const q = encodeURIComponent("name='Notes' and mimeType='application/vnd.google-apps.folder' and trashed=false");
+      const r = await (await call(`${API}?q=${q}&fields=files(id)&pageSize=10`)).json();
+      if (r.files && r.files.length) return (folder = r.files[0].id);
+      const c = await (await call(`${API}?fields=id`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: "Notes", mimeType: "application/vnd.google-apps.folder" }) })).json();
+      return (folder = c.id);
+    }
     async function list() {
-      const out = {}; let page = "";
+      const out = {}; let page = ""; const q = encodeURIComponent(`'${await dir()}' in parents and trashed=false`);
       do {
-        const r = await (await call(`${API}?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name)${page ? "&pageToken=" + page : ""}`)).json();
+        const r = await (await call(`${API}?q=${q}&pageSize=1000&fields=nextPageToken,files(id,name)${page ? "&pageToken=" + page : ""}`)).json();
         for (const f of r.files) out[f.name] = f.id; page = r.nextPageToken || "";
       } while (page);
       return (files = out);
@@ -390,7 +405,7 @@
     async function write(name, body, type) {
       if (!files) await list();
       if (!files[name]) {
-        const r = await (await call(`${API}?fields=id`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, parents: ["appDataFolder"] }) })).json();
+        const r = await (await call(`${API}?fields=id`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, parents: [await dir()] }) })).json();
         files[name] = r.id;
       }
       await call(`${UP}/${files[name]}?uploadType=media`, { method: "PATCH", headers: { "Content-Type": type }, body });
@@ -416,7 +431,7 @@
     const button = () => `<button type="button" class="sync state${tap ? " tap" : ""}" aria-live="polite">${state}</button>`;
     document.addEventListener("click", async ev => {
       if (!ev.target.closest(".sync.state") || !tap) return;
-      try { await Drive.auth(Drive.signedIn() ? "" : "consent"); soon(0); } catch { setState("Sign in to sync", true); }
+      try { await Drive.auth("consent"); soon(0); } catch { setState("Sign in to sync", true); }
     });
     async function run() {
       if (!K) return;
@@ -444,7 +459,7 @@
       } catch (e) {
         console.warn("[sync]", e);
         if (e.differs) setState("Not syncing: a different password is in use on your other devices");
-        else if (e.needTap || /sign-in|popup/i.test(e.message)) setState("Sign in to sync", true);
+        else if (e.needTap || /sign-in|popup/i.test(e.message)) setState(/tick the Drive box/.test(e.message) ? "Allow Drive access to sync" : "Sign in to sync", true);
         else setState(navigator.onLine ? "Sync paused: " + (e.message || e) : "Offline, will sync");
       }
       busy = false; if (again) { again = false; soon(0); }
