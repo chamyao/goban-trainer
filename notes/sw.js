@@ -1,6 +1,6 @@
 // Offline: the site's own files, network first, the kept copy when there's no connection.
-const CACHE = "notes-v13";
-const SHELL = ["./", "index.html", "style.css?v=9", "app.js?v=12", "manifest.json", "icon.svg"];
+const CACHE = "notes-v14";
+const SHELL = ["./", "index.html", "style.css?v=9", "app.js?v=13", "manifest.json", "icon.svg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", e => {
