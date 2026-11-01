@@ -259,6 +259,7 @@
       // *list opens as soon as it's typed; *page and *archive need no menu: Enter does it
       if (ql === "list") { opts = [{ list: true }]; on = 0; hide(jump); return take(0); }
       if (ql === "page") { opts = [{ page: true }]; on = 0; armed = true; hide(jump); return; }
+      if (ql === "backup") { opts = [{ backup: true }]; on = 0; armed = true; hide(jump); return; }
       if (ql === "today") { opts = [{ h: `#/d/${today()}` }]; on = 0; armed = true; hide(jump); return; }
       if (ql === "calendar" && current.k !== "home") { opts = [{ calendar: true }]; on = 0; armed = true; hide(jump); return; }
       if (ql === "archive" && current.k.startsWith("n:")) { opts = [{ archive: true }]; on = 0; armed = true; hide(jump); return; }
@@ -292,7 +293,24 @@
     // *archive: this note goes to the archive (bring it back from *list → Archived), and back to the calendar
     if (o.archive) { put(k, { a: true }); return go(lastMonth()); }
     if (o.calendar) return go(lastMonth());
+    if (o.backup) { if (k !== "home") ta.setSelectionRange(tok0, tok0); return backup(); }
     go(o.h);
+  }
+
+  /* ---------- *backup: one file with everything, still scrambled (the password opens it), saved to this device ---------- */
+  async function backup() {
+    const photos = {};
+    for (const e of Object.values(db)) for (const id of e.p || []) {
+      let r = await Photos.raw(id); if (r && r.b) { await Photos.put(id, r.b); r = await Photos.raw(id); }
+      if (r && r.d) photos[id] = { t: r.t, d: b64(r.d) };
+    }
+    const lock = JSON.parse(await lockFor(K));
+    const file = { what: "Notes backup: scrambled with your notes password", made: new Date().toISOString(), salt: lock.salt, check: lock.check, notes: await sealText(JSON.stringify(db)), photos };
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(file)], { type: "application/json" }));
+    a.download = `notes-backup-${today()}.json`;
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
   }
 
   /* ---------- *list: a floating, scrolling list of the notes (not the days); a note can be archived from it ---------- */
