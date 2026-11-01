@@ -21,7 +21,8 @@
   const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch {} };
   const get = k => db[k] || { t: "", u: 0, p: [] };
   const put = (k, patch) => { db[k] = { ...get(k), ...patch, u: Date.now() }; persist(); Sync.soon(); };
-  const noteName = e => (e.t.split("\n").find(l => l.trim()) || "untitled").trim();
+  // a note's name: one given with *name, else its first line
+  const noteName = e => (e.n || e.t.split("\n").find(l => l.trim()) || "untitled").trim();
   const notes = () => Object.keys(db).filter(k => k.startsWith("n:")).map(k => ({ k, name: noteName(db[k]), u: db[k].u }));
 
   // photos: blobs in IndexedDB, by id
@@ -185,6 +186,13 @@
   function jumpCheck() {
     if (!current) return;
     const { ta } = current, before = ta.value.slice(0, ta.selectionStart);
+    // *name <a name>: names the note (notes only; a day has its date)
+    const nm = current.k.startsWith("n:") && ta.selectionStart === ta.selectionEnd && /(^|\s)\*name[ \t]+([^\n*]*\S)[ \t]*$/.exec(before);
+    if (nm) {
+      tok = { start: ta.selectionStart - nm[0].length + nm[1].length, end: ta.selectionStart };
+      opts = [{ label: `Name this note “${nm[2].trim()}”`, name: nm[2].trim() }]; on = 0;
+      return drawJump(ta, tok.start);
+    }
     const m = ta.selectionStart === ta.selectionEnd && /(^|\s)\*([^\s*]*)$/.exec(before);
     if (!m) { hide(jump); tok = null; return; }
     const q = m[2], start = ta.selectionStart - q.length - 1;
@@ -193,11 +201,16 @@
     if (date) opts = [{ label: longDate(date), h: `#/d/${date}` }];
     else {
       const ql = q.toLowerCase();
-      opts = notes().filter(n => n.k !== current.k && (!ql || n.name.toLowerCase().includes(ql)))
+      opts = notes().filter(n => n.k !== current.k && !db[n.k].a && (!ql || n.name.toLowerCase().includes(ql)))
         .sort((a, b) => (b.name.toLowerCase().startsWith(ql) - a.name.toLowerCase().startsWith(ql)) || b.u - a.u)
         .slice(0, 6).map(n => ({ label: n.name, h: `#/n/${n.k.slice(2)}` }));
+      if (ql === "list") opts.unshift({ label: "All notes", list: true });
+      if (ql === "page") opts.unshift({ label: "New note", page: true });
     }
     if (!opts.length) { hide(jump); return; }
+    drawJump(ta, start);
+  }
+  function drawJump(ta, start) {
     on = Math.min(on, opts.length - 1);
     jump.innerHTML = opts.map((o, i) => `<div class="opt${i === on ? " on" : ""}" role="option" aria-selected="${i === on}" data-i="${i}"><span></span>${i === on ? "<small>Enter</small>" : ""}</div>`).join("");
     jump.querySelectorAll(".opt span").forEach((s, i) => s.textContent = opts[i].label);
@@ -212,11 +225,61 @@
   jump.addEventListener("mousedown", ev => { const o = ev.target.closest(".opt"); if (o) { ev.preventDefault(); take(+o.dataset.i); } });
   function take(i) {
     const o = opts[i]; if (!o || !current || !tok) return;
-    const { k, ta } = current;
+    const { k, ta } = current, tok0 = tok.start;
     ta.value = ta.value.slice(0, tok.start) + ta.value.slice(tok.end); // the command leaves no trace
     put(k, { t: ta.value }); sessionStorage.setItem("notes-caret-" + k, tok.start);
-    hide(jump); on = 0; tok = null; go(o.h);
+    hide(jump); on = 0; tok = null;
+    if (o.list) { ta.setSelectionRange(tok0, tok0); return openList(); }
+    if (o.name) { db[k] = { ...db[k], n: o.name }; put(k, {}); document.title = `${o.name} · Notes`; ta.setSelectionRange(tok0, tok0); return; }
+    if (o.page) { const id = uid(); put("n:" + id, { t: "" }); return go("#/n/" + id); }
+    go(o.h);
   }
+
+  /* ---------- *list: a floating, scrolling list of the notes (not the days); a note can be archived from it ---------- */
+  const listEl = document.createElement("div");
+  listEl.className = "pop listp"; listEl.hidden = true; listEl.tabIndex = -1; listEl.setAttribute("role", "dialog"); listEl.setAttribute("aria-label", "All notes");
+  listEl.innerHTML = `<div class="rows" role="listbox" aria-label="Notes"></div><button type="button" class="lmore"></button>`;
+  document.body.append(listEl);
+  const rows = listEl.querySelector(".rows"), more = listEl.querySelector(".lmore");
+  const boxIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/></svg>`;
+  let lopts = [], lon = 0, lfrom = null, showArchived = false;
+  function drawList() {
+    const all = notes(), live = all.filter(n => !db[n.k].a), arch = all.filter(n => db[n.k].a);
+    lopts = (showArchived ? arch : live).sort((a, b) => b.u - a.u);
+    lon = Math.min(lon, Math.max(0, lopts.length - 1));
+    rows.innerHTML = lopts.length ? "" : `<div class="lempty">${showArchived ? "Nothing archived" : "No notes yet"}</div>`;
+    lopts.forEach((n, i) => {
+      const r = document.createElement("div"); r.className = "lrow" + (i === lon ? " on" : ""); r.setAttribute("role", "option"); r.setAttribute("aria-selected", i === lon); r.dataset.i = i;
+      const body = db[n.k].t.split("\n").map(l => l.trim()).filter(Boolean); if (!db[n.k].n) body.shift();
+      const txt = document.createElement("div"); txt.className = "ltxt";
+      const nm = document.createElement("b"); nm.textContent = n.name;
+      const sn = document.createElement("span"); sn.textContent = body.join(" · ").slice(0, 120);
+      txt.append(nm, sn);
+      const ar = document.createElement("button"); ar.type = "button"; ar.className = "larch";
+      ar.setAttribute("aria-label", (showArchived ? "Unarchive " : "Archive ") + n.name);
+      ar.innerHTML = showArchived ? `<small>Unarchive</small>` : boxIcon;
+      r.append(txt, ar); rows.append(r);
+    });
+    more.textContent = showArchived ? "← Notes" : (arch.length ? `Archived (${arch.length})` : "");
+    more.hidden = !showArchived && !arch.length;
+    const on_ = rows.querySelector(".on"); if (on_) on_.scrollIntoView({ block: "nearest" });
+  }
+  function openList() { lfrom = current; lon = 0; showArchived = false; drawList(); listEl.hidden = false; listEl.focus(); }
+  function closeList(refocus = true) { listEl.hidden = true; if (refocus && lfrom && lfrom.ta.isConnected) lfrom.ta.focus(); }
+  const openNote = i => { if (!lopts[i]) return; closeList(false); go(`#/n/${lopts[i].k.slice(2)}`); };
+  const archive = (i, yes) => { const n = lopts[i]; if (!n) return; db[n.k] = { ...db[n.k], a: yes, u: Date.now() }; persist(); Sync.soon(); drawList(); listEl.focus(); };
+  listEl.addEventListener("keydown", ev => {
+    if (ev.key === "ArrowDown" || ev.key === "ArrowUp") { ev.preventDefault(); if (lopts.length) { lon = (lon + (ev.key === "ArrowDown" ? 1 : lopts.length - 1)) % lopts.length; drawList(); } }
+    else if (ev.key === "Enter" && ev.target === listEl) { ev.preventDefault(); openNote(lon); }
+    else if (ev.key === "Escape") { ev.preventDefault(); closeList(); }
+  });
+  rows.addEventListener("click", ev => {
+    const r = ev.target.closest(".lrow"); if (!r) return;
+    if (ev.target.closest(".larch")) return archive(+r.dataset.i, !showArchived);
+    openNote(+r.dataset.i);
+  });
+  more.addEventListener("click", () => { showArchived = !showArchived; lon = 0; drawList(); listEl.focus(); });
+  addEventListener("mousedown", ev => { if (!listEl.hidden && !listEl.contains(ev.target)) closeList(); });
   // where in the window a character of the textarea is drawn
   function caretXY(ta, at) {
     const m = document.createElement("div"), cs = getComputedStyle(ta);
@@ -236,7 +299,7 @@
     el.style.top = (y + h > innerHeight - 8 ? Math.max(8, y - h - 36) : y) + "px";
   }
   const hide = el => { el.hidden = true; };
-  const closePops = () => { hide(menu); hide(jump); };
+  const closePops = () => { hide(menu); hide(jump); if (!listEl.hidden) closeList(false); };
   addEventListener("mousedown", ev => { if (!menu.contains(ev.target)) hide(menu); });
   addEventListener("keydown", ev => { if (ev.key === "Escape") hide(menu); });
   addEventListener("resize", closePops);
