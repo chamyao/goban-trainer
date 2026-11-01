@@ -255,6 +255,7 @@
       // *list opens as soon as it's typed; *page and *archive need no menu: Enter does it
       if (ql === "list") { opts = [{ list: true }]; on = 0; hide(jump); return take(0); }
       if (ql === "page") { opts = [{ page: true }]; on = 0; armed = true; hide(jump); return; }
+      if (ql === "today") { opts = [{ h: `#/d/${today()}` }]; on = 0; armed = true; hide(jump); return; }
       if (ql === "calendar" && current.k !== "home") { opts = [{ calendar: true }]; on = 0; armed = true; hide(jump); return; }
       if (ql === "archive" && current.k.startsWith("n:")) { opts = [{ archive: true }]; on = 0; armed = true; hide(jump); return; }
     }
