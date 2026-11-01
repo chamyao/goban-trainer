@@ -122,6 +122,7 @@
     const prev = m === 1 ? iso(y - 1, 12, 1).slice(0, 7) : iso(y, m - 1, 1).slice(0, 7);
     const next = m === 12 ? iso(y + 1, 1, 1).slice(0, 7) : iso(y, m + 1, 1).slice(0, 7);
     app.innerHTML = `<section class="month">
+      <label class="cmdrow"><input id="cmd" class="cmd" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Go to: type * and a date, a note's name, list or page"></label>
       <header><h1>${MONTHS[m - 1]} ${y}</h1>
         <div class="nav"><a class="sync" href="#/feedback">Feedback</a>${Sync.button()}
           <button type="button" aria-label="Previous month" data-go="#/${prev}">‹</button>
@@ -129,6 +130,11 @@
       <div class="names" aria-hidden="true">${DAYS.map(n => `<div>${n}</div>`).join("")}</div>
       <nav class="grid" aria-label="${MONTHS[m - 1]} ${y}">${grid}</nav></section>`;
     app.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+    // the typing space: the same * commands as a page, so the site works without a mouse
+    const cmd = $("#cmd"); current = { k: "home", ta: cmd };
+    cmd.addEventListener("input", jumpCheck); cmd.addEventListener("keydown", ev => { jumpKeys(ev); if (ev.key === "Escape" && jump.hidden) cmd.value = ""; });
+    cmd.addEventListener("blur", () => setTimeout(() => { if (!jump.matches(":hover")) hide(jump); }, 150));
+    if (matchMedia("(pointer: fine)").matches) cmd.focus(); // not on a phone: the keyboard would cover the calendar
   }
 
   /* ---------- a page (a day or a note) ---------- */
@@ -249,6 +255,7 @@
       // *list opens as soon as it's typed; *page and *archive need no menu: Enter does it
       if (ql === "list") { opts = [{ list: true }]; on = 0; hide(jump); return take(0); }
       if (ql === "page") { opts = [{ page: true }]; on = 0; armed = true; hide(jump); return; }
+      if (ql === "calendar" && current.k !== "home") { opts = [{ calendar: true }]; on = 0; armed = true; hide(jump); return; }
       if (ql === "archive" && current.k.startsWith("n:")) { opts = [{ archive: true }]; on = 0; armed = true; hide(jump); return; }
     }
     if (!opts.length) { hide(jump); return; }
@@ -272,13 +279,14 @@
     const o = opts[i]; if (!o || !current || !tok) return;
     const { k, ta } = current, tok0 = tok.start;
     ta.value = ta.value.slice(0, tok.start) + ta.value.slice(tok.end); // the command leaves no trace
-    put(k, { t: ta.value }); sessionStorage.setItem("notes-caret-" + k, tok.start);
+    if (k !== "home") { put(k, { t: ta.value }); sessionStorage.setItem("notes-caret-" + k, tok.start); }
     hide(jump); on = 0; tok = null; armed = false;
     if (o.list) { ta.setSelectionRange(tok0, tok0); return openList(); }
     if (o.name) { db[k] = { ...db[k], n: o.name }; put(k, {}); document.title = `${o.name} · Notes`; ta.setSelectionRange(tok0, tok0); return; }
     if (o.page) { const id = uid(); put("n:" + id, { t: "" }); return go("#/n/" + id); }
     // *archive: this note goes to the archive (bring it back from *list → Archived), and back to the calendar
     if (o.archive) { put(k, { a: true }); return go(lastMonth()); }
+    if (o.calendar) return go(lastMonth());
     go(o.h);
   }
 
@@ -494,6 +502,7 @@
     }
     // what came in from another device: redraw, unless it's the page being typed on
     function refresh() {
+      if (current && current.k === "home") { if (document.activeElement !== current.ta || !current.ta.value) route(); return; }
       if (current && document.activeElement === current.ta) {
         const e = get(current.k); if (e.t !== current.ta.value) { const c = current.ta.selectionStart; current.ta.value = e.t; current.ta.setSelectionRange(c, c); }
         return;
