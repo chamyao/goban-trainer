@@ -443,9 +443,10 @@
         if (mergeIn(remote)) { persist(); refresh(); }
         // left over from the password version: read with this browser's old key, then removed
         const leftovers = await oldDrive();
-        if (leftovers || Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u)) {
+        if (leftovers || Drive.has("Notes.md") || Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u)) {
           await Drive.write("notes.json", JSON.stringify(db, null, 1), "application/json");
-          await Drive.write("Notes.md", readable(), "text/markdown");
+          await Drive.write("Notes.txt", readable(), "text/plain");
+          if (Drive.has("Notes.md")) await Drive.del("Notes.md"); // the old Markdown copy (it showed ~text~ as crossed out)
         }
         // photos: deletions, then this browser's that Drive hasn't got, as ordinary image files
         for (const id of gone()) { await Drive.del(photoName(id)); setGone(gone().filter(x => x !== id)); }
@@ -464,12 +465,13 @@
     }
     // a photo in Drive: photo-<id>.jpg (or .png …)
     const photoName = id => "photo-" + id + ".jpg";
-    // Notes.md: everything, readable, newest day first, then the notes
+    // Notes.txt: everything as plain text (no formatting, so ~text~ stays as typed), newest day first, then the notes
     function readable() {
       const days = Object.keys(db).filter(k => k.startsWith("d:") && db[k].t.trim()).sort().reverse();
       const ns = Object.keys(db).filter(k => k.startsWith("n:") && db[k].t.trim() && !db[k].a).sort((a, b) => db[b].u - db[a].u);
-      return "# Days\n\n" + days.map(k => `## ${longDate(k.slice(2))}\n\n${db[k].t.trim()}\n`).join("\n") +
-        "\n# Notes\n\n" + ns.map(k => `## ${noteName(db[k])}\n\n${db[k].t.trim()}\n`).join("\n");
+      const head = t => t + "\n" + "-".repeat(t.length);
+      return "DAYS\n\n" + days.map(k => `${head(longDate(k.slice(2)))}\n${db[k].t.trim()}\n`).join("\n") +
+        "\n\nNOTES\n\n" + ns.map(k => `${head(noteName(db[k]))}\n${db[k].t.trim()}\n`).join("\n");
     }
     let oldStuck = false;
     async function oldDrive() {
