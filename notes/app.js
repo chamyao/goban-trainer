@@ -1,8 +1,8 @@
 /* Notes: a month of days, a blank page for each, notes that aren't tied to a day, and photos.
    Locked with one password (no username). Everything is scrambled with it (AES-GCM, the key derived from the
    password with PBKDF2), kept on this device first (localStorage for text, IndexedDB for photos) and synced through
-   the go site's Apps Script, which keeps only the scrambled files, in a Drive folder. A new browser asks for the
-   password; the very first one creates it.
+   the person's Google Drive (the app's hidden folder: only this site can see it, and it holds only scrambled files).
+   A new browser signs in to Google, then asks for the password; the very first one creates it.
    Keys: "d:YYYY-MM-DD" a day, "n:<id>" a note. An entry: {t: text, u: last change (ms), p: [photo ids]}. */
 (() => {
   "use strict";
@@ -19,7 +19,7 @@
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
   /* ---------- the lock: a key from the password ---------- */
-  const API = "https://script.google.com/macros/s/AKfycbxClc9eoQ4jhxT2hwGK-y_JZef-7N9S27XJqPejKic8mO47qtbI5WNMYofN7hpMb_fGdw/exec";
+  const CLIENT_ID = "630442006940-t4g267fvkb2djt0v8d9oqib2ijkriijr.apps.googleusercontent.com";
   const te = new TextEncoder(), td = new TextDecoder();
   const b64 = u8 => { let s = ""; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
   const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
@@ -349,56 +349,109 @@
   addEventListener("keydown", ev => { if (ev.key === "Escape") hide(menu); });
   addEventListener("resize", closePops);
 
-  /* ---------- sync, through the go site's Apps Script (kind "notes"): it only ever sees scrambled data ---------- */
-  async function api(body) {
-    const r = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ kind: "notes", auth: K && K.auth, ...body }) });
-    if (!r.ok) throw new Error("server " + r.status);
-    const text = await r.text();
-    try { return JSON.parse(text); }
-    catch { const m = /<title>([^<]*)<\/title>|class="errorMessage"[^>]*>([^<]*)/i.exec(text) || /TypeError[^<]*|Exception[^<]*|Error:[^<]*/.exec(text); throw new Error("server: " + ((m && (m[1] || m[2] || m[0])) || "not JSON").trim().slice(0, 120)); }
-  }
-  async function saltOf() { const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 15000); const r = await fetch(API + "?kind=notes", { signal: ctl.signal }).finally(() => clearTimeout(t)); if (!r.ok) throw new Error("notes api " + r.status); return r.json(); }
+  /* ---------- Google Drive: the app's hidden folder (drive.appdata); every file in it is scrambled ---------- */
+  const Drive = (() => {
+    const API = "https://www.googleapis.com/drive/v3/files", UP = "https://www.googleapis.com/upload/drive/v3/files";
+    let client = null, files = null;
+    const saved = () => { try { const t = JSON.parse(localStorage.getItem("notes-gtoken") || "null"); return t && t.exp > Date.now() ? t : null; } catch { return null; } };
+    let tok = saved();
+    const signedIn = () => { try { return localStorage.getItem("notes-google") === "1"; } catch { return false; } };
+    const gsi = () => new Promise((ok, no) => { let n = 0; const t = setInterval(() => { if (window.google && google.accounts && google.accounts.oauth2) { clearInterval(t); ok(); } else if (++n > 100) { clearInterval(t); no(new Error("Google sign-in didn't load")); } }, 100); });
+    // prompt "": no screen for an account that already said yes (it may still need a tap: see Sync's button)
+    async function auth(prompt = "") {
+      await gsi();
+      return new Promise((ok, no) => {
+        client = client || google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: "https://www.googleapis.com/auth/drive.appdata", callback: () => {} });
+        client.callback = r => {
+          if (r.error) return no(new Error(r.error));
+          tok = { t: r.access_token, exp: Date.now() + (r.expires_in - 120) * 1000 };
+          try { localStorage.setItem("notes-gtoken", JSON.stringify(tok)); localStorage.setItem("notes-google", "1"); } catch {}
+          ok();
+        };
+        client.error_callback = e => no(Object.assign(new Error(e.type || "sign-in closed"), { needTap: true }));
+        client.requestAccessToken({ prompt });
+      });
+    }
+    async function call(url, opt = {}, retry = true) {
+      if (!tok || tok.exp < Date.now()) await auth("");
+      const r = await fetch(url, { ...opt, headers: { ...(opt.headers || {}), Authorization: "Bearer " + tok.t } });
+      if (r.status === 401 && retry) { tok = null; return call(url, opt, false); }
+      if (!r.ok) throw new Error("Drive " + r.status);
+      return r;
+    }
+    async function list() {
+      const out = {}; let page = "";
+      do {
+        const r = await (await call(`${API}?spaces=appDataFolder&pageSize=1000&fields=nextPageToken,files(id,name)${page ? "&pageToken=" + page : ""}`)).json();
+        for (const f of r.files) out[f.name] = f.id; page = r.nextPageToken || "";
+      } while (page);
+      return (files = out);
+    }
+    async function write(name, body, type) {
+      if (!files) await list();
+      if (!files[name]) {
+        const r = await (await call(`${API}?fields=id`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, parents: ["appDataFolder"] }) })).json();
+        files[name] = r.id;
+      }
+      await call(`${UP}/${files[name]}?uploadType=media`, { method: "PATCH", headers: { "Content-Type": type }, body });
+    }
+    async function read(name, as = "text") {
+      if (!files) await list();
+      if (!files[name]) return null;
+      const r = await call(`${API}/${files[name]}?alt=media`);
+      return as === "bytes" ? new Uint8Array(await r.arrayBuffer()) : r.text();
+    }
+    async function del(name) { if (!files) await list(); if (files[name]) { await call(`${API}/${files[name]}`, { method: "DELETE" }); delete files[name]; } }
+    return { auth, list, write, read, del, signedIn, has: n => !!(files && files[n]), ready: () => !!tok && tok.exp > Date.now() };
+  })();
+  // lock.json: the salt, and a known word scrambled with the key (a wrong password can't unscramble it)
+  const CHECK = "notes-ok";
+  const lockFor = async k => { const was = K; K = k; try { return JSON.stringify({ salt: k.salt, check: await sealText(CHECK) }); } finally { K = was; } };
+  const fits = async (k, lock) => { const was = K; K = k; try { return (await openText(lock.check)) === CHECK; } catch { return false; } finally { K = was; } };
+
+  /* ---------- sync ---------- */
   const Sync = (() => {
-    let timer = 0, busy = false, again = false, state = "";
-    const setState = s => { state = s; const b = document.querySelector(".sync.state"); if (b) b.textContent = state; };
-    const button = () => `<span class="sync state" role="status">${state}</span>`;
-    const pending = () => { try { return localStorage.getItem("notes-register") === "1"; } catch { return false; } };
+    let timer = 0, busy = false, again = false, state = "", tap = false;
+    const setState = (s, needTap = false) => { state = s; tap = needTap; const b = document.querySelector(".sync.state"); if (b) { b.textContent = state; b.classList.toggle("tap", tap); } };
+    const button = () => `<button type="button" class="sync state${tap ? " tap" : ""}" aria-live="polite">${state}</button>`;
+    document.addEventListener("click", async ev => {
+      if (!ev.target.closest(".sync.state") || !tap) return;
+      try { await Drive.auth(Drive.signedIn() ? "" : "consent"); soon(0); } catch { setState("Sign in to sync", true); }
+    });
     async function run() {
-      if (!K || !navigator.onLine) { if (K) setState("Offline, will sync"); return; }
+      if (!K) return;
+      if (!navigator.onLine) return setState("Offline, will sync");
       if (busy) { again = true; return; }
       busy = true; setState("Syncing…");
       try {
-        // a password made while the script wasn't ready yet: register it now
-        if (pending()) {
-          const r = await api({ op: "create", salt: K.salt, verifier: await verifier(K.auth) });
-          if (r.error === "exists" && r.salt !== K.salt) throw Object.assign(new Error("differs"), { differs: true });
-          if (r.ok || r.error === "exists") localStorage.removeItem("notes-register"); else throw new Error(r.error || "not ready");
-        }
-        for (let tries = 0; tries < 4; tries++) {
-          const r = await api({ op: "get" });
-          if (r.error) throw new Error(r.error);
-          const remote = r.data ? JSON.parse(await openText(r.data)) : {};
-          if (mergeIn(remote)) { await persist(); refresh(); }
-          const push = Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u);
-          if (!push) break;
-          const w = await api({ op: "put", data: await sealText(JSON.stringify(db)), rev: r.rev });
-          if (!w.error) break;
-          if (w.error !== "conflict") throw new Error(w.error);
-        }
-        // photos: deletions, then this browser's that the other side hasn't got
-        const have = new Set((await api({ op: "plist" })).ids || []);
-        for (const id of gone()) { if (have.has(id)) await api({ op: "pdel", id }); setGone(gone().filter(x => x !== id)); }
+        await Drive.list();
+        // the lock: this browser's password is the one (the first to sync puts it there)
+        const lock = JSON.parse(await Drive.read("lock.json") || "null");
+        if (!lock) await Drive.write("lock.json", await lockFor(K), "application/json");
+        else if (lock.salt !== K.salt && !(await fits(K, lock))) throw Object.assign(new Error("differs"), { differs: true });
+        // the notes: each entry, the newer copy wins
+        const enc = await Drive.read("notes.enc");
+        const remote = enc ? JSON.parse(await openText(enc)) : {};
+        if (mergeIn(remote)) { await persist(); refresh(); }
+        if (Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u)) await Drive.write("notes.enc", await sealText(JSON.stringify(db)), "text/plain");
+        // photos: deletions, then this browser's that Drive hasn't got (already scrambled as kept here)
+        for (const id of gone()) { await Drive.del("p-" + id); setGone(gone().filter(x => x !== id)); }
         for (const e of Object.values(db)) for (const id of e.p || []) {
-          if (have.has(id)) continue;
-          const r = await Photos.raw(id); if (r && r.d) await api({ op: "pput", id, data: JSON.stringify({ t: r.t, d: b64(r.d) }) });
+          if (Drive.has("p-" + id)) continue;
+          const r = await Photos.raw(id); if (r && r.d) await Drive.write("p-" + id, packPhoto(r), "application/octet-stream");
         }
         setState("Synced");
       } catch (e) {
         console.warn("[sync]", e);
-        setState(e.differs ? "Not syncing: this browser has a different password" : navigator.onLine ? "Sync paused: " + (e.message || e) : "Offline, will sync");
+        if (e.differs) setState("Not syncing: a different password is in use on your other devices");
+        else if (e.needTap || /sign-in|popup/i.test(e.message)) setState("Sign in to sync", true);
+        else setState(navigator.onLine ? "Sync paused: " + (e.message || e) : "Offline, will sync");
       }
       busy = false; if (again) { again = false; soon(0); }
     }
+    // a photo as stored in Drive: its type, then the scrambled bytes
+    const packPhoto = r => { const t = te.encode(r.t.padEnd(32, " ").slice(0, 32)); const out = new Uint8Array(32 + r.d.length); out.set(t); out.set(r.d, 32); return out; };
+    const unpackPhoto = u8 => ({ t: td.decode(u8.slice(0, 32)).trim(), d: u8.slice(32) });
     // what came in from another device: redraw, unless it's the page being typed on
     function refresh() {
       if (current && document.activeElement === current.ta) {
@@ -413,27 +466,26 @@
     const soon = (ms = 2500) => { clearTimeout(timer); timer = setTimeout(run, ms); };
     async function photo(id) {
       if (!K || !navigator.onLine) return null;
-      try {
-        const r = await api({ op: "pget", id }); if (!r.data) return null;
-        const { t, d } = JSON.parse(r.data); await Photos.putRaw(id, { t, d: unb64(d) });
-        return Photos.get(id);
-      } catch { return null; }
+      try { const u8 = await Drive.read("p-" + id, "bytes"); if (!u8) return null; await Photos.putRaw(id, unpackPhoto(u8)); return Photos.get(id); }
+      catch { return null; }
     }
     addEventListener("online", () => soon(0));
     addEventListener("offline", () => K && setState("Offline, will sync"));
     document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") soon(500); else if (timer) { clearTimeout(timer); run(); } });
-    setInterval(() => { if (document.visibilityState === "visible") soon(0); }, 60000);
+    setInterval(() => { if (document.visibilityState === "visible" && !tap) soon(0); }, 60000);
     return { button, soon, photo, forget, run };
   })();
 
-  /* ---------- the password screen: a new browser enters it; the first ever creates it ---------- */
+  /* ---------- a new browser: sign in to Google, then the password (or create one, the very first time) ---------- */
   async function gate() {
     document.title = "Notes";
-    let mode = "wait", salt = null;
+    let mode = "signin", lock = null;
+    const H1 = { signin: "Notes", create: "Create a password", enter: "Password", offline: "Notes" };
     const draw = (msg = "") => {
       app.innerHTML = `<section class="gate"><form autocomplete="on">
-        <h1>${mode === "create" ? "Create a password" : mode === "wait" ? "Notes" : "Password"}</h1>
-        ${mode === "offline" ? `<p class="gmsg">Connect to the internet to open your notes on this browser.</p><button type="button" class="gbtn retry">Try again</button>` : mode === "wait" ? `<p class="gmsg">Connecting…</p>` : `
+        <h1>${H1[mode]}</h1>
+        ${mode === "signin" ? `<p class="gmsg">Sign in with the Google account your notes are kept in.</p><button type="button" class="gbtn google">Sign in with Google</button>`
+        : mode === "offline" ? `<p class="gmsg">Connect to the internet to open your notes on this browser.</p><button type="button" class="gbtn retry">Try again</button>` : `
         <input type="text" name="username" autocomplete="username" value="notes" hidden>
         <label for="pw" class="mirror">Password</label>
         <input id="pw" type="password" autocomplete="${mode === "create" ? "new-password" : "current-password"}">
@@ -441,46 +493,35 @@
         <p class="gnote">There's no way to get your notes back without it.</p>` : ""}
         <button type="submit" class="gbtn">${mode === "create" ? "Create" : "Open"}</button>`}
         <p class="gmsg err" role="alert">${msg}</p></form></section>`;
-      const f = app.querySelector("form"), pw = $("#pw");
-      if (pw) pw.focus();
-      const retry = app.querySelector(".retry"); if (retry) retry.onclick = ask;
-      f.onsubmit = async ev => { ev.preventDefault(); if (mode === "create") create(); else if (mode === "enter") enter(); };
+      const pw = $("#pw"); if (pw) pw.focus();
+      const g = app.querySelector(".google"); if (g) g.onclick = signin;
+      const retry = app.querySelector(".retry"); if (retry) retry.onclick = () => { mode = "signin"; draw(); };
+      app.querySelector("form").onsubmit = ev => { ev.preventDefault(); if (mode === "create") create(); else if (mode === "enter") enter(); };
     };
-    const busy = t => { const b = app.querySelector(".gbtn"); if (b) { b.disabled = !!t; b.textContent = t || (mode === "create" ? "Create" : "Open"); } };
-    async function ask() {
-      mode = "wait"; draw();
-      try {
-        const r = await saltOf();
-        if (r.salt) { salt = r.salt; mode = "enter"; }
-        else mode = "create"; // r.none, or the script isn't updated yet ({error}): this browser makes it, registered later
-        if (!r.salt && !r.none) localStorage.setItem("notes-register", "1"); else localStorage.removeItem("notes-register");
-      } catch { mode = "offline"; }
-      draw();
+    const busy = t => { const b = app.querySelector(".gbtn"); if (b) { b.disabled = !!t; if (t) b.textContent = t; } };
+    async function signin() {
+      if (!navigator.onLine) { mode = "offline"; return draw(); }
+      busy("Signing in…");
+      try { await Drive.auth("consent"); await Drive.list(); lock = JSON.parse(await Drive.read("lock.json") || "null"); }
+      catch (e) { console.warn(e); return draw("Couldn't sign in: " + (e.message || e)); }
+      mode = lock ? "enter" : "create"; draw();
     }
     async function create() {
       const a = $("#pw").value, b = $("#pw2").value;
       if (a.length < 6) return draw("At least 6 characters.");
       if (a !== b) return draw("Those two don't match.");
       busy("Creating…");
-      const s = b64(crypto.getRandomValues(new Uint8Array(16)));
-      const k = await derive(a, s);
-      if (!localStorage.getItem("notes-register")) {
-        try {
-          const r = await api({ op: "create", salt: s, verifier: await verifier(k.auth) });
-          if (r.error === "exists") { salt = r.salt; mode = "enter"; return draw("This password was already set on another device. Enter it."); }
-          if (!r.ok) localStorage.setItem("notes-register", "1");
-        } catch { localStorage.setItem("notes-register", "1"); }
-      }
+      const k = await derive(a, b64(crypto.getRandomValues(new Uint8Array(16))));
+      try { await Drive.write("lock.json", await lockFor(k), "application/json"); } catch (e) { return draw("Couldn't save to Drive: " + (e.message || e)); }
       await unlocked(k);
     }
     async function enter() {
-      const p = $("#pw").value; busy("Opening…");
-      const k = await derive(p, salt);
-      let r; try { K = k; r = await api({ op: "get" }); } catch { K = null; return draw("Couldn't reach the server, try again."); }
-      if (r.error) { K = null; return draw(r.error === "locked" ? "Wrong password." : "Couldn't open: " + r.error); }
+      busy("Opening…");
+      const k = await derive($("#pw").value, lock.salt);
+      if (!(await fits(k, lock))) return draw("Wrong password.");
       await unlocked(k);
     }
-    ask();
+    draw();
   }
   async function unlocked(k) {
     K = k; await Keys.save(k).catch(() => {});

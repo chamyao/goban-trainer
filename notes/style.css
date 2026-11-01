@@ -119,3 +119,7 @@ main { height: 100%; }
   .month .sync { padding: 0 4px; font-size: 12px; }
 }
 .sync.state { max-width: 46vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sync.state { cursor: default; }
+.sync.state.tap { cursor: pointer; color: var(--accent); font-weight: 600; }
+.gbtn.google { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
+.gbtn.google:hover { background: var(--off); }
