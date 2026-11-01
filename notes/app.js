@@ -1,7 +1,7 @@
 /* Notes: a month of days, a blank page for each, notes that aren't tied to a day, and photos.
    Locked with one password (no username). Everything is scrambled with it (AES-GCM, the key derived from the
    password with PBKDF2), kept on this device first (localStorage for text, IndexedDB for photos) and synced through
-   the person's Google Drive (the app's hidden folder: only this site can see it, and it holds only scrambled files).
+   the person's Google Drive (a "Notes" folder that holds only scrambled files).
    A new browser signs in to Google, then asks for the password; the very first one creates it.
    Keys: "d:YYYY-MM-DD" a day, "n:<id>" a note. An entry: {t: text, u: last change (ms), p: [photo ids]}. */
 (() => {
@@ -19,10 +19,24 @@
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
   const CLIENT_ID = "630442006940-t4g267fvkb2djt0v8d9oqib2ijkriijr.apps.googleusercontent.com";
-  let ready = false; // the notes are loaded (after Google sign-in on a new browser)
+  let ready = false; // unlocked and loaded
 
-  // IndexedDB: "p" photos (blobs). Older versions scrambled them with a password ("k" kept the key): unscrambled
-  // once, on the first open of this version (oldKey / unscramble below), then the key is dropped.
+  /* ---------- the scrambling: AES-GCM, the key from the password (PBKDF2-SHA256, 310000 rounds) ---------- */
+  const te = new TextEncoder(), td = new TextDecoder();
+  const b64 = u8 => { let s = ""; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  let K = null; // {key: CryptoKey, salt: base64}
+  async function derive(pass, salt) {
+    const base = await crypto.subtle.importKey("raw", te.encode(pass), "PBKDF2", false, ["deriveBits"]);
+    const bits = new Uint8Array(await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: unb64(salt), iterations: 310000 }, base, 512));
+    return { key: await crypto.subtle.importKey("raw", bits.slice(0, 32), "AES-GCM", false, ["encrypt", "decrypt"]), salt };
+  }
+  async function seal(bytes) { const iv = crypto.getRandomValues(new Uint8Array(12)); const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, K.key, bytes)); const out = new Uint8Array(12 + ct.length); out.set(iv); out.set(ct, 12); return out; }
+  async function unseal(u8) { return new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: u8.slice(0, 12) }, K.key, u8.slice(12))); }
+  const sealText = async str => b64(await seal(te.encode(str)));
+  const openText = async s => td.decode(await unseal(unb64(s)));
+
+  // IndexedDB: "p" photos (scrambled), "k" this browser's key (so a known browser doesn't ask again)
   // (a tab still open on an older version holds the old database: say so instead of waiting forever)
   const idb = new Promise((ok, no) => {
     const r = indexedDB.open("notes-photos", 2);
@@ -32,35 +46,23 @@
     r.onblocked = () => { app.innerHTML = `<section class="gate"><form><h1>One moment</h1><p class="gmsg">Notes is open in another tab. Close the other tab and this one will open.</p></form></section>`; };
   });
   const tx = async (store, mode, f) => { const d = await idb; return new Promise((ok, no) => { const t = d.transaction(store, mode); const r = f(t.objectStore(store)); t.oncomplete = () => ok(r && r.result); t.onerror = () => no(t.error); }); };
+  const Keys = {
+    load: () => tx("k", "readonly", s => s.get("me")).catch(() => null),
+    save: k => tx("k", "readwrite", s => s.put(k, "me")),
+  };
 
-  // the old scrambling, only to read what it left behind
-  const td = new TextDecoder();
-  const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-  const unseal = async (key, u8) => new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: u8.slice(0, 12) }, key, u8.slice(12)));
-  const openText = async (key, s) => td.decode(await unseal(key, unb64(s)));
-  const oldKey = () => tx("k", "readonly", s => s.get("me")).then(k => k && k.key, () => null);
-
-  /* ---------- the store ---------- */
-  const KEY = "notes-v2";
+  /* ---------- the store: scrambled in localStorage ---------- */
+  const KEY = "notes-enc";
   let db = {};
-  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { console.warn("[store]", e); } };
+  let writing = Promise.resolve();
+  const persist = () => { const snap = JSON.stringify(db); writing = writing.then(async () => { try { localStorage.setItem(KEY, await sealText(snap)); } catch (e) { console.warn("[store]", e); } }); return writing; };
   async function loadDb() {
-    db = {}; try { db = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
-    try { const v1 = JSON.parse(localStorage.getItem("notes-v1") || "null"); if (v1) { mergeIn(v1); localStorage.removeItem("notes-v1"); } } catch {}
-    // a browser that had the password: unscramble its notes and photos, once
-    const key = await oldKey();
-    if (key) {
-      try { const enc = localStorage.getItem("notes-enc"); if (enc) mergeIn(JSON.parse(await openText(key, enc))); } catch (e) { console.warn("[store] old notes", e); }
-      const ids = await tx("p", "readonly", s => s.getAllKeys()).catch(() => []);
-      for (const id of ids) {
-        const r = await tx("p", "readonly", s => s.get(id));
-        if (r && r.d) { try { const plain = await unseal(key, r.d); await tx("p", "readwrite", s => s.put({ b: new Blob([plain], { type: r.t || "image/jpeg" }) }, id)); } catch (e) { console.warn("[store] old photo", id, e); } }
-      }
-      persist(); localStorage.removeItem("notes-enc");
-      sessionStorage.setItem("notes-oldkey", "1"); // Drive may still hold scrambled files: Sync reads them with this key, then drops it
-      window.__oldKey = key;
-    }
-    persist();
+    db = {};
+    try { const s = localStorage.getItem(KEY); if (s) db = JSON.parse(await openText(s)); } catch (e) { console.warn("[store] couldn't open", e); }
+    // notes kept unscrambled (the weeks without a password, or before it): taken in, scrambled, the plain copy removed
+    for (const old of ["notes-v2", "notes-v1"]) try { const o = JSON.parse(localStorage.getItem(old) || "null"); if (o) { mergeIn(o); await persist(); localStorage.removeItem(old); } } catch {}
+    const ids = await tx("p", "readonly", s => s.getAllKeys()).catch(() => []);
+    for (const id of ids) { const r = await tx("p", "readonly", s => s.get(id)); if (r && r.b) await Photos.put(id, r.b); }
   }
   // each entry: the newer copy wins
   function mergeIn(other) { let changed = false; for (const [k, e] of Object.entries(other || {})) if (!db[k] || e.u > db[k].u) { db[k] = e; changed = true; } return changed; }
@@ -70,10 +72,12 @@
   const noteName = e => (e.n || e.t.split("\n").find(l => l.trim()) || "untitled").trim();
   const notes = () => Object.keys(db).filter(k => k.startsWith("n:")).map(k => ({ k, name: noteName(db[k]), u: db[k].u }));
 
-  // photos: blobs in IndexedDB, by id
+  // photos: scrambled in IndexedDB, by id ({t: type, d: scrambled bytes}; {b: blob} is an unscrambled leftover)
   const Photos = {
-    get: async id => { const r = await tx("p", "readonly", s => s.get(id)); return (r && r.b) || null; },
-    put: (id, blob) => tx("p", "readwrite", s => s.put({ b: blob }, id)),
+    get: async id => { const r = await tx("p", "readonly", s => s.get(id)); if (!r) return null; if (r.b) return r.b; if (!r.d) return null; try { return new Blob([await unseal(r.d)], { type: r.t }); } catch { return null; } },
+    put: async (id, blob) => { const d = await seal(new Uint8Array(await blob.arrayBuffer())); return tx("p", "readwrite", s => s.put({ t: blob.type || "image/jpeg", d }, id)); },
+    raw: id => tx("p", "readonly", s => s.get(id)),
+    putRaw: (id, r) => tx("p", "readwrite", s => s.put(r, id)),
     del: id => tx("p", "readwrite", s => s.delete(id)),
   };
   // a phone photo is large: keep it at most 2400px on its long side, as JPEG
@@ -430,6 +434,11 @@
     async function del(name) { if (!files) await list(); if (files[name]) { await call(`${API}/${files[name]}`, { method: "DELETE" }); delete files[name]; } }
     return { auth, list, write, read, del, signedIn, has: n => !!(files && files[n]), names: () => Object.keys(files || {}), ready: () => !!tok && tok.exp > Date.now() };
   })();
+  // lock.json: the salt, and a known word scrambled with the key (a wrong password can't unscramble it)
+  const CHECK = "notes-ok";
+  const lockFor = async k => { const was = K; K = k; try { return JSON.stringify({ salt: k.salt, check: await sealText(CHECK) }); } finally { K = was; } };
+  const fits = async (k, lock) => { const was = K; K = k; try { return (await openText(lock.check)) === CHECK; } catch { return false; } finally { K = was; } };
+
   /* ---------- sync ---------- */
   const Sync = (() => {
     let timer = 0, busy = false, again = false, state = "", tap = false;
@@ -446,61 +455,39 @@
       busy = true; setState("Syncing…");
       try {
         await Drive.list();
-        // the notes: notes.json, each entry the newer copy wins
-        const txt = await Drive.read("notes.json");
-        const remote = txt ? JSON.parse(txt) : {};
-        if (mergeIn(remote)) { persist(); refresh(); }
-        // left over from the password version: read with this browser's old key, then removed
-        const leftovers = await oldDrive();
-        if (leftovers || Drive.has("Notes.md") || Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u)) {
-          await Drive.write("notes.json", JSON.stringify(db, null, 1), "application/json");
-          await Drive.write("Notes.txt", readable(), "text/plain");
-          if (Drive.has("Notes.md")) await Drive.del("Notes.md"); // the old Markdown copy (it showed ~text~ as crossed out)
-        }
-        // photos: deletions, then this browser's that Drive hasn't got, as ordinary image files
-        for (const id of gone()) { await Drive.del(photoName(id)); setGone(gone().filter(x => x !== id)); }
+        // the lock: this browser's password is the one (the first to sync puts it there)
+        const lock = JSON.parse(await Drive.read("lock.json") || "null");
+        if (!lock) await Drive.write("lock.json", await lockFor(K), "application/json");
+        else if (lock.salt !== K.salt && !(await fits(K, lock))) throw Object.assign(new Error("differs"), { differs: true });
+        // unscrambled files left from the weeks without a password: taken in, then removed
+        const plain = Drive.names().filter(n => n === "notes.json" || n === "Notes.txt" || n === "Notes.md" || /^photo-/.test(n));
+        if (Drive.has("notes.json")) { try { mergeIn(JSON.parse(await Drive.read("notes.json"))); } catch {} }
+        for (const n of plain) { const m = /^photo-(.+)\.jpg$/.exec(n); if (m && !(await Photos.raw(m[1]))) { const bl = await Drive.read(n, "blob"); if (bl) await Photos.put(m[1], bl); } }
+        // the notes: each entry, the newer copy wins
+        const enc = await Drive.read("notes.enc");
+        const remote = enc ? JSON.parse(await openText(enc)) : {};
+        mergeIn(remote); await persist(); refresh();
+        if (plain.length || Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u)) await Drive.write("notes.enc", await sealText(JSON.stringify(db)), "text/plain");
+        // photos: deletions, then this browser's that Drive hasn't got (scrambled as kept here)
+        for (const id of gone()) { await Drive.del("p-" + id); setGone(gone().filter(x => x !== id)); }
         for (const e of Object.values(db)) for (const id of e.p || []) {
-          if (Drive.has(photoName(id))) continue;
-          const b = await Photos.get(id); if (b) await Drive.write(photoName(id), b, b.type || "image/jpeg");
+          if (Drive.has("p-" + id)) continue;
+          let r = await Photos.raw(id); if (r && r.b) { await Photos.put(id, r.b); r = await Photos.raw(id); }
+          if (r && r.d) await Drive.write("p-" + id, packPhoto(r), "application/octet-stream");
         }
-        if (leftovers) await dropOld();
-        setState(oldStuck ? "Older scrambled notes are in Drive: open Notes once on the device you set the password on" : "Synced");
+        for (const n of plain) await Drive.del(n);
+        setState("Synced");
       } catch (e) {
         console.warn("[sync]", e);
-        if (e.needTap || /sign-in|popup/i.test(e.message)) setState(/tick the Drive box/.test(e.message) ? "Allow Drive access to sync" : "Sign in to sync", true);
+        if (e.differs) setState("Not syncing: a different password is in use on your other devices");
+        else if (e.needTap || /sign-in|popup/i.test(e.message)) setState(/tick the Drive box/.test(e.message) ? "Allow Drive access to sync" : "Sign in to sync", true);
         else setState(navigator.onLine ? "Sync paused: " + (e.message || e) : "Offline, will sync");
       }
       busy = false; if (again) { again = false; soon(0); }
     }
-    // a photo in Drive: photo-<id>.jpg (or .png …)
-    const photoName = id => "photo-" + id + ".jpg";
-    // Notes.txt: everything as plain text (no formatting, so ~text~ stays as typed), newest day first, then the notes
-    function readable() {
-      const days = Object.keys(db).filter(k => k.startsWith("d:") && db[k].t.trim()).sort().reverse();
-      const ns = Object.keys(db).filter(k => k.startsWith("n:") && db[k].t.trim() && !db[k].a).sort((a, b) => db[b].u - db[a].u);
-      const head = t => t + "\n" + "-".repeat(t.length);
-      return "DAYS\n\n" + days.map(k => `${head(longDate(k.slice(2)))}\n${db[k].t.trim()}\n`).join("\n") +
-        "\n\nNOTES\n\n" + ns.map(k => `${head(noteName(db[k]))}\n${db[k].t.trim()}\n`).join("\n");
-    }
-    let oldStuck = false;
-    async function oldDrive() {
-      if (!Drive.has("notes.enc") && !Drive.has("lock.json") && ![...Drive.names()].some(n => /^p-/.test(n))) { oldStuck = false; return false; }
-      const key = window.__oldKey || await oldKey();
-      if (!key) { oldStuck = Drive.has("notes.enc"); return false; }
-      const enc = await Drive.read("notes.enc");
-      if (enc) mergeIn(JSON.parse(await openText(key, enc)));
-      for (const n of Drive.names()) {
-        const m = /^p-(.+)$/.exec(n); if (!m || await Photos.get(m[1])) continue;
-        const u8 = await Drive.read(n, "bytes");
-        try { await Photos.put(m[1], new Blob([await unseal(key, u8.slice(32))], { type: td.decode(u8.slice(0, 32)).trim() || "image/jpeg" })); } catch {}
-      }
-      persist(); refresh(); oldStuck = false;
-      return true;
-    }
-    async function dropOld() {
-      for (const n of [...Drive.names()]) if (n === "notes.enc" || n === "lock.json" || /^p-/.test(n)) await Drive.del(n);
-      await tx("k", "readwrite", s => s.delete("me")).catch(() => {}); window.__oldKey = null;
-    }
+    // a photo as stored in Drive: its type (32 bytes), then the scrambled bytes
+    const packPhoto = r => { const t = te.encode(r.t.padEnd(32, " ").slice(0, 32)); const out = new Uint8Array(32 + r.d.length); out.set(t); out.set(r.d, 32); return out; };
+    const unpackPhoto = u8 => ({ t: td.decode(u8.slice(0, 32)).trim(), d: u8.slice(32) });
     // what came in from another device: redraw, unless it's the page being typed on
     function refresh() {
       if (current && current.k === "home") { if (document.activeElement !== current.ta || !current.ta.value) route(); return; }
@@ -516,7 +503,7 @@
     const soon = (ms = 2500) => { clearTimeout(timer); timer = setTimeout(run, ms); };
     async function photo(id) {
       if (!ready || !navigator.onLine) return null;
-      try { const b = await Drive.read(photoName(id), "blob"); if (!b) return null; await Photos.put(id, b); return b; }
+      try { const u8 = await Drive.read("p-" + id, "bytes"); if (!u8) return null; await Photos.putRaw(id, unpackPhoto(u8)); return Photos.get(id); }
       catch { return null; }
     }
     addEventListener("online", () => soon(0));
@@ -526,23 +513,55 @@
     return { button, soon, photo, forget, run };
   })();
 
-  /* ---------- a new browser: sign in to Google ---------- */
-  function gate() {
+  /* ---------- a browser without the key: sign in to Google, then the password (or create it, the very first time) ---------- */
+  async function gate() {
     document.title = "Notes";
+    let mode = "signin", lock = null;
+    const H1 = { signin: "Notes", create: "Create a password", enter: "Password", wait: "Notes" };
     const draw = (msg = "") => {
-      app.innerHTML = `<section class="gate"><form>
-        <h1>Notes</h1>
-        <p class="gmsg">${navigator.onLine ? "Sign in with the Google account your notes are kept in." : "Connect to the internet to open your notes on this browser."}</p>
-        <button type="button" class="gbtn google">Sign in with Google</button>
+      app.innerHTML = `<section class="gate"><form autocomplete="on">
+        <h1>${H1[mode]}</h1>
+        ${mode === "wait" ? `<p class="gmsg">Connecting…</p>` : mode === "signin" ? `<p class="gmsg">${navigator.onLine ? "Sign in with the Google account your notes are kept in." : "Connect to the internet to open your notes on this browser."}</p><button type="button" class="gbtn google">Sign in with Google</button>` : `
+        <input type="text" name="username" autocomplete="username" value="notes" hidden>
+        <label for="pw" class="mirror">Password</label>
+        <input id="pw" type="password" autocomplete="${mode === "create" ? "new-password" : "current-password"}">
+        ${mode === "create" ? `<label for="pw2" class="gsub">Again</label><input id="pw2" type="password" autocomplete="new-password">
+        <p class="gnote">Your notes are scrambled with it. There's no way to get them back without it: a long one, like a few random words, is best.</p>` : ""}
+        <button type="submit" class="gbtn">${mode === "create" ? "Create" : "Open"}</button>`}
         <p class="gmsg err" role="alert">${msg}</p></form></section>`;
-      app.querySelector(".google").onclick = signin;
+      const pw = $("#pw"); if (pw) pw.focus();
+      const g = app.querySelector(".google"); if (g) g.onclick = () => signin("consent");
+      app.querySelector("form").onsubmit = ev => { ev.preventDefault(); if (mode === "create") create(); else if (mode === "enter") enter(); };
     };
-    async function signin() {
-      const b = app.querySelector(".google"); b.disabled = true; b.textContent = "Signing in…";
-      try { await Drive.auth("consent"); } catch (e) { return draw("Couldn't sign in: " + (e.message || e)); }
-      await loadDb(); ready = true; start(); Sync.soon(0);
+    const busy = t => { const b = app.querySelector(".gbtn"); if (b) { b.disabled = !!t; if (t) b.textContent = t; } };
+    async function signin(prompt) {
+      busy("Signing in…");
+      try { if (prompt) await Drive.auth(prompt); await Drive.list(); lock = JSON.parse(await Drive.read("lock.json") || "null"); }
+      catch (e) { console.warn(e); mode = "signin"; return draw(prompt ? "Couldn't sign in: " + (e.message || e) : ""); }
+      mode = lock ? "enter" : "create"; draw();
     }
-    draw();
+    async function create() {
+      const a = $("#pw").value, b = $("#pw2").value;
+      if (a.length < 8) return draw("At least 8 characters.");
+      if (a !== b) return draw("Those two don't match.");
+      busy("Creating…");
+      const k = await derive(a, b64(crypto.getRandomValues(new Uint8Array(16))));
+      try { await Drive.write("lock.json", await lockFor(k), "application/json"); } catch (e) { return draw("Couldn't save to Drive: " + (e.message || e)); }
+      await unlocked(k);
+    }
+    async function enter() {
+      busy("Opening…");
+      const k = await derive($("#pw").value, lock.salt);
+      if (!(await fits(k, lock))) return draw("Wrong password.");
+      await unlocked(k);
+    }
+    // signed in already (a browser from the weeks without a password): straight to the password
+    if (Drive.ready() && navigator.onLine) { mode = "wait"; draw(); await signin(""); } else draw();
+  }
+  async function unlocked(k) {
+    K = k; await Keys.save(k).catch(() => {});
+    await loadDb(); await persist();
+    ready = true; start(); Sync.soon(0);
   }
 
   if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
@@ -591,10 +610,8 @@
   function start() { if (started) return route(); started = true; route(); }
   app.innerHTML = `<section class="gate"><form><h1>Notes</h1><p class="gmsg">Opening…</p></form></section>`;
   (async () => {
-    // a browser that has been here before opens straight away (Google may still want a tap to sync)
-    let known = Drive.signedIn() || !!localStorage.getItem(KEY) || !!localStorage.getItem("notes-v1") || !!localStorage.getItem("notes-enc");
-    if (!known) known = !!(await oldKey().catch(() => null));
-    if (known) { await loadDb(); ready = true; start(); Sync.soon(300); }
+    const saved = await Keys.load();
+    if (saved && saved.key) { K = saved; await loadDb(); ready = true; start(); Sync.soon(300); }
     else gate();
   })();
 })();
