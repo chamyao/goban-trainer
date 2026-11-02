@@ -3988,7 +3988,8 @@ function viewExplore() {
 const OGS = {
   API: "https://online-go.com/api/v1",
   KEY: "goban.ogsUser",
-  remembered() { try { return localStorage.getItem(this.KEY) || ""; } catch { return ""; } },
+  ME: "apo110",   // the only player here (the user): every OGS box starts with it
+  remembered() { try { return localStorage.getItem(this.KEY) || this.ME; } catch { return this.ME; } },
   remember(name) { try { localStorage.setItem(this.KEY, name); } catch {} },
 
   async json(url) {
@@ -4073,6 +4074,7 @@ function ogsPanel(loadSgf) {
     busy = false;
   });
 
+  setTimeout(go, 0);   // pulls the games straight away (the user: "just automatically pull for apo110")
   return h("div", { class: "sgf-loader", style: "margin-top:0" }, [
     h("div", { class: "cat-title" }, "Import from OGS"),
     h("div", { class: "row" }, [input, h("button", { class: "primary", onclick: go }, "Find games")]),
