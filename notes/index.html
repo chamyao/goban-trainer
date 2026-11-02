@@ -2,24 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
-<title>Notes</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=11">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes has moved</title>
+<style>body{margin:0;font:16px/1.5 system-ui,sans-serif;background:#fff;color:#1c1c1a;padding:18vh 16px}@media (prefers-color-scheme:dark){body{background:#161615;color:#ecece8}a{color:#6b93ff}}</style>
+<script>
+  // Notes now lives at /notes/ (its own repository). Same site, so this browser's notes and password come along.
+  (async () => {
+    try { for (const r of await navigator.serviceWorker.getRegistrations()) if (r.scope.includes("/goban-trainer/notes/")) await r.unregister(); } catch {}
+    location.replace("/notes/" + location.hash);
+  })();
+</script>
 </head>
-<body>
-<main id="app"></main>
-<div id="menu" class="pop" role="menu" hidden>
-  <button type="button" role="menuitem" data-act="export">Export to new note</button>
-  <button type="button" role="menuitem" data-act="copy">Copy</button>
-</div>
-<div id="jump" class="pop" role="listbox" aria-label="Jump to" hidden></div>
-<input id="file" type="file" accept="image/*" multiple hidden>
-<script src="https://accounts.google.com/gsi/client" async></script>
-<script src="app.js?v=19"></script>
-</body>
+<body><p>Notes has moved to <a href="/notes/">chamyao.github.io/notes</a>.</p></body>
 </html>
