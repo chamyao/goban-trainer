@@ -129,3 +129,8 @@ main { height: 100%; }
 /* the typing space on the calendar: nothing to see but the cursor */
 .cmdrow { display: block; width: min(360px, 100%); }
 .cmd { display: block; width: 100%; height: 28px; padding: 0; border: 0; background: transparent; color: var(--ink); caret-color: var(--ink); font: 400 15px Inter, system-ui, sans-serif; outline: none; }
+
+/* the password box when this browser's key is out of date */
+.relock form { display: flex; flex-direction: column; gap: 10px; padding: 10px; }
+.relock input[type=password] { min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: 400 16px Inter, system-ui, sans-serif; }
+.relock input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }

@@ -236,7 +236,10 @@
   function jumpCheck() {
     armed = false;
     if (!current) return;
-    const { ta } = current, before = ta.value.slice(0, ta.selectionStart);
+    const { ta } = current;
+    let before = ta.value.slice(0, ta.selectionStart);
+    // the calendar's cursor: the * is implied (typing it still works)
+    if (current.k === "home" && before && !before.includes("*") && !/^\s/.test(before)) before = "*" + before;
     // *name <a name>: names the note (notes only; a day has its date)
     const nm = current.k.startsWith("n:") && ta.selectionStart === ta.selectionEnd && /(^|\s)\*name[ \t]+([^\n*]*\S)[ \t]*$/.exec(before);
     if (nm) {
@@ -246,7 +249,7 @@
     }
     const m = ta.selectionStart === ta.selectionEnd && /(^|\s)\*([^\s*]*)$/.exec(before);
     if (!m) { hide(jump); tok = null; return; }
-    const q = m[2], start = ta.selectionStart - q.length - 1;
+    const q = m[2], start = Math.max(0, ta.selectionStart - q.length - 1);
     tok = { start, end: ta.selectionStart };
     const date = parseDate(q);
     if (date) opts = [{ label: longDate(date), h: `#/d/${date}` }];
@@ -459,11 +462,12 @@
 
   /* ---------- sync ---------- */
   const Sync = (() => {
-    let timer = 0, busy = false, again = false, state = "", tap = false;
+    let timer = 0, busy = false, again = false, state = "", tap = false, relock = null;
     const setState = (s, needTap = false) => { state = s; tap = needTap; const b = document.querySelector(".sync.state"); if (b) { b.textContent = state; b.classList.toggle("tap", tap); } };
     const button = () => `<button type="button" class="sync state${tap ? " tap" : ""}" aria-live="polite">${state}</button>`;
     document.addEventListener("click", async ev => {
       if (!ev.target.closest(".sync.state") || !tap) return;
+      if (relock) return askPassword(relock);
       try { await Drive.auth("consent"); soon(0); } catch { setState("Sign in to sync", true); }
     });
     async function run() {
@@ -476,15 +480,17 @@
         // the lock: this browser's password is the one (the first to sync puts it there)
         const lock = JSON.parse(await Drive.read("lock.json") || "null");
         if (!lock) await Drive.write("lock.json", await lockFor(K), "application/json");
-        else if (lock.salt !== K.salt && !(await fits(K, lock))) throw Object.assign(new Error("differs"), { differs: true });
+        else if (lock.salt !== K.salt && !(await fits(K, lock))) throw Object.assign(new Error("differs"), { differs: true, lock });
         // unscrambled files left from the weeks without a password: taken in, then removed
         const plain = Drive.names().filter(n => n === "notes.json" || n === "Notes.txt" || n === "Notes.md" || /^photo-/.test(n));
-        if (Drive.has("notes.json")) { try { mergeIn(JSON.parse(await Drive.read("notes.json"))); } catch {} }
+        let changed = false;
+        if (Drive.has("notes.json")) { try { changed = mergeIn(JSON.parse(await Drive.read("notes.json"))) || changed; } catch {} }
         for (const n of plain) { const m = /^photo-(.+)\.jpg$/.exec(n); if (m && !(await Photos.raw(m[1]))) { const bl = await Drive.read(n, "blob"); if (bl) await Photos.put(m[1], bl); } }
         // the notes: each entry, the newer copy wins
         const enc = await Drive.read("notes.enc");
         const remote = enc ? JSON.parse(await openText(enc)) : {};
-        mergeIn(remote); await persist(); refresh();
+        changed = mergeIn(remote) || changed;
+        if (changed) { await persist(); refresh(); }
         if (plain.length || Object.entries(db).some(([k, e]) => !remote[k] || e.u > remote[k].u)) await Drive.write("notes.enc", await sealText(JSON.stringify(db)), "text/plain");
         // photos: deletions, then this browser's that Drive hasn't got (scrambled as kept here)
         for (const id of gone()) { await Drive.del("p-" + id); setGone(gone().filter(x => x !== id)); }
@@ -497,18 +503,43 @@
         setState("Synced");
       } catch (e) {
         console.warn("[sync]", e);
-        if (e.differs) setState("Not syncing: a different password is in use on your other devices");
+        if (e.differs) { relock = e.lock; setState("Enter your password to sync", true); }
         else if (e.needTap || /sign-in|popup/i.test(e.message)) setState(/tick the Drive box/.test(e.message) ? "Allow Drive access to sync" : "Sign in to sync", true);
         else setState(navigator.onLine ? "Sync paused: " + (e.message || e) : "Offline, will sync");
       }
       busy = false; if (again) { again = false; soon(0); }
+    }
+    // this browser holds an older key than the one in Drive (an earlier password): the current password, once,
+    // and this browser's copy is re-scrambled with it
+    function askPassword(lock) {
+      const box = document.createElement("div"); box.className = "pop listp relock"; box.setAttribute("role", "dialog"); box.setAttribute("aria-label", "Password");
+      box.innerHTML = `<form><p class="gmsg">Your notes in Drive use your current password. Enter it to sync this browser.</p>
+        <label for="rpw" class="mirror">Password</label><input id="rpw" type="password" autocomplete="current-password">
+        <button type="submit" class="gbtn">Sync</button><p class="gmsg err" role="alert"></p></form>`;
+      document.body.append(box); const pw = box.querySelector("#rpw"); pw.focus();
+      const close = () => box.remove();
+      box.addEventListener("keydown", ev => { if (ev.key === "Escape") close(); });
+      box.querySelector("form").onsubmit = async ev => {
+        ev.preventDefault(); const b = box.querySelector(".gbtn"); b.disabled = true; b.textContent = "Checking…";
+        const k = await derive(pw.value, lock.salt);
+        if (!(await fits(k, lock))) { b.disabled = false; b.textContent = "Sync"; box.querySelector(".err").textContent = "Wrong password."; return; }
+        await rekey(k); relock = null; close(); soon(0);
+      };
+    }
+    async function rekey(k) {
+      const ids = await tx("p", "readonly", s => s.getAllKeys()).catch(() => []);
+      const plain = [];
+      for (const id of ids) { const r = await tx("p", "readonly", s => s.get(id)); if (r && r.d) try { plain.push([id, new Blob([await unseal(r.d)], { type: r.t })]); } catch {} }
+      K = k; await Keys.save(k).catch(() => {});
+      for (const [id, bl] of plain) await Photos.put(id, bl);
+      await persist();
     }
     // a photo as stored in Drive: its type (32 bytes), then the scrambled bytes
     const packPhoto = r => { const t = te.encode(r.t.padEnd(32, " ").slice(0, 32)); const out = new Uint8Array(32 + r.d.length); out.set(t); out.set(r.d, 32); return out; };
     const unpackPhoto = u8 => ({ t: td.decode(u8.slice(0, 32)).trim(), d: u8.slice(32) });
     // what came in from another device: redraw, unless it's the page being typed on
     function refresh() {
-      if (current && current.k === "home") { if (document.activeElement !== current.ta || !current.ta.value) route(); return; }
+      if (current && current.k === "home") { if (document.activeElement !== current.ta) route(); return; } // never under the cursor
       if (current && document.activeElement === current.ta) {
         const e = get(current.k); if (e.t !== current.ta.value) { const c = current.ta.selectionStart; current.ta.value = e.t; current.ta.setSelectionRange(c, c); }
         return;
