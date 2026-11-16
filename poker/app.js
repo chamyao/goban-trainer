@@ -6,6 +6,7 @@
   const SUIT_SYM = { c: "♣", d: "♦", h: "♥", s: "♠" };
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const bb = x => `${E.fmt(x)} bb`;
+  const lossTxt = x => x < 0.05 ? "≈0 bb" : `−${x < 1 ? x.toFixed(2) : E.fmt(x)} bb`;
 
   const store = {
     get(k, d) { try { const v = localStorage.getItem("pkr." + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
@@ -185,7 +186,7 @@
     let outcome;
     if (res.fold) outcome = res.winner === hero ? `${posName(vill)} folded. You win the pot.` : `You folded.`;
     else outcome = res.winner === -1 ? "Split pot." : res.winner === hero ? `You win with ${res.heroHand.toLowerCase()}.` : `${posName(vill)} wins with ${res.villHand.toLowerCase()}.`;
-    logLine(outcome, "end");
+    logLine(outcome, "end"); clearBubbles();
 
     // stats
     const st = stats; st.hands++; st.score += rv.score; st.lostBB += rv.totalBB; st.netBB += res.net;
@@ -227,14 +228,14 @@
       return `<tr class="${chosen ? "chosen" : ""}">
         <td class="an">${chosen ? "▶ " : ""}${a.label}${a.sizing ? ` <small>${a.sizing}</small>` : ""}</td>
         <td class="bar"><div class="b"><i style="width:${(f * 100).toFixed(1)}%"></i></div><span>${(f * 100).toFixed(0)}%</span></td>
-        <td class="ev ${best ? "best" : ""}">${best ? "best" : "−" + E.fmt(lossBB) + " bb"}</td>
+        <td class="ev ${best ? "best" : ""}">${best ? "best" : lossTxt(lossBB)}</td>
         <td class="rg">${(g * 100).toFixed(0)}%</td></tr>`;
     }).join("");
     return `<div class="rv-row">
       <div class="rv-ctx">
         <span class="st">${STREETS[r.street]}</span> ${cardsText(r.board)}
         <span class="sub">pot ${bb(r.pot)}${before ? " · " + before : ""}</span>
-        <span class="tag ${r.grade.cls}">${r.grade.tag}${r.lossBB > 0.005 ? ` −${E.fmt(r.lossBB)} bb` : ""}</span>
+        <span class="tag ${r.grade.cls}">${r.grade.tag}${r.lossBB >= 0.05 ? " " + lossTxt(r.lossBB) : ""}</span>
       </div>
       <table><thead><tr><th>Action</th><th>GTO, your hand</th><th>EV loss</th><th>Range</th></tr></thead><tbody>${lines}</tbody></table>
     </div>`;
