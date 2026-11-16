@@ -37,6 +37,171 @@
      "exploitability": 0.267
     }
    ]
+  },
+  {
+   "id": "co-bb",
+   "title": "CO open, BB call",
+   "kind": "Single-raised pot",
+   "pos": [
+    "BB",
+    "CO"
+   ],
+   "pot": 5.5,
+   "stack": 97.5,
+   "boards": [
+    {
+     "file": "co-bb-Ah9d4c.bin.gz",
+     "flop": "Ah9d4c",
+     "exploitability": 0.292
+    },
+    {
+     "file": "co-bb-Jc8c3h.bin.gz",
+     "flop": "Jc8c3h",
+     "exploitability": 0.289
+    },
+    {
+     "file": "co-bb-Td9s7d.bin.gz",
+     "flop": "Td9s7d",
+     "exploitability": 0.273
+    },
+    {
+     "file": "co-bb-Kh6s6c.bin.gz",
+     "flop": "Kh6s6c",
+     "exploitability": 0.287
+    }
+   ]
+  },
+  {
+   "id": "utg-bb",
+   "title": "UTG open, BB call",
+   "kind": "Single-raised pot",
+   "pos": [
+    "BB",
+    "UTG"
+   ],
+   "pot": 5.5,
+   "stack": 97.5,
+   "boards": [
+    {
+     "file": "utg-bb-As8d3c.bin.gz",
+     "flop": "As8d3c",
+     "exploitability": 0.298
+    },
+    {
+     "file": "utg-bb-7c6d5s.bin.gz",
+     "flop": "7c6d5s",
+     "exploitability": 0.293
+    },
+    {
+     "file": "utg-bb-KdQh4h.bin.gz",
+     "flop": "KdQh4h",
+     "exploitability": 0.252
+    },
+    {
+     "file": "utg-bb-9s9c2d.bin.gz",
+     "flop": "9s9c2d",
+     "exploitability": 0.295
+    }
+   ]
+  },
+  {
+   "id": "co-btn",
+   "title": "CO open, BTN call",
+   "kind": "Single-raised pot",
+   "pos": [
+    "CO",
+    "BTN"
+   ],
+   "pot": 6.5,
+   "stack": 97.5,
+   "boards": [
+    {
+     "file": "co-btn-Kc9h3d.bin.gz",
+     "flop": "Kc9h3d",
+     "exploitability": 0.274
+    },
+    {
+     "file": "co-btn-Tc6c2s.bin.gz",
+     "flop": "Tc6c2s",
+     "exploitability": 0.28
+    },
+    {
+     "file": "co-btn-Qd7h5h.bin.gz",
+     "flop": "Qd7h5h",
+     "exploitability": 0.289
+    },
+    {
+     "file": "co-btn-8s7s6d.bin.gz",
+     "flop": "8s7s6d",
+     "exploitability": 0.268
+    }
+   ]
+  },
+  {
+   "id": "bb3-btn",
+   "title": "BTN open, BB 3-bet, BTN call",
+   "kind": "3-bet pot",
+   "pos": [
+    "BB",
+    "BTN"
+   ],
+   "pot": 22.5,
+   "stack": 89,
+   "boards": [
+    {
+     "file": "bb3-btn-Ac7s3d.bin.gz",
+     "flop": "Ac7s3d",
+     "exploitability": 0.228
+    },
+    {
+     "file": "bb3-btn-Th9h4c.bin.gz",
+     "flop": "Th9h4c",
+     "exploitability": 0.299
+    },
+    {
+     "file": "bb3-btn-Kd8c2s.bin.gz",
+     "flop": "Kd8c2s",
+     "exploitability": 0.274
+    },
+    {
+     "file": "bb3-btn-6c5d2h.bin.gz",
+     "flop": "6c5d2h",
+     "exploitability": 0.25
+    }
+   ]
+  },
+  {
+   "id": "btn3-co",
+   "title": "CO open, BTN 3-bet, CO call",
+   "kind": "3-bet pot",
+   "pos": [
+    "CO",
+    "BTN"
+   ],
+   "pot": 18.5,
+   "stack": 91.5,
+   "boards": [
+    {
+     "file": "btn3-co-Qh8c3s.bin.gz",
+     "flop": "Qh8c3s",
+     "exploitability": 0.252
+    },
+    {
+     "file": "btn3-co-Js7d7h.bin.gz",
+     "flop": "Js7d7h",
+     "exploitability": 0.255
+    },
+    {
+     "file": "btn3-co-9d8d5c.bin.gz",
+     "flop": "9d8d5c",
+     "exploitability": 0.286
+    },
+    {
+     "file": "btn3-co-AhKd6c.bin.gz",
+     "flop": "AhKd6c",
+     "exploitability": 0.285
+    }
+   ]
   }
  ]
 }
