@@ -1,0 +1,42 @@
+{
+ "spots": [
+  {
+   "id": "btn-bb",
+   "title": "BTN open, BB call",
+   "kind": "Single-raised pot",
+   "pos": [
+    "BB",
+    "BTN"
+   ],
+   "pot": 5.5,
+   "stack": 97.5,
+   "boards": [
+    {
+     "file": "btn-bb-Ks7d2c.bin.gz",
+     "flop": "Ks7d2c",
+     "exploitability": 0.283
+    },
+    {
+     "file": "btn-bb-8h7h4c.bin.gz",
+     "flop": "8h7h4c",
+     "exploitability": 0.28
+    },
+    {
+     "file": "btn-bb-QsJd9s.bin.gz",
+     "flop": "QsJd9s",
+     "exploitability": 0.282
+    },
+    {
+     "file": "btn-bb-Ad5c5h.bin.gz",
+     "flop": "Ad5c5h",
+     "exploitability": 0.299
+    },
+    {
+     "file": "btn-bb-6s4d3c.bin.gz",
+     "flop": "6s4d3c",
+     "exploitability": 0.267
+    }
+   ]
+  }
+ ]
+}
