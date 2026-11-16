@@ -30,6 +30,7 @@ const keep = async (req, res) => { if (res && res.ok && res.type === "basic") (a
 self.addEventListener("fetch", e => {
   const req = e.request, url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== location.origin || req.headers.has("range")) return;
+  if (url.pathname.includes("/poker/")) return;   // the poker trainer is its own page: not the site's index.html
   const page = req.mode === "navigate" || /\/(index\.html)?$/.test(url.pathname);
   if (page) {
     e.respondWith((async () => {

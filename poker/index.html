@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Postflop Trainer</title>
+<meta name="description" content="Play heads-up postflop spots from a 6-max table against a precomputed GTO opponent; every decision is graded by EV loss.">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<header class="top">
+  <h1>♠ Postflop Trainer</h1>
+  <div class="spot" id="spotLabel"></div>
+  <div class="stats" id="stats"></div>
+  <button type="button" class="ghost" id="settingsBtn" aria-haspopup="dialog">Settings</button>
+</header>
+
+<main class="layout">
+  <section class="table-wrap">
+    <div class="table" id="table">
+      <div class="seat villain" id="seatV">
+        <div class="cards" id="villCards"></div>
+        <div class="plate"><span class="pos" id="villPos"></span><span class="stack" id="villStack"></span></div>
+        <div class="bubble" id="villBubble"></div>
+      </div>
+      <div class="middle">
+        <div class="board" id="board"></div>
+        <div class="pot" id="pot"></div>
+      </div>
+      <div class="seat hero" id="seatH">
+        <div class="bubble" id="heroBubble"></div>
+        <div class="plate"><span class="pos" id="heroPos"></span><span class="stack" id="heroStack"></span></div>
+        <div class="cards" id="heroCards"></div>
+        <div class="made" id="heroMade"></div>
+      </div>
+    </div>
+    <div class="actions" id="actions"></div>
+  </section>
+
+  <aside class="side">
+    <h2>Hand</h2>
+    <ol class="log" id="log"></ol>
+  </aside>
+
+  <section class="review" id="review" hidden></section>
+</main>
+
+<dialog id="settings">
+  <form method="dialog">
+    <h2>Settings</h2>
+    <fieldset>
+      <legend>Spots</legend>
+      <div id="spotChecks"></div>
+    </fieldset>
+    <fieldset>
+      <legend>Your seat</legend>
+      <label><input type="radio" name="side" value="any"> Either</label>
+      <label><input type="radio" name="side" value="0"> Out of position</label>
+      <label><input type="radio" name="side" value="1"> In position</label>
+    </fieldset>
+    <fieldset>
+      <legend>Opponent speed</legend>
+      <label><input type="radio" name="speed" value="250"> Fast</label>
+      <label><input type="radio" name="speed" value="650"> Normal</label>
+      <label><input type="radio" name="speed" value="1100"> Slow</label>
+    </fieldset>
+    <fieldset>
+      <legend>Stats</legend>
+      <button type="button" class="ghost" id="resetStats">Reset stats</button>
+    </fieldset>
+    <p class="note" id="aboutSolve"></p>
+    <div class="row"><button value="ok" class="primary">Done</button></div>
+  </form>
+</dialog>
+
+<script src="engine.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
