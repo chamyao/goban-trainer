@@ -60,7 +60,8 @@ const Poker = (() => {
     if (!id) { history.replaceState(null, "", "#/poker/" + hand.id); }
     const prog = loadProgress(), e0 = elo(prog), first = !(prog.poker || {})[hand.id];
     const [win, lose] = stakes(e0, hand.rating);
-    let at = 0, answered = false, allOk = true;
+    let at = 0, answered = false, allOk = true, carry = "";
+    const log = [];   // each decision: its street, the choice, right or not
     const asked = hand.steps.filter(s => !s.auto).length;
     root.innerHTML = "";
     const wrap = h("div", { class: "pk-wrap" });
@@ -100,6 +101,7 @@ const Poker = (() => {
         h("div", { class: "sgf-loader pk-panel" }, [
           h("ol", { class: "pk-history" }, s.history.map(t => h("li", {}, t))),
           autos && at > 0 && hand.steps[at - 1].auto ? h("p", { class: "pk-note" }, "(Checks the solver makes almost every time are played for you.)") : "",
+          carry ? h("p", { class: "pk-note" }, (c => (carry = "", c))(carry)) : "",
           h("p", { class: "pk-q" }, "What do you do?"),
           h("div", { class: "pk-acts" }, buttons), verdict,
         ]),
@@ -121,8 +123,13 @@ const Poker = (() => {
           h("p", { class: "pk-note" }, [`With ${hand.hand.replace(/(..)(..)/, "$1 $2")}: how often the solver takes each action, and what each costs against its best. `,
             `Its whole range here: ${s.mix.map((m, k) => `${s.actions[k].label.toLowerCase()} ${pct(m)}`).join(", ")}.`]),
         );
+        log.push({ street: s.street, label: s.actions[i].label, ok: j.ok, off: s.line != null && s.line !== i ? s.actions[s.line].label : null });
         if (!last) {
-          if (s.line != null && s.line !== i) verdict.append(h("p", { class: "pk-note" }, `The hand goes on as if you'd chosen ${s.actions[s.line].label.toLowerCase()} (its line).`));
+          const offNote = s.line != null && s.line !== i ? `The hand goes on as if you'd chosen ${s.actions[s.line].label.toLowerCase()} (its line).` : "";
+          // right: straight on to the next decision, after a moment to see the tick (the user: "unless the player plays
+          // the wrong move, move on to the next street without a click"); wrong: it waits, to read why
+          if (j.ok) { carry = offNote; setTimeout(() => { if (wrap.isConnected && hand.steps[at] === s) go(); }, 700); return; }
+          if (offNote) verdict.append(h("p", { class: "pk-note" }, offNote));
           const nxt = hand.steps[at + 1];
           verdict.append(h("div", { class: "row" }, [h("button", { class: "primary", onclick: go }, (nxt.street !== s.street ? NEXT[s.street] : "Continue") + " ▸")]));
         } else finish(verdict);
@@ -134,6 +141,7 @@ const Poker = (() => {
       if (first) markResult("poker", hand.id, allOk);
       const delta = first ? rate(hand.rating, allOk) : 0;
       verdict.append(
+        log.length > 1 ? h("ol", { class: "pk-log" }, log.map(x => h("li", { class: x.ok ? "ok" : "bad" }, [h("b", {}, x.ok ? "✓ " : "✗ "), `${x.street}: ${x.label.toLowerCase()}`]))) : "",
         h("div", { class: "pk-result " + (allOk ? "win" : "slip") }, [
           h("b", {}, allOk ? "Hand won: every decision was the solver's." : "Hand lost: not every decision was the solver's."),
           first ? ` Rating ${elo().r} (${delta >= 0 ? "+" : ""}${delta}).` : " (A replay: the rating stays.)",

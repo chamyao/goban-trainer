@@ -1323,3 +1323,4 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .ai-opts { flex-wrap: wrap; gap: 10px 16px; }
 .ai-opts label { display: inline-flex; align-items: center; gap: 6px; }
 .ai-opts select { min-height: 36px; }
+.pk-log { margin: 0; padding-left: 20px; font-size: 14px; } .pk-log .ok b { color: #2e9d55; } .pk-log .bad b { color: #d64545; }
