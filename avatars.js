@@ -220,9 +220,12 @@ const Avatars = (() => {
   const boardRow = () => !location.hash.startsWith("#/review") && [...document.querySelectorAll("#root .board-card")]
     .map(b => { let r = b.parentNode; while (r.classList.contains("avatar-stage") || r.classList.contains("board-col")) r = r.parentNode; return r; })   // (the Stream's board stands in a column with its controls)
     .find(r => r.querySelector(":scope > aside"));
+  // a game against an avatar (#/ai): that avatar stands in the corner in place of yours (apo110: "the opponent avatar in
+  // play should replace the user avatar"), and keeps quiet (its lines are a companion's, not an opponent's)
+  const foeShown = () => location.hash.startsWith("#/ai") && typeof AIPlay !== "undefined" && AIPlay.game && AIPlay.game.S.foe ? AIPlay.game.S.foe.who : "";
   function mount() {
     pending = false;
-    const who = picked(), row = who && boardRow(), playing = !!who && /^#\/(play|friend)/.test(location.hash);
+    const who = foeShown() || picked(), row = who && boardRow(), playing = !!who && /^#\/(play|friend)/.test(location.hash);
     document.body.classList.toggle("has-avatar", !!(row || playing));
     if (!row && !playing) { if (fixed) fixed.hidden = true; lastHash = ""; return; }
     const f = figure(who);
@@ -370,7 +373,7 @@ const Avatars = (() => {
   const games = {};
   let idleT = 0;
   function onGame(g) {
-    if (!picked()) return;
+    if (!picked() || foeShown()) return;
     const id = g.id || g.code || "game", st = games[id] = games[id] || {};
     if (g.phase === "play" && !st.start) { st.start = 1; setTimeout(() => say(moment("start")), 300); }
     if (g.phase === "finished" && !st.end) {
@@ -383,7 +386,7 @@ const Avatars = (() => {
   }
   const lastLine = {};
   addEventListener("tczw:result", e => {
-    if (!fixed || fixed.hidden) return;
+    if (!fixed || fixed.hidden || foeShown()) return;
     const kind = e.detail === "ok" ? "ok" : "bad", set = (VOICE[picked()] || LINES)[kind] || LINES[kind];
     let i = Math.floor(Math.random() * set.length);
     if (set.length > 1 && i === lastLine[kind]) i = (i + 1 + Math.floor(Math.random() * (set.length - 1))) % set.length;   // (never the same twice running)

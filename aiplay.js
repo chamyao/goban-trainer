@@ -56,7 +56,7 @@ function aiFit(style, grid, me, sz, x, y, rank) {
 // FriendGame, so the Play tab can show its panel on the first page)
 let AIGameClass = null;
 const aiGame = (S, me) => new (AIGameClass || (AIGameClass = class extends FriendGame {
-  get title() { return this.S.foe ? `vs ${this.S.foe.name} · ${aiStyleOf(this.S.foe.who).name}` : `vs KataGo · ${AI_LEVELS[this.S.level].name} · ${this.S.size}×${this.S.size}`; }
+  get title() { return this.S.foe ? `vs ${this.S.foe.name}` : `vs KataGo · ${AI_LEVELS[this.S.level].name} · ${this.S.size}×${this.S.size}`; }
   player(color) { return { username: color === this.S.hostColor ? (this.S.names[color] || "You") : this.S.foe ? this.S.foe.name : `KataGo (${AI_LEVELS[this.S.level].name})` }; }
 }))(S, me);
 
@@ -180,9 +180,10 @@ function aiLobby() {
     if (!mine.length) { cast.append(h("p", { class: "meta-sub" }, "Collect avatars in the stories to play them here.")); return; }
     const faces = await Promise.all(mine.map(x => Avatars.faceOf(x.who)));
     const pickBtn = (f, el) => () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); level.disabled = !!foe; };
-    cast.append(h("div", { class: "ai-cast-title" }, "Or play one of your avatars (10k or stronger, each in its own style):"),
-      h("div", { class: "ai-foes" }, faces.map(f => { const st = aiStyleOf(f.who);
-        const el = h("button", { class: "ai-foe", title: `${f.name}: ${st.about}` }, [f.src ? h("img", { src: f.src, alt: "" }) : "", h("b", {}, f.name), h("small", {}, st.name)]);
+    // (just the opponents: no style names or explanations, apo110)
+    cast.append(h("div", { class: "ai-cast-title" }, "Or play one of your avatars:"),
+      h("div", { class: "ai-foes" }, faces.map(f => {
+        const el = h("button", { class: "ai-foe", title: f.name }, [f.src ? h("img", { src: f.src, alt: "" }) : "", h("b", {}, f.name)]);
         el.onclick = pickBtn(f, el); return el; })));
   }).catch(() => {});
   const start = () => {
@@ -214,8 +215,8 @@ function viewAI() {
     wrap.textContent = "";
     const st = h("div", { class: "meta-sub ai-status" }, P.status);
     const retry = !P.thinking && g.phase === "play" && g.toMove() !== g.myColor ? h("button", { onclick: () => P.maybeAI() }, "Retry") : "";
-    const foe = g.S.foe;
-    g.extra = () => h("div", {}, [foe ? h("div", { class: "ai-foe-card" }, [foe.src ? h("img", { src: foe.src, alt: "" }) : "", h("div", {}, [h("b", {}, foe.name), h("small", {}, `${aiStyleOf(foe.who).name}: ${aiStyleOf(foe.who).about}`)])]) : "", st, retry]);
+    // (an avatar opponent: its portrait stands in the corner in place of yours, Avatars.mount; its name is the title)
+    g.extra = () => h("div", {}, [st, retry]);
     wrap.append(...playGame(g, P));
   };
   P.listeners.add(rerender);
