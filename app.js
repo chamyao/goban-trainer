@@ -5136,7 +5136,7 @@ const FriendPlay = {
     const S = g.S;
     if (S.phase === "waiting" && S.listed !== false)
       FriendLobby.offer({ code: S.code, size: S.size, time: S.time ? S.time.label : "no clock", name: S.names[S.hostColor] || "",
-                          hostColor: S.hostColor, at: S.created });
+                          hostColor: S.hostColor, at: S.created, kind: S.kind || "go" });
     else FriendLobby.withdraw(S.code);
   },
   persist() {
@@ -5154,17 +5154,18 @@ const FriendPlay = {
   emit() { for (const f of this.listeners) f(); },
   link(code) { return `${location.origin}${location.pathname}#/friend/${code}`; },
 
-  host({ size, time, color, name, listed = true }) {
+  host({ size, time, color, name, listed = true, kind = "go" }) {
     const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
-    this.start(this.fresh({ size, T: FRIEND_TIMES[time] || null, hostColor, names: { [hostColor]: name || "" }, listed }));
+    this.start(this.fresh({ size, T: FRIEND_TIMES[time] || null, hostColor, names: { [hostColor]: name || "" }, listed, kind }));
   },
-  fresh({ size, T, hostColor, names, listed, guest = null }) {
+  fresh({ size, T, hostColor, names, listed, guest = null, kind = "go" }) {
     const code = Array.from(crypto.getRandomValues(new Uint8Array(6)), b => "abcdefghjkmnpqrstuvwxyz23456789"[b % 31]).join("");
     return {
       v: 1, code, size, komi: 7.5, time: T && { main: T.main, periods: T.periods, period: T.period, label: T.label },
       hostColor, names, moves: [], removed: [], accepted: {},
       clocks: T ? { [BLACK]: { main: T.main, periods: T.periods }, [WHITE]: { main: T.main, periods: T.periods } } : {},
       phase: "waiting", result: null, seq: 0, created: Date.now(), guest, listed,
+      ...(kind === "xiangqi" ? { kind, size: 9 } : {}),   // xiangqi (xiangqi.js): its moves [r, c, r2, c2]
     };
   },
   start(S) {
@@ -5180,7 +5181,7 @@ const FriendPlay = {
     const g = this.game, S = g.S;
     if (g.me.role !== "host" || S.phase !== "finished" || S.next || !(S.rematch && S.rematch[BLACK] && S.rematch[WHITE])) return;
     const N2 = this.fresh({ size: S.size, T: S.time, hostColor: 3 - S.hostColor, names: { [BLACK]: S.names[WHITE], [WHITE]: S.names[BLACK] },
-                            listed: false, guest: S.guest });
+                            listed: false, guest: S.guest, kind: S.kind });
     try { localStorage.setItem(this.KEY + N2.code, JSON.stringify({ S: N2, me: { role: "host", color: N2.hostColor, token: null }, elapsed: 0 })); } catch {}
     this.change(s => { s.next = N2.code; });
     setTimeout(() => { if (this.game === g) location.hash = `#/friend/${N2.code}`; }, 400);   // the word gone across first
@@ -5318,6 +5319,23 @@ const FriendPlay = {
     });
     g.turnAt = Date.now();
   },
+  // a xiangqi move (xiangqi.js): legal for the side to move, then the game ends if the other side has none
+  xqMove(m) {
+    const g = this.game;
+    if (!g.myTurn) return;
+    const side = xqSide(g.myColor), b = Xiangqi.replay(g.S.moves);
+    if (!Xiangqi.legal(b, side).some(x => x.join() === m.join())) { g.error = "Not a legal move."; return this.emit(); }
+    const t = g.timeLeft(g.myColor);
+    if (t && t.byo && !t.periods) return this.lose(g.myColor, "time");
+    g.error = "";
+    this.change(S => {
+      if (t) S.clocks[g.myColor] = t.byo ? { main: 0, periods: t.periods } : { main: t.main, periods: S.clocks[g.myColor].periods };
+      S.moves.push(m);
+      const b2 = Xiangqi.apply(b, m), them = side === "r" ? "b" : "r";
+      if (!Xiangqi.legal(b2, them).length) { S.phase = "finished"; S.result = { winner: g.myColor, how: Xiangqi.inCheck(b2, them) ? "checkmate" : "stalemate" }; }
+    });
+    g.turnAt = Date.now();
+  },
   lose(color, how) { this.change(S => { S.phase = "finished"; S.result = { winner: 3 - color, how }; }); },
   resign() { this.lose(this.game.myColor, "resignation"); },
   setRemoved(points, removed) {
@@ -5449,14 +5467,17 @@ function friendName() { try { return localStorage.getItem("gt-friend-name") || S
 // the Play tab's first panel: host a game, or go back to one
 function friendLobby() {
   const sel = (name, opts, val) => h("select", { class: "rec-field", name }, opts.map(([v, t]) => h("option", { value: v, ...(v === val ? { selected: "" } : {}) }, t)));
+  const kind = sel("kind", [["go", "Go"], ["xiangqi", "Xiangqi 象棋"]], localStorage.getItem("gt-friend-kind") || "go");
   const size = sel("size", [["19", "19×19"], ["13", "13×13"], ["9", "9×9"]], "19");
+  const color0 = () => { size.style.display = kind.value === "xiangqi" ? "none" : ""; color.querySelector('[value="black"]').textContent = kind.value === "xiangqi" ? "I take Red (first)" : "I take Black"; color.querySelector('[value="white"]').textContent = kind.value === "xiangqi" ? "I take Black" : "I take White"; };
   const time = sel("time", [["20m", FRIEND_TIMES["20m"].label], ["10m", FRIEND_TIMES["10m"].label], ["3m", FRIEND_TIMES["3m"].label], ["none", "No clock"]], "20m");
   const color = sel("color", [["random", "Colors: random"], ["black", "I take Black"], ["white", "I take White"]], "random");
+  kind.addEventListener("change", () => { try { localStorage.setItem("gt-friend-kind", kind.value); } catch {} color0(); }); color0();
   const name = h("input", { class: "rec-field", placeholder: "Your name (optional)", value: friendName(), maxlength: "24" });
   const listed = h("input", { type: "checkbox", class: "friend-listed", checked: "" });
   const go = () => {
     try { localStorage.setItem("gt-friend-name", name.value.trim()); } catch {}
-    FriendPlay.host({ size: +size.value, time: time.value, color: color.value, name: name.value.trim(), listed: listed.checked });
+    FriendPlay.host({ size: +size.value, time: time.value, color: color.value, name: name.value.trim(), listed: listed.checked, kind: kind.value });
   };
   // the open games, kept current as the lobby's list changes
   const open = h("div", { class: "review-history friend-open", style: "margin:0" });
@@ -5469,8 +5490,8 @@ function friendLobby() {
     for (const g of games) {
       const own = mine.has(g.code);
       const row = h("div", { class: "history-item friend-game" }, [h("div", { class: "hi-open" }, [
-        h("div", { class: "t" }, `${own ? "Your game" : (g.name || "Someone")} · ${g.size}×${g.size}`),
-        h("div", { class: "n" }, `${g.time} · ${own ? "waiting for someone to join" : `you'd play ${g.hostColor === BLACK ? "White" : "Black"}`}`),
+        h("div", { class: "t" }, `${own ? "Your game" : (g.name || "Someone")} · ${g.kind === "xiangqi" ? "Xiangqi" : `${g.size}×${g.size}`}`),
+        h("div", { class: "n" }, `${g.time} · ${own ? "waiting for someone to join" : `you'd play ${g.kind === "xiangqi" ? (g.hostColor === BLACK ? "Black" : "Red") : g.hostColor === BLACK ? "White" : "Black"}`}`),
       ])]);
       row.addEventListener("click", () => { location.hash = `#/friend/${g.code}`; });
       open.append(row);
@@ -5482,7 +5503,7 @@ function friendLobby() {
   const mine = FriendPlay.list().filter(v => v.S.phase !== "finished").slice(0, 5).map(v => {
     const row = h("div", { class: "history-item" }, [h("div", { class: "hi-open" }, [
       h("div", { class: "t" }, `${v.S.phase === "waiting" ? "Waiting for a friend" : "Resume game"} · ${v.S.code}`),
-      h("div", { class: "n" }, `${v.S.size}×${v.S.size} · ${v.S.moves.length} moves · ${v.me.role === "host" ? "you host" : "you joined"}`),
+      h("div", { class: "n" }, `${v.S.kind === "xiangqi" ? "Xiangqi" : `${v.S.size}×${v.S.size}`} · ${v.S.moves.length} moves · ${v.me.role === "host" ? "you host" : "you joined"}`),
     ])]);
     row.addEventListener("click", () => { location.hash = `#/friend/${v.S.code}`; });
     return row;
@@ -5491,7 +5512,7 @@ function friendLobby() {
     h("div", { class: "cat-title" }, "Play a friend"),
     h("div", {}, "No login: join an open game below, or host one. Anyone on this page sees it, or send the link. Chinese rules, komi 7.5."),
     h("div", { class: "meta-sub" }, "Open games"), open,
-    h("div", { class: "row" }, [size, time, color]),
+    h("div", { class: "row" }, [kind, size, time, color]),
     h("div", { class: "row" }, [name, h("button", { class: "primary host-friend", onclick: go }, "Host a game")]),
     h("label", { class: "meta-sub" }, [listed, " Show it in Open games (otherwise only the link joins)"]),
     mine.length ? h("div", { class: "review-history", style: "margin:0" }, mine) : "",
@@ -5524,16 +5545,16 @@ function friendBody() {
     const copy = h("button", { class: "primary", onclick: async () => {
       try { await navigator.clipboard.writeText(url); copy.textContent = "Copied"; } catch { field.select(); }
     } }, "Copy link");
-    const share = navigator.share ? h("button", { onclick: () => navigator.share({ title: "A game of Go", url }).catch(() => {}) }, "Share…") : "";
+    const share = navigator.share ? h("button", { onclick: () => navigator.share({ title: g.S.kind === "xiangqi" ? "A game of xiangqi" : "A game of Go", url }).catch(() => {}) }, "Share…") : "";
     return [h("div", { class: "sgf-loader" }, g.phase === "joining"
       ? [h("div", { class: "cat-title" }, "Joining a friend's game"), h("div", {}, `Game ${g.S.code}.`), st]
       : [h("div", { class: "cat-title" }, "Waiting for your friend"),
-         h("div", {}, `${g.S.listed !== false ? "It's in Open games on the Play tab, or send" : "Send"} this link. Keep this page open: the game runs between your two browsers. ${g.S.size}×${g.S.size}, ${g.S.time ? g.S.time.label : "no clock"}, you play ${g.myColor === BLACK ? "Black" : "White"}.`),
+         h("div", {}, `${g.S.listed !== false ? "It's in Open games on the Play tab, or send" : "Send"} this link. Keep this page open: the game runs between your two browsers. ${g.S.kind === "xiangqi" ? "Xiangqi" : `${g.S.size}×${g.S.size}`}, ${g.S.time ? g.S.time.label : "no clock"}, you play ${g.S.kind === "xiangqi" ? (g.myColor === BLACK ? "Red" : "Black") : g.myColor === BLACK ? "Black" : "White"}.`),
          h("div", { class: "row" }, [field, copy, share]), st,
          h("div", { class: "row" }, [h("button", { onclick: () => { FriendLobby.withdraw(g.S.code); try { localStorage.removeItem(P.KEY + g.S.code); } catch {} P.close(); location.hash = "#/play"; } }, "Cancel")])])];
   }
   g.extra = () => P.status ? st : "";
-  const out = playGame(g, P);
+  const out = g.S.kind === "xiangqi" ? xqGame(g, P) : playGame(g, P);
   const tick = playTicker;   // playGame's ticker, plus the clocks running out
   const t2 = setInterval(() => { if (playTicker !== tick || !document.body.contains(out[0])) return clearInterval(t2); P.tick(); }, 500);
   return out;

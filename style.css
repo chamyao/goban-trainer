@@ -1333,3 +1333,25 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .ai-foe-card { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
 .ai-foe-card img { width: 72px; height: 72px; object-fit: cover; object-position: top; border-radius: 8px; image-rendering: pixelated; }
 .ai-foe-card small { display: block; opacity: .8; }
+
+/* xiangqi (xiangqi.js) */
+.xq-card { max-width: 620px; }
+.xq-board { width: 100%; height: auto; display: block; touch-action: manipulation; }
+.xq-wood { fill: #e8c98a; }
+.xq-lines { stroke: #5a3a1a; stroke-width: 2; fill: none; }
+.xq-river { font: 700 30px "Noto Serif SC", "Songti SC", serif; fill: #6b4a24; letter-spacing: 12px; }
+.xq-last { fill: rgba(30, 120, 220, .18); stroke: rgba(30, 120, 220, .6); stroke-width: 2; }
+.xq-piece circle:first-child { fill: #f6e7c8; stroke: #5a3a1a; stroke-width: 2; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+.xq-piece .xq-ring { fill: none; stroke-width: 1.5; }
+.xq-piece text { font: 700 28px "Noto Serif SC", "Songti SC", "KaiTi", serif; pointer-events: none; }
+.xq-r text, .xq-r .xq-ring { fill: #b3141b; stroke: #b3141b; } .xq-r text { stroke: none; }
+.xq-b text, .xq-b .xq-ring { fill: #1b1b1b; stroke: #1b1b1b; } .xq-b text { stroke: none; }
+.xq-r .xq-ring, .xq-b .xq-ring { fill: none; }
+.xq-mine, .xq-take { cursor: pointer; }
+.xq-sel circle:first-child { stroke: #1f6fd1; stroke-width: 4; }
+.xq-take circle:first-child { stroke: #d1301f; stroke-width: 4; }
+.xq-check circle:first-child { fill: #ffd6d0; stroke: #d1301f; stroke-width: 4; }
+.xq-dot { fill: rgba(31, 111, 209, .75); pointer-events: none; }
+.xq-hit { fill: transparent; cursor: pointer; }
+.xq-dotside { display: inline-block; width: 14px; height: 14px; border-radius: 50%; margin-right: 6px; vertical-align: -2px; }
+.xq-dotside.xq-r { background: #b3141b; } .xq-dotside.xq-b { background: #1b1b1b; }
