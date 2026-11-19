@@ -2348,6 +2348,11 @@ async function viewLibrary() {
       h("div", { class: "t" }, "Joseki · 定式"), h("div", { class: "n" }, "the corners from these pros' own games, one tree: what they played, how often, how it went"),
       h("div", { class: "row" }, [h("span", { class: "badge dan" }, "pro"), h("span", { class: "cnt" }, "explorer")]),
     ]),
+    // poker: postflop spots, answered by a game-theory solver (poker.js)
+    "~poker": () => h("a", { class: "book book-poker", href: "#/poker" }, [
+      h("div", { class: "t" }, "Poker · postflop"), h("div", { class: "n" }, "heads-up 100bb spots on the flop, turn and river: your hand, the board, the action; what would a solver do?"),
+      h("div", { class: "row" }, [h("span", { class: "badge" }, "solver"), h("span", { class: "cnt" }, (() => { const d = Object.values(prog.poker || {}).filter(v => v === 1).length; return d ? `${d} solved` : "puzzles"; })())]),
+    ]),
     // the Stream heads the Tsumego shelf: a book with no end, dealt by the story mode's own rating (viewStream)
     "~stream": () => h("div", { class: "book book-stream", onclick: () => location.hash = "#/stream" }, [
       h("div", { class: "t" }, "Stream"),
@@ -2399,6 +2404,7 @@ async function viewLibrary() {
   for (const [cat, title] of Object.entries(cats))
     shelf(title, [...(cat === "tsumego" ? [show("~stream"), show("~turning"), show("~keymoves")] : []), ...index.filter(b => b.category === cat).map(bookCard)]);
   shelf("Game records", [show("~joseki"), ...GAME_SHELVES.map(([id]) => show(`~games:${id}`))]);
+  shelf("Poker", [show("~poker")]);
 }
 
 // A shelf of game records (data/games/<id>.json): the games by date, a search, and each opens in the Review tab
@@ -5703,6 +5709,7 @@ async function route() {
   else if (parts[0] === "keymoves") viewTurning("key", 0, +parts[1] || null);
   else if (parts[0] === "review") viewReview();
   else if (parts[0] === "joseki") await viewJoseki();
+  else if (parts[0] === "poker") await Poker.view(parts[1]);
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "friend" && parts[1]) viewFriend(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
