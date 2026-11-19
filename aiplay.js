@@ -24,7 +24,7 @@ const AI_STYLES = {
   calm: { name: "calm", about: "plays the best move it sees", slack: 0.01 },
 };
 const AI_CAST = {
-  caocao: "fighter", zhangliao: "fighter", ms_oh: "fighter", zhaoyun: "fighter", lijue: "fighter",
+  caocao: "fighter", zhangliao: "fighter", ms_oh: "fighter", ms_oh_hike: "fighter", zhaoyun: "fighter", lijue: "fighter",
   dongzhuo: "territory", ms_ahn: "territory", grannyliu: "territory", houcheng: "territory",
   chengong: "influence", daiyu: "influence", chenliu: "influence", ladysun: "influence",
   liubei: "solid", ms_sun: "solid", chendeng: "solid", yanshi: "solid",
