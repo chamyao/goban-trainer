@@ -1318,3 +1318,8 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .pk-result { padding-top: 6px; }
 .pk-result.win b { color: #2e9d55; } .pk-result.slip b { color: #d64545; }
 .pk-hr { opacity: .7; }
+
+/* play KataGo (aiplay.js) */
+.ai-opts { flex-wrap: wrap; gap: 10px 16px; }
+.ai-opts label { display: inline-flex; align-items: center; gap: 6px; }
+.ai-opts select { min-height: 36px; }

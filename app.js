@@ -4669,7 +4669,7 @@ function viewPlay(gameId) {
   const rerender = () => {
     if (!wrap.isConnected) { OGSPlay.listeners.delete(rerender); return; }
     wrap.textContent = "";
-    wrap.append(...(gameId ? [] : [friendLobby()]), ...playBody(gameId));
+    wrap.append(...(gameId ? [] : [aiLobby(), friendLobby()]), ...playBody(gameId));   // (aiplay.js: KataGo)
   };
   OGSPlay.listeners.add(rerender);
   rerender();
@@ -5698,7 +5698,7 @@ async function route() {
   // took its clicks: it goes with the story
   if (parts[0] !== "tk") for (const w of document.querySelectorAll("body > .tk-scroll-wrap")) w.remove();
   clearInterval(playTicker);
-  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : parts[0] === "friend" ? "play" : "library";   // (the Stream is a card in the Library)
+  const tab = ["review", "play", "feedback"].includes(parts[0]) ? parts[0] : parts[0] === "friend" || parts[0] === "ai" ? "play" : "library";   // (the Stream is a card in the Library)
   if (window.Wukong && Wukong.suspend) Wukong.suspend(parts[0] === "tk" && !parts[2]);  // the map has its own party
   for (const a of document.querySelectorAll("#tabs a"))
     a.classList.toggle("active", a.dataset.tab === tab);
@@ -5711,6 +5711,7 @@ async function route() {
   else if (parts[0] === "review") viewReview();
   else if (parts[0] === "joseki") await viewJoseki();
   else if (parts[0] === "poker") await Poker.view(parts[1]);
+  else if (parts[0] === "ai") viewAI();
   else if (parts[0] === "play") viewPlay(parts[1]);
   else if (parts[0] === "friend" && parts[1]) viewFriend(parts[1]);
   else if (parts[0] === "feedback") viewFeedback();
