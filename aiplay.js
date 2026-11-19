@@ -79,7 +79,10 @@ const AIPlay = {
     const g = this.game;
     if (!g || g.phase !== "play" || g.toMove() === g.myColor || this.thinking) return;
     this.thinking = true; this.status = "KataGo is thinking…"; this.emit();
-    const L = AI_LEVELS[g.S.level], sz = g.S.size, me = g.toMove();
+    const L = AI_LEVELS[g.S.level], sz = g.S.size, me = g.toMove(), t0 = Date.now();
+    // a moment before it plays, as a person would (apo110: "the instant play is kind of jarring"): 1-2.5 s, a little
+    // longer in the middle game, the search's own time counted in
+    const think = 1000 + Math.random() * 1500 + (g.S.moves.length > 20 && g.S.moves.length < 200 ? 500 : 0);
     try {
       const grid = g.replay().grid;
       const board = gridToBoardState(grid).slice(0, sz).map(row => row.slice(0, sz));
@@ -101,6 +104,9 @@ const AIPlay = {
         pick = near[Math.floor(Math.random() * near.length)] || legal[0];
         if (lastPass && Math.abs(mine(pick.winRate ?? best) - mine(a.rootWinRate ?? best)) < 0.01 && mine(a.rootWinRate ?? 0.5) > 0.5) pick = null;   // nothing left to gain: it passes
       }
+      const wait = think - (Date.now() - t0);
+      if (wait > 0) await new Promise(r => setTimeout(r, wait));
+      if (this.game !== g || g.phase !== "play") return;
       this.status = pick ? "" : "KataGo passes.";
       this.play(pick ? pick.x : -1, pick ? pick.y : -1);
     } catch (e) {
