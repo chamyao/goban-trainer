@@ -1309,3 +1309,12 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
   .pk-card { width: 38px; height: 54px; } .pk-card b { font-size: 18px; } .pk-card i { font-size: 16px; }
   .pk-bar { grid-template-columns: 1fr 1.2fr 40px 64px; font-size: 13px; }
 }
+
+/* poker: who raised preflop (a gold ring and a badge), the dealer button, the stakes, a hand's result */
+.pk-raiser .pk-hand { padding: 4px; border-radius: 10px; box-shadow: 0 0 0 3px #e7b84a, 0 0 14px rgba(231,184,74,.55); }
+.pk-pfr { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: #e7b84a; color: #2a1d05; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; vertical-align: 1px; }
+.pk-dealer { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; margin-right: 5px; border-radius: 50%; background: #fff; color: #222; font-size: 11px; font-weight: 800; box-shadow: 0 1px 2px rgba(0,0,0,.4); vertical-align: 1px; }
+.pk-stakes { font-variant-numeric: tabular-nums; opacity: .85; }
+.pk-result { padding-top: 6px; }
+.pk-result.win b { color: #2e9d55; } .pk-result.slip b { color: #d64545; }
+.pk-hr { opacity: .7; }

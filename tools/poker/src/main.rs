@@ -105,7 +105,7 @@ fn main() {
                 continue;
             }
             let acts: Vec<String> = game.available_actions().iter().map(act_str).collect();
-            let idx = if st == "bet" || st == "raise" {
+            let idx = if st == "bet" || st == "raise" || st == "allin" {
                 acts.iter().position(|a| a.starts_with(st))
             } else if st == "bet2" || st == "raise2" {
                 acts.iter().enumerate().filter(|(_, a)| a.starts_with(&st[..st.len() - 1])).nth(1).map(|(i, _)| i)

@@ -1,38 +1,65 @@
-"""Turn the solves (out/<id>.json, from run.py) into puzzles: data/poker.json for poker.js.
+"""Turn the solves (out/<id>.json, from run.py) into hands for poker.js: data/poker.json.
 
-At each decision the solver reached, a few hands are chosen whose answer is clear (one action at least 70% of the
-time), one per action where possible, so the puzzles don't all have the same answer. Each puzzle: the board, the hand,
-the action so far as text, the pot and stacks in big blinds, and for every action the solver's frequency with that hand
-and its EV (bb). Usage: python3 build.py"""
+A hand follows one line through the flop, turn and river (the user: "I wanted it to go to turn and river"): at each
+of the hero's decisions on that line, the solver's answer for this exact hand (each action's frequency and EV), the
+action the line takes (it goes on that way whatever was chosen), and at the end a decision that's the hand's last.
+A hand is used only if the hero takes the line's action at least 60% of the time at each step (so the line is one this
+hand really plays), and its last decision is clear (one action >= 70%) with a wrong choice costing something. A step
+where the hero checks almost always (>= 90%) is played for them ("auto"), not asked.
+
+Each hand gets a difficulty rating (for poker.js's rating, like the Stream's): higher when the right play goes against
+instinct (betting or raising with little equity, checking or folding with a lot, calling thin), when the margins are
+small, and with more decisions to make. Usage: python3 build.py"""
 import json, os, random
+from collections import Counter
 
 here = os.path.dirname(os.path.abspath(__file__))
 S = json.load(open(os.path.join(here, "spots.json")))
 SUIT = {"s": "♠", "h": "♥", "d": "♦", "c": "♣"}
 RANKS = "23456789TJQKA"
 STREET = ["flop", "turn", "river"]
-PER_NODE = 2          # puzzles per decision
-CLEAR = 0.7           # the answer's frequency, at least
-GAP = 0.3             # bb: how far the next-best action must trail (or 3% of the pot, if more)
+PER_CHAIN = 4         # hands per line
+CLEAR = 0.7           # the last decision's answer: at least this often
+ONLINE = 0.6          # the line's action at each earlier step: at least this often
+AUTO = 0.9            # a check this sure is played for the hero
+GAP = 0.3             # bb: how far the next-best action trails at the last decision (or 3% of the pot)
 random.seed(7)
+
+# the lines: steps of (line to the hero's decision, the action the line takes there; None = the last decision)
+CHAINS = {
+    "srp": {
+        "ip": [(["check"], "bet"), (["check", "bet", "call", "T", "check"], "bet"),
+               (["check", "bet", "call", "T", "check", "bet", "call", "R", "check"], None)],
+        "ip-raise": [(["check"], "bet"), (["check", "bet", "call", "T", "check"], "bet"),
+                     (["check", "bet", "call", "T", "check", "bet", "call", "R", "check"], "bet"),
+                     (["check", "bet", "call", "T", "check", "bet", "call", "R", "check", "bet", "raise"], None)],
+        "oop": [([], "check"), (["check", "bet"], "call"), (["check", "bet", "call", "T"], "check"),
+                (["check", "bet", "call", "T", "check", "bet"], "call"),
+                (["check", "bet", "call", "T", "check", "bet", "call", "R"], "check"),
+                (["check", "bet", "call", "T", "check", "bet", "call", "R", "check", "bet"], None)],
+    },
+    "3bp": {
+        "oop": [([], "bet"), (["bet", "call", "T"], "bet"), (["bet", "call", "T", "bet", "call", "R"], None)],
+        "ip": [(["bet"], "call"), (["bet", "call", "T", "bet"], "call"), (["bet", "call", "T", "bet", "call", "R", "allin"], None)],
+    },
+}
 
 
 def bb(ch): return round(ch / 10, 1)
 def fmt(x): return ("%.1f" % x).rstrip("0").rstrip(".")
-def pretty(c): return (("10" if c[0] == "T" else c[0]) + SUIT[c[1]])
+def pretty(c): return ("10" if c[0] == "T" else c[0]) + SUIT[c[1]]
 
 
 def replay(spot, kind, walked):
-    """Walk the line: the history as text, the pot and each player's chips in front, at the end."""
+    """Walk the line: the history as text, the pot before this street's bets, each player's chips in front and left."""
     names = [kind["oop_name"], kind["ip_name"]]
-    pot, stack = kind["pot"], kind["stack"]
-    left = [stack, stack]
+    pot, left = kind["pot"], [kind["stack"], kind["stack"]]
     street, actor, front = 0, 0, [0, 0]
     board = [spot["flop"][i:i + 2] for i in (0, 2, 4)]
     lines, cur = [kind["pre"]], []
     head = lambda: f"{STREET[street].capitalize()} {' '.join(pretty(c) for c in board)}:"
     for w in walked:
-        if len(w) == 2 and w[0] in RANKS and w[1] in SUIT:   # a card: the next street
+        if len(w) == 2 and w[0] in RANKS and w[1] in SUIT:
             lines.append(head() + " " + ", ".join(cur) + ".")
             pot += front[0] + front[1]; front = [0, 0]; cur = []
             street += 1; board.append(w); actor = 0
@@ -41,17 +68,13 @@ def replay(spot, kind, walked):
         who = names[actor]
         if a == "check": cur.append(f"{who} checks")
         elif a == "call":
-            pay = front[1 - actor] - front[actor]; front[actor] += pay; left[actor] -= pay
-            cur.append(f"{who} calls")
+            pay = front[1 - actor] - front[actor]; front[actor] += pay; left[actor] -= pay; cur.append(f"{who} calls")
         elif a in ("bet", "raise", "allin"):
-            to = int(amt[0]); pay = to - front[actor]; front[actor] = to; left[actor] -= pay
-            size = to if a == "bet" else to
-            if a == "bet": cur.append(f"{who} bets {fmt(bb(to))} bb")
-            elif a == "raise": cur.append(f"{who} raises to {fmt(bb(to))} bb")
-            else: cur.append(f"{who} goes all-in for {fmt(bb(to))} bb")
+            to = int(amt[0]); left[actor] -= to - front[actor]; front[actor] = to
+            cur.append({"bet": f"{who} bets {fmt(bb(to))} bb", "raise": f"{who} raises to {fmt(bb(to))} bb"}.get(a, f"{who} goes all-in for {fmt(bb(to))} bb"))
         elif a == "fold": cur.append(f"{who} folds")
         actor = 1 - actor
-    lines.append(head() + " " + ", ".join(cur) + "." if cur else head()[:-1] + ".")   # (a street just dealt: nothing yet)
+    lines.append(head() + " " + ", ".join(cur) + "." if cur else head()[:-1] + ".")
     return lines, pot, front, left, board
 
 
@@ -66,57 +89,91 @@ def label(a, pot_now, front, me):
     return f"All-in {fmt(bb(to))} bb"
 
 
+def find(acts, want):
+    """The index of the line's action among the node's actions ("bet" = the smallest bet)."""
+    for i, a in enumerate(acts):
+        if a == want or (want in ("bet", "raise", "allin") and a.startswith(want)): return i
+    return None
+
+
+def difficulty(steps):
+    """A rating (about 700-1900) from the decisions' nature, margins and number."""
+    d = 700 + 60 * sum(1 for s in steps if not s["auto"])
+    for s in steps:
+        if s["auto"]: continue
+        a = s["actions"]; best = max(range(len(a)), key=lambda i: a[i]["f"])
+        kind = a[best]["label"].split()[0]; eq = s["equity"]
+        evs = sorted((x["ev"] for x in a), reverse=True)
+        gap = (evs[0] - evs[1]) / max(1, s["pot"])           # the margin, against the pot
+        if kind in ("Bet", "Raise", "All-in") and eq < 0.4: d += 260 * (0.4 - eq) / 0.4 + 120    # a bluff
+        if kind in ("Check", "Fold") and eq > 0.5: d += 260 * (eq - 0.5) / 0.5 + 100             # holding back / letting go
+        if kind == "Call" and eq < 0.4: d += 200 * (0.4 - eq) / 0.4 + 60                         # a thin call
+        d += max(0, 180 * (1 - gap / 0.15))                                                     # a small margin
+        if a[best]["f"] < 0.85: d += 80                                                          # the solver itself mixes a little
+    return int(round(d / 10) * 10)
+
+
 def main():
-    puzzles = []
+    hands = []
     for sp in S["spots"]:
         path = os.path.join(here, "out", sp["id"] + ".json")
         if not os.path.exists(path): print("no solve yet:", sp["id"]); continue
         kind = S[sp["kind"]]
         res = json.load(open(path))
-        for ni, node in enumerate(res["nodes"]):
-            if "error" in node: continue
-            me = node["player"]
-            hist, pot0, front, left, board = replay(sp, kind, node["walked"])
-            pot_now = pot0 + front[0] + front[1]
-            acts = node["actions"]
-            # clear hands, grouped by their answer; one or two answers' worth, spread out
-            by = {}
-            wmax = max([hd["w"] for hd in node["hands"]] or [0])
-            for hd in node["hands"]:
-                if hd["w"] < 0.2 * wmax: continue                # hands that rarely get here (or are mostly blocked) left out
-                top = max(range(len(acts)), key=lambda i: hd["f"][i])
-                if hd["f"][top] < CLEAR: continue
-                # a wrong choice has to cost something: the best other action at least GAP behind (else any answer is fine)
-                gap = hd["ev"][top] - max(hd["ev"][i] for i in range(len(acts)) if i != top)
-                if gap < max(GAP * 10, 0.03 * pot_now): continue
-                by.setdefault(top, []).append(hd)
+        sub = lambda l: [sp["turn"] if x == "T" else sp["river"] if x == "R" else x for x in l]
+        nodes = {tuple(n["line"]): n for n in res["nodes"] if "error" not in n}
+        for cname, chain in CHAINS[sp["kind"]].items():
+            ns = [nodes.get(tuple(sub(l))) for l, _ in chain]
+            if any(n is None for n in ns): print("missing a decision:", sp["id"], cname); continue
+            me = ns[0]["player"]
+            idx = [{h["h"]: h for h in n["hands"]} for n in ns]
+            common = set(idx[0]).intersection(*idx[1:])
+            groups = {}
+            for hs in sorted(common):
+                ok = True
+                for (line, want), n, ix in zip(chain[:-1], ns[:-1], idx[:-1]):
+                    j = find(n["actions"], want)
+                    if j is None or ix[hs]["f"][j] < ONLINE: ok = False; break
+                if not ok: continue
+                last, h = ns[-1], idx[-1][hs]
+                top = max(range(len(last["actions"])), key=lambda i: h["f"][i])
+                if h["f"][top] < CLEAR: continue
+                _, pot0, front, _, _ = replay(sp, kind, last["walked"])
+                gap = h["ev"][top] - max(h["ev"][i] for i in range(len(h["ev"])) if i != top)
+                if gap < max(GAP * 10, 0.03 * (pot0 + sum(front))): continue
+                groups.setdefault(last["actions"][top].split()[0], []).append(hs)
             picks = []
-            for top in sorted(by, key=lambda t: -node["mix"][t]):
-                if len(picks) >= PER_NODE: break
-                picks.append(random.choice(by[top]))
-            for hd in picks:
-                street = STREET[len(board) - 3]
-                facing = front[1 - me] - front[me]
-                puzzles.append({
-                    "id": f"{sp['id']}-{ni}-{hd['h']}",
-                    "street": street,
-                    "hero": kind["oop_name"] if me == 0 else kind["ip_name"],
-                    "villain": kind["ip_name"] if me == 0 else kind["oop_name"],
-                    "board": board, "hand": hd["h"],
-                    "pot": bb(pot_now), "heroStack": bb(left[me]), "villainStack": bb(left[1 - me]),
-                    "facing": bb(facing), "facingLabel": f"bets {fmt(bb(front[1 - me]))} bb" if facing and front[me] == 0 else (f"raises to {fmt(bb(front[1 - me]))} bb" if facing else ""),
-                    "history": hist,
-                    "actions": [{"label": label(a, pot_now, front, me), "f": hd["f"][i], "ev": bb(hd["ev"][i])} for i, a in enumerate(acts)],
-                    "mix": node["mix"],
-                    "equity": hd["eq"],
-                })
-    # flop first, then turn, then river; within a street, the spots interleaved
-    order = {"flop": 0, "turn": 1, "river": 2}
-    puzzles.sort(key=lambda p: (order[p["street"]], p["id"]))
+            for k in sorted(groups, key=lambda k: -len(groups[k])):
+                picks += random.sample(groups[k], min(2, len(groups[k])))
+            for hs in picks[:PER_CHAIN]:
+                steps = []
+                for (line, want), n, ix in zip(chain, ns, idx):
+                    hist, pot0, front, left, board = replay(sp, kind, n["walked"])
+                    pot_now = pot0 + front[0] + front[1]
+                    h = ix[hs]; facing = front[1 - me] - front[me]
+                    j = find(n["actions"], want) if want else None
+                    steps.append({
+                        "street": STREET[len(board) - 3], "board": board, "history": hist,
+                        "pot": bb(pot_now), "heroStack": bb(left[me]), "villainStack": bb(left[1 - me]),
+                        "facingLabel": (f"bets {fmt(bb(front[1 - me]))} bb" if front[me] == 0 else f"raises to {fmt(bb(front[1 - me]))} bb") if facing else "",
+                        "actions": [{"label": label(a, pot_now, front, me), "f": h["f"][i], "ev": bb(h["ev"][i])} for i, a in enumerate(n["actions"])],
+                        "line": j, "auto": bool(want == "check" and j is not None and h["f"][j] >= AUTO),
+                        "mix": n["mix"], "equity": h["eq"],
+                    })
+                hands.append({"id": f"{sp['id']}-{cname}-{hs}", "spot": sp["id"], "kind": sp["kind"],
+                              "hero": kind["oop_name"] if me == 0 else kind["ip_name"], "villain": kind["ip_name"] if me == 0 else kind["oop_name"],
+                              "raiser": kind["raiser"], "raiseLabel": kind["raise_label"], "hand": hs,
+                              "rating": difficulty(steps), "steps": steps})
+    # spread evenly by difficulty, 800 (easiest) to 1800 (hardest): the raw scores rank the hands, the rank is the rating
+    hands.sort(key=lambda x: x["rating"])
+    for i, x in enumerate(hands): x["rating"] = int(round((800 + 1000 * i / max(1, len(hands) - 1)) / 10) * 10)
     out = os.path.join(here, "..", "..", "data", "poker.json")
-    json.dump({"v": 1, "about": "Heads-up 100bb; answers from postflop-solver (tools/poker). Sizes: flop BTN 33%/75%, BB lead 50%; turn and river 75%; raises 3x; all-in.", "puzzles": puzzles}, open(out, "w"), ensure_ascii=False, separators=(",", ":"))
-    from collections import Counter
-    print(len(puzzles), "puzzles", dict(Counter(p["street"] for p in puzzles)), "answers", dict(Counter(max(p["actions"], key=lambda a: a["f"])["label"].split()[0] for p in puzzles)))
+    json.dump({"v": 2, "about": "Heads-up 100bb; answers from postflop-solver (tools/poker). Sizes: flop BTN 33%/75%, BB lead 50%; turn and river 75%; raises 3x; all-in.",
+               "hands": hands}, open(out, "w"), ensure_ascii=False, separators=(",", ":"))
+    if hands:
+        print(len(hands), "hands; decisions", sum(sum(1 for s in x["steps"] if not s["auto"]) for x in hands),
+              "; by spot", dict(Counter(x["spot"] for x in hands)), "; ratings", min(x["rating"] for x in hands), "-", max(x["rating"] for x in hands),
+              "; last answers", dict(Counter(max(x["steps"][-1]["actions"], key=lambda a: a["f"])["label"].split()[0] for x in hands)))
 
 
 if __name__ == "__main__":

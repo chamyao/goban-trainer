@@ -167,6 +167,7 @@ const Sync = {
         continue;
       }
       if (bookId === "tkElo") { local.tkElo = this.mergeElo(local.tkElo, remote.tkElo); continue; }
+      if (bookId === "pokerElo") { local.pokerElo = Poker.merge(local.pokerElo, remote.pokerElo); continue; }   // (poker.js)
       if (bookId === "ev") { local.ev = Events.merge(local.ev, remote.ev); continue; }   // (events.js)
       if (bookId === "av") { local.av = Avatars.merge(local.av, remote.av); continue; }   // the avatars collected (avatars.js)   // the event ledger (events.js)
       const b = local[bookId] || (local[bookId] = {});
@@ -2350,8 +2351,8 @@ async function viewLibrary() {
     ]),
     // poker: postflop spots, answered by a game-theory solver (poker.js)
     "~poker": () => h("a", { class: "book book-poker", href: "#/poker" }, [
-      h("div", { class: "t" }, "Poker · postflop"), h("div", { class: "n" }, "heads-up 100bb spots on the flop, turn and river: your hand, the board, the action; what would a solver do?"),
-      h("div", { class: "row" }, [h("span", { class: "badge" }, "solver"), h("span", { class: "cnt" }, (() => { const d = Object.values(prog.poker || {}).filter(v => v === 1).length; return d ? `${d} solved` : "puzzles"; })())]),
+      h("div", { class: "t" }, "Poker · postflop"), h("div", { class: "n" }, "heads-up 100bb hands played from the flop to the river, each decision against a solver; rated like the Stream"),
+      h("div", { class: "row" }, [h("span", { class: "badge" }, "solver"), h("span", { class: "cnt" }, prog.pokerElo ? `rating ${prog.pokerElo.r}` : "rated")]),
     ]),
     // the Stream heads the Tsumego shelf: a book with no end, dealt by the story mode's own rating (viewStream)
     "~stream": () => h("div", { class: "book book-stream", onclick: () => location.hash = "#/stream" }, [
