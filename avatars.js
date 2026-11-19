@@ -464,5 +464,7 @@ const Avatars = (() => {
   });
   // the picked one's portrait and name, for another page's own use (the Events page's host)
   const host = async () => { const who = picked(); if (!who) return null; const m = await loadPortraits(); const f = face(who, m); return f ? { who, name: name(who), src: f } : null; };
-  return { tuck, tucked, host, INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
+  // a character's name and picture, for an opponent (aiplay.js)
+  const faceOf = async who => { const m = await loadPortraits(); return { who, name: name(who), src: face(who, m) }; };
+  return { faceOf, tuck, tucked, host, INTRO, intro, VOICE, SAY, MOMENTS, moment, onGame, say, unlock, cleared, owns, picked, leads, catchUp, mount: () => { mount(); return fixed; }, view, merge, count, norm };
 })();

@@ -1324,3 +1324,12 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .ai-opts label { display: inline-flex; align-items: center; gap: 6px; }
 .ai-opts select { min-height: 36px; }
 .pk-log { margin: 0; padding-left: 20px; font-size: 14px; } .pk-log .ok b { color: #2e9d55; } .pk-log .bad b { color: #d64545; }
+.ai-cast-title { margin: 6px 0; }
+.ai-foes { display: flex; flex-wrap: wrap; gap: 8px; }
+.ai-foe { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 92px; padding: 6px; border-radius: 10px; }
+.ai-foe img { width: 64px; height: 64px; object-fit: cover; object-position: top; border-radius: 8px; image-rendering: pixelated; }
+.ai-foe b { font-size: 12px; line-height: 1.1; text-align: center; } .ai-foe small { font-size: 11px; opacity: .75; }
+.ai-foe.on { outline: 3px solid var(--accent); }
+.ai-foe-card { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
+.ai-foe-card img { width: 72px; height: 72px; object-fit: cover; object-position: top; border-radius: 8px; image-rendering: pixelated; }
+.ai-foe-card small { display: block; opacity: .8; }
