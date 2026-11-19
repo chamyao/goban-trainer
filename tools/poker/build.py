@@ -7,9 +7,8 @@ A hand is used only if the hero takes the line's action at least 60% of the time
 hand really plays), and its last decision is clear (one action >= 70%) with a wrong choice costing something. A step
 where the hero checks almost always (>= 90%) is played for them ("auto"), not asked.
 
-Each hand gets a difficulty rating (for poker.js's rating, like the Stream's): higher when the right play goes against
-instinct (betting or raising with little equity, checking or folding with a lot, calling thin), when the margins are
-small, and with more decisions to make. Usage: python3 build.py"""
+Each hand gets a difficulty rating (for poker.js's rating, like the Stream's) from the gap between the best and the
+second-best action at each decision: see difficulty(). Usage: python3 build.py"""
 import json, os, random
 from collections import Counter
 
@@ -97,20 +96,19 @@ def find(acts, want):
 
 
 def difficulty(steps):
-    """A rating (about 700-1900) from the decisions' nature, margins and number."""
-    d = 700 + 60 * sum(1 for s in steps if not s["auto"])
+    """How hard the hand is, from the solve alone (the user: "something objective"): at each decision you're asked, the
+    gap in bb between the best action and the nearest one that counts as wrong; the closer, the harder to tell apart. The hand's
+    score sums 1 / gap over its decisions (a gap under 0.1 bb counts as 0.1). Only the order matters: main() spreads
+    the hands evenly from 800 to 1800 by this score."""
+    score = 0.0
     for s in steps:
         if s["auto"]: continue
-        a = s["actions"]; best = max(range(len(a)), key=lambda i: a[i]["f"])
-        kind = a[best]["label"].split()[0]; eq = s["equity"]
-        evs = sorted((x["ev"] for x in a), reverse=True)
-        gap = (evs[0] - evs[1]) / max(1, s["pot"])           # the margin, against the pot
-        if kind in ("Bet", "Raise", "All-in") and eq < 0.4: d += 260 * (0.4 - eq) / 0.4 + 120    # a bluff
-        if kind in ("Check", "Fold") and eq > 0.5: d += 260 * (eq - 0.5) / 0.5 + 100             # holding back / letting go
-        if kind == "Call" and eq < 0.4: d += 200 * (0.4 - eq) / 0.4 + 60                         # a thin call
-        d += max(0, 180 * (1 - gap / 0.15))                                                     # a small margin
-        if a[best]["f"] < 0.85: d += 80                                                          # the solver itself mixes a little
-    return int(round(d / 10) * 10)
+        best = max(x["ev"] for x in s["actions"])
+        # the nearest action that counts as wrong (as poker.js grades: under 25% and costing more than a sliver);
+        # a decision where nothing can be wrong adds nothing
+        wrong = [best - x["ev"] for x in s["actions"] if x["f"] < 0.25 and best - x["ev"] > max(0.05, s["pot"] * 0.01)]
+        if wrong: score += 1 / max(0.1, min(wrong))
+    return score
 
 
 def main():

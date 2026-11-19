@@ -10,7 +10,7 @@
    play moves yours (Elo, faster for the first hands), and hands are dealt near your level, aimed at a 3-in-4 win. */
 const Poker = (() => {
   let data = null;
-  const load = async () => data || (data = await (await fetch("data/poker.json?v=2")).json());
+  const load = async () => data || (data = await (await fetch("data/poker.json?v=3")).json());
   const SUIT = { s: "♠", h: "♥", d: "♦", c: "♣" };
   const card = c => h("span", { class: `pk-card pk-${c[1]}` }, [h("b", {}, c[0] === "T" ? "10" : c[0]), h("i", {}, SUIT[c[1]])]);
   const back = () => h("span", { class: "pk-card pk-back" });
