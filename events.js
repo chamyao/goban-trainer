@@ -83,6 +83,18 @@ const Events = (() => {
     { id: "skin-diaochan-fox", rar: "SSR", ev: "halloween", type: "skin", who: "diaochan", file: "skins/diaochan-fox.webp", v: 2, name: "Diaochan · Fox spirit", price: 90 },   // (v: the picture redone: the lantern from her sash)
     { id: "skin-caocao-armor", rar: "SR", ev: "halloween", type: "skin", who: "caocao", file: "skins/caocao-armor.webp", name: "Cao Cao · Battle armour", price: 70 },
     { id: "skin-ahn-weekend", rar: "SR", ev: "halloween", type: "skin", who: "ms_ahn", file: "skins/ahn-weekend.webp", name: "Ahn Young-ji · Autumn weekend", price: 60 },
+    // Harvest (Thanksgiving; apo110: "please stock the event shop"), priced like Halloween's skins
+    { id: "board-maple", rar: "SR", ev: "harvest", type: "board", name: "Maple board", price: 40,
+      board: { id: "maple", name: "Maple", wood: ["#c88a45", "#bb7d3a", "#ad7030"], tex: "assets/boards/maple.webp", line: "#2a1608", label: "#3a2210", stone: "rgba(0,0,0,.45)" } },
+    { id: "title-acorn-gatherer", rar: "R", ev: "harvest", type: "title", name: "Acorn Gatherer", icon: "🌰", price: 20 },
+    { id: "hat-pilgrim", rar: "SR", ev: "harvest", type: "hat", name: "Pilgrim hat for Sun Wukong", price: 45 },
+    { id: "skin-daiyu-chrysanthemum", rar: "SSR", ev: "harvest", type: "skin", who: "daiyu", file: "skins/daiyu-chrysanthemum.webp", name: "Lin Daiyu · Chrysanthemum poetry", price: 90 },
+    { id: "skin-liubei-harvest", rar: "SR", ev: "harvest", type: "skin", who: "liubei", file: "skins/liubei-harvest.webp", name: "Liu Bei · Harvest", price: 70 },
+    { id: "skin-jang-autumn", rar: "SR", ev: "harvest", type: "skin", who: "ms_jang", file: "skins/jang-autumn.webp", name: "Jang Geu-rae · Autumn knit", price: 60 },
+    { id: "hat-acorn", rar: "SR", ev: "harvest", type: "hat", name: "Acorn cap for Sun Wukong", price: 0, gift: true, slot: 5 },
+    { id: "board-hearth", rar: "SSR", ev: "harvest", type: "board", name: "Hearth board", price: 0, gift: true, slot: 10,
+      board: { id: "hearth", name: "Hearth", wood: ["#9a5a2c", "#8c4f25", "#7e451f"], tex: "assets/boards/hearth.webp", line: "#1e0f06", label: "#f3dcc0", stone: "rgba(0,0,0,.45)" } },
+    { id: "title-thankful", rar: "SR", ev: "harvest", type: "title", name: "Thankful", icon: "🦃", price: 0, gift: true, goals: true },
   ];
   // what an item is worn in: one of each type, but a skin per character
   const slot = it => it.type === "skin" ? `skin:${it.who}` : it.type;

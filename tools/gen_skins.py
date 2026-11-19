@@ -35,6 +35,17 @@ SKINS = {   # skin: (source portrait, the new outfit)
     "caocao-armor": ("caocao", "Dress him in a warlord's battle armour in place of the court robes: black lacquered "
                      "lamellar armour with gold edging and gold dragon details on the shoulder plates, a crimson cape "
                      "behind his shoulders, and a black crested war helmet with a red plume in place of the court hat."),
+    # Harvest (Thanksgiving)
+    "daiyu-chrysanthemum": ("daiyu", "Dress her for the autumn chrysanthemum poetry gathering: a layered hanfu in soft "
+                            "amber-gold and russet silk embroidered with chrysanthemums, a pale celadon outer robe, a few "
+                            "small golden chrysanthemum blossoms tucked in her hair, and a folded autumn-leaf fan in her hand "
+                            "if a hand is visible."),
+    "liubei-harvest": ("liubei", "Dress him as a farmer bringing in the harvest: a homespun undyed hemp tunic with "
+                       "rolled sleeves and a rope belt, a wide woven straw hat in place of any headwear, and a bundle of "
+                       "golden wheat sheaves over one shoulder."),
+    "jang-autumn": ("ms_jang", "Dress him in a cosy autumn outfit in place of the office clothes: a chunky oatmeal "
+                    "cable-knit cardigan over a rust-orange crew-neck sweater, and a dark green and brown plaid scarf "
+                    "loosely around his neck."),
 }
 
 

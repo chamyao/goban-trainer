@@ -157,6 +157,13 @@ BD_PAINT = {   # the event boards' surfaces (Events ITEMS board.tex): drawn unde
     "moonlit": ("1:1", "The playing surface of a moonlit go board: medium night-blue lacquer, smooth and softly glossy, "
                        "with tiny faint silver star flecks scattered sparsely and a soft pale moon glow in one corner. "
                        + BD_LOOK),
+    # Harvest (Thanksgiving)
+    "maple": ("1:1", "The playing surface of a harvest go board: warm medium amber-honey maple wood with soft, flowing "
+                     "golden grain, a gentle late-afternoon glow, a few faint red-orange maple leaves drifting in the far "
+                     "corners. " + BD_LOOK),
+    "hearth": ("1:1", "The playing surface of a hearthside go board: medium russet-copper burnished wood, softly lit as "
+                      "by a fireplace, a warm glow from one corner, faint wheat-stalk and acorn motifs etched very lightly "
+                      "in the corners. " + BD_LOOK),
 }
 
 

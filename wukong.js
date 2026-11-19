@@ -12,6 +12,7 @@ const WK = (() => {
     w: "#ffffff", r: "#e2461d", e: "#2f9e43", b: "#161616", n: "#b0602e",
     p: "#f08a78", c: "#e8604c", L: "#d9461a", s: "#c8351a", h: "#f3d2a2",
     v: "#6b3fa0", V: "#472870", O: "#ff8a1f",   // (the witch hat)
+    B: "#33302d", X: "#1d1b19", m: "#d8c27a", a: "#9a6430", A: "#6e421c",   // (the Harvest hats: pilgrim, acorn cap)
   };
   const HEAD = [
     "...............gg.....",
@@ -72,6 +73,27 @@ const WK = (() => {
       "....kkkvOOOOOOOOOvkk..",
       "..kkvvvvvvvvvvvvvvvvkk",
       "...kkkkkkkkkkkkkkkkkk.",
+    ],
+    "hat-pilgrim": [
+      "......kkkkkkkkkk......",
+      "......kBBBBBBBBk......",
+      "......kBBBBBBBBk......",
+      "......kBBBBBBBBk......",
+      "......kXXmmmmXXk......",
+      "......kXXmXXmXXk......",
+      "......kXXmmmmXXk......",
+      "..kkkkkBBBBBBBBkkkkk..",
+      ".kBBBBBBBBBBBBBBBBBBk.",
+      "..kkkkkkkkkkkkkkkkkk..",
+    ],
+    "hat-acorn": [
+      "..........kk..........",
+      "..........kAk.........",
+      ".....kkkkkkAkkkkk.....",
+      "...kkaAaAaAaAaAaAkk...",
+      "..kaAaAaAaAaAaAaAaAk..",
+      "..kAaAaAaAaAaAaAaAak..",
+      "...kkkkkkkkkkkkkkkk...",
     ],
   };
   const TORSO = [
