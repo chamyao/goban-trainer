@@ -5183,6 +5183,25 @@ const FriendPlay = {
   // a rematch (the user): asked by one, accepted by the other; the host then opens the next game, same board and
   // clock, colors swapped, its seat kept for the same friend, and both pages go to it (the code rides in the state)
   rematch() { const c = this.game.myColor; this.change(S => { S.rematch = { ...(S.rematch || {}), [c]: true }; }); },
+  // an undo request (apo110, xiangqi: "can you add undo req"): asked by one, accepted or declined by the other; it
+  // takes back the asker's last move (and the reply after it, if there is one). A move in between drops the request.
+  undoCount(color) {   // how many moves come off for color's undo: 0 if it has nothing to take back
+    const n = this.game.S.moves.length, lastBy = n % 2 ? BLACK : WHITE;
+    return lastBy === color ? (n >= 1 ? 1 : 0) : (n >= 2 ? 2 : 0);
+  },
+  undoAsked() { const u = this.game.S.undo; return u && u.at === this.game.S.moves.length ? u : null; },
+  askUndo() {
+    const g = this.game, c = g.myColor;
+    if (g.phase !== "play" || !c || !this.undoCount(c) || this.undoAsked()) return;
+    this.change(S => { S.undo = { by: c, at: S.moves.length }; });
+  },
+  answerUndo(yes) {
+    const g = this.game, u = this.undoAsked();
+    if (g.phase !== "play" || !u || u.by === g.myColor) return;
+    const k = this.undoCount(u.by);
+    this.change(S => { if (yes && k) S.moves.splice(S.moves.length - k, k); S.undo = yes ? null : { ...u, no: true }; });
+    g.turnAt = Date.now();
+  },
   nextGame() {
     const g = this.game, S = g.S;
     if (g.me.role !== "host" || S.phase !== "finished" || S.next || !(S.rematch && S.rematch[BLACK] && S.rematch[WHITE])) return;

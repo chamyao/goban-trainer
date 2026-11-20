@@ -150,9 +150,18 @@ function xqGame(g, P) {
   }, 250);
   const status = h("div", { class: "meta-sub" },
     g.phase === "finished" ? g.resultText()
+    : g.phase === "play" && P.undoAsked && P.undoAsked() && P.undoAsked().by !== g.myColor && !P.undoAsked().no && g.myColor ? "They ask to undo their last move."
     : g.phase === "play" ? (mine ? (check ? "Check! Your move." : xqSel ? "Choose where it goes." : "Your move: tap a piece.") : g.myColor ? (check ? "You gave check. Their move." : "Their move.") : "Watching.")
     : "");
   const buttons = [];
+  if (g.phase === "play" && g.myColor && P.askUndo) {   // an undo request (apo110): ask, or answer the other's
+    const u = P.undoAsked();
+    if (u && u.by !== g.myColor && !u.no) buttons.push(
+      h("button", { class: "primary", onclick: () => P.answerUndo(true) }, "Allow undo"),
+      h("button", { onclick: () => P.answerUndo(false) }, "Decline"));
+    else if (u && u.by === g.myColor) { const b = h("button", {}, u.no ? "Undo declined" : "Undo asked…"); b.disabled = true; buttons.push(b); }
+    else if (P.undoCount(g.myColor)) buttons.push(h("button", { onclick: () => P.askUndo() }, "Ask to undo"));
+  }
   if (g.phase === "play" && g.myColor) buttons.push(h("button", { onclick: () => { if (confirm("Resign this game?")) P.resign(); } }, "Resign"));
   else if (g.phase === "finished") {
     buttons.push(h("button", { onclick: () => { P.game = null; location.hash = "#/play"; } }, "Back to lobby"));
