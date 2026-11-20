@@ -180,8 +180,14 @@ const Sync = {
   mergeElo(l, r) {
     if (!r) return l;
     if (!l) return r;
-    const ta = l.at || 0, tb = r.at || 0, win = tb > ta || (tb === ta && (r.n || 0) >= (l.n || 0)) ? r : l;
+    const ta = l.at || 0, tb = r.at || 0;
+    let win = tb > ta || (tb === ta && (r.n || 0) >= (l.n || 0)) ? r : l;
+    // a fresh start never takes over: the newer copy with fewer boards, whose log doesn't hold the other's latest
+    // answer, began on its own (apo110's: someone else's browser signed in with 3 boards to their 352)
+    const other = win === r ? l : r;
+    if ((win.n || 0) < (other.n || 0) && other.at && !(win.log || []).some(e => e[2] === other.at)) win = other;
     const o = { ...l, r: win.r, n: win.n };
+    if (l.fix1 || r.fix1) o.fix1 = 1;
     if (win.at) o.at = win.at;
     o.used = [...new Set([...(r.used || []), ...(l.used || [])])];
     o.slots = { ...(r.slots || {}), ...(l.slots || {}) };   // a board this browser has dealt stays

@@ -2285,7 +2285,26 @@ const TKElo = {
     if (s.slots) for (const k of Object.keys(s.slots)) if (k.startsWith("stream~") && +k.slice(7) < cur) delete s.slots[k];
     return s;
   },
-  state(p = loadProgress()) { return p.tkElo || (p.tkElo = { r: this.START, n: 0, used: [], slots: {} }); },
+  state(p = loadProgress()) {
+    const s = p.tkElo || (p.tkElo = { r: this.START, n: 0, used: [], slots: {} });
+    if (this.repair(s) && typeof TK !== "undefined" && TK.saveProg) TK.saveProg(p);
+    return s;
+  },
+  // a fresh rating that took over an established one (apo110: "Emily signed into my account and my stream rating got
+  // reset": a browser that had answered 3 boards on its own signed in, and its newer answer won Sync.mergeElo, 1234
+  // after 352 boards to 720 after 3): the log shows it as the boards count falling back. Once: the rating from just
+  // before, the boards after the fall not counted. (Sync.mergeElo no longer lets a fresh start win.)
+  repair(s) {
+    if (s.fix1 || !s.log || s.log.length < 2) return false;
+    s.fix1 = 1;
+    let back = null;
+    for (let i = 1; i < s.log.length; i++) if (s.log[i - 1][1] >= 10 && s.log[i][1] < s.log[i - 1][1]) back = s.log[i - 1];
+    if (!back || (s.n || 0) >= back[1]) return true;
+    s.r = back[0]; s.n = back[1]; s.at = Date.now();
+    s.log = s.log.filter(e => e[2] <= back[2]).concat([[s.r, s.n, s.at]]).slice(-this.LOG);
+    console.info("[rating] put back", s.r, "after", s.n, "boards");
+    return true;
+  },
   get rating() { return this.state().r; },
   label(r = this.rating) {
     const i = Math.max(0, Math.round((r - 600) / 50));
