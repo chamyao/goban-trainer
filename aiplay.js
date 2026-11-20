@@ -2,26 +2,40 @@
    A game against the site's own KataGo (Engine, the network Review uses), in the browser, no login: 19×19 (the small
    network plays nonsense on 9×9 and 13×13: on an empty 9×9 it rates the 1-1 points best), Chinese rules, komi 7.5,
    no clock. It runs on the friend game's board and rules (FriendGame, playGame): two
-   passes end it, you mark the dead stones and KataGo accepts your marks. Three strengths: Easy (a few visits, and it
-   picks among moves that don't lose much), Medium, Strong (as Review reads). The game is kept in this browser
+   passes end it, you mark the dead stones and KataGo accepts your marks. Three strengths: Easy (about 10k), Medium
+   (about 6k), Strong (about 1d): see aiShare. The game is kept in this browser
    (gt-ai-game), so a reload carries on. Loaded before app.js. */
+// Strength (the user: "I want the strength to range between 10k and 1d"). A search, even 2 visits, plays dan level
+// with this network; so each move it draws a share of the legal points at random and plays the one the network's
+// policy likes most (KaTrain's "pick" bot). The shares were calibrated on 19x19 against KataGo's human-SL model at set
+// ranks (b18c384nbt-humanv0, humanSLProfile rank_Xk/Xd; staircases of 12 games): 30-40% ~13k, 50% ~8-9k, 60% ~6k,
+// 70% ~3k, 78% ~1-2k, 85% ~1d. aiShare(kyu) interpolates them (kyu: 10 = 10k, 0 = 1d).
+const AI_SHARE_PTS = [[10, 0.47], [8.5, 0.5], [6, 0.6], [3, 0.7], [1.5, 0.78], [0, 0.85]];
+function aiShare(kyu) {
+  const P = AI_SHARE_PTS;
+  if (kyu >= P[0][0]) return P[0][1];
+  for (let i = 1; i < P.length; i++) if (kyu >= P[i][0]) { const [k0, s0] = P[i - 1], [k1, s1] = P[i]; return s0 + (s1 - s0) * (k0 - kyu) / (k0 - k1); }
+  return P[P.length - 1][1];
+}
+const aiRankText = kyu => kyu > 0 ? `${kyu}k` : `${1 - kyu}d`;
 const AI_LEVELS = {
-  easy: { name: "Easy", visits: 12, slack: 0.12 },     // any move within 12% win rate of its best, at random
-  medium: { name: "Medium", visits: 60, slack: 0.04 },
-  strong: { name: "Strong", visits: 400, slack: 0 },
+  easy: { name: "Easy", kyu: 10 },
+  medium: { name: "Medium", kyu: 6 },
+  strong: { name: "Strong", kyu: 0 },
 };
 
 // the avatars as opponents (apo110: "play against the avatars themselves... at least 10k... vary their play styles by
-// character"). KataGo can't change its style, so a style is a lean: among the moves within its slack of KataGo's best
-// (a near-best move, so no one plays below about 10k: 80+ visits, a few % of win rate at most), the one that fits.
+// character"). KataGo can't change its style, so a style is a lean: among the best few of the points it drew (by
+// the policy), the one that fits. Each avatar has its own strength, 10k to 1d (the user: "a wider skill range
+// starting from 10k"): AI_RANK, in kyu (0 = 1d).
 const AI_STYLES = {
-  fighter: { name: "fighter", about: "goes for contact with your stones", slack: 0.04 },
-  territory: { name: "territorial", about: "takes the corners and the third line", slack: 0.04 },
-  influence: { name: "influence", about: "plays high, toward the centre", slack: 0.04 },
-  solid: { name: "solid", about: "keeps its stones connected", slack: 0.035 },
-  trickster: { name: "trickster", about: "prefers the move you didn't expect", slack: 0.04 },
-  wild: { name: "wild", about: "roams, and doesn't mind a risk", slack: 0.07 },
-  calm: { name: "calm", about: "plays the best move it sees", slack: 0.01 },
+  fighter: { name: "fighter", about: "goes for contact with your stones" },
+  territory: { name: "territorial", about: "takes the corners and the third line" },
+  influence: { name: "influence", about: "plays high, toward the centre" },
+  solid: { name: "solid", about: "keeps its stones connected" },
+  trickster: { name: "trickster", about: "prefers the move you didn't expect" },
+  wild: { name: "wild", about: "roams, and doesn't mind a risk" },
+  calm: { name: "calm", about: "plays the best move it sees" },
 };
 const AI_CAST = {
   caocao: "fighter", zhangliao: "fighter", ms_oh: "fighter", ms_oh_hike: "fighter", zhaoyun: "fighter", lijue: "fighter",
@@ -32,6 +46,12 @@ const AI_CAST = {
   lvbu: "wild", ms_han: "wild",
   jiaxu: "calm", ms_jang: "calm",
 };
+const AI_RANK = {
+  grannyliu: 10, chenliu: 10, houcheng: 9, ms_han: 9, lijue: 8, ladysun: 8, ms_ahn: 7, chendeng: 7, yanshi: 6, lisu: 6,
+  ms_oh: 5, ms_oh_hike: 5, dongzhuo: 5, diaochan: 4, daiyu: 4, zhangliao: 4, liubei: 3, ms_sun: 3, wangyun: 3,
+  zhaoyun: 2, ms_parkjg: 2, chengong: 1, lvbu: 1, caocao: 0, jiaxu: 0, ms_jang: 0,
+};
+const aiRankOf = who => AI_RANK[who] ?? 5;
 const aiStyleOf = who => AI_STYLES[AI_CAST[who] || "calm"];
 // a candidate's fit for a style: the board (grid), KataGo's color (me), the point (x, y), its rank among KataGo's moves
 function aiFit(style, grid, me, sz, x, y, rank) {
@@ -115,13 +135,14 @@ const AIPlay = {
   review(g, err) { FriendPlay.review(g, err); },
   finishedButtons() { return [h("button", { class: "primary", onclick: () => { location.hash = "#/play"; } }, "New game")]; },
 
-  // KataGo's turn: its search, then a move among those near its best (by the level), or a pass
+  // KataGo's turn: the network's policy (one evaluation, no search), then the best of a random share of the legal
+  // points (by the strength: aiShare), or a pass
   async maybeAI() {
     const g = this.game;
     if (!g || g.phase !== "play" || g.toMove() === g.myColor || this.thinking) return;
     this.thinking = true; this.status = `${g.S.foe ? g.S.foe.name : "KataGo"} is thinking…`; this.emit();
     const foe = g.S.foe, st = foe && AI_CAST[foe.who] || null;
-    const L = foe ? { visits: 80, slack: aiStyleOf(foe.who).slack } : AI_LEVELS[g.S.level], sz = g.S.size, me = g.toMove(), t0 = Date.now();
+    const kyu = foe ? aiRankOf(foe.who) : (AI_LEVELS[g.S.level] || AI_LEVELS.medium).kyu, sz = g.S.size, me = g.toMove(), t0 = Date.now();
     // a moment before it plays, as a person would (apo110: "the instant play is kind of jarring"): 1-2.5 s, a little
     // longer in the middle game, the search's own time counted in
     const think = 1000 + Math.random() * 1500 + (g.S.moves.length > 20 && g.S.moves.length < 200 ? 500 : 0);
@@ -129,28 +150,31 @@ const AIPlay = {
       const grid = g.replay().grid;
       const board = gridToBoardState(grid).slice(0, sz).map(row => row.slice(0, sz));
       const hist = [];
-      g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; if (c >= 0) hist.push({ x: c, y: r, player: k % 2 ? "white" : "black" }); });
+      // (passes too, as x -1: the network's pass sense needs them)
+      g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: k % 2 ? "white" : "black" }); });
       const a = await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
-        visits: L.visits, topK: 8, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
+        visits: 1, topK: 1, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
       if (this.game !== g || g.phase !== "play") return;
-      const mine = w => me === BLACK ? w : 1 - w;   // a win rate from KataGo's side (the engine gives Black's)
-      const moves = (a.moves || []).filter(m => m && m.x != null);
-      const passBest = !moves.length || moves[0].x < 0 || moves[0].move === "pass";
+      const pol = a.policy || [];   // sz*sz points (row by row from the top) then pass; -1 where illegal
       const lastPass = g.S.moves.length && g.S.moves[g.S.moves.length - 1][0] < 0;
-      // after your pass, KataGo passes too unless a move still matters (a win rate it can gain); else it plays on
-      const legal = moves.filter(m => m.x >= 0 && m.y >= 0 && m.x < sz && m.y < sz && g.legal(m.x, m.y));
+      const legal = [];
+      for (let i = 0; i < sz * sz; i++) if (pol[i] >= 0 && g.legal(i % sz, Math.floor(i / sz))) legal.push(i);
+      const passP = pol[sz * sz] ?? 0, topP = legal.reduce((m, i) => Math.max(m, pol[i]), 0);
       let pick = null;
-      if (!passBest && legal.length) {
-        const best = mine(legal[0].winRate ?? a.rootWinRate ?? 0.5);
-        const near = legal.filter(m => best - mine(m.winRate ?? 0) <= L.slack);
-        if (foe) {   // an avatar: the near-best move that fits its style (a little chance in it)
-          const style = st || "calm";
+      if (legal.length && passP < topP) {   // (the network's own pass when it likes passing best, as calibrated)
+        // draw the share at random (a partial shuffle), best first by the policy
+        const n = Math.max(1, Math.min(legal.length, Math.round(aiShare(kyu) * legal.length)));
+        for (let i = 0; i < n; i++) { const j = i + Math.floor(Math.random() * (legal.length - i)); [legal[i], legal[j]] = [legal[j], legal[i]]; }
+        const drawn = legal.slice(0, n).sort((p, q) => pol[q] - pol[p]);
+        let best = drawn[0];
+        if (foe) {   // an avatar: among the best few it drew (half the best's policy or more, up to 4), the one that fits its style
+          const few = drawn.slice(0, 4).filter(i => pol[i] >= pol[drawn[0]] * 0.5);
           let top = -1e9;
-          for (const m of near) { const f = aiFit(style, grid, me, sz, m.x, m.y, legal.indexOf(m)) + Math.random() * 0.4; if (f > top) { top = f; pick = m; } }
+          few.forEach((i, r) => { const f = aiFit(st || "calm", grid, me, sz, i % sz, Math.floor(i / sz), r) + Math.random() * 0.4; if (f > top) { top = f; best = i; } });
         }
-        else pick = near[Math.floor(Math.random() * near.length)] || legal[0];
-        pick = pick || legal[0];
-        if (lastPass && Math.abs(mine(pick.winRate ?? best) - mine(a.rootWinRate ?? best)) < 0.01 && mine(a.rootWinRate ?? 0.5) > 0.5) pick = null;   // nothing left to gain: it passes
+        pick = { x: best % sz, y: Math.floor(best / sz) };
+        // after your pass: a move the network barely considers while it rates passing above it isn't worth playing
+        if (lastPass && pol[best] < 0.02 && passP > pol[best]) pick = null;
       }
       const wait = think - (Date.now() - t0);
       if (wait > 0) await new Promise(r => setTimeout(r, wait));
@@ -170,20 +194,20 @@ function aiLobby() {
   const g = AIPlay.load();
   const sel = (opts, cur) => { const s = h("select", {}, opts.map(([v, t]) => h("option", { value: v, ...(v === cur ? { selected: "" } : {}) }, t))); return s; };
   const size = { value: "19" };   // (19×19 only: see the top)
-  const level = sel(Object.entries(AI_LEVELS).map(([k, v]) => [k, v.name]), localStorage.getItem("gt-ai-level") || "medium");
+  const level = sel(Object.entries(AI_LEVELS).map(([k, v]) => [k, `${v.name} (about ${aiRankText(v.kyu)})`]), localStorage.getItem("gt-ai-level") || "medium");
   const color = sel([["black", "Black (you start)"], ["white", "White"], ["random", "Random"]], "black");
   // the avatars you've collected, each with its style (apo110: "play against the avatars themselves")
   const cast = h("div", { class: "ai-cast" });
   let foe = null;
   if (typeof Avatars !== "undefined") Avatars.leads().then(async all => {
-    const mine = all.filter(x => Avatars.owns(x.who));
+    const mine = all.filter(x => Avatars.owns(x.who)).sort((p, q) => aiRankOf(q.who) - aiRankOf(p.who));   // weakest first
     if (!mine.length) { cast.append(h("p", { class: "meta-sub" }, "Collect avatars in the stories to play them here.")); return; }
     const faces = await Promise.all(mine.map(x => Avatars.faceOf(x.who)));
     const pickBtn = (f, el) => () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); level.disabled = !!foe; };
-    // (just the opponents: no style names or explanations, apo110)
+    // (just the opponents and their strength: no style names or explanations, apo110)
     cast.append(h("div", { class: "ai-cast-title" }, "Or play one of your avatars:"),
       h("div", { class: "ai-foes" }, faces.map(f => {
-        const el = h("button", { class: "ai-foe", title: f.name }, [f.src ? h("img", { src: f.src, alt: "" }) : "", h("b", {}, f.name)]);
+        const el = h("button", { class: "ai-foe", title: f.name }, [f.src ? h("img", { src: f.src, alt: "" }) : "", h("b", {}, f.name), h("small", { class: "ai-foe-rank" }, aiRankText(aiRankOf(f.who)))]);
         el.onclick = pickBtn(f, el); return el; })));
   }).catch(() => {});
   const start = () => {
