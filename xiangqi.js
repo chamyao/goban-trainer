@@ -159,7 +159,7 @@ function xqGame(g, P) {
     if (u && u.by !== g.myColor && !u.no) buttons.push(
       h("button", { class: "primary", onclick: () => P.answerUndo(true) }, "Allow undo"),
       h("button", { onclick: () => P.answerUndo(false) }, "Decline"));
-    else if (u && u.by === g.myColor) { const b = h("button", {}, u.no ? "Undo declined" : "Undo asked…"); b.disabled = true; buttons.push(b); }
+    else if (u && u.by === g.myColor) { const b = h("button", { title: "Waiting for your friend to allow it" }, u.no ? "Undo declined" : "Undo asked…"); b.disabled = true; buttons.push(b); }
     else if (P.undoCount(g.myColor)) buttons.push(h("button", { onclick: () => P.askUndo() }, "Ask to undo"));
   }
   if (g.phase === "play" && g.myColor) buttons.push(h("button", { onclick: () => { if (confirm("Resign this game?")) P.resign(); } }, "Resign"));

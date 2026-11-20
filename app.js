@@ -5305,8 +5305,17 @@ const FriendPlay = {
     } else if (d.t === "seat" && g.me.role === "guest") { g.me.color = d.color; this.persist(); this.emit(); }
     else if (d.t === "state" && c === this.conn) this.take(d);
   },
-  packet() { return { t: "state", S: this.game.S, elapsed: (Date.now() - this.game.turnAt) / 1000 }; },
+  packet() { return { t: "state", S: this.game.S, elapsed: (Date.now() - this.game.turnAt) / 1000, build: this.build() }; },
+  // this page's version (app.js?v=N): a friend on an older page lacks what's new (apo110: the undo asked, and the other
+  // page, open from before, had no Allow button), so each side says which one should reload
+  build() { const s = document.querySelector('script[src^="app.js"]'), m = s && /[?&]v=(\d+)/.exec(s.getAttribute("src")); return m ? +m[1] : 0; },
+  versionNote() {
+    const b = this.peerBuild, mine = this.build();
+    if (!b || !mine || b === mine) return "";
+    return b > mine ? "Your friend's page is newer than yours: reload this page (the game carries on)." : "Your friend's page is out of date: ask them to reload it (the game carries on).";
+  },
   take(d) {
+    { const was = this.peerBuild; this.peerBuild = d.build || 1; if (was !== this.peerBuild) this.emit(); }   // (no build: a page from before this)
     const g = this.game, S2 = d.S;
     if (!S2 || S2.code !== g.S.code) return;
     if (!(S2.seq > g.S.seq || (S2.seq === g.S.seq && g.me.role === "guest"))) {   // ours is newer: send it back
@@ -5578,7 +5587,7 @@ function friendBody() {
          h("div", { class: "row" }, [field, copy, share]), st,
          h("div", { class: "row" }, [h("button", { onclick: () => { FriendLobby.withdraw(g.S.code); try { localStorage.removeItem(P.KEY + g.S.code); } catch {} P.close(); location.hash = "#/play"; } }, "Cancel")])])];
   }
-  g.extra = () => P.status ? st : "";
+  g.extra = () => { const v = P.versionNote ? P.versionNote() : ""; return P.status || v ? h("div", {}, [P.status ? st : "", v ? h("div", { class: "meta-sub" }, v) : ""]) : ""; };
   const out = g.S.kind === "xiangqi" ? xqGame(g, P) : playGame(g, P);
   const tick = playTicker;   // playGame's ticker, plus the clocks running out
   const t2 = setInterval(() => { if (playTicker !== tick || !document.body.contains(out[0])) return clearInterval(t2); P.tick(); }, 500);
