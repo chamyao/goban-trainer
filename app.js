@@ -41,6 +41,9 @@ function clearResult(bookId, pid) {
 function clearBook(bookId) {
   const prog = loadProgress();
   for (const pid in prog[bookId] || {}) prog[bookId][pid] = 0;
+  // dated, so the synced row's older marks don't come back (emily: "once i click reset and then refresh the page my
+  // old progress shows up again": a solve sticks in Sync.mergeInto, and the row still had them)
+  (prog.resetAt || (prog.resetAt = {}))[bookId] = Date.now();
   localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog));
   Sync.scheduleSave();
 }
@@ -154,7 +157,15 @@ const Sync = {
   },
   // solved sticks (1 beats anything); the adaptive rating follows the latest rated answer (mergeElo)
   mergeInto(local, remote) {
+    // a book reset (clearBook): the copy reset later is the start; the other's marks for it from before don't count
+    const lr = local.resetAt || {}, rr = remote.resetAt || {}, skip = new Set();
+    for (const b of new Set([...Object.keys(lr), ...Object.keys(rr)])) {
+      if ((rr[b] || 0) > (lr[b] || 0)) { if (local[b]) for (const pid in local[b]) local[b][pid] = 0; }
+      else if ((lr[b] || 0) > (rr[b] || 0)) skip.add(b);
+    }
+    if (remote.resetAt) { local.resetAt = { ...lr }; for (const b in rr) local.resetAt[b] = Math.max(lr[b] || 0, rr[b]); }
     for (const bookId in remote) {
+      if (bookId === "resetAt" || skip.has(bookId)) continue;
       if (bookId === "tkAt" || bookId === "tkUndo" || bookId === "tkReplay" || bookId === "tkSeen") {   // dated: the later date wins (TK.cleared, TK.seen)
         const b = local[bookId] || (local[bookId] = {});
         for (const k in remote[bookId]) b[k] = Math.max(b[k] || 0, remote[bookId][k] || 0);
