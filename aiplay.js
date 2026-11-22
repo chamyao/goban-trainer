@@ -72,6 +72,17 @@ function aiFit(style, grid, me, sz, x, y, rank) {
   }
 }
 
+// handicap stones on 19x19, Black's, as Go places them (the user: "I would like it to be able to play handicap games"):
+// the star points, 2 to 9 (5, 7, 9 add the centre)
+function AI_HANDICAP(n) {
+  const L = 3, M = 9, H = 15, corners = [[H, L], [L, H], [H, H], [L, L]];
+  const s = corners.slice(0, Math.min(n, 4));
+  if (n >= 6) s.push([L, M], [H, M]);
+  if (n >= 8) s.push([M, L], [M, H]);
+  if (n % 2 && n >= 5) s.push([M, M]);
+  return s;
+}
+
 // the friend game's board and rules, with KataGo's name (made on first use: this file loads before app.js, which has
 // FriendGame, so the Play tab can show its panel on the first page)
 let AIGameClass = null;
@@ -92,9 +103,10 @@ const AIPlay = {
   },
   persist() { try { localStorage.setItem(this.KEY, JSON.stringify({ S: this.game.S })); } catch {} },
   emit() { for (const f of this.listeners) f(); },
-  start({ size, level, color, foe }) {
+  start({ size, level, color, foe, handicap = 0 }) {
     const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
     const S = FriendPlay.fresh({ size, T: null, hostColor, names: { [hostColor]: Sync.username || "You" }, listed: false });
+    if (handicap >= 2) { S.setup = AI_HANDICAP(handicap); S.komi = 0.5; }   // stones for Black, White moves first
     S.phase = "play"; S.level = foe ? "strong" : level; if (foe) S.foe = foe;   // foe: an avatar ({who, name, src})
     this.game = aiGame(S, { role: "host", color: hostColor, token: null });
     this.persist();
@@ -151,7 +163,7 @@ const AIPlay = {
       const board = gridToBoardState(grid).slice(0, sz).map(row => row.slice(0, sz));
       const hist = [];
       // (passes too, as x -1: the network's pass sense needs them)
-      g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: k % 2 ? "white" : "black" }); });
+      g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
       const a = await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
         visits: 1, topK: 1, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
       if (this.game !== g || g.phase !== "play") return;
@@ -195,7 +207,8 @@ function aiLobby() {
   const sel = (opts, cur) => { const s = h("select", {}, opts.map(([v, t]) => h("option", { value: v, ...(v === cur ? { selected: "" } : {}) }, t))); return s; };
   const size = { value: "19" };   // (19×19 only: see the top)
   const level = sel(Object.entries(AI_LEVELS).map(([k, v]) => [k, `${v.name} (about ${aiRankText(v.kyu)})`]), localStorage.getItem("gt-ai-level") || "medium");
-  const color = sel([["black", "Black (you start)"], ["white", "White"], ["random", "Random"]], "black");
+  const color = sel([["black", "Black"], ["white", "White"], ["random", "Random"]], "black");
+  const hcap = sel([["0", "None"], ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => [String(n), `${n} stones for Black`])], "0");
   // the avatars you've collected, each with its style (apo110: "play against the avatars themselves")
   const cast = h("div", { class: "ai-cast" });
   let foe = null;
@@ -212,12 +225,12 @@ function aiLobby() {
   }).catch(() => {});
   const start = () => {
     try { localStorage.setItem("gt-ai-level", level.value); } catch {}
-    AIPlay.start({ size: +size.value, level: level.value, color: color.value, foe });
+    AIPlay.start({ size: +size.value, level: level.value, color: color.value, foe, handicap: +hcap.value });
   };
   return h("div", { class: "sgf-loader ai-lobby" }, [
     h("div", { class: "cat-title" }, "Play KataGo"),
-    h("div", {}, "A 19×19 game against the site's own AI, right here: no login, no clock. Chinese rules, komi 7.5."),
-    h("div", { class: "row ai-opts" }, [h("label", {}, ["Strength ", level]), h("label", {}, ["You play ", color])]),
+    h("div", {}, "A 19×19 game against the site's own AI, right here: no login, no clock. Chinese rules, komi 7.5 (0.5 with a handicap)."),
+    h("div", { class: "row ai-opts" }, [h("label", {}, ["Strength ", level]), h("label", {}, ["You play ", color]), h("label", {}, ["Handicap ", hcap])]),
     cast,
     h("div", { class: "row" }, [
       h("button", { class: "primary", onclick: start }, "Start a game"),

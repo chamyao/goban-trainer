@@ -4958,13 +4958,18 @@ class FriendGame {
   get data() { return { komi: this.S.komi }; }
   get clock() { const t = this.S.time; return t ? { black_time: { period_time: t.period }, white_time: { period_time: t.period } } : {}; }
   player(color) { return { username: this.S.names[color] || (color === this.S.hostColor ? "Host" : "Friend") }; }
-  toMove() { return this.S.moves.length % 2 === 0 ? BLACK : WHITE; }
+  // handicap stones (S.setup, Black's [c, r]; the Play tab's AI games): White moves first
+  get off() { return this.S.setup && this.S.setup.length ? 1 : 0; }
+  colorOf(i) { return (i + this.off) % 2 ? WHITE : BLACK; }   // who played move i
+  toMove() { return this.colorOf(this.S.moves.length); }
   get myTurn() { return this.phase === "play" && this.myColor && this.toMove() === this.myColor; }
   get removed() { return new Set(this.S.removed); }
   get removedStr() { return this.S.removed.map(k => sgfPt(k % N, (k - k % N) / N)).join(""); }
   blank() {
     const sz = this.S.size;
-    return Array.from({ length: N }, (_, r) => Array.from({ length: N }, (_, c) => r < sz && c < sz ? EMPTY : WALL));
+    const g = Array.from({ length: N }, (_, r) => Array.from({ length: N }, (_, c) => r < sz && c < sz ? EMPTY : WALL));
+    for (const [c, r] of this.S.setup || []) g[r][c] = BLACK;
+    return g;
   }
   replay() {
     let g = this.blank(), last = null;
@@ -4972,7 +4977,7 @@ class FriendGame {
       const [c, r] = this.S.moves[i];
       last = null;
       if (c < 0) continue;
-      g = applyMove(g, c, r, i % 2 ? WHITE : BLACK) || g;
+      g = applyMove(g, c, r, this.colorOf(i)) || g;
       last = [c, r];
     }
     return { grid: g, last };
@@ -5040,8 +5045,9 @@ class FriendGame {
   sgf() {
     const S = this.S, names = c => (this.player(c).username || "").replace(/[\]\\]/g, "");
     const re = S.result ? (S.result.how === "score" ? S.result.text : `${S.result.winner === BLACK ? "B" : "W"}+${S.result.how === "time" ? "T" : "R"}`) : "";
-    const mv = S.moves.map(([c, r], i) => `;${i % 2 ? "W" : "B"}[${c < 0 ? "" : sgfPt(c, r)}]`).join("");
-    return `(;GM[1]FF[4]CA[UTF-8]SZ[${S.size}]KM[${S.komi}]RU[Chinese]PB[${names(BLACK)}]PW[${names(WHITE)}]RE[${re}]DT[${new Date(S.created).toISOString().slice(0, 10)}]${mv})`;
+    const mv = S.moves.map(([c, r], i) => `;${this.colorOf(i) === WHITE ? "W" : "B"}[${c < 0 ? "" : sgfPt(c, r)}]`).join("");
+    const ha = S.setup && S.setup.length ? `HA[${S.setup.length}]AB${S.setup.map(([c, r]) => `[${sgfPt(c, r)}]`).join("")}PL[W]` : "";
+    return `(;GM[1]FF[4]CA[UTF-8]SZ[${S.size}]KM[${S.komi}]RU[Chinese]PB[${names(BLACK)}]PW[${names(WHITE)}]RE[${re}]DT[${new Date(S.created).toISOString().slice(0, 10)}]${ha}${mv})`;
   }
 }
 
