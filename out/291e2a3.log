@@ -1,0 +1,9 @@
+# Mon Nov 23 03:26:15 UTC 2026 on bf58b7b8369d
+train.py: folder data ok
+prep.py: folder output ok
+11:if [ ! -f mix2.npz ]; then
+16:np.savez("mix2.tmp.npz", **{k: np.concatenate([p[k] for p in parts])[perm] for k in parts[0].files}); print("mix2", n)
+18:mv mix2.tmp.npz mix2.npz; fi
+21:nohup python3 train.py mix2.npz run2 --init run1/m0080000.pt --steps 150000 --batch 256 --lr 0.02 --every 2500 --threads 4 --device cuda $BF > train2.log 2>&1 &
+22:nohup python3 train.py mix2.npz run3 --blocks 8 --ch 96 --steps 150000 --batch 256 --lr 0.05 --every 2500 --threads 4 --device cuda $BF > train3.log 2>&1 &
+# exit 0
