@@ -4924,6 +4924,7 @@ function playGame(g, P = OGSPlay) {
     const pass = h("button", { onclick: () => { if (confirm("Pass?")) P.move(-1, -1); } }, "Pass");
     pass.disabled = !g.myTurn;
     buttons.push(pass);
+    if (P.undo) { const u = h("button", { onclick: () => P.undo() }, "Undo"); u.disabled = !P.canUndo(); buttons.push(u); }   // (games against an avatar: AIPlay)
     buttons.push(h("button", { onclick: () => { if (confirm("Resign this game?")) P.resign(); } }, "Resign"));
   } else if (scoring && g.myColor) {
     buttons.push(h("button", { class: "primary", onclick: () => P.acceptScore() }, "Accept score"));

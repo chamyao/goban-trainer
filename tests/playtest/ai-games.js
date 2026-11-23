@@ -62,6 +62,18 @@ await p.goto(URL+'#/play');await p.waitForTimeout(1500);await noAuth();
 await p.locator('.ai-foe',{hasText:'Li Su'}).click();await p.locator('button',{hasText:'New game instead'}).click();await p.waitForTimeout(500);
 g=await prog();
 check(g.aig.lisu.S.moves.length<=1&&g.aig.ms_ahn.S.moves.length>=2,'a new game vs Li Su, Ahn\'s untouched');
+// Undo (apo110: "add an undo button"): your last move and the reply come off; one taken back while it thinks drops its move
+await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(800);
+await moveAndWait(2,2);const n0=await n();
+const u1=await p.evaluate(async()=>{const before=AIPlay.game.S.moves.length;AIPlay.undo();return {before,after:AIPlay.game.S.moves.length,mine:AIPlay.game.myTurn,btn:[...document.querySelectorAll('.rv-actions button')].map(b=>b.textContent).join('|')};});
+check(u1.after===u1.before-2&&u1.mine&&/Undo/.test(u1.btn),'Undo takes back your move and its reply: '+JSON.stringify(u1));
+const u2=await p.evaluate(async()=>{AIPlay.move(16,2);const k=AIPlay.game.S.moves.length;AIPlay.undo();await new Promise(r=>setTimeout(r,6000));
+  return {k,after:AIPlay.game.S.moves.length,mine:AIPlay.game.myTurn,thinking:AIPlay.thinking};});
+check(u2.after===u2.k-1&&u2.mine&&!u2.thinking,'Undo while it thinks: its move is dropped, your turn '+JSON.stringify(u2));
+// apo110's misclicked loss comes off once
+const fx=await p.evaluate(()=>{const keep=AIRank.get();Sync.username='apo110';AIRank.put({kyu:10,series:[true,false]});aiLobby();const a=AIRank.get(),first=a.series.join();
+  a.series.push(false);AIRank.put(a);aiLobby();const b=AIRank.get();Sync.username='';AIRank.put(keep);return [first,b.series.join()];});   // (username cleared before the save's 3 s: nothing sent)
+check(fx[0]==='true'&&fx[1]==='true,false','apo110\'s last loss cleared once ('+fx.join(' / ')+')');
 // promotion: finish games as won or lost
 const finish=(won)=>p.evaluate(w=>{AIPlay.change(S=>{S.phase='finished';S.result={winner:w?S.hostColor:3-S.hostColor,how:'resignation'};});return [AIRank.get(),AIPlay.status];},won);
 await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(1000);

@@ -55,6 +55,14 @@ const AIRank = {
   get() { const r = loadProgress().aiRank; return r && typeof r.kyu === "number" ? r : { kyu: this.START, series: [], at: 0 }; },
   put(r) { const p = loadProgress(); r.at = Date.now(); p.aiRank = r; try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {} Sync.scheduleSave(); },
   merge(l, r) { return !r ? l : !l ? r : (r.at || 0) > (l.at || 0) ? r : l; },
+  // once: apo110's loss to a misclick (2026-11-23, "can you clear the loss") comes off the series
+  repair() {
+    if (typeof Sync === "undefined" || Sync.username !== "apo110") return;
+    const r = this.get(); if (r.fix1) return;
+    const k = (r.series || []).lastIndexOf(false);
+    if (k >= 0) r.series.splice(k, 1);
+    r.fix1 = 1; this.put(r);
+  },
   text: kyu => kyu > 0 ? `${kyu}k` : `${1 - kyu}d`,
   // the game for the next rank against an avatar: the version closest to an even game (the fewest stones either
   // way; handicap games are where these networks are weakest), taking stones before giving them on a tie
@@ -274,6 +282,16 @@ const AIPlay = {
     this.play(c, r);
     this.maybeAI();
   },
+  // take back your last move, and the avatar's reply after it (apo110: "i lost a promotion match due to misclick ...
+  // add an undo button"); while it thinks, its move is dropped (maybeAI checks seq)
+  canUndo() { const g = this.game; return !!g && g.S.phase === "play" && g.S.moves.some((_, k) => g.colorOf(k) === g.myColor); },
+  undo() {
+    const g = this.game; if (!this.canUndo()) return;
+    let k = g.S.moves.length - 1;
+    while (k >= 0 && g.colorOf(k) !== g.myColor) k--;
+    this.status = ""; this.change(S => { S.moves.splice(k); S.undo = null; });
+    this.maybeAI();
+  },
   resign() { this.change(S => { S.phase = "finished"; S.result = { winner: 3 - this.game.myColor, how: "resignation" }; }); },
   setRemoved(points, removed) {
     this.change(S => {
@@ -300,6 +318,7 @@ const AIPlay = {
     const foe = g.S.foe, st = foe && AI_CAST[foe.who] || null;
     const lvl = foe ? null : (AI_LEVELS[g.S.level] || AI_LEVELS.medium), pro = !!(foe && AI_PRO[foe.who]), own = pro || !!(lvl && lvl.own);
     const kyu = foe ? aiRankOf(foe.who) : lvl.kyu, sz = g.S.size, me = g.toMove(), t0 = Date.now();
+    const seq0 = g.S.seq;   // (the position it's answering: an Undo meanwhile drops its move)
     // a moment before it plays, as a person would (apo110: "the instant play is kind of jarring"): 1-2.5 s, a little
     // longer in the middle game, the search's own time counted in
     const think = 1000 + Math.random() * 1500 + (g.S.moves.length > 20 && g.S.moves.length < 200 ? 500 : 0);
@@ -311,7 +330,7 @@ const AIPlay = {
       g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
       const a = own ? await OwnPlay.analyze(g, grid, me, pro ? aiProUrl(foe.who, g.S.tier) : undefined) : await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
         visits: 1, topK: 1, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
-      if (this.game !== g || g.phase !== "play") return;
+      if (this.game !== g || g.phase !== "play" || g.S.seq !== seq0) return;   // (taken back meanwhile: Undo)
       const pol = a.policy || [];   // sz*sz points (row by row from the top) then pass; -1 where illegal
       const lastPass = g.S.moves.length && g.S.moves[g.S.moves.length - 1][0] < 0;
       const legal = [];
@@ -335,7 +354,7 @@ const AIPlay = {
       }
       const wait = think - (Date.now() - t0);
       if (wait > 0) await new Promise(r => setTimeout(r, wait));
-      if (this.game !== g || g.phase !== "play") return;
+      if (this.game !== g || g.phase !== "play" || g.S.seq !== seq0) return;
       this.status = pick ? "" : `${foe ? foe.name : "KataGo"} passes.`;
       this.play(pick ? pick.x : -1, pick ? pick.y : -1);
     } catch (e) {
@@ -344,7 +363,7 @@ const AIPlay = {
       g.error = "";
     } finally {
       this.thinking = false; this.emit();
-      if (this.game && this.game !== g) setTimeout(() => this.maybeAI());   // (you went to another game meanwhile: its turn)
+      if (this.game && (this.game !== g || g.S.seq !== seq0)) setTimeout(() => this.maybeAI());   // (another game meanwhile, or an Undo: its turn?)
     }
   },
 };
@@ -352,6 +371,7 @@ const AIPlay = {
 // the panel in the Play tab: your rank and promotion series, and the seven opponents, each with its own game (one at a
 // time per avatar, several at once). The handicap and colour come from your rank (AIRank.setting): pick an avatar.
 function aiLobby() {
+  AIRank.repair();
   const games = AIPlay.all(), r = AIRank.get(), next = AIRank.text(r.kyu - 1);
   const going = who => { const v = games[who]; return v && v.S && v.S.phase !== "finished" ? v.S : null; };
   const cast = h("div", { class: "ai-foes" });
