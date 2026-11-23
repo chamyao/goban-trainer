@@ -1,0 +1,13 @@
+# Mon Nov 23 03:45:52 UTC 2026 on bf58b7b8369d
+==> rebuild.log <==
+
+==> cwi6.log <==
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_format_impl.py", line 772, in write_array
+    array.tofile(fp)
+OSError: Not enough free space to write 4408428754 bytes after offset 128
+[03:40:38] run2  | run3 
+[03:42:40] run2  | run3 
+[03:44:41] run2  | run3 
+0 %, 2 MiB
+4697 sh -c python3 prep.py cwi6/ cwi 0.6 > cwi6.log 2>&1 && python3 - > mix2.log 2>&1 <<"P
+# exit 0
