@@ -1,0 +1,5 @@
+# Mon Nov 23 03:59:05 UTC 2026 on bf58b7b8369d
+6923 sh -c while pgrep -f 'train.py kgs.npz,kgs2.npz,cwi6/ run2' >/dev/null; do sleep 30; done; python3 train.py kgs.npz
+6923 sh -c while pgrep -f 'train.py kgs.npz,kgs2.npz,cwi6/ run2' >/dev/null; do sleep 30; done; python3 train.py kgs.npz
+6977 bash push.sh
+# exit 0
