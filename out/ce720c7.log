@@ -1,0 +1,10 @@
+# Mon Nov 23 03:23:26 UTC 2026 on bf58b7b8369d
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 243, in __getitem__
+    raise KeyError(f"{key} is not a file in the archive") from None
+KeyError: 'move is not a file in the archive'
+[03:18:35] training run 2 (6x64 from step 80,000) and run 3 (8x96 from scratch)
+[03:20:35] run2  | run3 
+[03:20:39] done
+# exit 0
