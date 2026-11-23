@@ -1,0 +1,7 @@
+# Mon Nov 23 03:54:50 UTC 2026 on bf58b7b8369d
+step 12500 pol 2.198 val 0.919 acc 0.429 lr 0.0197 27316 pos/s
+74 %, 968 MiB
+6267 python3 train.py kgs.npz,kgs2.npz,cwi6/ run2 --init run1/m0080000.pt --steps 150000 --batch 256 --lr 0.02
+               total        used        free      shared  buff/cache   available
+Mem:              94          28          47           0          19          65
+# exit 0
