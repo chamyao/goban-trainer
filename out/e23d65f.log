@@ -1,0 +1,12 @@
+# Mon Nov 23 03:25:00 UTC 2026 on bf58b7b8369d
+-rw-rw-r-- 1 root root 2319775200 Nov 23 02:39 cwi.npz
+-rw-rw-r-- 1 root root 4349624493 Nov 23 03:18 cwi6.npz
+-rw-rw-r-- 1 root root 2227346996 Nov 23 02:37 kgs.npz
+-rw-rw-r-- 1 root root 3544525080 Nov 23 03:14 kgs2.npz
+-rw-rw-r-- 1 root root 4547120120 Nov 23 02:40 mix.npz
+kgs.npz ['board', 'ko', 'last', 'black', 'komi', 'move', 'win', 'hcap'] 5861434
+kgs2.npz ['board', 'ko', 'last', 'black', 'komi', 'move', 'win', 'hcap'] 9327692
+cwi6.npz ERR Overlapped entries: 'board.npy' (possible zip bomb)
+cwi.npz ['board', 'ko', 'last', 'black', 'komi', 'move', 'win', 'hcap'] 6104666
+mix.npz ['board', 'ko', 'last', 'black', 'komi', 'move', 'win', 'hcap'] 11966100
+# exit 0
