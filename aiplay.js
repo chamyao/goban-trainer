@@ -22,6 +22,31 @@ const AI_LEVELS = {
   easy: { name: "Easy", kyu: 10 },
   medium: { name: "Medium", kyu: 6 },
   strong: { name: "Strong", kyu: 0 },
+  // the site's own network, trained on KGS dan and professional games (tools/ownnet; the user: "upload the latest one
+  // to the site so I can try playing it"): its policy's favourite legal move, no search. Still training: the
+  // weights are a checkpoint, its rank a measured estimate.
+  ours: { name: "Our AI · experimental", kyu: 10, own: true },
+};
+// the own network, in a worker (engine/ownnet-worker.js): the weights load on its first move
+const OwnPlay = {
+  url: "engine/ownnet/latest.bin?v=1", w: null, seq: 0, wait: new Map(),
+  call(msg) {
+    if (!this.w) {
+      this.w = new Worker("engine/ownnet-worker.js?v=1");
+      this.w.onmessage = e => { const f = this.wait.get(e.data.id); if (f) { this.wait.delete(e.data.id); e.data.error ? f.no(new Error(e.data.error)) : f.ok(e.data); } };
+      this.call({ type: "load", url: new URL(this.url, location.href).href }).catch(() => {});   // (the page's address: a worker resolves its own relative to engine/)
+    }
+    const id = ++this.seq;
+    return new Promise((ok, no) => { this.wait.set(id, { ok, no }); this.w.postMessage({ ...msg, id }); });
+  },
+  // the game -> {policy}: sz*sz points then pass, -1 on occupied points (as the engine's)
+  async analyze(g, grid, me) {
+    const sz = g.S.size, board = new Array(sz * sz);
+    for (let r = 0; r < sz; r++) for (let c = 0; c < sz; c++) board[r * sz + c] = grid[r][c] === BLACK ? 1 : grid[r][c] === WHITE ? -1 : 0;
+    const last = g.S.moves.slice(-4).reverse().map(([c, r]) => c >= 0 ? r * sz + c : 361);
+    const a = await this.call({ type: "eval", board, black: me === BLACK, ko: -1, last, komi: g.S.komi });
+    return { policy: a.policy.map((p, i) => i < sz * sz && board[i] ? -1 : p) };
+  },
 };
 
 // the avatars as opponents (apo110: "play against the avatars themselves... at least 10k... vary their play styles by
@@ -87,8 +112,8 @@ function AI_HANDICAP(n) {
 // FriendGame, so the Play tab can show its panel on the first page)
 let AIGameClass = null;
 const aiGame = (S, me) => new (AIGameClass || (AIGameClass = class extends FriendGame {
-  get title() { return this.S.foe ? `vs ${this.S.foe.name}` : `vs KataGo · ${AI_LEVELS[this.S.level].name} · ${this.S.size}×${this.S.size}`; }
-  player(color) { return { username: color === this.S.hostColor ? (this.S.names[color] || "You") : this.S.foe ? this.S.foe.name : `KataGo (${AI_LEVELS[this.S.level].name})` }; }
+  get title() { const L = AI_LEVELS[this.S.level] || {}; return this.S.foe ? `vs ${this.S.foe.name}` : L.own ? `vs ${L.name} · ${this.S.size}×${this.S.size}` : `vs KataGo · ${L.name} · ${this.S.size}×${this.S.size}`; }
+  player(color) { const L = AI_LEVELS[this.S.level] || {}; return { username: color === this.S.hostColor ? (this.S.names[color] || "You") : this.S.foe ? this.S.foe.name : L.own ? "Our AI" : `KataGo (${L.name})` }; }
 }))(S, me);
 
 const AIPlay = {
@@ -152,9 +177,10 @@ const AIPlay = {
   async maybeAI() {
     const g = this.game;
     if (!g || g.phase !== "play" || g.toMove() === g.myColor || this.thinking) return;
-    this.thinking = true; this.status = `${g.S.foe ? g.S.foe.name : "KataGo"} is thinking…`; this.emit();
+    this.thinking = true; this.status = `${g.S.foe ? g.S.foe.name : (AI_LEVELS[g.S.level] || {}).own ? "Our AI" : "KataGo"} is thinking…`; this.emit();
     const foe = g.S.foe, st = foe && AI_CAST[foe.who] || null;
-    const kyu = foe ? aiRankOf(foe.who) : (AI_LEVELS[g.S.level] || AI_LEVELS.medium).kyu, sz = g.S.size, me = g.toMove(), t0 = Date.now();
+    const lvl = foe ? null : (AI_LEVELS[g.S.level] || AI_LEVELS.medium), own = !!(lvl && lvl.own);
+    const kyu = foe ? aiRankOf(foe.who) : lvl.kyu, sz = g.S.size, me = g.toMove(), t0 = Date.now();
     // a moment before it plays, as a person would (apo110: "the instant play is kind of jarring"): 1-2.5 s, a little
     // longer in the middle game, the search's own time counted in
     const think = 1000 + Math.random() * 1500 + (g.S.moves.length > 20 && g.S.moves.length < 200 ? 500 : 0);
@@ -164,7 +190,7 @@ const AIPlay = {
       const hist = [];
       // (passes too, as x -1: the network's pass sense needs them)
       g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
-      const a = await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
+      const a = own ? await OwnPlay.analyze(g, grid, me) : await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
         visits: 1, topK: 1, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
       if (this.game !== g || g.phase !== "play") return;
       const pol = a.policy || [];   // sz*sz points (row by row from the top) then pass; -1 where illegal
@@ -175,7 +201,7 @@ const AIPlay = {
       let pick = null;
       if (legal.length && passP < topP) {   // (the network's own pass when it likes passing best, as calibrated)
         // draw the share at random (a partial shuffle), best first by the policy
-        const n = Math.max(1, Math.min(legal.length, Math.round(aiShare(kyu) * legal.length)));
+        const n = own ? legal.length : Math.max(1, Math.min(legal.length, Math.round(aiShare(kyu) * legal.length)));   // (ours: its favourite, all of them drawn)
         for (let i = 0; i < n; i++) { const j = i + Math.floor(Math.random() * (legal.length - i)); [legal[i], legal[j]] = [legal[j], legal[i]]; }
         const drawn = legal.slice(0, n).sort((p, q) => pol[q] - pol[p]);
         let best = drawn[0];
@@ -195,7 +221,7 @@ const AIPlay = {
       this.play(pick ? pick.x : -1, pick ? pick.y : -1);
     } catch (e) {
       console.error("[ai]", e);
-      this.status = "KataGo couldn't move: " + (e.message || e) + " (tap Retry)";
+      this.status = `${g.S.foe ? g.S.foe.name : (AI_LEVELS[g.S.level] || {}).own ? "Our AI" : "KataGo"} couldn't move: ` + (e.message || e) + " (tap Retry)";
       g.error = "";
     } finally { this.thinking = false; this.emit(); }
   },
