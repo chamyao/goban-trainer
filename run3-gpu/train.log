@@ -217,3 +217,19 @@ step 83000 pol 2.012 val 0.880 acc 0.459 lr 0.0208 11969 pos/s
 step 83500 pol 2.007 val 0.880 acc 0.457 lr 0.0206 12878 pos/s
 step 84000 pol 2.007 val 0.882 acc 0.456 lr 0.0203 12876 pos/s
 step 84500 pol 2.005 val 0.883 acc 0.457 lr 0.0201 12840 pos/s
+step 85000 pol 2.007 val 0.881 acc 0.458 lr 0.0198 12761 pos/s
+VAL {'step': 85000, 'positions': 21760000, 'val_acc': 0.46495, 'val_pol': 1.9749480407714843, 'val_v': 0.8729135864257812, 'time': 1795409898.8780491}
+step 85500 pol 1.998 val 0.878 acc 0.460 lr 0.0195 11732 pos/s
+step 86000 pol 2.006 val 0.878 acc 0.457 lr 0.0193 12691 pos/s
+step 86500 pol 2.004 val 0.877 acc 0.457 lr 0.0190 12920 pos/s
+step 87000 pol 1.987 val 0.878 acc 0.464 lr 0.0188 12903 pos/s
+step 87500 pol 1.996 val 0.877 acc 0.460 lr 0.0185 12905 pos/s
+VAL {'step': 87500, 'positions': 22400000, 'val_acc': 0.4605, 'val_pol': 1.9774089416503906, 'val_v': 0.9211366607666016, 'time': 1795409949.6285286}
+step 88000 pol 1.990 val 0.877 acc 0.461 lr 0.0183 12005 pos/s
+step 88500 pol 1.984 val 0.873 acc 0.463 lr 0.0180 12916 pos/s
+step 89000 pol 1.982 val 0.875 acc 0.461 lr 0.0178 12891 pos/s
+step 89500 pol 1.987 val 0.874 acc 0.460 lr 0.0175 12925 pos/s
+step 90000 pol 1.989 val 0.876 acc 0.460 lr 0.0173 12900 pos/s
+VAL {'step': 90000, 'positions': 23040000, 'val_acc': 0.4606, 'val_pol': 1.9771272033691407, 'val_v': 0.8949710083007812, 'time': 1795409999.9423108}
+step 90500 pol 1.984 val 0.876 acc 0.463 lr 0.0170 12011 pos/s
+step 91000 pol 1.981 val 0.874 acc 0.463 lr 0.0168 12938 pos/s
