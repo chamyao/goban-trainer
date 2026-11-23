@@ -1,0 +1,12 @@
+# Mon Nov 23 02:53:14 UTC 2026 on bf58b7b8369d
+[02:44:35] step 36000 pol 2.296 val 0.944 acc 0.418 lr 0.0289 24155 pos/s
+[02:46:42] step 47500 pol 2.220 val 0.930 acc 0.426 lr 0.0177 17246 pos/s
+[02:48:48] step 59500 pol 2.145 val 0.919 acc 0.436 lr 0.0077 24305 pos/s
+[02:50:55] step 71500 pol 2.065 val 0.904 acc 0.449 lr 0.0014 23816 pos/s
+[02:53:01] step 80000 pol 2.047 val 0.903 acc 0.453 lr 0.0000 24218 pos/s
+[02:53:08] done: step 80000 pol 2.047 val 0.903 acc 0.453 lr 0.0000 24218 pos/s
+step 80000 pol 2.047 val 0.903 acc 0.453 lr 0.0000 24218 pos/s
+VAL {'step': 80000, 'positions': 20480000, 'val_acc': 0.4503, 'val_pol': 2.042396630859375, 'val_v': 0.9020535
+positions 6104666
+merged 11966100 kgs 5861434 pro 6104666
+# exit 0
