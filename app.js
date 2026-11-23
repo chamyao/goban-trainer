@@ -180,7 +180,8 @@ const Sync = {
       if (bookId === "tkElo") { local.tkElo = this.mergeElo(local.tkElo, remote.tkElo); continue; }
       if (bookId === "pokerElo") { local.pokerElo = Poker.merge(local.pokerElo, remote.pokerElo); continue; }   // (poker.js)
       if (bookId === "ev") { local.ev = Events.merge(local.ev, remote.ev); continue; }   // (events.js)
-      if (bookId === "av") { local.av = Avatars.merge(local.av, remote.av); continue; }   // the avatars collected (avatars.js)   // the event ledger (events.js)
+      if (bookId === "av") { local.av = Avatars.merge(local.av, remote.av); continue; }
+      if (bookId === "aig") { local.aig = AIPlay.merge(local.aig, remote.aig); continue; }   // the games against the avatars (aiplay.js)   // the avatars collected (avatars.js)   // the event ledger (events.js)
       const b = local[bookId] || (local[bookId] = {});
       for (const pid in remote[bookId]) if (b[pid] !== 1) b[pid] = remote[bookId][pid];
     }

@@ -66,6 +66,7 @@ starts from a fresh save.
 | duel-desktop | desktop duel overlay; Escape leaves; you can move again |
 | wukong-guide | the menu has no guide switch; Wukong appears only after standing still a while; nothing of his is drawn over a story scroll |
 | play-tab | the site's Play tab still loads |
+| ai-games | Play vs the avatars, one game per avatar: the earlier single game moves into the synced progress (progress.aig); two avatars at once, each answering; the lobby marks each game under way with its move and offers to resume it; a reload keeps both; a sync merge takes the later copy of each; dropping one for a new game leaves the other |
 
 Tools, not in the default run: `node tests/playtest/spacing.js "iPhone SE"` measures board point spacing for every pool problem of Books 1 and 2 as the problem overlay shows it (share under 28 px and 24 px); `node tests/playtest/book-run.js 2` plays a whole book on the phone by taps and times each beat.
 

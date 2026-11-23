@@ -129,25 +129,57 @@ const aiGame = (S, me) => new (AIGameClass || (AIGameClass = class extends Frien
 }))(S, me);
 
 const AIPlay = {
+  // one game per avatar, kept with the synced progress (progress.aig: who -> {S, at}), so several go at once and each
+  // follows you to another device (apo110: "the games get synced/saved too and per avatar"); at: the last change, the
+  // later copy of a game wins (merge). The one game from before (gt-ai-game) moves in under its avatar.
   KEY: "gt-ai-game",
-  game: null, listeners: new Set(), thinking: false, status: "",
-  saved() { try { return JSON.parse(localStorage.getItem(this.KEY)); } catch { return null; } },
-  load() {
-    if (this.game) return this.game;
-    const v = this.saved();
-    if (v && v.S) this.game = aiGame(v.S, { role: "host", color: v.S.hostColor, token: null });
+  game: null, cur: null, listeners: new Set(), thinking: false, status: "",
+  all() {
+    const prog = loadProgress(), aig = prog.aig || {};
+    try {
+      const old = JSON.parse(localStorage.getItem(this.KEY));
+      if (old && old.S) {
+        const k = old.S.foe ? old.S.foe.who : "_";
+        if (!aig[k]) { aig[k] = { S: old.S, at: Date.now() }; prog.aig = aig; localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog)); Sync.scheduleSave(); }
+        localStorage.removeItem(this.KEY);
+      }
+    } catch {}
+    return aig;
+  },
+  saved(who) { const v = this.all()[who]; return v && v.S ? v : null; },
+  // the games under way, newest first: [{who, S, at}]
+  going() { return Object.entries(this.all()).filter(([, v]) => v && v.S && v.S.phase !== "finished").map(([who, v]) => ({ who, ...v })).sort((a, b) => b.at - a.at); },
+  load(who = this.cur) {
+    if (who == null) return this.game;
+    const v = this.saved(who);
+    // the stored copy when it's another game or newer (a sync brought another device's moves), else the one in hand
+    if (!(this.game && this.cur === who && v && v.S.seq <= this.game.S.seq)) {
+      this.game = v ? aiGame(v.S, { role: "host", color: v.S.hostColor, token: null }) : null;
+      this.cur = who; this.status = "";
+    }
     return this.game;
   },
-  persist() { try { localStorage.setItem(this.KEY, JSON.stringify({ S: this.game.S })); } catch {} },
+  persist() {
+    if (!this.game || this.cur == null) return;
+    const prog = loadProgress(); (prog.aig || (prog.aig = {}))[this.cur] = { S: this.game.S, at: Date.now() };
+    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(prog)); } catch {}
+    Sync.scheduleSave();
+  },
+  // two copies of the games (Sync.mergeInto): per avatar, the later change
+  merge(l, r) {
+    const o = { ...(l || {}) };
+    for (const [k, v] of Object.entries(r || {})) if (v && (!o[k] || (v.at || 0) > (o[k].at || 0))) o[k] = v;
+    return o;
+  },
   emit() { for (const f of this.listeners) f(); },
   start({ size, level, color, foe, handicap = 0 }) {
     const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
     const S = FriendPlay.fresh({ size, T: null, hostColor, names: { [hostColor]: Sync.username || "You" }, listed: false });
     if (handicap >= 2) { S.setup = AI_HANDICAP(handicap); S.komi = 0.5; }   // stones for Black, White moves first
     S.phase = "play"; S.level = foe ? "strong" : level; if (foe) S.foe = foe;   // foe: an avatar ({who, name, src})
-    this.game = aiGame(S, { role: "host", color: hostColor, token: null });
+    this.game = aiGame(S, { role: "host", color: hostColor, token: null }); this.cur = foe ? foe.who : "_"; this.status = "";
     this.persist();
-    location.hash = "#/ai";
+    location.hash = `#/ai/${this.cur}`;
     this.maybeAI();
   },
   change(fn) { fn(this.game.S); this.game.S.seq++; this.persist(); this.emit(); },
@@ -235,37 +267,59 @@ const AIPlay = {
       console.error("[ai]", e);
       this.status = `${g.S.foe ? g.S.foe.name : (AI_LEVELS[g.S.level] || {}).own ? "Our AI" : "KataGo"} couldn't move: ` + (e.message || e) + " (tap Retry)";
       g.error = "";
-    } finally { this.thinking = false; this.emit(); }
+    } finally {
+      this.thinking = false; this.emit();
+      if (this.game && this.game !== g) setTimeout(() => this.maybeAI());   // (you went to another game meanwhile: its turn)
+    }
   },
 };
 
-// the panel in the Play tab: board size, strength, color; and the game in progress, if any
+// the panel in the Play tab: the seven opponents, each with its own game (one at a time per avatar, several at once);
+// colour and handicap for a new one
 function aiLobby() {
-  const g = AIPlay.load();
+  const games = AIPlay.all();
   const sel = (opts, cur) => { const s = h("select", {}, opts.map(([v, t]) => h("option", { value: v, ...(v === cur ? { selected: "" } : {}) }, t))); return s; };
   const color = sel([["black", "Black"], ["white", "White"], ["random", "Random"]], "black");
   const hcap = sel([["0", "None"], ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => [String(n), `${n} stones for Black`])], "0");
+  const going = who => { const v = games[who]; return v && v.S && v.S.phase !== "finished" ? v.S : null; };
   // the seven opponents: a collected one plays, the rest are silhouettes (apo110: "no note, just the avatar silhouettes")
   const cast = h("div", { class: "ai-foes" });
   let foe = null;
-  const startBtn = h("button", { class: "primary", onclick: () => AIPlay.start({ size: 19, level: "strong", color: color.value, foe, handicap: +hcap.value }) }, "Start a game");
-  startBtn.disabled = true;
+  const startBtn = h("button", { class: "primary", onclick: () => {
+    if (!foe) return;
+    if (going(foe.who)) { location.hash = `#/ai/${foe.who}`; return; }
+    AIPlay.start({ size: 19, level: "strong", color: color.value, foe, handicap: +hcap.value });
+  } }, "Start a game");
+  const overBtn = h("button", { onclick: () => {
+    if (foe && confirm(`Drop your game against ${foe.name} and start a new one?`)) AIPlay.start({ size: 19, level: "strong", color: color.value, foe, handicap: +hcap.value });
+  } }, "New game instead");
+  const opts = h("div", { class: "row ai-opts" }, [h("label", {}, ["You play ", color]), h("label", {}, ["Handicap ", hcap])]);
+  const pick = () => {
+    const S = foe && going(foe.who);
+    startBtn.disabled = !foe;
+    startBtn.textContent = S ? `Resume vs ${foe.name}` : "Start a game";
+    overBtn.hidden = !S; opts.hidden = !!S;
+  };
+  pick();
   if (typeof Avatars !== "undefined") Promise.all(Object.keys(AI_PRO).map(who => Avatars.faceOf(who))).then(faces => {
     for (const f of faces) {
-      const mine = Avatars.owns(f.who);
+      const mine = Avatars.owns(f.who), S = mine && going(f.who);
       const el = h("button", { class: `ai-foe${mine ? "" : " ai-foe-locked"}`, ...(mine ? { title: f.name } : {}) },
-        [f.src ? h("img", { src: f.src, alt: "" }) : "", mine ? h("b", {}, f.name) : h("b", {}, "\u00a0"), mine ? h("small", { class: "ai-foe-rank" }, AI_PRO_RANK) : ""]);
-      if (mine) el.onclick = () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); startBtn.disabled = !foe; };
+        [f.src ? h("img", { src: f.src, alt: "" }) : "", mine ? h("b", {}, f.name) : h("b", {}, "\u00a0"),
+         mine ? h("small", { class: "ai-foe-rank" }, S ? `move ${S.moves.length + 1}` : AI_PRO_RANK) : ""]);
+      if (S) el.classList.add("ai-foe-going");
+      if (mine) el.onclick = () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); pick(); };
       else el.disabled = true;
       cast.append(el);
     }
   }).catch(() => {});
+  const old = going("_");   // a game against a strength level, from before the avatars
   return h("div", { class: "sgf-loader ai-lobby" }, [
     h("div", { class: "cat-title" }, "Play an avatar"),
-    h("div", {}, "A 19×19 game against one of your avatars, right here: no login, no clock. Chinese rules, komi 7.5 (0.5 with a handicap)."),
-    h("div", { class: "row ai-opts" }, [h("label", {}, ["You play ", color]), h("label", {}, ["Handicap ", hcap])]),
+    h("div", {}, "A 19×19 game against one of your avatars, right here: no login, no clock. Chinese rules, komi 7.5 (0.5 with a handicap). One game per avatar at a time; they're saved with your progress."),
+    opts,
     cast,
-    h("div", { class: "row" }, [startBtn, g && g.phase !== "finished" ? h("button", { onclick: () => { location.hash = "#/ai"; } }, "Resume your game") : ""]),
+    h("div", { class: "row" }, [startBtn, overBtn, old ? h("button", { onclick: () => { location.hash = "#/ai/_"; } }, "Resume your earlier game") : ""]),
   ]);
 }
 
@@ -275,7 +329,8 @@ function viewAI() {
   const P = AIPlay, wrap = h("div", { class: "play" });
   root.append(wrap);
   P.listeners.clear();
-  if (!P.load()) { location.hash = "#/play"; return; }
+  const who = decodeURIComponent((location.hash.split("/")[2] || "")) || P.cur || (P.going()[0] || {}).who;
+  if (!who || !P.load(who)) { location.hash = "#/play"; return; }
   const rerender = () => {
     if (!wrap.isConnected) { P.listeners.delete(rerender); return; }
     const g = P.game;

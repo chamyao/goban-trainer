@@ -1331,6 +1331,7 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .ai-foe b { font-size: 12px; line-height: 1.1; text-align: center; } .ai-foe small { font-size: 11px; opacity: .75; }
 .ai-foe.on { outline: 3px solid var(--accent); }
 .ai-foe-locked { cursor: default; opacity: .55; } .ai-foe-locked img { filter: brightness(0); }   /* not collected yet: a silhouette */
+.ai-foe-going small { opacity: 1; color: var(--accent); font-weight: 600; }   /* a game under way with this avatar */
 .ai-foe-card { display: flex; gap: 10px; align-items: center; margin: 6px 0; }
 .ai-foe-card img { width: 72px; height: 72px; object-fit: cover; object-position: top; border-radius: 8px; image-rendering: pixelated; }
 .ai-foe-card small { display: block; opacity: .8; }
