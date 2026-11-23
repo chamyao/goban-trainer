@@ -1,0 +1,18 @@
+# Mon Nov 23 03:46:56 UTC 2026 on bf58b7b8369d
+before:
+overlay          32G   28G  4.1G  88% /
+249M	raw
+398M	raw2
+412M	cwi
+46M	cwi.tgz
+4.3G	mix.npz
+2.2G	cwi.npz
+4.0K	cwi6
+757M	run1
+after:
+overlay          32G   21G   12G  66% /
+train.py: multi-source ok
+21:nohup python3 train.py kgs.npz,kgs2.npz,cwi6/ run2 --init run1/m0080000.pt --steps 150000 --batch 256 --lr 0.02 --eve
+22:nohup python3 train.py kgs.npz,kgs2.npz,cwi6/ run3 --blocks 8 --ch 96 --steps 150000 --batch 256 --lr 0.05 --every 25
+36:while pgrep -f "train.py kgs" > /dev/null; do sleep 120; say "run2 $(grep '^step' train2.log | tail -1 | cut -c1-60) 
+# exit 0
