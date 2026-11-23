@@ -30,15 +30,15 @@ const moveAndWait=async(c,r)=>{ await myTurn(); const k=await n(); await p.evalu
   for(let i=0;i<40&&(await n())<k+2;i++) await p.waitForTimeout(500); return n(); };
 await playVs('Li Su');
 check(await p.evaluate(()=>location.hash)==='#/ai/lisu','a game vs Li Su at #/ai/lisu');
-const liS=await p.evaluate(()=>({d:AIPlay.game.S.promo.d,setup:(AIPlay.game.S.setup||[]).length,me:AIPlay.game.myColor}));
-check(liS.d===4&&liS.setup===4&&liS.me===1,'at 10k, Li Su (5k) for 9k: 4 stones, you Black '+JSON.stringify(liS));
+const liS=await p.evaluate(()=>({d:AIPlay.game.S.promo.d,tier:AIPlay.game.S.tier,setup:(AIPlay.game.S.setup||[]).length,me:AIPlay.game.myColor,komi:AIPlay.game.S.komi}));
+check(liS.d===-1&&liS.tier==='10k'&&liS.setup===0&&liS.me===2&&liS.komi===0.5,'at 10k, for 9k: Li Su\'s 10k version (closer to even than the 5k one at 4 stones), you White, komi 0.5 '+JSON.stringify(liS));
 const liN=await moveAndWait(2,16);
 check(liN===3,'Li Su answered');
 await playVs('Ahn Young-yi');
 check((await p.evaluate(()=>location.hash))==='#/ai/ms_ahn','a game vs Ahn Young-yi at #/ai/ms_ahn');
 for(let i=0;i<40&&(await p.evaluate(()=>AIPlay.game.S.moves.length))<1;i++) await p.waitForTimeout(500);   // (White moves first after the stones)
 const ahn0=await p.evaluate(()=>({n:AIPlay.game.S.moves.length,setup:!!AIPlay.game.S.setup}));
-check(ahn0.setup,'with handicap stones');
+const ahnT=await p.evaluate(()=>AIPlay.game.S.tier);check(ahnT==='10k'&&!ahn0.setup,'Ahn\'s 10k version too');
 await moveAndWait(2,16);   // (not a star point: the handicap stones are there)
 g=await prog();
 check(g.aig.lisu&&g.aig.ms_ahn&&g.aig.lisu.S.moves.length===3&&g.aig.ms_ahn.S.moves.length>=2,'both games kept');
@@ -73,7 +73,7 @@ await playVs('Ahn Young-yi');   // (Ahn's game still going: resumes, for 9k)
 await p.goto(URL+'#/play');await p.waitForTimeout(800);await noAuth();
 await p.locator('.ai-foe',{hasText:'Ahn'}).click();p.once('dialog',d=>d.accept());await p.locator('button',{hasText:'New game instead'}).click();await p.waitForTimeout(400);
 [rk,stt]=await finish(true);check(rk.kyu===9&&rk.series.length===0,'two wins of three: promoted to 9k ('+stt+')');
-const set=await p.evaluate(()=>AIRank.setting('ms_ahn'));check(set.target===8&&set.d===2,'at 9k, Ahn (6k) for 8k: 2 stones '+JSON.stringify(set));
+const set=await p.evaluate(()=>AIRank.setting('ms_ahn'));check(set.target===8&&set.d===2&&set.tier==='7k','at 9k, Ahn for 8k: the 6k version at 2 stones (a tie with giving 2 to the 10k one: stones taken first) '+JSON.stringify(set));
 await p.goto(URL+'#/play');await p.waitForTimeout(1200);await noAuth();
 const rt=await p.locator('.ai-rank').innerText();check(/Your rank: 9k/.test(rt)&&/promotion to 8k/.test(rt),'the lobby: '+rt.replace(/\n/g,' '));
 await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(800);[rk,stt]=await finish(true);

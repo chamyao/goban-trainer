@@ -37,16 +37,18 @@ const AI_LEVELS = {
 const AI_PRO = { lvbu: "kato", lisu: "sakata", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "takemiya", caocao: "goseigen" };
 // the versions of each opponent (tiers): their weights and each one's strength (OGS kyu, from the joint fit: reference
 // games + head-to-head; twelve games each against its base, so about ±2 ranks apiece). "7k": run 2 (~6.6k) fine-tuned
-// on the pro's games.
+// on the pro's games. "10k": the step-22,500 checkpoint (~12k) fine-tuned 6,000 steps the same way (24 games each
+// against steps 22,500 and 35,000).
 const AI_TIERS = {
   "7k": { url: pro => `engine/ownnet/pro/${pro}.bin?v=2`, rank: { lvbu: 4, ms_jang: 4, lisu: 5, ms_ahn: 6, dongzhuo: 6, caocao: 7, diaochan: 7 } },
+  "10k": { url: pro => `engine/ownnet/pro10/${pro}.bin?v=1`, rank: { lvbu: 10, ms_jang: 9, lisu: 10, ms_ahn: 10, dongzhuo: 11, caocao: 10, diaochan: 10 } },
 };
 const aiProUrl = (who, tier = "7k") => (AI_TIERS[tier] || AI_TIERS["7k"]).url(AI_PRO[who]);
 
 // Promotion (apo110: "a promotion system: I have to beat 6k at 3 stones 2/3 times in order to promote one rank", "no
 // demotion"). You hold a rank (kyu; 0 = 1d, -1 = 2d); each game tests the next one up: against an opponent of
 // strength O, a rank difference d = next - O is given as handicap (d stones from 2, Black with komi 0.5 at 1, an even
-// game at 0; past the strongest version, you give the stones). Two wins of a series of three promote you; two losses
+// game at 0; negative: you give them). Each avatar has versions of several strengths (AI_TIERS): the closest to even. Two wins of a series of three promote you; two losses
 // start a new series. Kept with the synced progress (progress.aiRank), the later copy wins.
 const AIRank = {
   START: 10,
@@ -54,12 +56,12 @@ const AIRank = {
   put(r) { const p = loadProgress(); r.at = Date.now(); p.aiRank = r; try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {} Sync.scheduleSave(); },
   merge(l, r) { return !r ? l : !l ? r : (r.at || 0) > (l.at || 0) ? r : l; },
   text: kyu => kyu > 0 ? `${kyu}k` : `${1 - kyu}d`,
-  // the game for the next rank against an avatar: the version giving the smallest handicap you take, else the one
-  // closest to even with you giving the stones
+  // the game for the next rank against an avatar: the version closest to an even game (the fewest stones either
+  // way; handicap games are where these networks are weakest), taking stones before giving them on a tie
   setting(who, kyu = this.get().kyu) {
     const want = kyu - 1;
     const opts = Object.entries(AI_TIERS).map(([tier, t]) => ({ tier, d: Math.max(-9, Math.min(9, want - t.rank[who])) }));
-    const take = opts.filter(o => o.d >= 0).sort((a, b) => a.d - b.d)[0] || opts.sort((a, b) => b.d - a.d)[0];
+    const take = opts.sort((a, b) => Math.abs(a.d) - Math.abs(b.d) || b.d - a.d)[0];
     return { ...take, target: want };
   },
   // what the game looks like: "3 stones", "even", "you give 2"
