@@ -36,7 +36,7 @@ const AI_LEVELS = {
 // on that player's moves). Difficulty comes from handicap stones. An avatar not collected shows as a silhouette.
 const AI_PRO = { lvbu: "kato", daiyu: "takemiya", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "sakata", caocao: "goseigen" };
 const AI_PRO_RANK = "7k";   // their measured strength, about OGS 6.5-7k
-const aiProUrl = who => `engine/ownnet/pro/${AI_PRO[who]}.bin?v=1`;
+const aiProUrl = who => `engine/ownnet/pro/${AI_PRO[who]}.bin?v=2`;
 // the own network, in a worker per weights file (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
   url: "engine/ownnet/latest.bin?v=3", ws: new Map(), seq: 0, wait: new Map(),
