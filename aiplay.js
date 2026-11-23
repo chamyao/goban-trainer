@@ -31,24 +31,32 @@ const AI_LEVELS = {
   // on the human-SL benchmark, which runs ~4 ranks generous. (Step 12,500 felt 13-14k.)
   ours: { name: "Our AI · experimental", kyu: 9, own: true },
 };
-// the own network, in a worker (engine/ownnet-worker.js): the weights load on its first move
+// the opponents (the user: "just choose one per and we only need 7 opponents ... collected only"): seven avatars,
+// each the site's own network fine-tuned on one professional's games (tools/ownnet: run 2, ~OGS 6.5k, + 1,500 steps
+// on that player's moves). Difficulty comes from handicap stones. An avatar not collected shows as a silhouette.
+const AI_PRO = { lvbu: "kato", daiyu: "takemiya", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "sakata", caocao: "goseigen" };
+const AI_PRO_RANK = "7k";   // their measured strength, about OGS 6.5-7k
+const aiProUrl = who => `engine/ownnet/pro/${AI_PRO[who]}.bin?v=1`;
+// the own network, in a worker per weights file (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
-  url: "engine/ownnet/latest.bin?v=3", w: null, seq: 0, wait: new Map(),
-  call(msg) {
-    if (!this.w) {
-      this.w = new Worker("engine/ownnet-worker.js?v=1");
-      this.w.onmessage = e => { const f = this.wait.get(e.data.id); if (f) { this.wait.delete(e.data.id); e.data.error ? f.no(new Error(e.data.error)) : f.ok(e.data); } };
-      this.call({ type: "load", url: new URL(this.url, location.href).href }).catch(() => {});   // (the page's address: a worker resolves its own relative to engine/)
+  url: "engine/ownnet/latest.bin?v=3", ws: new Map(), seq: 0, wait: new Map(),
+  call(msg, url = this.url) {
+    let w = this.ws.get(url);
+    if (!w) {
+      w = new Worker("engine/ownnet-worker.js?v=1"); this.ws.set(url, w);
+      w.onmessage = e => { const f = this.wait.get(e.data.id); if (f) { this.wait.delete(e.data.id); e.data.error ? f.no(new Error(e.data.error)) : f.ok(e.data); } };
+      const id = ++this.seq; this.wait.set(id, { ok: () => {}, no: () => {} });
+      w.postMessage({ type: "load", url: new URL(url, location.href).href, id });   // (the page's address: a worker resolves its own relative to engine/)
     }
     const id = ++this.seq;
-    return new Promise((ok, no) => { this.wait.set(id, { ok, no }); this.w.postMessage({ ...msg, id }); });
+    return new Promise((ok, no) => { this.wait.set(id, { ok, no }); w.postMessage({ ...msg, id }); });
   },
   // the game -> {policy}: sz*sz points then pass, -1 on occupied points (as the engine's)
-  async analyze(g, grid, me) {
+  async analyze(g, grid, me, url) {
     const sz = g.S.size, board = new Array(sz * sz);
     for (let r = 0; r < sz; r++) for (let c = 0; c < sz; c++) board[r * sz + c] = grid[r][c] === BLACK ? 1 : grid[r][c] === WHITE ? -1 : 0;
     const last = g.S.moves.slice(-4).reverse().map(([c, r]) => c >= 0 ? r * sz + c : 361);
-    const a = await this.call({ type: "eval", board, black: me === BLACK, ko: -1, last, komi: g.S.komi });
+    const a = await this.call({ type: "eval", board, black: me === BLACK, ko: -1, last, komi: g.S.komi }, url);
     return { policy: a.policy.map((p, i) => i < sz * sz && board[i] ? -1 : p) };
   },
 };
@@ -183,7 +191,7 @@ const AIPlay = {
     if (!g || g.phase !== "play" || g.toMove() === g.myColor || this.thinking) return;
     this.thinking = true; this.status = `${g.S.foe ? g.S.foe.name : (AI_LEVELS[g.S.level] || {}).own ? "Our AI" : "KataGo"} is thinking…`; this.emit();
     const foe = g.S.foe, st = foe && AI_CAST[foe.who] || null;
-    const lvl = foe ? null : (AI_LEVELS[g.S.level] || AI_LEVELS.medium), own = !!(lvl && lvl.own);
+    const lvl = foe ? null : (AI_LEVELS[g.S.level] || AI_LEVELS.medium), pro = !!(foe && AI_PRO[foe.who]), own = pro || !!(lvl && lvl.own);
     const kyu = foe ? aiRankOf(foe.who) : lvl.kyu, sz = g.S.size, me = g.toMove(), t0 = Date.now();
     // a moment before it plays, as a person would (apo110: "the instant play is kind of jarring"): 1-2.5 s, a little
     // longer in the middle game, the search's own time counted in
@@ -194,7 +202,7 @@ const AIPlay = {
       const hist = [];
       // (passes too, as x -1: the network's pass sense needs them)
       g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
-      const a = own ? await OwnPlay.analyze(g, grid, me) : await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
+      const a = own ? await OwnPlay.analyze(g, grid, me, pro ? aiProUrl(foe.who) : undefined) : await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
         visits: 1, topK: 1, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
       if (this.game !== g || g.phase !== "play") return;
       const pol = a.policy || [];   // sz*sz points (row by row from the top) then pass; -1 where illegal
@@ -209,7 +217,7 @@ const AIPlay = {
         for (let i = 0; i < n; i++) { const j = i + Math.floor(Math.random() * (legal.length - i)); [legal[i], legal[j]] = [legal[j], legal[i]]; }
         const drawn = legal.slice(0, n).sort((p, q) => pol[q] - pol[p]);
         let best = drawn[0];
-        if (foe) {   // an avatar: among the best few it drew (half the best's policy or more, up to 4), the one that fits its style
+        if (foe && !own) {   // a KataGo avatar (games from before the pro opponents): among the best few it drew (half the best's policy or more, up to 4), the one that fits its style
           const few = drawn.slice(0, 4).filter(i => pol[i] >= pol[drawn[0]] * 0.5);
           let top = -1e9;
           few.forEach((i, r) => { const f = aiFit(st || "calm", grid, me, sz, i % sz, Math.floor(i / sz), r) + Math.random() * 0.4; if (f > top) { top = f; best = i; } });
@@ -235,37 +243,29 @@ const AIPlay = {
 function aiLobby() {
   const g = AIPlay.load();
   const sel = (opts, cur) => { const s = h("select", {}, opts.map(([v, t]) => h("option", { value: v, ...(v === cur ? { selected: "" } : {}) }, t))); return s; };
-  const size = { value: "19" };   // (19×19 only: see the top)
-  const level = sel(Object.entries(AI_LEVELS).map(([k, v]) => [k, v.unrated ? `${v.name} (not yet rated)` : `${v.name} (about ${aiRankText(v.kyu)})`]), localStorage.getItem("gt-ai-level") || "medium");
   const color = sel([["black", "Black"], ["white", "White"], ["random", "Random"]], "black");
   const hcap = sel([["0", "None"], ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => [String(n), `${n} stones for Black`])], "0");
-  // the avatars you've collected, each with its style (apo110: "play against the avatars themselves")
-  const cast = h("div", { class: "ai-cast" });
+  // the seven opponents: a collected one plays, the rest are silhouettes (apo110: "no note, just the avatar silhouettes")
+  const cast = h("div", { class: "ai-foes" });
   let foe = null;
-  if (typeof Avatars !== "undefined") Avatars.leads().then(async all => {
-    const mine = all.filter(x => Avatars.owns(x.who)).sort((p, q) => aiRankOf(q.who) - aiRankOf(p.who));   // weakest first
-    if (!mine.length) { cast.append(h("p", { class: "meta-sub" }, "Collect avatars in the stories to play them here.")); return; }
-    const faces = await Promise.all(mine.map(x => Avatars.faceOf(x.who)));
-    const pickBtn = (f, el) => () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); level.disabled = !!foe; };
-    // (just the opponents and their strength: no style names or explanations, apo110)
-    cast.append(h("div", { class: "ai-cast-title" }, "Or play one of your avatars:"),
-      h("div", { class: "ai-foes" }, faces.map(f => {
-        const el = h("button", { class: "ai-foe", title: f.name }, [f.src ? h("img", { src: f.src, alt: "" }) : "", h("b", {}, f.name), h("small", { class: "ai-foe-rank" }, aiRankText(aiRankOf(f.who)))]);
-        el.onclick = pickBtn(f, el); return el; })));
+  const startBtn = h("button", { class: "primary", onclick: () => AIPlay.start({ size: 19, level: "strong", color: color.value, foe, handicap: +hcap.value }) }, "Start a game");
+  startBtn.disabled = true;
+  if (typeof Avatars !== "undefined") Promise.all(Object.keys(AI_PRO).map(who => Avatars.faceOf(who))).then(faces => {
+    for (const f of faces) {
+      const mine = Avatars.owns(f.who);
+      const el = h("button", { class: `ai-foe${mine ? "" : " ai-foe-locked"}`, ...(mine ? { title: f.name } : {}) },
+        [f.src ? h("img", { src: f.src, alt: "" }) : "", mine ? h("b", {}, f.name) : h("b", {}, "\u00a0"), mine ? h("small", { class: "ai-foe-rank" }, AI_PRO_RANK) : ""]);
+      if (mine) el.onclick = () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); startBtn.disabled = !foe; };
+      else el.disabled = true;
+      cast.append(el);
+    }
   }).catch(() => {});
-  const start = () => {
-    try { localStorage.setItem("gt-ai-level", level.value); } catch {}
-    AIPlay.start({ size: +size.value, level: level.value, color: color.value, foe, handicap: +hcap.value });
-  };
   return h("div", { class: "sgf-loader ai-lobby" }, [
-    h("div", { class: "cat-title" }, "Play KataGo"),
-    h("div", {}, "A 19×19 game against the site's own AI, right here: no login, no clock. Chinese rules, komi 7.5 (0.5 with a handicap)."),
-    h("div", { class: "row ai-opts" }, [h("label", {}, ["Strength ", level]), h("label", {}, ["You play ", color]), h("label", {}, ["Handicap ", hcap])]),
+    h("div", { class: "cat-title" }, "Play an avatar"),
+    h("div", {}, "A 19×19 game against one of your avatars, right here: no login, no clock. Chinese rules, komi 7.5 (0.5 with a handicap)."),
+    h("div", { class: "row ai-opts" }, [h("label", {}, ["You play ", color]), h("label", {}, ["Handicap ", hcap])]),
     cast,
-    h("div", { class: "row" }, [
-      h("button", { class: "primary", onclick: start }, "Start a game"),
-      g && g.phase !== "finished" ? h("button", { onclick: () => { location.hash = "#/ai"; } }, "Resume your game") : "",
-    ]),
+    h("div", { class: "row" }, [startBtn, g && g.phase !== "finished" ? h("button", { onclick: () => { location.hash = "#/ai"; } }, "Resume your game") : ""]),
   ]);
 }
 
