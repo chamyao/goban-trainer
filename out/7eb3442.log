@@ -1,0 +1,11 @@
+# Mon Nov 23 02:34:06 UTC 2026 on bf58b7b8369d
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+torch 2.11.0+cu128 cuda True NVIDIA GeForce RTX 5070 Ti
+matmul ok: 19.9 TFLOP/s fp32
+bf16 True
+[02:35:24] checking the GPU
+NVIDIA GeForce RTX 5070 Ti 2.11.0+cu128
+[02:35:36] starting from m0014000.pt (--bf16)
+[02:35:36] data: downloading the game archives
+# exit 0
