@@ -1,0 +1,7 @@
+# Mon Nov 23 04:28:57 UTC 2026 on bf58b7b8369d
+step 6000 pol 2.499 val 0.969 acc 0.388 lr 0.0498 12027 pos/s
+step 6000 pol 2.499 val 0.969 acc 0.388 lr 0.0498 12027 pos/s
+VAL {'step': 6000, 'positions': 1536000, 'val_acc': 0.3922, 'val_pol': 2.47016025390625, 'val_v': 0.9689921142578125, 't
+6977 bash push.sh
+10038 python3 train.py kgs.npz,kgs2.npz,cwi6/ run3 --blocks 8 --ch 96 --steps 15
+# exit 0
