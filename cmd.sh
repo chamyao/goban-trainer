@@ -1,1 +1,1 @@
-tail -n 4 ~/goban/run2.log; tail -n 2 ~/goban/data2.log 2>/dev/null; grep "^step" ~/goban/train2.log 2>/dev/null | tail -1 | cut -c1-90; grep "^step" ~/goban/train3.log 2>/dev/null | tail -1 | cut -c1-90; nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader
+tail -n 3 ~/goban/run2.log; tail -n 2 ~/goban/data2.log 2>/dev/null; for r in 2 3; do grep -E "^step|VAL" ~/goban/train$r.log 2>/dev/null | tail -2 | cut -c1-100; done; nvidia-smi --query-gpu=utilization.gpu,memory.used --format=csv,noheader
