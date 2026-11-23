@@ -1,10 +1,17 @@
-Traceback (most recent call last):
-  File "/root/goban/train.py", line 147, in <module>
-    main()
-  File "/root/goban/train.py", line 96, in main
-    d = {f[:-4]: np.load(os.path.join(a.data, f)) for f in os.listdir(a.data) if f.endswith(".npy")} if os.path.isdir(a.data) else dict(np.load(a.data))   # (a folder of .npy: very large sets)
-                                                                                                                                        ^^^^^^^^^^^^^^^
-  File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 454, in load
-    fid = stack.enter_context(open(os.fspath(file), "rb"))
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'mix2'
+VAL {'step': 250, 'positions': 64000, 'val_acc': 0.4292, 'val_pol': 2.19565029296875, 'val_v': 0.9181080780029297, 'time': 1795405961.663905}
+step 500 pol 2.207 val 0.923 acc 0.427 lr 0.0200 18254 pos/s
+VAL {'step': 500, 'positions': 128000, 'val_acc': 0.4307, 'val_pol': 2.195403594970703, 'val_v': 0.9256064361572266, 'time': 1795405964.766341}
+step 1000 pol 2.222 val 0.922 acc 0.425 lr 0.0200 23028 pos/s
+VAL {'step': 1000, 'positions': 256000, 'val_acc': 0.4264, 'val_pol': 2.215575402832031, 'val_v': 0.9224397338867187, 'time': 1795405970.3161762}
+step 1500 pol 2.220 val 0.924 acc 0.426 lr 0.0200 24805 pos/s
+VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.4305, 'val_pol': 2.2132193420410156, 'val_v': 0.9191481353759766, 'time': 1795405975.4725258}
+step 2000 pol 2.221 val 0.922 acc 0.427 lr 0.0200 24857 pos/s
+VAL {'step': 2000, 'positions': 512000, 'val_acc': 0.4291, 'val_pol': 2.2076137084960936, 'val_v': 0.920706967163086, 'time': 1795405980.6309893}
+step 2500 pol 2.222 val 0.923 acc 0.426 lr 0.0200 24853 pos/s
+VAL {'step': 2500, 'positions': 640000, 'val_acc': 0.43275, 'val_pol': 2.1955867065429686, 'val_v': 0.9235768585205079, 'time': 1795405985.7968576}
+step 3000 pol 2.228 val 0.924 acc 0.424 lr 0.0200 24650 pos/s
+VAL {'step': 3000, 'positions': 768000, 'val_acc': 0.42925, 'val_pol': 2.2072943603515625, 'val_v': 0.9129573150634765, 'time': 1795405990.9776783}
+step 3500 pol 2.224 val 0.922 acc 0.424 lr 0.0200 24741 pos/s
+VAL {'step': 3500, 'positions': 896000, 'val_acc': 0.4258, 'val_pol': 2.2179565795898437, 'val_v': 0.9275169311523438, 'time': 1795405996.1433518}
+step 4000 pol 2.219 val 0.922 acc 0.425 lr 0.0200 24750 pos/s
+VAL {'step': 4000, 'positions': 1024000, 'val_acc': 0.43215, 'val_pol': 2.198974737548828, 'val_v': 0.9458118530273437, 'time': 1795406001.315212}
