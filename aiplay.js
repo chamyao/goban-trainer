@@ -32,7 +32,7 @@ const AI_LEVELS = {
 };
 // the own network, in a worker (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
-  url: "engine/ownnet/latest.bin?v=2", w: null, seq: 0, wait: new Map(),
+  url: "engine/ownnet/latest.bin?v=3", w: null, seq: 0, wait: new Map(),
   call(msg) {
     if (!this.w) {
       this.w = new Worker("engine/ownnet-worker.js?v=1");
