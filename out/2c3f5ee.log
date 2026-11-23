@@ -1,0 +1,9 @@
+# Mon Nov 23 05:45:26 UTC 2026 on bf58b7b8369d
+[05:43:18] long style copy: takemiya
+[05:44:24] long style copy: kato
+== styles2/kato.log
+step 5500 pol 1.892 val 0.653 acc 0.486 lr 0.0001 25051 pos/s
+== styles2/takemiya.log
+step 6000 pol 1.915 val 0.635 acc 0.488 lr 0.0000 25165 pos/s
+overlay          32G   28G  4.3G  87% /
+# exit 0
