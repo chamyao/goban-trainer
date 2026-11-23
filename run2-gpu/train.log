@@ -2,9 +2,9 @@ Traceback (most recent call last):
   File "/root/goban/train.py", line 147, in <module>
     main()
   File "/root/goban/train.py", line 96, in main
-    d = dict(np.load(a.data))
-             ^^^^^^^^^^^^^^^
+    d = {f[:-4]: np.load(os.path.join(a.data, f)) for f in os.listdir(a.data) if f.endswith(".npy")} if os.path.isdir(a.data) else dict(np.load(a.data))   # (a folder of .npy: very large sets)
+                                                                                                                                        ^^^^^^^^^^^^^^^
   File "/venv/main/lib/python3.12/site-packages/numpy/lib/_npyio_impl.py", line 454, in load
     fid = stack.enter_context(open(os.fspath(file), "rb"))
                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'mix2.npz'
+FileNotFoundError: [Errno 2] No such file or directory: 'mix2'
