@@ -1,0 +1,24 @@
+# Mon Nov 23 02:33:32 UTC 2026 on bf58b7b8369d
+name, driver_version, memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+NVIDIA GeForce RTX 5070 Ti, 570.133.07, 2 MiB, 16303 MiB, 0 %
+
+== processes
+1480 /bin/bash ./run.sh
+1485 /bin/bash ./control.sh
+
+== run.log
+[02:32:26] checking the GPU
+[02:32:29] PyTorch can't use this GPU's driver: installing the CUDA 12.6 build (a few minutes)
+
+== train.log
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/venv/main/lib/python3.12/site-packages/torch/__init__.py", line 505, in <module>
+    from torch._C import *  # noqa: F403
+    ^^^^^^^^^^^^^^^^^^^^^^
+ImportError: /venv/main/lib/python3.12/site-packages/torch/lib/libtorch_nvshmem.so: undefined symbol: nvshmem_selected_device_transport, version NVSHMEM
+32
+               total        used        free      shared  buff/cache   available
+Mem:              94           7          19           0          68          86
+overlay          32G   15G   18G  47% /
+# exit 0
