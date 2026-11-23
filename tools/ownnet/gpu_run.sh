@@ -70,6 +70,33 @@ while kill -0 $TP 2>/dev/null; do sleep 120; say "$(grep '^step' train.log | tai
 push; say "done: $(grep '^step' train.log | tail -1 | cut -c1-70)"
 RUN
 chmod +x run.sh
+# remote control without SSH (Cham approved it: the controlling Claude session can't make SSH connections): every
+# 30 s this box fetches branch vast-control of the repo; a new commit there touching cmd.sh runs it once (cwd
+# ~/goban, 1 h limit) and its output is pushed back as out/<commit>.log. Only people who can push to the repo can
+# use it; it ends when the instance is destroyed (or: pkill -f control.sh).
+cat > control.sh <<'CTL'
+#!/bin/bash
+cd "$HOME/goban"; R="https://x-access-token:$(cat .token)@github.com/chamyao/goban-trainer.git"
+G() { git -c user.name=vast -c user.email=vast@users.noreply.github.com "$@"; }
+if [ ! -d ctl/.git ]; then
+  git clone -q --depth 1 --branch vast-control "$R" ctl 2>/dev/null ||
+    { mkdir -p ctl && cd ctl && git init -q && git checkout -q --orphan vast-control && git remote add origin "$R" &&
+      mkdir -p out && echo "control channel for the Vast GPU (tools/ownnet/gpu_run.sh)" > README && git add -A && G commit -q -m init && git push -q origin HEAD:vast-control; cd ..; }
+fi
+done_rev=$(cat ctl.done 2>/dev/null)
+while true; do
+  cd ctl && git fetch -q origin vast-control && git reset -q --hard origin/vast-control; rev=$(git log -1 --format=%h -- cmd.sh 2>/dev/null); cd ..
+  if [ -n "$rev" ] && [ "$rev" != "$done_rev" ] && [ -f ctl/cmd.sh ]; then
+    { echo "# $(date -u) on $(hostname)"; timeout 3600 bash ctl/cmd.sh 2>&1 | tail -c 200000; echo "# exit ${PIPESTATUS[0]}"; } > /tmp/ctl.out
+    cd ctl && git fetch -q origin vast-control && git reset -q --hard origin/vast-control && mkdir -p out && cp /tmp/ctl.out out/$rev.log &&
+      git add -A out && G commit -q -m "output of $rev" && git push -q origin HEAD:vast-control; cd ..
+    done_rev=$rev; echo $rev > ctl.done
+  fi
+  sleep 30
+done
+CTL
+chmod +x control.sh
+pgrep -f "control.sh" >/dev/null || nohup ./control.sh > control.log 2>&1 &
 nohup ./run.sh > run.log 2>&1 &
 echo "Started in the background. Follow it with:  tail -f ~/goban/run.log"
 sleep 3; tail -n 5 run.log
