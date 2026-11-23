@@ -21,6 +21,10 @@ cd "$HOME/goban"
 say() { echo "[$(date -u +%H:%M:%S)] $*"; }
 say "checking the GPU"
 python3 -c "import torch" 2>/dev/null || { say "installing PyTorch (with CUDA; a few minutes)"; python3 -m pip install -q torch numpy || pip install -q torch numpy; }
+# a PyTorch built for a newer CUDA than this machine's driver: the CUDA 12.6 build instead (drivers 12.6 and up)
+python3 -c "import torch, sys; sys.exit(0 if torch.cuda.is_available() else 1)" 2>/dev/null ||
+  { say "PyTorch can't use this GPU's driver: installing the CUDA 12.6 build (a few minutes)"
+    python3 -m pip install -q --force-reinstall torch --index-url https://download.pytorch.org/whl/cu126 && python3 -m pip install -q numpy; }
 python3 -c "import torch; assert torch.cuda.is_available(), 'no CUDA'; print(torch.cuda.get_device_name(0), torch.__version__)" ||
   { say "PyTorch with CUDA isn't available here: pick a PyTorch image on the rental and run again."; exit 1; }
 BF=$(python3 -c "import torch; print('--bf16' if torch.cuda.is_bf16_supported() else '')")
