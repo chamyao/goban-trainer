@@ -35,10 +35,52 @@ const AI_LEVELS = {
 // each the site's own network fine-tuned on one professional's games (tools/ownnet: run 2, ~OGS 6.5k, + 1,500 steps
 // on that player's moves). Difficulty comes from handicap stones. An avatar not collected shows as a silhouette.
 const AI_PRO = { lvbu: "kato", lisu: "sakata", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "takemiya", caocao: "goseigen" };
-// each one's strength, OGS ranks from the joint fit (reference games + head-to-head; run 2 itself 6.6k). Twelve games
-// each against run 2, so about ±2 ranks apiece: the order among them is rough
-const AI_PRO_RANK = { lvbu: "4k", ms_jang: "4k", lisu: "5k", ms_ahn: "6k", dongzhuo: "6k", caocao: "7k", diaochan: "7k" };
-const aiProUrl = who => `engine/ownnet/pro/${AI_PRO[who]}.bin?v=2`;
+// the versions of each opponent (tiers): their weights and each one's strength (OGS kyu, from the joint fit: reference
+// games + head-to-head; twelve games each against its base, so about ±2 ranks apiece). "7k": run 2 (~6.6k) fine-tuned
+// on the pro's games.
+const AI_TIERS = {
+  "7k": { url: pro => `engine/ownnet/pro/${pro}.bin?v=2`, rank: { lvbu: 4, ms_jang: 4, lisu: 5, ms_ahn: 6, dongzhuo: 6, caocao: 7, diaochan: 7 } },
+};
+const aiProUrl = (who, tier = "7k") => (AI_TIERS[tier] || AI_TIERS["7k"]).url(AI_PRO[who]);
+
+// Promotion (apo110: "a promotion system: I have to beat 6k at 3 stones 2/3 times in order to promote one rank", "no
+// demotion"). You hold a rank (kyu; 0 = 1d, -1 = 2d); each game tests the next one up: against an opponent of
+// strength O, a rank difference d = next - O is given as handicap (d stones from 2, Black with komi 0.5 at 1, an even
+// game at 0; past the strongest version, you give the stones). Two wins of a series of three promote you; two losses
+// start a new series. Kept with the synced progress (progress.aiRank), the later copy wins.
+const AIRank = {
+  START: 10,
+  get() { const r = loadProgress().aiRank; return r && typeof r.kyu === "number" ? r : { kyu: this.START, series: [], at: 0 }; },
+  put(r) { const p = loadProgress(); r.at = Date.now(); p.aiRank = r; try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {} Sync.scheduleSave(); },
+  merge(l, r) { return !r ? l : !l ? r : (r.at || 0) > (l.at || 0) ? r : l; },
+  text: kyu => kyu > 0 ? `${kyu}k` : `${1 - kyu}d`,
+  // the game for the next rank against an avatar: the version giving the smallest handicap you take, else the one
+  // closest to even with you giving the stones
+  setting(who, kyu = this.get().kyu) {
+    const want = kyu - 1;
+    const opts = Object.entries(AI_TIERS).map(([tier, t]) => ({ tier, d: Math.max(-9, Math.min(9, want - t.rank[who])) }));
+    const take = opts.filter(o => o.d >= 0).sort((a, b) => a.d - b.d)[0] || opts.sort((a, b) => b.d - a.d)[0];
+    return { ...take, target: want };
+  },
+  // what the game looks like: "3 stones", "even", "you give 2"
+  label({ d }) { const n = Math.abs(d); return d === 0 ? "even" : n === 1 ? (d > 0 ? "you take Black" : "you take White") : d > 0 ? `${n} stones` : `you give ${n}`; },
+  // a finished game: counted once, if it tested the rank you're going for now; returns what happened
+  count(S) {
+    if (!S.promo || S.promo.counted || !S.result) return null;
+    S.promo.counted = 1;
+    const r = this.get();
+    if (S.promo.target !== r.kyu - 1) return null;
+    const won = S.result.winner === S.hostColor;
+    r.series = [...(r.series || []), won];
+    const w = r.series.filter(x => x).length, l = r.series.length - w;
+    let out = won ? "win" : "loss";
+    if (w >= 2) { r.kyu -= 1; r.series = []; out = "promoted"; }
+    else if (l >= 2) { r.series = []; out = "series lost"; }
+    this.put(r);
+    return out;
+  },
+};
+
 // the own network, in a worker per weights file (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
   url: "engine/ownnet/latest.bin?v=3", ws: new Map(), seq: 0, wait: new Map(),
@@ -174,17 +216,30 @@ const AIPlay = {
     return o;
   },
   emit() { for (const f of this.listeners) f(); },
-  start({ size, level, color, foe, handicap = 0 }) {
-    const hostColor = color === "black" ? BLACK : color === "white" ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
+  start({ size = 19, foe }) {
+    const st = AIRank.setting(foe.who), n = Math.abs(st.d);
+    // the weaker side takes Black: you when d > 0, the avatar when you give the stones; an even game, by lot
+    const hostColor = st.d > 0 ? BLACK : st.d < 0 ? WHITE : (Math.random() < .5 ? BLACK : WHITE);
     const S = FriendPlay.fresh({ size, T: null, hostColor, names: { [hostColor]: Sync.username || "You" }, listed: false });
-    if (handicap >= 2) { S.setup = AI_HANDICAP(handicap); S.komi = 0.5; }   // stones for Black, White moves first
-    S.phase = "play"; S.level = foe ? "strong" : level; if (foe) S.foe = foe;   // foe: an avatar ({who, name, src})
-    this.game = aiGame(S, { role: "host", color: hostColor, token: null }); this.cur = foe ? foe.who : "_"; this.status = "";
+    if (n >= 2) { S.setup = AI_HANDICAP(n); S.komi = 0.5; }   // stones for Black, White moves first
+    else if (n === 1) S.komi = 0.5;
+    S.phase = "play"; S.level = "strong"; S.foe = foe; S.tier = st.tier;
+    S.promo = { target: st.target, d: st.d };
+    this.game = aiGame(S, { role: "host", color: hostColor, token: null }); this.cur = foe.who; this.status = "";
     this.persist();
     location.hash = `#/ai/${this.cur}`;
     this.maybeAI();
   },
-  change(fn) { fn(this.game.S); this.game.S.seq++; this.persist(); this.emit(); },
+  change(fn) {
+    const S = this.game.S, was = S.phase;
+    fn(S); S.seq++;
+    if (was !== "finished" && S.phase === "finished") {
+      const out = AIRank.count(S), r = AIRank.get();
+      if (out) this.status = out === "promoted" ? `Promoted to ${AIRank.text(r.kyu)}!` : out === "series lost" ? `Series lost: a new one for ${AIRank.text(r.kyu - 1)} starts.` :
+        `${out === "win" ? "A win" : "A loss"} toward ${AIRank.text(r.kyu - 1)} (${(r.series || []).map(x => x ? "W" : "L").join(" ")}).`;
+    }
+    this.persist(); this.emit();
+  },
   play(c, r) {
     this.change(S => {
       S.moves.push([c, r]);
@@ -236,7 +291,7 @@ const AIPlay = {
       const hist = [];
       // (passes too, as x -1: the network's pass sense needs them)
       g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
-      const a = own ? await OwnPlay.analyze(g, grid, me, pro ? aiProUrl(foe.who) : undefined) : await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
+      const a = own ? await OwnPlay.analyze(g, grid, me, pro ? aiProUrl(foe.who, g.S.tier) : undefined) : await Engine.analyze({ board, currentPlayer: me === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
         visits: 1, topK: 1, ownershipMode: "none", analysisPvLen: 1, reuseTree: false });
       if (this.game !== g || g.phase !== "play") return;
       const pol = a.policy || [];   // sz*sz points (row by row from the top) then pass; -1 where illegal
@@ -276,31 +331,26 @@ const AIPlay = {
   },
 };
 
-// the panel in the Play tab: the seven opponents, each with its own game (one at a time per avatar, several at once);
-// colour and handicap for a new one
+// the panel in the Play tab: your rank and promotion series, and the seven opponents, each with its own game (one at a
+// time per avatar, several at once). The handicap and colour come from your rank (AIRank.setting): pick an avatar.
 function aiLobby() {
-  const games = AIPlay.all();
-  const sel = (opts, cur) => { const s = h("select", {}, opts.map(([v, t]) => h("option", { value: v, ...(v === cur ? { selected: "" } : {}) }, t))); return s; };
-  const color = sel([["black", "Black"], ["white", "White"], ["random", "Random"]], "black");
-  const hcap = sel([["0", "None"], ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => [String(n), `${n} stones for Black`])], "0");
+  const games = AIPlay.all(), r = AIRank.get(), next = AIRank.text(r.kyu - 1);
   const going = who => { const v = games[who]; return v && v.S && v.S.phase !== "finished" ? v.S : null; };
-  // the seven opponents: a collected one plays, the rest are silhouettes (apo110: "no note, just the avatar silhouettes")
   const cast = h("div", { class: "ai-foes" });
   let foe = null;
   const startBtn = h("button", { class: "primary", onclick: () => {
     if (!foe) return;
     if (going(foe.who)) { location.hash = `#/ai/${foe.who}`; return; }
-    AIPlay.start({ size: 19, level: "strong", color: color.value, foe, handicap: +hcap.value });
+    AIPlay.start({ foe });
   } }, "Start a game");
   const overBtn = h("button", { onclick: () => {
-    if (foe && confirm(`Drop your game against ${foe.name} and start a new one?`)) AIPlay.start({ size: 19, level: "strong", color: color.value, foe, handicap: +hcap.value });
+    if (foe && confirm(`Drop your game against ${foe.name} and start a new one?`)) AIPlay.start({ foe });
   } }, "New game instead");
-  const opts = h("div", { class: "row ai-opts" }, [h("label", {}, ["You play ", color]), h("label", {}, ["Handicap ", hcap])]);
   const pick = () => {
     const S = foe && going(foe.who);
     startBtn.disabled = !foe;
-    startBtn.textContent = S ? `Resume vs ${foe.name}` : "Start a game";
-    overBtn.hidden = !S; opts.hidden = !!S;
+    startBtn.textContent = S ? `Resume vs ${foe.name}` : foe ? `Play ${foe.name}: ${AIRank.label(AIRank.setting(foe.who))}` : "Start a game";
+    overBtn.hidden = !S;
   };
   pick();
   if (typeof Avatars !== "undefined") Promise.all(Object.keys(AI_PRO).map(who => Avatars.faceOf(who))).then(faces => {
@@ -308,7 +358,7 @@ function aiLobby() {
       const mine = Avatars.owns(f.who), S = mine && going(f.who);
       const el = h("button", { class: `ai-foe${mine ? "" : " ai-foe-locked"}`, ...(mine ? { title: f.name } : {}) },
         [f.src ? h("img", { src: f.src, alt: "" }) : "", mine ? h("b", {}, f.name) : h("b", {}, "\u00a0"),
-         mine ? h("small", { class: "ai-foe-rank" }, S ? `move ${S.moves.length + 1}` : AI_PRO_RANK[f.who]) : ""]);
+         mine ? h("small", { class: "ai-foe-rank" }, S ? `move ${S.moves.length + 1}` : AIRank.label(AIRank.setting(f.who))) : ""]);
       if (S) el.classList.add("ai-foe-going");
       if (mine) el.onclick = () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); pick(); };
       else el.disabled = true;
@@ -316,10 +366,11 @@ function aiLobby() {
     }
   }).catch(() => {});
   const old = going("_");   // a game against a strength level, from before the avatars
+  const marks = (r.series || []).map(x => h("span", { class: x ? "ai-w" : "ai-l" }, x ? "W" : "L"));
   return h("div", { class: "sgf-loader ai-lobby" }, [
     h("div", { class: "cat-title" }, "Play an avatar"),
-    h("div", {}, "A 19×19 game against one of your avatars, right here: no login, no clock. Chinese rules, komi 7.5 (0.5 with a handicap). One game per avatar at a time; they're saved with your progress."),
-    opts,
+    h("div", { class: "ai-rank" }, [h("b", {}, `Your rank: ${AIRank.text(r.kyu)}`), ` · promotion to ${next}: win 2 of 3 `, ...marks]),
+    h("div", {}, "Each game tests the next rank: its handicap is set from your rank and the avatar's strength. 19×19, Chinese rules, no clock. One game per avatar at a time; they're saved with your progress."),
     cast,
     h("div", { class: "row" }, [startBtn, overBtn, old ? h("button", { onclick: () => { location.hash = "#/ai/_"; } }, "Resume your earlier game") : ""]),
   ]);

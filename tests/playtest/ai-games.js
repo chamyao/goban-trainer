@@ -1,7 +1,9 @@
 // Play vs the avatars, one game per avatar (apo110: "the games get synced/saved too and per avatar, so I can have
 // multiple going at a time"). Checks: the earlier single game (gt-ai-game) moves into progress.aig and the lobby offers
 // it; two avatars' games go at once, each answered by its own network; the lobby shows each one's move; a reload keeps
-// both; Sync.mergeInto takes the later copy of each game; dropping a game for a new one.
+// both; Sync.mergeInto takes the later copy of each game; dropping a game for a new one. Promotion (apo110: "beat 6k at
+// 3 stones 2/3 times to promote one rank", "no demotion"): the handicap set from your rank, two wins promote, two
+// losses start a new series, a game for the old rank doesn't count, the rank merges by its later copy.
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 (async()=>{const b=await chromium.launch();const p=await b.newPage();let fails=0;
 const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+what);};
@@ -16,44 +18,68 @@ const prog=()=>p.evaluate(()=>JSON.parse(localStorage.getItem('gt-progress')));
 let g=await prog();
 check(g.aig&&g.aig._&&g.aig._.S.moves.length===1&&!(await p.evaluate(()=>localStorage.getItem('gt-ai-game'))),'the earlier game moved into progress.aig');
 check(await p.locator('button',{hasText:'Resume your earlier game'}).count()===1,'the lobby offers the earlier game');
-const playVs=async(name,hc)=>{
+const playVs=async(name)=>{
   await p.goto(URL+'#/play');await p.waitForTimeout(1500);await noAuth();
   await p.locator('.ai-foe',{hasText:name}).click();
-  if(hc) await p.locator('.ai-opts select').nth(1).selectOption(String(hc));
   await p.locator('.ai-lobby button.primary').click();await p.waitForTimeout(300);
 };
-const moveAndWait=async(c,r,n)=>{ await p.evaluate(([c,r])=>AIPlay.move(c,r),[c,r]);
-  for(let i=0;i<40&&(await p.evaluate(()=>AIPlay.game.S.moves.length))<n;i++) await p.waitForTimeout(500); };
+const n=()=>p.evaluate(()=>AIPlay.game.S.moves.length);
+const myTurn=async()=>{for(let i=0;i<40&&!(await p.evaluate(()=>AIPlay.game.myTurn&&!AIPlay.thinking));i++) await p.waitForTimeout(500);};
+// our move, then the avatar's answer (after the handicap stones White moves first: its move comes before ours)
+const moveAndWait=async(c,r)=>{ await myTurn(); const k=await n(); await p.evaluate(([c,r])=>AIPlay.move(c,r),[c,r]);
+  for(let i=0;i<40&&(await n())<k+2;i++) await p.waitForTimeout(500); return n(); };
 await playVs('Li Su');
 check(await p.evaluate(()=>location.hash)==='#/ai/lisu','a game vs Li Su at #/ai/lisu');
-await moveAndWait(3,3,2);
-check((await p.evaluate(()=>AIPlay.game.S.moves.length))===2,'Li Su answered');
-await playVs('Ahn Young-yi',2);
+const liS=await p.evaluate(()=>({d:AIPlay.game.S.promo.d,setup:(AIPlay.game.S.setup||[]).length,me:AIPlay.game.myColor}));
+check(liS.d===4&&liS.setup===4&&liS.me===1,'at 10k, Li Su (5k) for 9k: 4 stones, you Black '+JSON.stringify(liS));
+const liN=await moveAndWait(2,16);
+check(liN===3,'Li Su answered');
+await playVs('Ahn Young-yi');
 check((await p.evaluate(()=>location.hash))==='#/ai/ms_ahn','a game vs Ahn Young-yi at #/ai/ms_ahn');
 for(let i=0;i<40&&(await p.evaluate(()=>AIPlay.game.S.moves.length))<1;i++) await p.waitForTimeout(500);   // (White moves first after the stones)
 const ahn0=await p.evaluate(()=>({n:AIPlay.game.S.moves.length,setup:!!AIPlay.game.S.setup}));
 check(ahn0.setup,'with handicap stones');
-await moveAndWait(2,16,ahn0.n+2);   // (not a star point: the handicap stones are there)
+await moveAndWait(2,16);   // (not a star point: the handicap stones are there)
 g=await prog();
-check(g.aig.lisu&&g.aig.ms_ahn&&g.aig.lisu.S.moves.length===2&&g.aig.ms_ahn.S.moves.length>=2,'both games kept');
+check(g.aig.lisu&&g.aig.ms_ahn&&g.aig.lisu.S.moves.length===3&&g.aig.ms_ahn.S.moves.length>=2,'both games kept');
 await p.goto(URL+'#/play');await p.waitForTimeout(2000);await noAuth();
 const tiles=await p.$$eval('.ai-foe-going',e=>e.map(x=>x.innerText.replace(/\n/g,' ')));
-check(tiles.length===2&&tiles.some(t=>/Li Su.*move 3/.test(t)),'the lobby marks both, with the move: '+tiles.join(' / '));
+check(tiles.length===2&&tiles.some(t=>/Li Su.*move 4/.test(t)),'the lobby marks both, with the move: '+tiles.join(' / '));
 await p.locator('.ai-foe',{hasText:'Li Su'}).click();
 const rb=await p.locator('.ai-lobby button.primary').textContent();check(/^Resume vs .*Li Su$/.test(rb),'picking Li Su offers to resume ('+rb+')');
 await p.reload();await p.waitForTimeout(2000);
 await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(1500);
-check((await p.evaluate(()=>AIPlay.cur+':'+AIPlay.game.S.moves.length))==='lisu:2','after a reload, Li Su\'s game as it was');
+check((await p.evaluate(()=>AIPlay.cur+':'+AIPlay.game.S.moves.length))==='lisu:3','after a reload, Li Su\'s game as it was');
 // another device's later copy of Li Su's game, and an older copy of Ahn's
 const r=await p.evaluate(()=>{const loc=loadProgress(),now=Date.now();
   const remote={aig:{lisu:{S:{...loc.aig.lisu.S,moves:[...loc.aig.lisu.S.moves,[10,10],[9,9]],seq:loc.aig.lisu.S.seq+2},at:now+1000},
                      ms_ahn:{S:{...loc.aig.ms_ahn.S,moves:[]},at:1}}};
   Sync.mergeInto(loc,remote);return {l:loc.aig.lisu.S.moves.length,a:loc.aig.ms_ahn.S.moves.length};});
-check(r.l===4&&r.a>=2,'a merge takes the later copy of each game ('+JSON.stringify(r)+')');
+check(r.l===5&&r.a>=2,'a merge takes the later copy of each game ('+JSON.stringify(r)+')');
 // drop Li Su's game for a new one
 p.once('dialog',d=>d.accept());
 await p.goto(URL+'#/play');await p.waitForTimeout(1500);await noAuth();
 await p.locator('.ai-foe',{hasText:'Li Su'}).click();await p.locator('button',{hasText:'New game instead'}).click();await p.waitForTimeout(500);
 g=await prog();
 check(g.aig.lisu.S.moves.length<=1&&g.aig.ms_ahn.S.moves.length>=2,'a new game vs Li Su, Ahn\'s untouched');
+// promotion: finish games as won or lost
+const finish=(won)=>p.evaluate(w=>{AIPlay.change(S=>{S.phase='finished';S.result={winner:w?S.hostColor:3-S.hostColor,how:'resignation'};});return [AIRank.get(),AIPlay.status];},won);
+await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(1000);
+let [rk,stt]=await finish(true);check(rk.kyu===10&&rk.series.join()==='true','a win toward 9k: '+stt);
+await playVs('Li Su');[rk,stt]=await finish(false);check(rk.kyu===10&&rk.series.join()==='true,false','then a loss: '+stt);
+await playVs('Li Su');
+const stale=await p.evaluate(()=>AIPlay.cur);   // (this one we leave open: it's for 9k)
+await playVs('Ahn Young-yi');   // (Ahn's game still going: resumes, for 9k)
+await p.goto(URL+'#/play');await p.waitForTimeout(800);await noAuth();
+await p.locator('.ai-foe',{hasText:'Ahn'}).click();p.once('dialog',d=>d.accept());await p.locator('button',{hasText:'New game instead'}).click();await p.waitForTimeout(400);
+[rk,stt]=await finish(true);check(rk.kyu===9&&rk.series.length===0,'two wins of three: promoted to 9k ('+stt+')');
+const set=await p.evaluate(()=>AIRank.setting('ms_ahn'));check(set.target===8&&set.d===2,'at 9k, Ahn (6k) for 8k: 2 stones '+JSON.stringify(set));
+await p.goto(URL+'#/play');await p.waitForTimeout(1200);await noAuth();
+const rt=await p.locator('.ai-rank').innerText();check(/Your rank: 9k/.test(rt)&&/promotion to 8k/.test(rt),'the lobby: '+rt.replace(/\n/g,' '));
+await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(800);[rk,stt]=await finish(true);
+check(rk.kyu===9&&rk.series.length===0,'a game started for 9k, won after the promotion: not counted');
+await playVs('Li Su');[rk]=await finish(false);await playVs('Li Su');[rk,stt]=await finish(false);
+check(rk.kyu===9&&rk.series.length===0,'two losses: a new series, no demotion ('+stt+')');
+const mg=await p.evaluate(()=>{const a={kyu:9,series:[],at:5},b={kyu:8,series:[true],at:9};return [AIRank.merge(a,b).kyu,AIRank.merge(b,a).kyu];});
+check(mg.join()==='8,8','the rank merges by its later copy');
 await b.close();process.exit(fails?1:0);})();
