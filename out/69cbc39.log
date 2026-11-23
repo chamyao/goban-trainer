@@ -1,0 +1,16 @@
+# Mon Nov 23 05:40:09 UTC 2026 on bf58b7b8369d
+[05:38:15] style copy: chochikun
+[05:38:38] style copy: otake
+[05:38:57] style copy: kitani
+[05:39:16] style copy: sakata
+[05:39:35] style copy: goseigen
+[05:39:54] style check
+chochikun-train.npz chochikun-val.npz goseigen-train.npz goseigen-val.npz kato-train.npz kato-val.npz kitani-train.npz kitani-val.npz otake-train.npz otake-val.npz sakata-train.npz sakata-val.npz takemiya-train.npz takemiya-val.npz 
+styles/chochikun.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.4511811023622047, 'val_pol'
+styles/goseigen.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.4434120335110434, 'val_pol'
+styles/kato.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.471378744357817, 'val_pol':
+styles/kitani.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.4557787481804949, 'val_pol'
+styles/otake.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.45560364124757496, 'val_pol
+styles/sakata.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.4356573594159282, 'val_pol'
+styles/takemiya.log: VAL {'step': 1500, 'positions': 384000, 'val_acc': 0.46760388027182653, 'val_pol
+# exit 0
