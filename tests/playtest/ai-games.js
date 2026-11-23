@@ -31,14 +31,14 @@ const moveAndWait=async(c,r)=>{ await myTurn(); const k=await n(); await p.evalu
 await playVs('Li Su');
 check(await p.evaluate(()=>location.hash)==='#/ai/lisu','a game vs Li Su at #/ai/lisu');
 const liS=await p.evaluate(()=>({d:AIPlay.game.S.promo.d,tier:AIPlay.game.S.tier,setup:(AIPlay.game.S.setup||[]).length,me:AIPlay.game.myColor,komi:AIPlay.game.S.komi}));
-check(liS.d===-1&&liS.tier==='10k'&&liS.setup===0&&liS.me===2&&liS.komi===0.5,'at 10k, for 9k: Li Su\'s 10k version (closer to even than the 5k one at 4 stones), you White, komi 0.5 '+JSON.stringify(liS));
+check(liS.d===4&&liS.tier==='7k'&&liS.setup===4&&liS.me===1&&liS.komi===0.5,'at 10k, for 9k: Li Su\'s 5k version at 4 stones (you never give stones: the 10k version would need it) '+JSON.stringify(liS));
 const liN=await moveAndWait(2,16);
 check(liN===3,'Li Su answered');
 await playVs('Ahn Young-yi');
 check((await p.evaluate(()=>location.hash))==='#/ai/ms_ahn','a game vs Ahn Young-yi at #/ai/ms_ahn');
 for(let i=0;i<40&&(await p.evaluate(()=>AIPlay.game.S.moves.length))<1;i++) await p.waitForTimeout(500);   // (White moves first after the stones)
 const ahn0=await p.evaluate(()=>({n:AIPlay.game.S.moves.length,setup:!!AIPlay.game.S.setup}));
-const ahnT=await p.evaluate(()=>AIPlay.game.S.tier);check(ahnT==='10k'&&!ahn0.setup,'Ahn\'s 10k version too');
+const ahnT=await p.evaluate(()=>AIPlay.game.S.tier);check(ahnT==='7k'&&ahn0.setup,'Ahn\'s 6k version, with stones');
 await moveAndWait(2,16);   // (not a star point: the handicap stones are there)
 g=await prog();
 check(g.aig.lisu&&g.aig.ms_ahn&&g.aig.lisu.S.moves.length===3&&g.aig.ms_ahn.S.moves.length>=2,'both games kept');
@@ -84,14 +84,18 @@ const stale=await p.evaluate(()=>AIPlay.cur);   // (this one we leave open: it's
 await playVs('Ahn Young-yi');   // (Ahn's game still going: resumes, for 9k)
 await p.goto(URL+'#/play');await p.waitForTimeout(800);await noAuth();
 await p.locator('.ai-foe',{hasText:'Ahn'}).click();p.once('dialog',d=>d.accept());await p.locator('button',{hasText:'New game instead'}).click();await p.waitForTimeout(400);
-[rk,stt]=await finish(true);check(rk.kyu===9&&rk.series.length===0,'two wins of three: promoted to 9k ('+stt+')');
-const set=await p.evaluate(()=>AIRank.setting('ms_ahn'));check(set.target===8&&set.d===2&&set.tier==='7k','at 9k, Ahn for 8k: the 6k version at 2 stones (a tie with giving 2 to the 10k one: stones taken first) '+JSON.stringify(set));
+[rk,stt]=await finish(true);check(rk.kyu===9&&rk.series.length===0,'W L W: two wins in three, promoted to 9k ('+stt+')');
+const set=await p.evaluate(()=>AIRank.setting('ms_ahn'));check(set.target===8&&set.d===2&&set.tier==='7k','at 9k, Ahn for 8k: the 6k version at 2 stones '+JSON.stringify(set));
+const sx=await p.evaluate(()=>[AIRank.setting('ms_jang',10),AIRank.setting('dongzhuo',12),AIRank.setting('diaochan',4)]);
+check(sx[0].tier==='10k'&&sx[0].d===0&&sx[1].tier==='10k'&&sx[1].d===0&&sx[2].tier==='7k'&&sx[2].d===0,'never giving stones: Jang even at 10k (his 9k version), Dong Zhuo even at 12k, Diaochan even when you pass every version '+JSON.stringify(sx));
 await p.goto(URL+'#/play');await p.waitForTimeout(1200);await noAuth();
-const rt=await p.locator('.ai-rank').innerText();check(/Your rank: 9k/.test(rt)&&/promotion to 8k/.test(rt),'the lobby: '+rt.replace(/\n/g,' '));
+const rt=await p.locator('.ai-rank').innerText();check(/Your rank: 9k/.test(rt)&&/promotion to 8k: 2 wins in any 3 games/.test(rt),'the lobby: '+rt.replace(/\n/g,' '));
 await p.goto(URL+'#/ai/lisu');await p.waitForTimeout(800);[rk,stt]=await finish(true);
 check(rk.kyu===9&&rk.series.length===0,'a game started for 9k, won after the promotion: not counted');
 await playVs('Li Su');[rk]=await finish(false);await playVs('Li Su');[rk,stt]=await finish(false);
-check(rk.kyu===9&&rk.series.length===0,'two losses: a new series, no demotion ('+stt+')');
+check(rk.kyu===9&&rk.series.join()==='false,false','L L: no demotion, the two kept for the window ('+stt+')');
+await playVs('Li Su');[rk]=await finish(true);check(rk.kyu===9&&rk.series.join()==='false,true','L L W: one win in the last three');
+await playVs('Li Su');[rk,stt]=await finish(true);check(rk.kyu===8&&rk.series.length===0,'L W W: promoted to 8k ('+stt+')');
 const mg=await p.evaluate(()=>{const a={kyu:9,series:[],at:5},b={kyu:8,series:[true],at:9};return [AIRank.merge(a,b).kyu,AIRank.merge(b,a).kyu];});
 check(mg.join()==='8,8','the rank merges by its later copy');
 await b.close();process.exit(fails?1:0);})();

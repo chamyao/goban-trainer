@@ -48,7 +48,8 @@ const aiProUrl = (who, tier = "7k") => (AI_TIERS[tier] || AI_TIERS["7k"]).url(AI
 // Promotion (apo110: "a promotion system: I have to beat 6k at 3 stones 2/3 times in order to promote one rank", "no
 // demotion"). You hold a rank (kyu; 0 = 1d, -1 = 2d); each game tests the next one up: against an opponent of
 // strength O, a rank difference d = next - O is given as handicap (d stones from 2, Black with komi 0.5 at 1, an even
-// game at 0; negative: you give them). Each avatar has versions of several strengths (AI_TIERS): the closest to even. Two wins of a series of three promote you; two losses
+// game at 0; you never give stones). Each avatar has versions of several strengths (AI_TIERS): the one needing fewest.
+// Two wins in any three games in a row promote you; no demotion. Two wins of a series of three promote you; two losses
 // start a new series. Kept with the synced progress (progress.aiRank), the later copy wins.
 const AIRank = {
   START: 10,
@@ -64,12 +65,13 @@ const AIRank = {
     r.fix1 = 1; this.put(r);
   },
   text: kyu => kyu > 0 ? `${kyu}k` : `${1 - kyu}d`,
-  // the game for the next rank against an avatar: the version closest to an even game (the fewest stones either
-  // way; handicap games are where these networks are weakest), taking stones before giving them on a tie
+  // the game for the next rank against an avatar (apo110: "make it so im never giving a handicap. at most I should play
+  // even. otherwise play handicap at next level"): the version needing the fewest stones you take (or none); if every
+  // version is weaker than the rank you're going for, an even game against the strongest
   setting(who, kyu = this.get().kyu) {
     const want = kyu - 1;
-    const opts = Object.entries(AI_TIERS).map(([tier, t]) => ({ tier, d: Math.max(-9, Math.min(9, want - t.rank[who])) }));
-    const take = opts.sort((a, b) => Math.abs(a.d) - Math.abs(b.d) || b.d - a.d)[0];
+    const opts = Object.entries(AI_TIERS).map(([tier, t]) => ({ tier, d: Math.min(9, want - t.rank[who]) }));
+    const take = opts.filter(o => o.d >= 0).sort((a, b) => a.d - b.d)[0] || { ...opts.sort((a, b) => b.d - a.d)[0], d: 0 };
     return { ...take, target: want };
   },
   // what the game looks like: "3 stones", "even", "you give 2"
@@ -81,11 +83,12 @@ const AIRank = {
     const r = this.get();
     if (S.promo.target !== r.kyu - 1) return null;
     const won = S.result.winner === S.hostColor;
-    r.series = [...(r.series || []), won];
-    const w = r.series.filter(x => x).length, l = r.series.length - w;
+    // (apo110: "any 2 wins in a window of 3"): the last three games for this rank, two of them won promote you; the
+    // two before the next game are kept for its window
+    const win3 = [...(r.series || []), won].slice(-3);
     let out = won ? "win" : "loss";
-    if (w >= 2) { r.kyu -= 1; r.series = []; out = "promoted"; }
-    else if (l >= 2) { r.series = []; out = "series lost"; }
+    if (win3.filter(x => x).length >= 2) { r.kyu -= 1; r.series = []; out = "promoted"; }
+    else r.series = win3.slice(-2);
     this.put(r);
     return out;
   },
@@ -245,8 +248,8 @@ const AIPlay = {
     fn(S); S.seq++;
     if (was !== "finished" && S.phase === "finished") {
       const out = AIRank.count(S), r = AIRank.get();
-      if (out) this.status = out === "promoted" ? `Promoted to ${AIRank.text(r.kyu)}!` : out === "series lost" ? `Series lost: a new one for ${AIRank.text(r.kyu - 1)} starts.` :
-        `${out === "win" ? "A win" : "A loss"} toward ${AIRank.text(r.kyu - 1)} (${(r.series || []).map(x => x ? "W" : "L").join(" ")}).`;
+      if (out) this.status = out === "promoted" ? `Promoted to ${AIRank.text(r.kyu)}!` :
+        `${out === "win" ? "A win" : "A loss"} toward ${AIRank.text(r.kyu - 1)} (last games: ${(r.series || []).map(x => x ? "W" : "L").join(" ")}).`;
     }
     this.persist(); this.emit();
   },
@@ -407,7 +410,7 @@ function aiLobby() {
   const marks = (r.series || []).map(x => h("span", { class: x ? "ai-w" : "ai-l" }, x ? "W" : "L"));
   return h("div", { class: "sgf-loader ai-lobby" }, [
     h("div", { class: "cat-title" }, "Play an avatar"),
-    h("div", { class: "ai-rank" }, [h("b", {}, `Your rank: ${AIRank.text(r.kyu)}`), ` · promotion to ${next}: win 2 of 3 `, ...marks]),
+    h("div", { class: "ai-rank" }, [h("b", {}, `Your rank: ${AIRank.text(r.kyu)}`), ` · promotion to ${next}: 2 wins in any 3 games `, ...marks]),
     cast,
     h("div", { class: "row" }, [startBtn, overBtn, old ? h("button", { onclick: () => { location.hash = "#/ai/_"; } }, "Resume your earlier game") : ""]),
   ]);
