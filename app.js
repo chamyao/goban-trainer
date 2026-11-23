@@ -438,7 +438,7 @@ const Engine = {
   ensure() {
     if (!this.initPromise) {
       this.setStatus("loading");
-      this.worker = new Worker((window.APP_LOCAL || "") + "engine/katago-worker.js");
+      this.worker = new Worker((window.APP_LOCAL || "") + "engine/katago-worker.js?v=b16");   // (?v=: the worker that reads float16 weights, for ScoreEngine)
       this.worker.onmessage = e => this.onMessage(e.data);
       this.worker.onerror = e => { this.setStatus("error", "worker failed"); console.error(e); };
       this.initPromise = new Promise((resolve, reject) => { this.initSettle = { resolve, reject }; });
@@ -525,6 +525,26 @@ const Engine = {
     });
   },
 };
+
+// The score: kata1-b15c192 (the user: "add b15 for scoring"), a second engine, loaded only when a score or the
+// ownership of the points is asked for (Review's Judge, counting a finished game). b6c64 has no score head. Measured on
+// 120 positions of kyu games against kata1-b18c384nbt at 300 visits: 1.9 points off on average at 200 visits, more
+// than 10 off in 3% (b10c128, the site's earlier net: 4.2 and 9%). 18 MB: the weights as float16
+// (tools/katago_txt2bin.py --fp16). From the site itself even in the Android app (document.baseURI: its <base>).
+const ScoreEngine = Object.assign(Object.create(Engine), {
+  worker: null, status: "off", backend: null, initPromise: null, pending: new Map(), seq: 0,
+  _queue: { fg: [], bg: [] }, _running: false,
+  modelUrl: new URL("engine/katago-score.bin.gz?v=b15c192-h", document.baseURI).href,
+  setStatus(status, detail) { this.status = status; this.detail = detail || ""; },   // (the header chip is the move engine's)
+  // Black's lead as the site shows it: "B+4.5"
+  text: lead => Math.abs(lead) < 0.25 ? "even" : `${lead >= 0 ? "B" : "W"}+${Math.abs(Math.round(lead * 2) / 2).toFixed(1).replace(/\.0$/, "")}`,
+  // the stones the score network calls dead in a finished position (grid[r][c]: 1 Black, 2 White): r * N + c
+  dead(grid, ownership, cut = 0.5) {
+    const out = [];
+    grid.forEach((row, r) => row.forEach((v, c) => { const o = ownership[r * N + c]; if ((v === 1 && o < -cut) || (v === 2 && o > cut)) out.push(r * N + c); }));
+    return out;
+  },
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   Engine.setStatus("off");
@@ -2041,25 +2061,21 @@ const Review = {
     }
   },
 
+  // Judge: the score network's read of this position, the ownership of each point on the board and Black's lead
   async judge() {
     if (!this.game) return;
-    if (Engine.status === "off" || Engine.status === "error") { Engine.ensure().catch(() => {}); return; }
     try {
       const board = gridToBoardState(this.curGrid());
       const player = this.curTurn() === BLACK ? "black" : "white";
-      const a = await this.enqueue(() => Engine.analyze({
-        board, currentPlayer: player,
-        moveHistory: [], komi: this.game.meta.engineKomi,
-        visits: 75, ownershipMode: "root",
-      }));
-      this.ownership = null;   // (the network has no ownership head: Judge gives the win rate)
-      if (this.node.main !== undefined) {
-        const k = this.node.main, g = this.game;
-        this.analyses[k] = { w: a.rootWinRate, v: 2 };
-        this.scheduleSave();
-      }
-      this.renderBoard(); this.renderReadout(); this.renderChart();
-    } catch (e) { console.error(e); }
+      if (ScoreEngine.status !== "ready" && this.els) this.els.pos.textContent = "Loading the scoring network (18 MB, the first time only)…";
+      const a = await ScoreEngine.analyze({
+        board, currentPlayer: player, moveHistory: [], komi: this.game.meta.engineKomi, rules: "chinese",
+        visits: 200, maxTimeMs: 8000, ownershipMode: "root", topK: 1, analysisPvLen: 1, reuseTree: false,   // (CPU only: ~25 visits in the 8 s)
+      });
+      this.ownership = a.ownership || null;
+      this.judged = { node: this.node, lead: a.rootScoreLead };
+      this.renderBoard(); this.renderReadout();
+    } catch (e) { console.error(e); this.renderReadout(); }
   },
 
   /* ---- rendering ---- */
@@ -2107,6 +2123,7 @@ const Review = {
     if (a) {
       evalTxt = `  ·  ${winText(a.rootWinRate ?? a.w)}`;
     }
+    if (this.judged && this.judged.node === this.node) evalTxt += `  ·  ${ScoreEngine.text(this.judged.lead)}`;   // (Judge's score)
     const onMain = this.node.main !== undefined;
     const at = onMain
       ? (this.node.main > 0 ? `${this.node.main} · ${this.nodeLabel(this.node)}` : "start") + ` / ${this.game.n}`

@@ -248,6 +248,22 @@ const AIPlay = {
       const n = S.moves.length;
       if (n >= 2 && S.moves[n - 1][0] < 0 && S.moves[n - 2][0] < 0) { S.phase = "stone removal"; S.removed = []; S.accepted = {}; }
     });
+    if (this.game.S.phase === "stone removal") this.markDead();
+  },
+  // two passes: the score network (ScoreEngine, app.js) marks the dead stones; you can change its marks, then accept
+  async markDead() {
+    const g = this.game, seq = g.S.seq;
+    this.status = "Marking dead stones…"; this.emit();
+    try {
+      const grid = g.replay().grid, sz = g.S.size;
+      const board = gridToBoardState(grid).slice(0, sz).map(row => row.slice(0, sz));
+      const a = await ScoreEngine.analyze({ board, currentPlayer: g.toMove() === BLACK ? "black" : "white", moveHistory: [], komi: g.S.komi,
+        rules: "chinese", visits: 16, maxTimeMs: 8000, ownershipMode: "root", topK: 1, analysisPvLen: 1, reuseTree: false });   // (a settled position: a few visits do)
+      if (this.game !== g || g.S.phase !== "stone removal" || g.S.seq !== seq) return;   // (you marked or went on meanwhile)
+      const dead = ScoreEngine.dead(grid, a.ownership || []);
+      this.status = dead.length ? "Dead stones marked: tap a group to change, then accept." : "No dead stones: accept the score, or tap to mark.";
+      this.change(S => { S.removed = dead; });
+    } catch (e) { console.error("[ai] marking", e); if (this.game === g) { this.status = "Mark the dead stones, then accept."; this.emit(); } }
   },
 
   // what playGame calls

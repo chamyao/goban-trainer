@@ -69,7 +69,7 @@ The engine is [web-katrain](https://github.com/ykrsama/web-katrain)'s KataGo
 implementation (MIT): a KataGo v8 model parser, feature encoder, and MCTS in
 TypeScript, running in a Web Worker on TF.js (WebGPU, WASM/CPU fallback),
 bundled with esbuild into `engine/katago-worker.js`. The bundled net is
-Lionffen's `b6c64` (~1.7 MB, 2025, from KataGo's extra networks; converted from KataGo's text format by `tools/katago_txt2bin.py`; it has no score or ownership head, so Review goes by win rate; it replaced `kata1-b10c128`, which replaced `g170-b6c96`). Positions are walled off with web-katrain's tsumego
+Lionffen's `b6c64` (~1.7 MB, 2025, from KataGo's extra networks; converted from KataGo's text format by `tools/katago_txt2bin.py`; it has no score or ownership head, so Review goes by win rate; it replaced `kata1-b10c128`, which replaced `g170-b6c96`). Scores and the ownership of points come from a second net, `kata1-b15c192` (engine/katago-score.bin.gz, 18 MB as float16: `tools/katago_txt2bin.py --fp16`), loaded only when Review's Judge or the end of an avatar game asks for them; on kyu-game positions it was 1.9 points off a b18 at 200 visits, against b10c128's 4.2. Positions are walled off with web-katrain's tsumego
 frame (KaTrain's F10 algorithm) so the engine reads the local fight, and the
 search is restricted to the frame's region of interest.
 

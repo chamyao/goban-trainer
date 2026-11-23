@@ -49,17 +49,34 @@ export class KataGoBinModelParser {
   readBinaryFloats(count: number): Float32Array {
     this.skipWhitespace();
     const marker = this.data.subarray(this.idx, this.idx + 5);
+    // "@B16@": the same weights as little-endian float16 (tools/katago_txt2bin.py --fp16: half the download; the
+    // site's own addition, KataGo itself only writes "@BIN@")
+    const half =
+      marker.length === 5 && marker[0] === 0x40 && marker[1] === 0x42 && marker[2] === 0x31 && marker[3] === 0x36 && marker[4] === 0x40;
     if (
+      !half && (
       marker.length !== 5 ||
       marker[0] !== 0x40 || // @
       marker[1] !== 0x42 || // B
       marker[2] !== 0x49 || // I
       marker[3] !== 0x4e || // N
-      marker[4] !== 0x40 // @
+      marker[4] !== 0x40) // @
     ) {
       throw new Error('Expected @BIN@ marker');
     }
     this.idx += 5;
+    if (half) {
+      const absStart = this.data.byteOffset + this.idx;
+      if (absStart + count * 2 > this.data.buffer.byteLength) throw new Error('Unexpected EOF while reading binary floats');
+      const view = new DataView(this.data.buffer, absStart, count * 2), out = new Float32Array(count);
+      for (let i = 0; i < count; i++) {
+        const h = view.getUint16(2 * i, true), s = h & 0x8000 ? -1 : 1, e = (h >> 10) & 31, f = h & 1023;
+        out[i] = e === 0 ? s * f * 5.960464477539063e-8 : e === 31 ? (f ? NaN : s * Infinity) : s * Math.pow(2, e - 15) * (1 + f / 1024);
+      }
+      this.idx += count * 2;
+      this.skipWhitespace();
+      return out;
+    }
 
     const byteLen = count * 4;
     const absStart = this.data.byteOffset + this.idx;

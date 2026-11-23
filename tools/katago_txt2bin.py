@@ -5,11 +5,15 @@ It walks the file in exactly the order engine-src/websrc/engine/katago/loadModel
 8..11: ordinary and gpool blocks; 11 names each activation, as Lionffen's b6c64 does with Mish), passing words and
 ints through and turning each weight array into binary.
 
-    python3 -I tools/katago_txt2bin.py in.txt.gz out.bin.gz
+    python3 -I tools/katago_txt2bin.py in.txt.gz out.bin.gz [--fp16]
+
+--fp16: each weight array as "@B16@" + little-endian float16 (the site's engine reads both; half the download).
 """
 import gzip
 import struct
 import sys
+
+FP16 = "--fp16" in sys.argv
 
 
 class Conv:
@@ -31,7 +35,8 @@ class Conv:
         if len(vals) != n:
             raise ValueError("unexpected end of file")
         self.i += n
-        self.out.append(b"@BIN@" + struct.pack("<%df" % n, *vals) + b"\n")
+        if FP16: self.out.append(b"@B16@" + struct.pack("<%de" % n, *vals) + b"\n")
+        else: self.out.append(b"@BIN@" + struct.pack("<%df" % n, *vals) + b"\n")
 
     def bn(self):
         self.tok(); c = self.int(); self.tok(); hs = self.int(); hb = self.int()   # name, channels, epsilon, flags
