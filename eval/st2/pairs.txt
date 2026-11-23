@@ -1,0 +1,7 @@
+st2/takemiya-6000.pt run2-150000.pt
+st2/kato-6000.pt run2-150000.pt
+st2/chochikun-6000.pt run2-150000.pt
+st2/otake-6000.pt run2-150000.pt
+st2/kitani-6000.pt run2-150000.pt
+st2/sakata-6000.pt run2-150000.pt
+st2/goseigen-6000.pt run2-150000.pt

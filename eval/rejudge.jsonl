@@ -1,0 +1,5 @@
+{"ckpt": "../kgs/run1/m0004000.pt", "est": "9.5k", "est_rv": 10.46, "sd_ranks": 1.2, "games": [["10k", "bot"], ["8k", "ref"], ["9k", "bot"], ["8k", "ref"], ["9k", "ref"], ["11k", "bot"], ["10k", "ref"], ["11k", "bot"]]}
+{"ckpt": "gpu-80000.pt", "est": "5.9k", "est_rv": 14.11, "sd_ranks": 1.4, "games": [["8k", "bot"], ["6k", "bot"], ["2k", "ref"], ["4k", "ref"], ["8k", "ref"], ["12k", "bot"], ["10k", "bot"], ["6k", "bot"]]}
+{"ckpt": "../kgs/run1/m0012500.pt", "est": "14.3k", "est_rv": 5.73, "sd_ranks": 1.5, "games": [["10k", "bot"], ["8k", "ref"], ["9k", "ref"], ["11k", "ref"], ["15k", "bot"], ["13k", "ref"], ["14k", "ref"], ["16k", "ref"]]}
+{"ckpt": "gpu-0022500.pt", "est": "7.2k", "est_rv": 12.77, "sd_ranks": 1.3, "games": [["11k", "bot"], ["9k", "bot"], ["5k", "ref"], ["7k", "ref"], ["11k", "bot"], ["9k", "bot"], ["5k", "ref"], ["7k", "bot"]]}
+{"ckpt": "gpu-0047500.pt", "est": "8.8k", "est_rv": 11.19, "sd_ranks": 1.2, "games": [["8k", "ref"], ["10k", "bot"], ["9k", "ref"], ["10k", "bot"], ["9k", "bot"], ["7k", "ref"], ["8k", "ref"], ["10k", "bot"]]}

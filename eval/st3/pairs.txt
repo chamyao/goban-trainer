@@ -1,0 +1,3 @@
+st3/chochikun-12000.pt run2-150000.pt
+st3/kitani-12000.pt run2-150000.pt
+st3/goseigen-12000.pt run2-150000.pt

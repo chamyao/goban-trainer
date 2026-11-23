@@ -1,0 +1,2 @@
+{"a": "../kgs/run1/m0012500.pt", "b": "gpu-80000.pt", "a_black": true, "a_won": false, "lead_black": -41.9, "moves": 244}
+{"a": "../kgs/run1/m0012500.pt", "b": "gpu-80000.pt", "a_black": false, "a_won": false, "lead_black": 84.5, "moves": 232}

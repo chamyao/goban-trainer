@@ -1,0 +1,15 @@
+{"step": 250, "est_rv": -0.5, "est": "20.5k", "wins": 0, "lost_to": ["20k", "20k", "20k", "20k", "20k", "20k", "20k", "20k"], "beat": []}
+{"step": 500, "est_rv": -0.5, "est": "20.5k", "wins": 0, "lost_to": ["20k", "20k", "20k", "20k", "20k", "20k", "20k", "20k"], "beat": []}
+{"step": 1000, "est_rv": -0.5, "est": "20.5k", "wins": 0, "lost_to": ["20k", "20k", "20k", "20k", "20k", "20k", "20k", "20k"], "beat": []}
+{"step": 1500, "est_rv": 4.25, "est": "15.8k", "wins": 4, "lost_to": ["16k", "15k", "15k", "16k"], "beat": ["20k", "19k", "17k", "16k"]}
+{"step": 3000, "est_rv": 6.0, "est": "14.0k", "wins": 5, "lost_to": ["13k", "13k", "14k"], "beat": ["20k", "16k", "15k", "15k", "14k"]}
+{"step": 4000, "est_rv": 9.75, "est": "10.2k", "wins": 6, "lost_to": ["14k", "9k"], "beat": ["16k", "14k", "13k", "12k", "11k", "10k"]}
+{"step": 5000, "est_rv": 7.3, "est": "12.7k", "sd_ranks": 1.6, "wins": 4, "lost_to": ["10k", "12k", "16k", "6k"], "beat": ["20k", "18k", "14k", "10k"]}
+{"step": 6000, "est_rv": 8.12, "est": "11.9k", "sd_ranks": 1.4, "wins": 5, "lost_to": ["13k", "15k", "9k"], "beat": ["19k", "17k", "13k", "11k", "10k"]}
+{"step": 7500, "est_rv": 8.91, "est": "11.1k", "sd_ranks": 1.2, "wins": 5, "lost_to": ["12k", "11k", "11k"], "beat": ["14k", "13k", "12k", "12k", "11k"]}
+{"step": 8000, "est_rv": 9.81, "est": "10.2k", "sd_ranks": 1.2, "games": 8, "tests": 1, "wins": 4, "lost_to": ["9k", "10k", "9k", "9k"], "beat": ["11k", "12k", "11k", "10k"]}
+{"step": 7000, "est_rv": 10.99, "est": "9.0k", "sd_ranks": 1.4, "games": 8, "tests": 1, "wins": 5, "lost_to": ["12k", "7k", "6k"], "beat": ["14k", "13k", "11k", "9k", "8k"]}
+{"step": 8500, "est_rv": 7.48, "est": "12.5k", "sd_ranks": 1.3, "games": 8, "tests": 1, "wins": 3, "lost_to": ["10k", "9k", "10k", "12k", "14k"], "beat": ["12k", "11k", "16k"]}
+{"step": 9000, "est_rv": 8.82, "est": "11.2k", "sd_ranks": 1.3, "games": 8, "tests": 1, "wins": 4, "lost_to": ["7k", "9k", "11k", "11k"], "beat": ["13k", "11k", "13k", "12k"]}
+{"step": 9500, "est_rv": 9.05, "est": "11.0k", "sd_ranks": 1.4, "games": 8, "tests": 1, "wins": 4, "lost_to": ["9k", "10k", "12k", "6k"], "beat": ["11k", "16k", "14k", "10k"]}
+{"step": 10000, "est_rv": 11.44, "est": "8.6k", "sd_ranks": 1.3, "games": 8, "tests": 1, "wins": 4, "lost_to": ["5k", "6k", "7k", "9k"], "beat": ["11k", "9k", "7k", "13k"]}
