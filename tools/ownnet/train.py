@@ -86,7 +86,8 @@ def main():
     ap.add_argument("--resume", default="")
     ap.add_argument("--threads", type=int, default=0)
     # bfloat16 math on the CPU's AMX units, channels-last layout: ~4.7x faster here (84 -> 395 positions/s a thread)
-    ap.add_argument("--bf16", action="store_true")   # leave a core for the milestone evaluator (evalwatch.py)
+    ap.add_argument("--bf16", action="store_true")
+    ap.add_argument("--device", default="cpu")   # "cuda": a rented GPU (tools/ownnet/gpu_run.sh)   # leave a core for the milestone evaluator (evalwatch.py)
     # a style copy (one pro's games): start from a trained checkpoint, held-out games in their own file
     ap.add_argument("--init", default=""); ap.add_argument("--val", default="")
     a = ap.parse_args()
@@ -103,12 +104,13 @@ def main():
         ck0 = torch.load(a.init, map_location="cpu"); a.blocks, a.ch = ck0["cfg"]["blocks"], ck0["cfg"]["ch"]
     net = Net(a.blocks, a.ch); step0 = 0
     if a.init: net.load_state_dict(ck0["model"])
+    dev = torch.device(a.device); net = net.to(dev)
     opt = torch.optim.SGD(net.parameters(), lr=a.lr, momentum=0.9, weight_decay=1e-4, nesterov=True)
     if a.resume:
-        ck = torch.load(a.resume); net.load_state_dict(ck["model"]); opt.load_state_dict(ck["opt"]); step0 = ck["step"]
+        ck = torch.load(a.resume, map_location=dev); net.load_state_dict(ck["model"]); opt.load_state_dict(ck["opt"]); step0 = ck["step"]
     if a.bf16: net = net.to(memory_format=torch.channels_last)
-    amp = lambda: torch.autocast("cpu", dtype=torch.bfloat16, enabled=a.bf16)
-    cl = (lambda x: x.contiguous(memory_format=torch.channels_last)) if a.bf16 else (lambda x: x)
+    amp = lambda: torch.autocast(dev.type, dtype=torch.bfloat16, enabled=a.bf16)
+    cl = (lambda x: x.to(dev, non_blocking=True).contiguous(memory_format=torch.channels_last)) if a.bf16 else (lambda x: x.to(dev, non_blocking=True))
     rng = np.random.default_rng(step0)
     log = open(os.path.join(a.out, "log.jsonl"), "a")
     lr_at = lambda s: a.lr * 0.5 * (1 + math.cos(math.pi * min(1, s / a.steps)))   # cosine to 0
@@ -119,6 +121,7 @@ def main():
         x, mv, w = batch(d, rng.choice(tr, a.batch), rng)
         with amp(): p, v = net(cl(x))
         p, v = p.float(), v.float()
+        mv, w = mv.to(dev), w.to(dev)
         lp, lv = F.cross_entropy(p, mv), F.mse_loss(v, w)
         loss = lp + 0.25 * lv
         opt.zero_grad(); loss.backward(); opt.step()
@@ -132,7 +135,7 @@ def main():
                 for i in range(0, nval, 1000):
                     ix = va[i:i + 1000]; x, mv, w = batch(d, ix, np.random.default_rng(0))
                     with amp(): p, v = net(cl(x))
-                    p, v = p.float(), v.float()
+                    p, v = p.float(), v.float(); mv, w = mv.to(dev), w.to(dev)
                     acc += (p.argmax(1) == mv).float().sum().item(); pl += F.cross_entropy(p, mv, reduction="sum").item()
                     vl += F.mse_loss(v, w, reduction="sum").item(); m += len(ix)
             rec = {"step": step, "positions": step * a.batch, "val_acc": acc / m, "val_pol": pl / m, "val_v": vl / m, "time": time.time()}
