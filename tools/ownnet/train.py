@@ -84,16 +84,31 @@ def main():
     ap.add_argument("--steps", type=int, default=200000); ap.add_argument("--batch", type=int, default=256)
     ap.add_argument("--every", type=int, default=5000); ap.add_argument("--lr", type=float, default=0.05)
     ap.add_argument("--resume", default="")
+    ap.add_argument("--threads", type=int, default=0)
+    # bfloat16 math on the CPU's AMX units, channels-last layout: ~4.7x faster here (84 -> 395 positions/s a thread)
+    ap.add_argument("--bf16", action="store_true")   # leave a core for the milestone evaluator (evalwatch.py)
+    # a style copy (one pro's games): start from a trained checkpoint, held-out games in their own file
+    ap.add_argument("--init", default=""); ap.add_argument("--val", default="")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
-    torch.set_num_threads(os.cpu_count())
+    torch.set_num_threads(a.threads or os.cpu_count())
     d = dict(np.load(a.data))
     n = len(d["move"]); nval = min(20000, n // 20)
     tr, va = np.arange(nval, n), np.arange(nval)
+    if a.val:   # held-out games: appended after the training rows, scored on their own
+        dv = dict(np.load(a.val)); nval = len(dv["move"])
+        tr = np.arange(n); va = np.arange(n, n + nval)
+        d = {k: np.concatenate([d[k], dv[k]]) for k in d}
+    if a.init:
+        ck0 = torch.load(a.init, map_location="cpu"); a.blocks, a.ch = ck0["cfg"]["blocks"], ck0["cfg"]["ch"]
     net = Net(a.blocks, a.ch); step0 = 0
+    if a.init: net.load_state_dict(ck0["model"])
     opt = torch.optim.SGD(net.parameters(), lr=a.lr, momentum=0.9, weight_decay=1e-4, nesterov=True)
     if a.resume:
         ck = torch.load(a.resume); net.load_state_dict(ck["model"]); opt.load_state_dict(ck["opt"]); step0 = ck["step"]
+    if a.bf16: net = net.to(memory_format=torch.channels_last)
+    amp = lambda: torch.autocast("cpu", dtype=torch.bfloat16, enabled=a.bf16)
+    cl = (lambda x: x.contiguous(memory_format=torch.channels_last)) if a.bf16 else (lambda x: x)
     rng = np.random.default_rng(step0)
     log = open(os.path.join(a.out, "log.jsonl"), "a")
     lr_at = lambda s: a.lr * 0.5 * (1 + math.cos(math.pi * min(1, s / a.steps)))   # cosine to 0
@@ -102,7 +117,8 @@ def main():
         for g in opt.param_groups: g["lr"] = lr_at(step)
         net.train()
         x, mv, w = batch(d, rng.choice(tr, a.batch), rng)
-        p, v = net(x)
+        with amp(): p, v = net(cl(x))
+        p, v = p.float(), v.float()
         lp, lv = F.cross_entropy(p, mv), F.mse_loss(v, w)
         loss = lp + 0.25 * lv
         opt.zero_grad(); loss.backward(); opt.step()
@@ -110,12 +126,13 @@ def main():
         if step % 500 == 0:
             print(f"step {step} pol {run[0]/run[3]:.3f} val {run[1]/run[3]:.3f} acc {run[2]/run[3]:.3f} lr {lr_at(step):.4f} {500*a.batch/(time.time()-t0):.0f} pos/s", flush=True)
             t0, run = time.time(), [0, 0, 0, 0]
-        if step % a.every == 0 or step == a.steps or step in (250, 500, 1000, 1500):   # (early ones: the weak milestones)
+        if step % a.every == 0 or step == a.steps or step in (250,) or (step <= 10000 and step % 500 == 0):   # (dense early: strength rises fastest there)
             net.eval(); acc = pl = vl = 0; m = 0
             with torch.no_grad():
                 for i in range(0, nval, 1000):
                     ix = va[i:i + 1000]; x, mv, w = batch(d, ix, np.random.default_rng(0))
-                    p, v = net(x)
+                    with amp(): p, v = net(cl(x))
+                    p, v = p.float(), v.float()
                     acc += (p.argmax(1) == mv).float().sum().item(); pl += F.cross_entropy(p, mv, reduction="sum").item()
                     vl += F.mse_loss(v, w, reduction="sum").item(); m += len(ix)
             rec = {"step": step, "positions": step * a.batch, "val_acc": acc / m, "val_pol": pl / m, "val_v": vl / m, "time": time.time()}
