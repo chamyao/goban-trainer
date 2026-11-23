@@ -1,0 +1,25 @@
+# Mon Nov 23 05:49:35 UTC 2026 on bf58b7b8369d
+takemiya   train  172448  val  19277
+kato       train  175665  val  19496
+chochikun  train  472734  val  52070
+otake      train  181829  val  20103
+kitani     train  158733  val  17175
+sakata     train  168705  val  17943
+goseigen   train  120363  val  13130
+chochikun-train.npz
+chochikun-val.npz
+goseigen-train.npz
+goseigen-val.npz
+kato-train.npz
+kato-val.npz
+kitani-train.npz
+kitani-val.npz
+otake-train.npz
+otake-val.npz
+sakata-train.npz
+sakata-val.npz
+takemiya-train.npz
+takemiya-val.npz
+[05:47:51] long style copy: kitani
+[05:48:56] long style copy: sakata
+# exit 0
