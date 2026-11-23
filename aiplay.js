@@ -27,8 +27,9 @@ const AI_LEVELS = {
   // weights are a checkpoint, its rank a measured estimate.
   // (unrated: the benchmark said ~9-10k, but a 10k beat it easily, killing a big group; apo110: "Ive played 8k
   // before, that does not happen". A rank once real games calibrate it)
-  // apo110 played it: "it feels like a 13 or 14k maybe" (beat it even and giving 2 stones); the benchmark said ~9-10k
-  ours: { name: "Our AI · experimental", kyu: 13, own: true },
+  // step 80,000 (the finished run): apo110 (~10k): "Its stonger than me I think"; ~50% against GnuGo (OGS ~10k), ~5k
+  // on the human-SL benchmark, which runs ~4 ranks generous. (Step 12,500 felt 13-14k.)
+  ours: { name: "Our AI · experimental", kyu: 9, own: true },
 };
 // the own network, in a worker (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
