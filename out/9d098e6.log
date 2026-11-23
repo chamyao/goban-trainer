@@ -1,0 +1,25 @@
+# Mon Nov 23 17:28:29 UTC 2026 on 60595e362636
+[17:27:38] data: CWI games
+Go Seigen games 1216 train 120363 val 13130
+Kitani Minoru games 1621 train 158733 val 17175
+Takemiya Masaki games 1844 train 172448 val 19277
+Kato Masao games 1859 train 175665 val 19496
+Sakata Eio games 1704 train 168705 val 17943
+Otake Hideo games 1972 train 181829 val 20103
+total 402640
+drwxr-xr-x  2 root root     4096 Nov 23 17:28 .
+drwxr-xr-x 10 root root     4096 Nov 23 17:27 ..
+-rw-r--r--  1 root root 45739880 Nov 23 17:28 goseigen-train.npz
+-rw-r--r--  1 root root  4991340 Nov 23 17:28 goseigen-val.npz
+-rw-r--r--  1 root root 66754640 Nov 23 17:28 kato-train.npz
+-rw-r--r--  1 root root  7410420 Nov 23 17:28 kato-val.npz
+-rw-r--r--  1 root root 60320480 Nov 23 17:28 kitani-train.npz
+-rw-r--r--  1 root root  6528440 Nov 23 17:28 kitani-val.npz
+-rw-r--r--  1 root root 69096960 Nov 23 17:28 otake-train.npz
+-rw-r--r--  1 root root  7641080 Nov 23 17:28 otake-val.npz
+-rw-r--r--  1 root root 64109840 Nov 23 17:28 sakata-train.npz
+-rw-r--r--  1 root root  6820280 Nov 23 17:28 sakata-val.npz
+-rw-r--r--  1 root root 65532180 Nov 23 17:28 takemiya-train.npz
+-rw-r--r--  1 root root  7327200 Nov 23 17:28 takemiya-val.npz
+== styles10k/*.log 
+# exit 0
