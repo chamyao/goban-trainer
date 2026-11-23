@@ -35,7 +35,9 @@ const AI_LEVELS = {
 // each the site's own network fine-tuned on one professional's games (tools/ownnet: run 2, ~OGS 6.5k, + 1,500 steps
 // on that player's moves). Difficulty comes from handicap stones. An avatar not collected shows as a silhouette.
 const AI_PRO = { lvbu: "kato", lisu: "sakata", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "takemiya", caocao: "goseigen" };
-const AI_PRO_RANK = "7k";   // their measured strength, about OGS 6.5-7k
+// each one's strength, OGS ranks from the joint fit (reference games + head-to-head; run 2 itself 6.6k). Twelve games
+// each against run 2, so about ±2 ranks apiece: the order among them is rough
+const AI_PRO_RANK = { lvbu: "4k", ms_jang: "4k", lisu: "5k", ms_ahn: "6k", dongzhuo: "6k", caocao: "7k", diaochan: "7k" };
 const aiProUrl = who => `engine/ownnet/pro/${AI_PRO[who]}.bin?v=2`;
 // the own network, in a worker per weights file (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
@@ -306,7 +308,7 @@ function aiLobby() {
       const mine = Avatars.owns(f.who), S = mine && going(f.who);
       const el = h("button", { class: `ai-foe${mine ? "" : " ai-foe-locked"}`, ...(mine ? { title: f.name } : {}) },
         [f.src ? h("img", { src: f.src, alt: "" }) : "", mine ? h("b", {}, f.name) : h("b", {}, "\u00a0"),
-         mine ? h("small", { class: "ai-foe-rank" }, S ? `move ${S.moves.length + 1}` : AI_PRO_RANK) : ""]);
+         mine ? h("small", { class: "ai-foe-rank" }, S ? `move ${S.moves.length + 1}` : AI_PRO_RANK[f.who]) : ""]);
       if (S) el.classList.add("ai-foe-going");
       if (mine) el.onclick = () => { foe = foe && foe.who === f.who ? null : f; cast.querySelectorAll(".ai-foe").forEach(b => b.classList.toggle("on", b === el && !!foe)); pick(); };
       else el.disabled = true;
