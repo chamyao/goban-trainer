@@ -25,7 +25,9 @@ const AI_LEVELS = {
   // the site's own network, trained on KGS dan and professional games (tools/ownnet; the user: "upload the latest one
   // to the site so I can try playing it"): its policy's favourite legal move, no search. Still training: the
   // weights are a checkpoint, its rank a measured estimate.
-  ours: { name: "Our AI · experimental", kyu: 10, own: true },
+  // (unrated: the benchmark said ~9-10k, but a 10k beat it easily, killing a big group; apo110: "Ive played 8k
+  // before, that does not happen". A rank once real games calibrate it)
+  ours: { name: "Our AI · experimental", kyu: 10, own: true, unrated: true },
 };
 // the own network, in a worker (engine/ownnet-worker.js): the weights load on its first move
 const OwnPlay = {
@@ -232,7 +234,7 @@ function aiLobby() {
   const g = AIPlay.load();
   const sel = (opts, cur) => { const s = h("select", {}, opts.map(([v, t]) => h("option", { value: v, ...(v === cur ? { selected: "" } : {}) }, t))); return s; };
   const size = { value: "19" };   // (19×19 only: see the top)
-  const level = sel(Object.entries(AI_LEVELS).map(([k, v]) => [k, `${v.name} (about ${aiRankText(v.kyu)})`]), localStorage.getItem("gt-ai-level") || "medium");
+  const level = sel(Object.entries(AI_LEVELS).map(([k, v]) => [k, v.unrated ? `${v.name} (not yet rated)` : `${v.name} (about ${aiRankText(v.kyu)})`]), localStorage.getItem("gt-ai-level") || "medium");
   const color = sel([["black", "Black"], ["white", "White"], ["random", "Random"]], "black");
   const hcap = sel([["0", "None"], ...[2, 3, 4, 5, 6, 7, 8, 9].map(n => [String(n), `${n} stones for Black`])], "0");
   // the avatars you've collected, each with its style (apo110: "play against the avatars themselves")
