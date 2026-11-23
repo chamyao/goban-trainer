@@ -34,7 +34,7 @@ const AI_LEVELS = {
 // the opponents (the user: "just choose one per and we only need 7 opponents ... collected only"): seven avatars,
 // each the site's own network fine-tuned on one professional's games (tools/ownnet: run 2, ~OGS 6.5k, + 1,500 steps
 // on that player's moves). Difficulty comes from handicap stones. An avatar not collected shows as a silhouette.
-const AI_PRO = { lvbu: "kato", lisu: "takemiya", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "sakata", caocao: "goseigen" };
+const AI_PRO = { lvbu: "kato", lisu: "sakata", ms_ahn: "otake", ms_jang: "kitani", dongzhuo: "chochikun", diaochan: "takemiya", caocao: "goseigen" };
 const AI_PRO_RANK = "7k";   // their measured strength, about OGS 6.5-7k
 const aiProUrl = who => `engine/ownnet/pro/${AI_PRO[who]}.bin?v=2`;
 // the own network, in a worker per weights file (engine/ownnet-worker.js): the weights load on its first move
