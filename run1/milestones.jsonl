@@ -6,3 +6,4 @@
 {"step": 4000, "est_rv": 9.75, "est": "10.2k", "wins": 6, "lost_to": ["14k", "9k"], "beat": ["16k", "14k", "13k", "12k", "11k", "10k"]}
 {"step": 5000, "est_rv": 7.3, "est": "12.7k", "sd_ranks": 1.6, "wins": 4, "lost_to": ["10k", "12k", "16k", "6k"], "beat": ["20k", "18k", "14k", "10k"]}
 {"step": 6000, "est_rv": 8.12, "est": "11.9k", "sd_ranks": 1.4, "wins": 5, "lost_to": ["13k", "15k", "9k"], "beat": ["19k", "17k", "13k", "11k", "10k"]}
+{"step": 7500, "est_rv": 8.91, "est": "11.1k", "sd_ranks": 1.2, "wins": 5, "lost_to": ["12k", "11k", "11k"], "beat": ["14k", "13k", "12k", "12k", "11k"]}
