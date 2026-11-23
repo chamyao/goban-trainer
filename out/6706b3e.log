@@ -1,0 +1,4 @@
+# Mon Nov 23 04:28:23 UTC 2026 on bf58b7b8369d
+6923 sh -c while pgrep -f 'train.py kgs.npz,kgs2.npz,cwi6/ run2' >/dev/null; do sleep 30; 
+0 %, 2 MiB
+# exit 0
