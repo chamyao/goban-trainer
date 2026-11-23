@@ -2,12 +2,14 @@
 # A rented GPU (Vast.ai) for more training, controlled from a Claude session without SSH, in one command from the
 # box's terminal:
 #     bash <(curl -fsSL https://raw.githubusercontent.com/chamyao/goban-trainer/main/tools/ownnet/gpu_box.sh)
-# It asks once for a GitHub token (fine-grained: repository chamyao/goban-trainer only, Contents read and write),
+# Or with no terminal at all: put the token in the Vast account's environment variables as GH_TOKEN and give the
+# instance this script as its on-start command. It asks once (if GH_TOKEN isn't set) for a GitHub token (fine-grained: repository chamyao/goban-trainer only, Contents read and write),
 # kept in a root-only file here and never printed; then it sets up PyTorch, the code, the checkpoints branch, and the
 # control channel (control.sh, as in gpu_run.sh: a new commit to cmd.sh on branch vast-control runs once, its output
 # pushed back to out/<commit>.log). No training starts by itself. Ends when the instance is destroyed.
 set -e
 W="$HOME/goban"; mkdir -p "$W"; cd "$W"
+if [ ! -f .token ] && [ -n "$GH_TOKEN" ]; then umask 077; printf %s "$GH_TOKEN" > .token; umask 022; fi
 if [ ! -f .token ]; then
   read -rsp "GitHub token (fine-grained, chamyao/goban-trainer only, Contents: read and write; not shown): " T; echo
   [ -n "$T" ] || { echo "No token given."; exit 1; }
