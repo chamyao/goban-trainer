@@ -370,7 +370,6 @@ function aiLobby() {
   return h("div", { class: "sgf-loader ai-lobby" }, [
     h("div", { class: "cat-title" }, "Play an avatar"),
     h("div", { class: "ai-rank" }, [h("b", {}, `Your rank: ${AIRank.text(r.kyu)}`), ` · promotion to ${next}: win 2 of 3 `, ...marks]),
-    h("div", {}, "Each game tests the next rank: its handicap is set from your rank and the avatar's strength. 19×19, Chinese rules, no clock. One game per avatar at a time; they're saved with your progress."),
     cast,
     h("div", { class: "row" }, [startBtn, overBtn, old ? h("button", { onclick: () => { location.hash = "#/ai/_"; } }, "Resume your earlier game") : ""]),
   ]);
