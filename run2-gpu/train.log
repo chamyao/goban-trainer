@@ -15,3 +15,42 @@ step 3500 pol 2.224 val 0.922 acc 0.424 lr 0.0200 24741 pos/s
 VAL {'step': 3500, 'positions': 896000, 'val_acc': 0.4258, 'val_pol': 2.2179565795898437, 'val_v': 0.9275169311523438, 'time': 1795405996.1433518}
 step 4000 pol 2.219 val 0.922 acc 0.425 lr 0.0200 24750 pos/s
 VAL {'step': 4000, 'positions': 1024000, 'val_acc': 0.43215, 'val_pol': 2.198974737548828, 'val_v': 0.9458118530273437, 'time': 1795406001.315212}
+step 4500 pol 2.218 val 0.923 acc 0.427 lr 0.0200 24813 pos/s
+VAL {'step': 4500, 'positions': 1152000, 'val_acc': 0.4328, 'val_pol': 2.196389074707031, 'val_v': 0.9182963226318359, 'time': 1795406006.4714558}
+step 5000 pol 2.227 val 0.922 acc 0.426 lr 0.0199 24801 pos/s
+VAL {'step': 5000, 'positions': 1280000, 'val_acc': 0.43365, 'val_pol': 2.1933584838867186, 'val_v': 0.9267652038574219, 'time': 1795406011.64291}
+step 5500 pol 2.209 val 0.923 acc 0.429 lr 0.0199 24709 pos/s
+VAL {'step': 5500, 'positions': 1408000, 'val_acc': 0.43515, 'val_pol': 2.206824169921875, 'val_v': 0.9295851989746093, 'time': 1795406016.809238}
+step 6000 pol 2.218 val 0.926 acc 0.426 lr 0.0199 24862 pos/s
+VAL {'step': 6000, 'positions': 1536000, 'val_acc': 0.43105, 'val_pol': 2.204698193359375, 'val_v': 0.96992109375, 'time': 1795406021.962692}
+step 6500 pol 2.219 val 0.924 acc 0.426 lr 0.0199 24795 pos/s
+VAL {'step': 6500, 'positions': 1664000, 'val_acc': 0.42955, 'val_pol': 2.2231483276367188, 'val_v': 0.9332614807128906, 'time': 1795406027.126404}
+step 7000 pol 2.214 val 0.921 acc 0.428 lr 0.0199 24734 pos/s
+VAL {'step': 7000, 'positions': 1792000, 'val_acc': 0.43575, 'val_pol': 2.1941938232421876, 'val_v': 0.9252628936767578, 'time': 1795406032.3022013}
+step 7500 pol 2.221 val 0.921 acc 0.428 lr 0.0199 24757 pos/s
+VAL {'step': 7500, 'positions': 1920000, 'val_acc': 0.4213, 'val_pol': 2.2447418212890624, 'val_v': 1.0155778411865235, 'time': 1795406037.479796}
+step 8000 pol 2.216 val 0.922 acc 0.428 lr 0.0199 24708 pos/s
+VAL {'step': 8000, 'positions': 2048000, 'val_acc': 0.4267, 'val_pol': 2.2217301391601563, 'val_v': 0.9253401092529296, 'time': 1795406042.6519692}
+step 8500 pol 2.215 val 0.920 acc 0.427 lr 0.0198 24768 pos/s
+VAL {'step': 8500, 'positions': 2176000, 'val_acc': 0.4326, 'val_pol': 2.200914440917969, 'val_v': 0.9275674194335938, 'time': 1795406047.815966}
+step 9000 pol 2.208 val 0.920 acc 0.429 lr 0.0198 24745 pos/s
+VAL {'step': 9000, 'positions': 2304000, 'val_acc': 0.432, 'val_pol': 2.193682922363281, 'val_v': 0.9432857299804688, 'time': 1795406052.9916315}
+step 9500 pol 2.216 val 0.922 acc 0.427 lr 0.0198 24770 pos/s
+VAL {'step': 9500, 'positions': 2432000, 'val_acc': 0.43065, 'val_pol': 2.200193884277344, 'val_v': 0.922221923828125, 'time': 1795406058.1623812}
+step 10000 pol 2.213 val 0.923 acc 0.428 lr 0.0198 23624 pos/s
+VAL {'step': 10000, 'positions': 2560000, 'val_acc': 0.43675, 'val_pol': 2.176757391357422, 'val_v': 0.9684536895751953, 'time': 1795406063.5707724}
+step 10500 pol 2.211 val 0.922 acc 0.426 lr 0.0198 24734 pos/s
+step 11000 pol 2.206 val 0.919 acc 0.428 lr 0.0197 27302 pos/s
+step 11500 pol 2.219 val 0.921 acc 0.427 lr 0.0197 27263 pos/s
+step 12000 pol 2.208 val 0.921 acc 0.428 lr 0.0197 27206 pos/s
+step 12500 pol 2.198 val 0.919 acc 0.429 lr 0.0197 27316 pos/s
+VAL {'step': 12500, 'positions': 3200000, 'val_acc': 0.43115, 'val_pol': 2.19004375, 'val_v': 0.9199228607177734, 'time': 1795406087.5318446}
+step 13000 pol 2.208 val 0.919 acc 0.428 lr 0.0196 24671 pos/s
+step 13500 pol 2.204 val 0.918 acc 0.430 lr 0.0196 27264 pos/s
+step 14000 pol 2.210 val 0.917 acc 0.428 lr 0.0196 27230 pos/s
+step 14500 pol 2.204 val 0.918 acc 0.430 lr 0.0195 27290 pos/s
+step 15000 pol 2.200 val 0.918 acc 0.430 lr 0.0195 27288 pos/s
+VAL {'step': 15000, 'positions': 3840000, 'val_acc': 0.43225, 'val_pol': 2.1754173950195312, 'val_v': 0.9091182037353516, 'time': 1795406111.494215}
+step 15500 pol 2.201 val 0.915 acc 0.429 lr 0.0195 24781 pos/s
+step 16000 pol 2.193 val 0.918 acc 0.430 lr 0.0194 27218 pos/s
+step 16500 pol 2.202 val 0.918 acc 0.430 lr 0.0194 26793 pos/s
