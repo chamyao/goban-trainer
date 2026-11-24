@@ -1,0 +1,11 @@
+# Tue Nov 24 05:03:08 UTC 2026 on 12064cfe8cd4
+19:  python3 distill.py labels distill/$b --init base/$b.pt --steps 40000 --batch 256 --every 5000 --device cuda > distill/$b.log 2>&1 || say "$b failed: $(tail -2 distill/$b.log)"
+[05:03:13] games: 59576
+[05:03:14] distilling run2
+step 2000 kl 0.000 value 0.438 score 0.718 own 0.233 |score err| 10.97 lr 0.0050 11488 pos/s
+step 2500 kl 0.037 value 0.529 score 0.906 own 0.166 |score err| 12.90 lr 0.0050 7094 pos/s
+step 3000 kl 0.037 value 0.487 score 0.837 own 0.131 |score err| 12.12 lr 0.0049 7114 pos/s
+step 3500 kl 0.034 value 0.457 score 0.783 own 0.114 |score err| 11.51 lr 0.0049 7121 pos/s
+step 4000 kl 0.034 value 0.443 score 0.759 own 0.103 |score err| 11.23 lr 0.0049 7067 pos/s
+step 4500 kl 0.034 value 0.436 score 0.752 own 0.095 |score err| 11.15 lr 0.0048 7068 pos/s
+# exit 0
