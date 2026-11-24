@@ -1,0 +1,11 @@
+# Tue Nov 24 04:03:08 UTC 2026 on 12064cfe8cd4
+torch 2.5.1+cu124 requires nvidia-cudnn-cu12==9.1.0.70; platform_system == "Linux" and platform_machine == "x86_64", but you have nvidia-cudnn-cu12 8.9.7.29 which is incompatible.
+KataGo v1.15.3
+Git revision: cd0ed6c0712088ddb901be68189ba7fa1439a9e7
+{"id":"t","isDuringSearch":false,"moveInfos":[],"ownership":[0.015364,0.03034,-0.041297,0.004379,0.023677,0.074265,0.07469,0.081908,0.0588,0.047358,0.029853,0.050646,0.035782,0.073233,0.028404,-0.0157
+
+real	0m3.176s
+user	0m2.568s
+sys	0m0.588s
+torch conv ok torch.Size([8, 64, 19, 19])
+# exit 0
