@@ -1,0 +1,18 @@
+# Tue Nov 24 05:02:35 UTC 2026 on 12064cfe8cd4
+5:step 1500 kl 0.000 value 0.562 score 1.011 own 0.316 |score err| 14.15 lr 0.0050 14907 pos/s
+6:step 2000 kl 0.000 value 0.551 score 0.990 own 0.315 |score err| 13.91 lr 0.0050 15182 pos/s
+7:step 2500 kl nan value nan score nan own nan |score err| nan lr 0.0050 9925 pos/s
+8:step 3000 kl nan value nan score nan own nan |score err| nan lr 0.0049 9965 pos/s
+9:step 3500 kl nan value nan score nan own nan |score err| nan lr 0.0049 10059 pos/s
+10:step 4000 kl nan value nan score nan own nan |score err| nan lr 0.0049 10030 pos/s
+11:step 4500 kl nan value nan score nan own nan |score err| nan lr 0.0048 9993 pos/s
+12:step 5000 kl nan value nan score nan own nan |score err| nan lr 0.0048 9939 pos/s
+14:step 5500 kl nan value nan score nan own nan |score err| nan lr 0.0048 9885 pos/s
+15:step 6000 kl nan value nan score nan own nan |score err| nan lr 0.0047 11242 pos/s
+5:step 1500 kl 0.000 value 0.519 score 0.905 own 0.234 |score err| 13.10 lr 0.0050 15339 pos/s
+6:step 2000 kl 0.000 value 0.488 score 0.847 own 0.233 |score err| 12.48 lr 0.0050 15776 pos/s
+7:step 2500 kl nan value nan score nan own nan |score err| nan lr 0.0050 10142 pos/s
+8:step 3000 kl nan value nan score nan own nan |score err| nan lr 0.0049 10150 pos/s
+9:step 3500 kl nan value nan score nan own nan |score err| nan lr 0.0049 10109 pos/s
+10:step 4000 kl nan value nan score nan own nan |score err| nan lr 0.0049 10017 pos/s
+# exit 0
