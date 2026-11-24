@@ -82,7 +82,9 @@ def main():
         x, wr, sc, own = [t.to(dev, non_blocking=True) for t in batch(d, rng.choice(tr, a.batch), rng)]
         lp, lv, ls, lo, se = losses(x, wr, sc, own)
         loss = a.kl * lp + lv + ls + lo
-        opt.zero_grad(set_to_none=True); loss.backward(); opt.step()
+        opt.zero_grad(set_to_none=True)
+        if not torch.isfinite(loss): print(f"step {step}: loss not finite, skipped", flush=True); continue
+        loss.backward(); torch.nn.utils.clip_grad_norm_(net.parameters(), 5.0); opt.step()
         run += [lp.item(), lv.item(), ls.item(), lo.item(), se.item()]; k += 1
         if step % 500 == 0:
             r = run / k; print(f"step {step} kl {r[0]:.3f} value {r[1]:.3f} score {r[2]:.3f} own {r[3]:.3f} |score err| {r[4]:.2f} lr {lr_at(step):.4f} {500*a.batch/(time.time()-t0):.0f} pos/s", flush=True)
