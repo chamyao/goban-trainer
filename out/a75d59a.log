@@ -1,0 +1,14 @@
+# Tue Nov 24 05:02:02 UTC 2026 on 12064cfe8cd4
+/root/goban/distill.py:58: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct
+  ck = torch.load(a.init, map_location="cpu"); B, C = ck["cfg"]["blocks"], ck["cfg"]["ch"]
+step 500 kl 0.000 value 0.735 score 1.235 own 0.327 |score err| 16.31 lr 0.0050 14210 pos/s
+step 1000 kl 0.000 value 0.607 score 1.076 own 0.316 |score err| 14.84 lr 0.0050 14822 pos/s
+step 1500 kl 0.000 value 0.562 score 1.011 own 0.316 |score err| 14.15 lr 0.0050 14907 pos/s
+t_wr (2108408,) float32 nan 0 min 1.3124779041362444e-11 max 1.0
+t_score (2108408,) float32 nan 0 min -205.4974365234375 max 194.07476806640625
+t_own (2108408, 361) int8 nan 0 min -100.0 max 100.0
+komi (2108408,) float32 nan 0 min -9.5 max 7.5
+board (2108408, 361) int8 nan 0 min -3.0 max 3.0
+last (2108408, 4) int16 nan 0 min -1.0 max 361.0
+ko (2108408,) int16 nan 0 min -1.0 max 360.0
+# exit 0
