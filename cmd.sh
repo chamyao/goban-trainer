@@ -1,14 +1,14 @@
-# KataGo (CUDA) and the teacher network on the box
-cd ~/goban; nproc; free -g | head -2; df -h ~ | tail -1; nvidia-smi --query-gpu=name,driver_version --format=csv,noheader
-cp code/tools/ownnet/*.py . 2>/dev/null; (cd code && git pull -q) && cp code/tools/ownnet/*.py .
-command -v unzip >/dev/null || { apt-get update -qq && apt-get install -y -qq unzip libzip4 > /dev/null 2>&1 || apt-get install -y -qq unzip > /dev/null; }
-python3 -m pip install -q "nvidia-cudnn-cu12==8.9.7.29" nvidia-cublas-cu12 nvidia-cuda-runtime-cu12 2>&1 | tail -2
-mkdir -p kgo && cd kgo
-[ -f katago ] || { curl -sSfL -o k.zip https://github.com/lightvector/KataGo/releases/download/v1.15.3/katago-v1.15.3-cuda12.1-cudnn8.9.7-linux-x64.zip && unzip -o -q k.zip && ls; }
-[ -f b18.bin.gz ] || curl -sSfL -o b18.bin.gz https://media.katagotraining.org/uploaded/networks/models/kata1/kata1-b18c384nbt-s9996604416-d4316597426.bin.gz
-SP=$(python3 -c "import site; print(site.getsitepackages()[0])")
-export LD_LIBRARY_PATH=$(ls -d $SP/nvidia/*/lib | tr '\n' ':')$LD_LIBRARY_PATH
-echo "$LD_LIBRARY_PATH" > ld.txt
+# KataGo's libraries in its own folder (cuDNN 8, libzip5, OpenSSL 1.1); PyTorch's cuDNN 9 back
+cd ~/goban/kgo
+python3 -m pip install -q "nvidia-cudnn-cu12==9.1.0.70" 2>&1 | grep -v WARNING | tail -1
+python3 -m pip install -q --target libs "nvidia-cudnn-cu12==8.9.7.29" nvidia-cublas-cu12 nvidia-cuda-runtime-cu12 2>&1 | grep -v WARNING | tail -1
+mkdir -p debs sys && cd debs
+for u in http://archive.ubuntu.com/ubuntu/pool/universe/libz/libzip/libzip5_1.5.1-0ubuntu1_amd64.deb http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb; do curl -sSfL -O "$u" || echo "fail $u"; done
+for d in *.deb; do dpkg -x "$d" ../sys; done; cd ..
+LD="$(ls -d $PWD/libs/nvidia/*/lib | tr '\n' ':')$PWD/sys/usr/lib/x86_64-linux-gnu:$PWD/sys/lib/x86_64-linux-gnu"
+echo "$LD" > ld.txt
+export LD_LIBRARY_PATH=$LD
 ldd ./katago | grep -i "not found"
-./katago version 2>&1 | head -3
-echo '{"id":"t","moves":[["B","Q16"],["W","D4"]],"rules":"chinese","komi":7.5,"boardXSize":19,"boardYSize":19,"maxVisits":1,"includeOwnership":true}' | timeout 300 ./katago analysis -config analysis_example.cfg -model b18.bin.gz -override-config "logDir=,logToStderr=false" 2>&1 | tail -2 | cut -c1-300
+./katago version 2>&1 | head -2
+time (echo '{"id":"t","moves":[["B","Q16"],["W","D4"]],"rules":"chinese","komi":7.5,"boardXSize":19,"boardYSize":19,"maxVisits":1,"includeOwnership":true}' | timeout 600 ./katago analysis -config analysis_example.cfg -model b18.bin.gz -override-config "logDir=,logToStderr=false" 2>&1 | tail -1 | cut -c1-200)
+python3 -c "import torch; x=torch.randn(8,17,19,19,device='cuda'); c=torch.nn.Conv2d(17,64,3,padding=1).cuda(); print('torch conv ok', c(x).shape)"
