@@ -1,0 +1,24 @@
+# Tue Nov 24 04:01:38 UTC 2026 on 12064cfe8cd4
+6
+               total        used        free      shared  buff/cache   available
+Mem:              31           0          27           0           3          30
+overlay          60G  1.7G   59G   3% /
+NVIDIA GeForce RTX 3090, 580.173.02
+torch 2.5.1+cu124 requires nvidia-cudnn-cu12==9.1.0.70; platform_system == "Linux" and platform_machine == "x86_64", but you have nvidia-cudnn-cu12 8.9.7.29 which is incompatible.
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable.It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+README.txt
+analysis_example.cfg
+cacert.pem
+contribute_example.cfg
+default_gtp.cfg
+gtp_human5k_example.cfg
+gtp_human9d_search_example.cfg
+k.zip
+katago
+match_example.cfg
+	libzip.so.5 => not found
+	libssl.so.1.1 => not found
+	libcrypto.so.1.1 => not found
+./katago: error while loading shared libraries: libzip.so.5: cannot open shared object file: No such file or directory
+./katago: error while loading shared libraries: libzip.so.5: cannot open shared object file: No such file or directory
+# exit 0
