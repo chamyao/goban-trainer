@@ -1,0 +1,8 @@
+{"step": 5000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795495662.0165136}
+{"step": 10000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795495777.5020387}
+{"step": 15000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795495894.0496416}
+{"step": 20000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795496011.4127426}
+{"step": 25000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795496125.9932525}
+{"step": 30000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795496240.698346}
+{"step": 35000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795496357.4777188}
+{"step": 40000, "val_kl": NaN, "val_value_mse": NaN, "val_score": NaN, "val_own_mse": NaN, "val_score_abs_err": NaN, "time": 1795496475.0712385}
