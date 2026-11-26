@@ -1,6 +1,6 @@
 // Teaching games: the opponent remarks on your moves in its own voice (apo110: "write some dialogues for the characters
 // on good and bad moves"), judged in points by the score network (stubbed here: each case's lead set by hand).
-// A blunder (15+ points) gets a blunder line with the points and the better point; a strong move (its first choice,
+// A blunder (15+ points) gets a blunder line with the points (not the better move); a strong move (its first choice,
 // not obvious, nothing lost) a "great" line; a small loss nothing.
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 (async()=>{const b=await chromium.launch({args:['--window-size=1400,900']});const p=await b.newPage({viewport:{width:1400,height:900}});let fails=0;
@@ -27,7 +27,7 @@ const pol2=new Array(362).fill(0.01);pol2[16*19+16]=0.3;
 t=await playAs(5,1,16,2,pol2);
 check(t==='','a 4-point loss: nothing said ('+t+')');
 t=await playAs(10,2,15,10,pol2);
-check(/about 8 points; better: R3/.test(t),'an 8-point loss: a mistake line, and the better point R3: '+t);
+check(/about 8 points\)$/.test(t)&&!/better/.test(t),'an 8-point loss: a mistake line with the points, not the better move: '+t);
 // the remark stays through the avatar's reply and goes with your next move
 await turn();const kept=await said();
 t=await playAs(5,4,14,14,pol2);
