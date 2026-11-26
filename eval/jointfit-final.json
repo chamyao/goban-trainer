@@ -1,182 +1,267 @@
 {
  "local:250": {
   "bench_kyu": 26.11,
-  "sd": 3.04,
-  "ogs_kyu": 35.02
+  "sd": 3.03,
+  "ogs_kyu": 35.0
  },
  "local:500": {
   "bench_kyu": 25.5,
-  "sd": 3.1,
+  "sd": 3.09,
   "ogs_kyu": 34.18
  },
  "local:1000": {
   "bench_kyu": 25.5,
-  "sd": 3.1,
+  "sd": 3.09,
   "ogs_kyu": 34.18
  },
  "local:1500": {
-  "bench_kyu": 14.97,
-  "sd": 0.76,
-  "ogs_kyu": 19.86
+  "bench_kyu": 14.98,
+  "sd": 0.75,
+  "ogs_kyu": 19.88
  },
  "local:2000": {
-  "bench_kyu": 15.39,
+  "bench_kyu": 15.4,
   "sd": 0.83,
-  "ogs_kyu": 20.43
+  "ogs_kyu": 20.45
  },
  "local:3000": {
-  "bench_kyu": 13.65,
+  "bench_kyu": 13.66,
   "sd": 0.58,
-  "ogs_kyu": 18.06
+  "ogs_kyu": 18.08
  },
  "local:4000": {
-  "bench_kyu": 11.49,
+  "bench_kyu": 11.5,
   "sd": 0.49,
-  "ogs_kyu": 15.12
+  "ogs_kyu": 15.14
  },
  "local:5000": {
   "bench_kyu": 12.04,
   "sd": 0.63,
-  "ogs_kyu": 15.87
+  "ogs_kyu": 15.88
  },
  "local:6000": {
-  "bench_kyu": 12.2,
+  "bench_kyu": 12.21,
   "sd": 0.67,
-  "ogs_kyu": 16.09
+  "ogs_kyu": 16.11
+ },
+ "kato:6000": {
+  "bench_kyu": 3.55,
+  "sd": 1.17,
+  "ogs_kyu": 4.32
  },
  "takemiya:6000": {
   "bench_kyu": 5.77,
-  "sd": 1.03,
+  "sd": 1.02,
   "ogs_kyu": 7.35
  },
  "kitani:6000": {
   "bench_kyu": 5.77,
-  "sd": 1.03,
+  "sd": 1.02,
   "ogs_kyu": 7.35
  },
- "otake:6000": {
-  "bench_kyu": 4.72,
-  "sd": 1.05,
-  "ogs_kyu": 5.92
- },
- "kato:6000": {
-  "bench_kyu": 3.55,
-  "sd": 1.19,
-  "ogs_kyu": 4.33
+ "pro-takemiya:6000": {
+  "bench_kyu": 2.73,
+  "sd": 0.94,
+  "ogs_kyu": 3.21
  },
  "chochikun:6000": {
   "bench_kyu": 5.25,
-  "sd": 1.03,
+  "sd": 1.02,
   "ogs_kyu": 6.64
  },
- "goseigen:6000": {
-  "bench_kyu": 4.17,
-  "sd": 1.1,
-  "ogs_kyu": 5.17
+ "pro-goseigen:6000": {
+  "bench_kyu": 3.37,
+  "sd": 0.87,
+  "ogs_kyu": 4.08
  },
  "sakata:6000": {
   "bench_kyu": 4.17,
-  "sd": 1.1,
+  "sd": 1.08,
   "ogs_kyu": 5.17
  },
+ "goseigen:6000": {
+  "bench_kyu": 4.17,
+  "sd": 1.08,
+  "ogs_kyu": 5.17
+ },
+ "otake:6000": {
+  "bench_kyu": 4.72,
+  "sd": 1.04,
+  "ogs_kyu": 5.92
+ },
  "local:7000": {
-  "bench_kyu": 11.66,
+  "bench_kyu": 11.68,
   "sd": 0.47,
-  "ogs_kyu": 15.36
+  "ogs_kyu": 15.38
  },
  "local:7500": {
-  "bench_kyu": 10.67,
+  "bench_kyu": 10.68,
   "sd": 0.62,
-  "ogs_kyu": 14.01
+  "ogs_kyu": 14.02
  },
  "local:8000": {
-  "bench_kyu": 10.34,
+  "bench_kyu": 10.35,
   "sd": 0.56,
   "ogs_kyu": 13.57
  },
  "local:8500": {
-  "bench_kyu": 12.18,
+  "bench_kyu": 12.19,
   "sd": 0.66,
-  "ogs_kyu": 16.07
+  "ogs_kyu": 16.08
  },
  "local:9000": {
-  "bench_kyu": 11.06,
+  "bench_kyu": 11.07,
   "sd": 0.62,
   "ogs_kyu": 14.55
  },
  "local:9500": {
-  "bench_kyu": 10.79,
+  "bench_kyu": 10.8,
   "sd": 0.57,
-  "ogs_kyu": 14.18
+  "ogs_kyu": 14.19
  },
  "local:10000": {
   "bench_kyu": 10.71,
   "sd": 0.44,
-  "ogs_kyu": 14.06
+  "ogs_kyu": 14.07
  },
  "goseigen:12000": {
   "bench_kyu": 5.77,
-  "sd": 1.03,
+  "sd": 1.02,
   "ogs_kyu": 7.35
  },
  "kitani:12000": {
   "bench_kyu": 3.55,
-  "sd": 1.19,
-  "ogs_kyu": 4.33
+  "sd": 1.17,
+  "ogs_kyu": 4.32
  },
  "chochikun:12000": {
   "bench_kyu": 4.72,
-  "sd": 1.05,
+  "sd": 1.04,
   "ogs_kyu": 5.92
  },
  "local:12500": {
-  "bench_kyu": 10.81,
+  "bench_kyu": 10.83,
   "sd": 0.45,
-  "ogs_kyu": 14.2
+  "ogs_kyu": 14.23
  },
  "ec2:17500": {
-  "bench_kyu": 9.68,
+  "bench_kyu": 9.72,
   "sd": 0.51,
-  "ogs_kyu": 12.66
+  "ogs_kyu": 12.72
+ },
+ "kato10k-b22500:22500": {
+  "bench_kyu": 7.76,
+  "sd": 0.81,
+  "ogs_kyu": 10.06
+ },
+ "goseigen10k-b22500:22500": {
+  "bench_kyu": 7.47,
+  "sd": 0.83,
+  "ogs_kyu": 9.66
+ },
+ "otake10k-b22500:22500": {
+  "bench_kyu": 7.47,
+  "sd": 0.83,
+  "ogs_kyu": 9.66
+ },
+ "kitani10k-b22500:22500": {
+  "bench_kyu": 7.16,
+  "sd": 0.86,
+  "ogs_kyu": 9.24
  },
  "gpu:22500": {
-  "bench_kyu": 9.13,
-  "sd": 0.51,
-  "ogs_kyu": 11.92
+  "bench_kyu": 9.07,
+  "sd": 0.46,
+  "ogs_kyu": 11.84
+ },
+ "chochikun10k-b22500:22500": {
+  "bench_kyu": 8.32,
+  "sd": 0.79,
+  "ogs_kyu": 10.81
+ },
+ "sakata10k-b22500:22500": {
+  "bench_kyu": 7.76,
+  "sd": 0.81,
+  "ogs_kyu": 10.06
+ },
+ "takemiya10k-b22500:22500": {
+  "bench_kyu": 7.76,
+  "sd": 0.81,
+  "ogs_kyu": 10.06
+ },
+ "chochikun10k-b35000:35000": {
+  "bench_kyu": 7.47,
+  "sd": 0.83,
+  "ogs_kyu": 9.66
+ },
+ "kato10k-b35000:35000": {
+  "bench_kyu": 7.16,
+  "sd": 0.86,
+  "ogs_kyu": 9.24
  },
  "gpu:35000": {
-  "bench_kyu": 7.84,
-  "sd": 0.55,
-  "ogs_kyu": 10.16
+  "bench_kyu": 8.09,
+  "sd": 0.48,
+  "ogs_kyu": 10.5
+ },
+ "sakata10k-b35000:35000": {
+  "bench_kyu": 7.16,
+  "sd": 0.86,
+  "ogs_kyu": 9.24
+ },
+ "otake10k-b35000:35000": {
+  "bench_kyu": 8.04,
+  "sd": 0.8,
+  "ogs_kyu": 10.44
+ },
+ "kitani10k-b35000:35000": {
+  "bench_kyu": 6.83,
+  "sd": 0.9,
+  "ogs_kyu": 8.78
+ },
+ "takemiya10k-b35000:35000": {
+  "bench_kyu": 5.5,
+  "sd": 1.14,
+  "ogs_kyu": 6.98
+ },
+ "goseigen10k-b35000:35000": {
+  "bench_kyu": 7.16,
+  "sd": 0.86,
+  "ogs_kyu": 9.24
  },
  "gpu:47500": {
-  "bench_kyu": 7.81,
-  "sd": 0.49,
-  "ogs_kyu": 10.12
+  "bench_kyu": 7.88,
+  "sd": 0.48,
+  "ogs_kyu": 10.21
  },
  "gpu:57500": {
-  "bench_kyu": 6.51,
-  "sd": 0.54,
-  "ogs_kyu": 8.36
+  "bench_kyu": 6.59,
+  "sd": 0.53,
+  "ogs_kyu": 8.47
+ },
+ "prostudent:60000": {
+  "bench_kyu": 1.99,
+  "sd": 1.04,
+  "ogs_kyu": 2.21
  },
  "gpu:70000": {
-  "bench_kyu": 6.63,
+  "bench_kyu": 6.72,
   "sd": 0.56,
-  "ogs_kyu": 8.52
+  "ogs_kyu": 8.64
  },
  "gpu:80000": {
-  "bench_kyu": 6.55,
+  "bench_kyu": 6.6,
   "sd": 0.47,
-  "ogs_kyu": 8.41
- },
- "run3:150000": {
-  "bench_kyu": 3.0,
-  "sd": 0.68,
-  "ogs_kyu": 3.58
+  "ogs_kyu": 8.48
  },
  "run2:150000": {
   "bench_kyu": 5.21,
-  "sd": 0.49,
+  "sd": 0.47,
   "ogs_kyu": 6.58
+ },
+ "run3:150000": {
+  "bench_kyu": 3.23,
+  "sd": 0.62,
+  "ogs_kyu": 3.9
  }
 }

@@ -18,7 +18,7 @@ gtp = lambda i: "pass" if i == N else f"{COLS[i % 19]}{19 - i // 19}"
 NETS = {}
 def net(path):
     if path not in NETS:
-        ck = torch.load(path, map_location="cpu"); n = train.Net(ck["cfg"]["blocks"], ck["cfg"]["ch"]); n.load_state_dict(ck["model"]); n.eval()
+        ck = torch.load(path, map_location="cpu", weights_only=False); n = train.Net(ck["cfg"]["blocks"], ck["cfg"]["ch"]); n.load_state_dict(ck["model"]); n.eval()
         NETS[path] = n
     return NETS[path]
 

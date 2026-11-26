@@ -15,6 +15,12 @@ import numpy as np
 from scipy.optimize import minimize
 
 def ck_id(path):
+    m = re.search(r"ps/student\.pt", path)
+    if m: return "prostudent:60000"
+    m = re.search(r"ps/([a-z]+)-(\d+)\.pt", path)
+    if m: return f"pro-{m.group(1)}:{int(m.group(2))}"
+    m = re.search(r"s10/([a-z]+)-b(\d+)\.pt", path)
+    if m: return f"{m.group(1)}10k-b{m.group(2)}:{int(m.group(2))}"
     m = re.search(r"st[23]/([a-z]+)-(\d+)\.pt", path)
     if m: return f"{m.group(1)}:{int(m.group(2))}"
     m = re.search(r"(run[23])-0*(\d+)\.pt", path)
@@ -32,7 +38,7 @@ for l in open("rejudge.jsonl.games.jsonl"):                   # re-tests and the
 if os.path.exists("anchor5.jsonl"):                            # fixed matches against "5k" (rank value 15)
     for l in open("anchor5.jsonl"):
         r = json.loads(l); ref.append((ck_id(r["ckpt"]), 20 - r["kyu"], r["winner"] == "bot"))
-for f in ["st2/h2h.jsonl", "st3/h2h.jsonl"]:
+for f in ["st2/h2h.jsonl", "st3/h2h.jsonl", "s10/h2h.jsonl", "ps/h2hA.jsonl", "ps/h2hB.jsonl"]:
     for l in open(f):
         r = json.loads(l); h2h.append((ck_id(r["a"]), ck_id(r["b"]), r["a_won"]))
 for l in open("selfplay.jsonl"):

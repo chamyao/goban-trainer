@@ -1,0 +1,16 @@
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": false, "lead_black": -5.7, "moves": 273}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -61.5, "moves": 226}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 133.1, "moves": 260}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -105.4, "moves": 240}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 25.2, "moves": 258}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -38.7, "moves": 227}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 49.1, "moves": 231}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -39.6, "moves": 262}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 74.5, "moves": 256}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -76.4, "moves": 277}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 102.0, "moves": 244}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -44.1, "moves": 256}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 47.2, "moves": 281}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -68.8, "moves": 256}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": true, "a_won": true, "lead_black": 44.2, "moves": 241}
+{"a": "dist-b22500.pt@128", "b": "gpu-0022500.pt@0", "a_black": false, "a_won": true, "lead_black": -33.6, "moves": 215}
