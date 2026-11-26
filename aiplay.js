@@ -107,15 +107,16 @@ const AI_COACH = {
     blunder: [["哈哈！送到我戟下来了！", "Ha! You walked right onto my halberd!"], ["这一手，够我杀个痛快！", "That move gives me a feast of a kill!"], ["下之前，先数数气！", "Count the liberties before you play!"], ["大将阵前，岂可儿戏？", "In front of the enemy's lines, no child's play!"]],
     same: [["哈！你也看中了这里？", "Ha! You had your eye on that point too?"], ["英雄所见略同！", "Great warriors think alike!"], ["我的方天画戟也要落在此处。", "My halberd would have struck right there."], ["这一手，我吕布也会这样下。", "That's exactly the move Lü Bu would make."]] },
   diaochan: {
-    great: [["呀，这一手妾身倒没想到。", "Oh, I hadn't foreseen that one."], ["好手。妾身的计，被你看穿了。", "A good move. You saw through my scheme."], ["这一子落得轻巧，却最要紧。", "A light stone, yet the one that matters most."], ["您比看上去聪明得多呢。", "You're far cleverer than you look."]],
+    great: [["这一手，倒有几分章法。", "That move has real method to it."], ["好手。妾身的计，被你看穿了。", "A good move. You saw through my scheme."], ["这一子落得轻巧，却最要紧。", "A light stone, yet the one that matters most."], ["您比看上去聪明得多呢。", "You're far cleverer than you look."]],
+    surprise: [["呀，这一手妾身倒没想到。", "Oh, I hadn't foreseen that one."], ["这一手……出乎妾身意料。", "That one… I didn't expect."], ["妾身竟没想到这里。", "I never even thought of that point."]],
     bad: [["您被妾身引过去了。", "You followed where I led you."], ["这一手，正中妾身下怀。", "That move falls right into my plan."], ["别只看眼前的子，看全盘。", "Don't look only at the stones in front of you; see the whole board."], ["慢些。先问问自己：我刚才想要什么？", "Slowly. First ask yourself: what did I just want?"]],
     blunder: [["连环计，就差您这一环了。", "My chain of stratagems needed just this one link from you."], ["哎呀，这块棋，妾身就收下了。", "Oh my, I'll be taking that group, then."], ["美人计都不用使，您自己就送来了。", "I didn't even need my charms; you came on your own."], ["下之前，看看哪块棋还没活。", "Before you play, check which group isn't alive yet."]],
     same: [["咦，您竟与妾身想到一处了。", "Oh, you thought of the very same point as I did."], ["这一手，妾身也正想下呢。", "I was about to play that one myself."], ["您学得真快，连妾身的心思都猜中了。", "You learn fast. You even guessed my thoughts."], ["心有灵犀，一点即通。", "Hearts in tune, minds that meet."]] },
   caocao: {
-    great: [["好！天下英雄，你也算一个。", "Good! You too are one of the heroes under heaven."], ["此着深得兵法。", "That move understands the art of war."], ["孤正欲取此处，竟被你先得。", "I wanted that point myself, and you took it first."], ["有此一手，可为孤之谋士。", "With moves like that, you could be my strategist."]],
+    great: [["好！天下英雄，你也算一个。", "Good! You too are one of the heroes under heaven."], ["此着深得兵法。", "That move understands the art of war."], ["胆识过人。", "Daring and insight both."], ["有此一手，可为孤之谋士。", "With moves like that, you could be my strategist."]],
     bad: [["兵贵神速，这一手却慢了。", "Speed is the soul of war; that move was slow."], ["舍大取小，非将才也。", "Taking the small and leaving the large: not a general's move."], ["先察敌意，再落子。", "Read the enemy's intent before you place a stone."], ["此处不急，急处在别处。", "Nothing is urgent here; the urgent point is elsewhere."]],
     blunder: [["宁教我负天下人……这块棋，孤收下了。", "Better I wrong the world… I'll take this group."], ["赤壁之火，也不过如此。", "Even the fire at Red Cliffs was no worse."], ["一着失算，满盘皆输——记住了。", "One miscalculation loses the whole board. Remember it."], ["你的棋，气数已尽。", "Your stones have run out of breath."]],
-    same: [["正合孤意！", "Exactly what I had in mind!"], ["孤若执你之子，亦落此处。", "Had I held your stones, I'd have played there too."], ["英雄所见，果然相同。", "Heroes do see alike."], ["此手与孤不谋而合。", "That move matches my own plan."]] },
+    same: [["正合孤意！", "Exactly what I had in mind!"], ["孤若执你之子，亦落此处。", "Had I held your stones, I'd have played there too."], ["英雄所见，果然相同。", "Heroes do see alike."], ["此手与孤不谋而合。", "That move matches my own plan."], ["孤正欲取此处，竟被你先得。", "I wanted that point myself, and you took it first."]] },
   lisu: {
     great: [["这一手，有理有据，在下佩服。", "That move stands on reason. I'm impressed."], ["连我都被说服了。", "Even I'm persuaded."], ["好棋，比我的说辞还动听。", "A fine move, better than my best speech."], ["一语中的。", "Straight to the point."]],
     bad: [["这一手，说不通啊。", "That move doesn't make its case."], ["在下劝你：先补自己的弱处。", "A word of advice: shore up your weak point first."], ["想清楚对方要什么，再开口——下棋也一样。", "Know what the other side wants before you speak. At the board too."], ["多走一步无用之棋，等于白送一城。", "A wasted move is a city given away."]],
@@ -143,14 +144,33 @@ const AICoach = {
   // where the avatar would have played your move (apo110: "the choice they would have chosen as my move is shown as a
   // orange dot", "and then a dialogue if I played what they would have played"): its own network's first choice in
   // your position, drawn after your move until your next one
-  pick: null, dot: null,
+  pick: null, dot: null, lion: null,
+  // Lionffen's search of your position (apo110: "we can have lionfenn running in the background since its strong"):
+  // is a move decent? Among its three most-searched moves, or within 3 points of win rate of its best (relative, so
+  // the handicap doesn't flatten it)
+  scout(g) {
+    if (typeof Engine === "undefined") return null;
+    const grid = g.replay().grid, sz = g.S.size, seq = g.S.seq, hist = [];
+    g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
+    const board = gridToBoardState(grid).slice(0, sz).map(row => row.slice(0, sz));
+    return Engine.analyze({ board, currentPlayer: g.toMove() === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
+      visits: 60, maxTimeMs: 6000, ownershipMode: "none", topK: 8, analysisPvLen: 1, reuseTree: false }, { background: true })
+      .then(a => ({ seq, moves: a.moves || [] })).catch(() => null);
+  },
+  decent(lion, g, c, r) {
+    if (!lion || !lion.moves.length) return null;   // (no read: unknown)
+    const mine = w => g.myColor === BLACK ? w : 1 - w, i = lion.moves.findIndex(m => m.x === c && m.y === r);
+    if (i < 0) return false;
+    return i < 3 || mine(lion.moves[0].winRate) - mine(lion.moves[i].winRate) < 0.03;
+  },
   choose(g) {
     const who = g.S.foe && g.S.foe.who; if (!who || !AI_PRO[who]) return null;
     const grid = g.replay().grid, sz = g.S.size, seq = g.S.seq;
     return OwnPlay.analyze(g, grid, g.myColor, aiProUrl(who, g.S.tier)).then(a => {
-      let best = -1, bp = -1;
-      for (let i = 0; i < sz * sz; i++) if (a.policy[i] > bp && g.legal(i % sz, Math.floor(i / sz))) { bp = a.policy[i]; best = i; }
-      return { seq, idx: best };
+      const top = [];
+      for (let i = 0; i < sz * sz; i++) if (a.policy[i] >= 0 && g.legal(i % sz, Math.floor(i / sz))) top.push(i);
+      top.sort((x, y) => a.policy[y] - a.policy[x]);
+      return { seq, idx: top.length ? top[0] : -1, top3: top.slice(0, 3) };
     }).catch(() => null);
   },
   // the score network's look at the game as it stands: your lead (points) and its move weights; null if it can't
@@ -165,7 +185,7 @@ const AICoach = {
   // your turn has come: read the position you're about to play in
   yourTurn(g) {
     if (!(g.S.foe && AI_COACH[g.S.foe.who] && g.S.phase === "play")) return;
-    this.before = this.look(g); this.pick = this.choose(g);
+    this.before = this.look(g); this.pick = this.choose(g); this.lion = this.scout(g);
   },
   // you played (c, r) at seq: read what's left, and say something if it's worth saying
   async youPlayed(g, c, r) {
@@ -173,15 +193,21 @@ const AICoach = {
     if (!who || !AI_COACH[who] || c < 0) return;
     const pick = await this.pick, sz0 = g.S.size;
     const same = !!pick && pick.seq === seq0 && pick.idx === r * sz0 + c;
+    const unforeseen = !!pick && pick.seq === seq0 && !pick.top3.includes(r * sz0 + c);   // (not among its own three first choices)
     if (pick && pick.seq === seq0 && pick.idx >= 0 && AIPlay.game === g) { this.dot = { at, idx: pick.idx, same }; AIPlay.emit(); }
+    const lion = await this.lion, lionOk = lion && lion.seq === seq0 ? this.decent(lion, g, c, r) : null;
     const before = await this.before;
-    if (!before) { if (same) this.remark(g, who, "same"); return; }
+    if (!before) { if (same) this.remark(g, who, "same"); else if (unforeseen && lionOk && AI_COACH[who].surprise) this.remark(g, who, "surprise"); return; }
     const after = await this.look(g);
     if (!after || AIPlay.game !== g || after.seq !== before.seq + 1) return;   // (an Undo, or another game, meanwhile)
     const lost = before.lead - after.lead, sz = g.S.size, pol = before.policy || [];
     let top = -1, topP = 0;
     for (let i = 0; i < sz * sz; i++) if (pol[i] > topP) { topP = pol[i]; top = i; }
-    const kind = lost >= this.BLUNDER ? "blunder" : lost >= this.MISTAKE ? "bad" : same ? "same" : top === r * sz + c && topP < 0.5 && lost < 1 ? "great" : null;
+    // "I hadn't foreseen that" (apo110: "only ... if it was actually true. meaning its a decent move according to a
+    // stronger net but not in her top 3 choices"): Lionffen finds it decent (the score network's points, if Lionffen
+    // couldn't read it), and the avatar didn't have it among its three
+    const kind = lost >= this.BLUNDER ? "blunder" : lost >= this.MISTAKE ? "bad" : same ? "same"
+      : unforeseen && (lionOk ?? lost < 1.5) && lost < this.MISTAKE && AI_COACH[who].surprise ? "surprise" : top === r * sz + c && topP < 0.5 && lost < 1 ? "great" : null;
     this.remark(g, who, kind);
   },
   remark(g, who, kind) {
