@@ -1,0 +1,8 @@
+# Thu Nov 26 17:52:10 UTC 2026 on 64ef39698f8f
+labelled 2999898 of 3000000 in 2192 s
+saved plabels
+[17:00:02] labelling
+[17:37:42] 98621 games, 305 held out 100015 sent, 98086 labelled, 913/s 200019 sent, 198040 labelled, 923/s 300008 sent, 298020 labelled, 1045/s 400027 sent, 398080 labelled, 1118/s 500015 sent, 498039 labelled, 1167/s 600017 sent, 598084 labelled, 1201/s 700002 sent, 698020 labelled, 1228/s 800011 sent, 798066 labelled, 1248/s 900015 sent, 898070 labelled, 1265/s 1000016 sent, 998031 labelled, 1279/s 1100007 sent, 1098010 labelled, 1290/s 1200011 sent, 1198057 labelled, 1300/s 1300007 sent, 1298013 labelled, 1308/s 1400009 sent, 1398012 labelled, 1315/s 1500025 sent, 1498038 labelled, 1321/s 1600003 sent, 1598012 labelled, 1327/s 1700004 sent, 1698029 labelled, 1332/s 1800027 sent, 1798067 labelled, 1336/s 1900007 sent, 1898051 labelled, 1341/s 2000027 sent, 1998073 labelled, 1344/s 2100005 sent, 2098034 labelled, 1348/s 2200000 sent, 2198070 labelled, 1350/s 2300022 sent, 2298076 labelled, 1353/s 2400016 sent, 2398015 labelled, 1356/s 2500010 sent, 2498078 labelled, 1358/s 2600030 sent, 2598056 labelled, 1361/s 2700010 sent, 2698019 labelled, 1363/s 2800024 sent, 2798037 labelled, 1365/s 2900010 sent, 2898040 labelled, 1367/s labelled 2999898 of 3000000 in 2192 s 
+[17:37:42] distilling into 8x96
+step 14000 soft-CE 2.106 value 0.191 agrees with teacher 0.555 pro's move 0.458 lr 0.0087 4385 pos/s
+# exit 0
