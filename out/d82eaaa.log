@@ -1,0 +1,10 @@
+# Thu Nov 26 18:38:28 UTC 2026 on 64ef39698f8f
+VAL {'step': 50000, 'val_softce': np.float64(2.012406128644943), 'val_value': np.float64(0.1536345850676298), 'val_agree_teacher': np.float64(0.5785500288009644), 'val_pro_move': np.float64(0.4693000212311745), 'time': 1795717636.
+VAL {'step': 60000, 'val_softce': np.float64(2.0058619141578675), 'val_value': np.float64(0.15095905289053918), 'val_agree_teacher': np.float64(0.5793500274419785), 'val_pro_move': np.float64(0.47075002193450927), 'time': 17957182
+step 60000 soft-CE 2.005 value 0.144 agrees with teacher 0.592 pro's move 0.477 lr 0.0000 4349 pos/s
+[18:37:08] student: VAL {'step': 60000, 'val_softce': np.float64(2.0058619141578675), 'val_value': np.float64(0.15095905289053918), 'val_agree_teacher
+Takemiya Masaki games 1844 train 172448 val 19277
+[18:37:41] fine-tune takemiya
+takemiya: VAL {'step': 1000, 'positions': 256000, 'val_acc': 0.48638273590288944, 'val_pol': 1.872022394978877, 'val_v': 0.972772526136231, 'time': 1795718299.0
+goseigen: 
+# exit 0
