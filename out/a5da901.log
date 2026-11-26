@@ -1,0 +1,4 @@
+# Thu Nov 26 17:55:45 UTC 2026 on 64ef39698f8f
+run 3 before distillation, 20000 held-out positions: agrees with teacher 52.8%, pro's move 47.7%, soft-CE 2.240
+VAL {'step': 10000, 'val_softce': np.float64(2.1146181344985964), 'val_value': np.float64(0.23830163329839707), 'val_agree_teacher': np.float64(0.5463000297546386), 'val_pro_move': np.float64(0.4590000197291374), 'time': 1795715282.41916}
+# exit 0
