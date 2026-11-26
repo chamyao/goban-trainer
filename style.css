@@ -247,7 +247,8 @@ aside { width: 300px; display: flex; flex-direction: column; gap: 14px; }
   border-radius: 9px; padding: 6px 12px; cursor: pointer; min-width: 42px;
 }
 .rv-nav button:hover { background: #f1ede1; }
-.rv-nav .pos { color: var(--muted); font-size: 13.5px; margin-left: auto; white-space: nowrap; }
+.rv-nav { flex-wrap: wrap; }
+.rv-nav .pos { color: var(--ink); font-size: 15px; font-weight: 600; flex-basis: 100%; margin-top: 2px; line-height: 1.35; }   /* the position line on its own row, full ink (apo110: "this line in review is too hard to see") */
 
 .mt-toggle {
   font-size: 11.5px; text-transform: uppercase; letter-spacing: .8px;
