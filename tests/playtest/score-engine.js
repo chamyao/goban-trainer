@@ -32,7 +32,7 @@ await p.goto(URL+'#/play');await p.waitForTimeout(1200);await p.evaluate(()=>{co
 await p.locator('.ai-foe',{hasText:'Li Su'}).click();await p.locator('.ai-lobby button.primary').click();await p.waitForTimeout(500);
 const m=await p.evaluate(async()=>{ScoreEngine.analyze=async()=>({ownership:new Array(361).fill(0.9),rootScoreLead:30});   // (Black owns all)
   for(let i=0;i<60&&(AIPlay.thinking||!AIPlay.game.myTurn);i++) await new Promise(r=>setTimeout(r,250));
-  AIPlay.change(S=>{S.moves=[[3,3],[15,15]];});AIPlay.maybeAI=()=>{};AIPlay.play(-1,-1);AIPlay.play(-1,-1);
+  AIPlay.change(S=>{S.setup=null;S.komi=7.5;S.moves=[[3,3],[15,15]];});AIPlay.maybeAI=()=>{};AIPlay.play(-1,-1);AIPlay.play(-1,-1);   // (no handicap: Black first, Black at D16, White at Q4)
   for(let i=0;i<40&&!(AIPlay.game.S.removed||[]).length;i++) await new Promise(r=>setTimeout(r,100));
   return {phase:AIPlay.game.S.phase,removed:AIPlay.game.S.removed,status:AIPlay.status};});
 check(m.phase==='stone removal'&&m.removed.join()===String(15*19+15),'after two passes the white stone on Black\'s ground is marked dead: '+JSON.stringify(m));

@@ -232,7 +232,7 @@ const Avatars = (() => {
     if (f.hidden) { f.hidden = false; const l = f.querySelector(".avatar-lead"); l.style.animation = "none"; void l.offsetWidth; l.style.animation = ""; }
     // a new board (the next problem, another page): the last word goes (the user: "completion dialogue shouldn't persist to
     // the next problem"); a page's own line (Turning points' prompt) is said right after
-    if (row && row !== lastRow) {
+    if (row && row !== lastRow && !(foeShown() && location.hash === lastHash)) {   // (a game against an avatar redraws on every move: its remark on your move stays)
       const b = f.querySelector(".avatar-dlg"); b.hidden = true; b.querySelector(".avatar-say").textContent = "";
       const t = window.__trainer;
       if (t && t.alive !== false && t.goban && row.contains(t.goban.svg) && typeof t.turnColor === "function") say(intro(t.turnColor()));
