@@ -1641,6 +1641,9 @@ const Review = {
     this.sgfText = text;
     this.analyses = new Array(this.game.n + 1);
     this.losses = new Array(this.game.n);   // win rate (percentage points) lost by move k, from a search of the position before it
+    this.scores = new Array(this.game.n + 1);   // Black's lead (points) at position k, the score network's look (analyzeScores)
+    this.ptLoss = new Array(this.game.n);       // points the mover gave up with move k
+    this.scoreRun = (this.scoreRun || 0) + 1;
     this.analyzing = false;
     this.runId++;
     this.ownership = null;
@@ -1722,6 +1725,7 @@ const Review = {
       path: this.nodePath(this.node),
       analyses: this.analyses,
       losses: this.losses, lossUnit: "wr",
+      scores: (this.scores || []).map(x => x == null ? null : Math.round(x * 10) / 10), scoreNet: "b15c192",
       showHints: this.showHints,
       movesOpen: this.movesOpen,
     };
@@ -1788,6 +1792,7 @@ const Review = {
       }
       if (Array.isArray(raw.analyses)) this.analyses = raw.analyses.map(a => a && a.v === 2 ? a : null);   // unsearched ones: again
       if (Array.isArray(raw.losses) && raw.lossUnit === "wr") this.losses = raw.losses;   // (points, from the old network: judged again)
+      if (Array.isArray(raw.scores) && raw.scoreNet === "b15c192" && raw.scores.length === this.game.n + 1) { this.scores = raw.scores; this.fillPtLoss(); }
       if (typeof raw.showHints === "boolean") this.showHints = raw.showHints;
       if (typeof raw.movesOpen === "boolean") this.movesOpen = raw.movesOpen;
       this.node = (raw.path && this.nodeAtPath(raw.path)) || this.mainNodes[0];
@@ -1978,8 +1983,59 @@ const Review = {
     if (j >= 0 && j < p.children.length) this.setNode(p.children[j]);
   },
 
+  // Win rate or points (the user: "just have it a toggle, so the user has the option, and still show one if the others
+  // not ready"): the chosen one (kept on this device), unless it has nothing yet or isn't done while the other is
+  get unitWanted() { try { return localStorage.getItem("gt-review-unit") === "pts" ? "pts" : "wr"; } catch { return "wr"; } },
+  setUnit(u) {
+    try { localStorage.setItem("gt-review-unit", u); } catch {}
+    if (u === "pts") this.analyzeScores();
+    this.renderChart(); this.renderMistakes(); this.renderProgress(); this.renderReadout(); this.renderUnit();
+  },
+  count(unit) { return unit === "pts" ? (this.scores || []).filter(x => x != null).length : this.analyses.filter(Boolean).length; },
+  shownUnit() {
+    const want = this.unitWanted, other = want === "pts" ? "wr" : "pts", all = this.game.n + 1;
+    if (!this.count(want) && this.count(other)) return other;
+    if (this.count(want) < all && this.count(other) === all) return other;
+    return want;
+  },
+  // points the mover gave up with move k: their lead before it less their lead after it (the score network's look at
+  // each position; it leans a little to the side to play, so small losses are left out)
+  fillPtLoss() {
+    for (let k = 0; k < this.game.n; k++) {
+      const a = this.scores[k], b = this.scores[k + 1], m = this.game.moves[k];
+      this.ptLoss[k] = a == null || b == null ? null : m.pass ? 0 : Math.max(0, (m.color === BLACK ? 1 : -1) * (a - b));
+    }
+  },
+  // the points pass: the score network (ScoreEngine, kata1-b15c192) looks once at every position of the game, in the
+  // background; started when Points is chosen
+  async analyzeScores() {
+    if (this.scoring || !this.game || typeof ScoreEngine === "undefined") return;
+    this.scoring = true; const run = this.scoreRun, g = this.game;
+    this.renderProgress();
+    try {
+      for (let k = 0; k <= g.n; k++) {
+        if (this.scoreRun !== run || !location.hash.startsWith("#/review")) break;
+        if (this.scores[k] != null) continue;
+        const hist = [];
+        for (let j = Math.max(0, k - 6); j < k; j++) { const q = g.moves[j]; if (!q.pass) hist.push({ x: q.c, y: q.r, player: q.color === BLACK ? "black" : "white" }); }
+        try {
+          const a = await ScoreEngine.analyze({ board: gridToBoardState(g.grids[k]), currentPlayer: this.toMoveAt(k) === BLACK ? "black" : "white", moveHistory: hist,
+            komi: g.meta.engineKomi, rules: "chinese", visits: 1, maxTimeMs: 8000, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false });
+          if (this.scoreRun !== run) break;
+          this.scores[k] = a.rootScoreLead;
+        } catch (e) { console.error(e); continue; }
+        this.fillPtLoss(); this.scheduleSave();
+        this.renderChart(); this.renderMistakes(); this.renderProgress(); this.renderReadout();
+      }
+    } finally { if (this.scoreRun === run) { this.scoring = false; this.renderProgress(); } }
+  },
   mistakes() {
     const out = [];
+    if (this.shownUnit() === "pts") {
+      for (let k = 0; k < this.game.n; k++) { const loss = this.ptLoss[k]; if (loss != null && loss >= 3) out.push({ k, loss }); }
+      out.sort((x, y) => y.loss - x.loss);
+      return out.slice(0, 6).sort((x, y) => x.k - y.k);
+    }
     for (let k = 0; k < this.game.n; k++) {
       const loss = this.losses[k];
       if (loss != null && loss >= 10) out.push({ k, loss });
@@ -2028,6 +2084,7 @@ const Review = {
   },
 
   async analyzeAll() {
+    if (this.unitWanted === "pts") this.analyzeScores();
     if (this.analyzing || !this.game) return;
     this.analyzing = true;
     const run = ++this.runId;
@@ -2124,6 +2181,7 @@ const Review = {
       evalTxt = `  ·  ${winText(a.rootWinRate ?? a.w)}`;
     }
     if (this.judged && this.judged.node === this.node) evalTxt += `  ·  ${ScoreEngine.text(this.judged.lead)}`;   // (Judge's score)
+    else if (this.node.main !== undefined && this.scores && this.scores[this.node.main] != null) evalTxt += `  ·  ${ScoreEngine.text(this.scores[this.node.main])}`;   // (the points pass's)
     const onMain = this.node.main !== undefined;
     const at = onMain
       ? (this.node.main > 0 ? `${this.node.main} · ${this.nodeLabel(this.node)}` : "start") + ` / ${this.game.n}`
@@ -2210,9 +2268,12 @@ const Review = {
     if (!this.els) return;
     const done = this.analyses.filter(Boolean).length;
     const judged = this.losses.filter(x => x != null).length;
-    this.els.progress.textContent = this.analyzing
+    const pts = this.count("pts");
+    this.els.progress.textContent = [this.analyzing
       ? (done < this.game.n + 1 ? `Analyzing… ${done}/${this.game.n + 1}` : `Judging moves… ${judged}/${this.game.n}`)
-      : done ? `Analyzed ${done}/${this.game.n + 1} positions` : "";
+      : done ? `Analyzed ${done}/${this.game.n + 1} positions` : "",
+      this.scoring ? `Points… ${pts}/${this.game.n + 1}${ScoreEngine.status === "ready" ? "" : " (loading the scoring network, 18 MB, the first time)"}` : ""].filter(Boolean).join(" · ");
+    this.renderUnit();
     this.els.btnAnalyze.disabled = this.analyzing;
   },
 
@@ -2220,13 +2281,31 @@ const Review = {
     return { W: 560, H: 150, L: 44, R: 10, T: 10, B: 22, M: 50 };   // Black's win rate, as -50..50 around even
   },
   chartV(a) { return (a.w - 0.5) * 100; },
+  // the chart's value at position k in the unit shown: Black's win rate (-50..50 around even) or Black's lead (points)
+  chartVal(k) {
+    if (this.shownUnit() === "pts") return this.scores && this.scores[k] != null ? this.scores[k] : null;
+    return this.analyses[k] ? this.chartV(this.analyses[k]) : null;
+  },
+  chartRange() {
+    if (this.shownUnit() !== "pts") return 50;
+    const m = Math.max(10, ...(this.scores || []).filter(x => x != null).map(Math.abs));
+    return Math.min(80, Math.ceil(m / 10) * 10);
+  },
+  // the toggle and its note ("Points: 40/251, showing win rate until they're ready")
+  renderUnit() {
+    if (!this.els || !this.els.unitWr) return;
+    const want = this.unitWanted, shown = this.game ? this.shownUnit() : want;
+    this.els.unitWr.classList.toggle("active", want === "wr"); this.els.unitPts.classList.toggle("active", want === "pts");
+    this.els.unitNote.textContent = !this.game || shown === want ? "" :
+      `${want === "pts" ? "Points" : "Win rate"} not ready yet (${this.count(want)}/${this.game.n + 1}): showing ${shown === "pts" ? "points" : "win rate"}.`;
+  },
   chartX(k, geo) { return geo.L + (geo.W - geo.L - geo.R) * (this.game.n ? k / this.game.n : 0); },
   chartY(s, geo) { return geo.T + (geo.H - geo.T - geo.B) * (1 - (s / geo.M + 1) / 2); },
   chartK(px, geo) { return Math.round((px - geo.L) / (geo.W - geo.L - geo.R) * this.game.n); },
 
   renderChart() {
     if (!this.els) return;
-    const svg = this.els.chart, geo = this.chartGeom();
+    const svg = this.els.chart, geo = { ...this.chartGeom(), M: this.chartRange() }, pts_ = this.shownUnit() === "pts";
     svg.setAttribute("viewBox", `0 0 ${geo.W} ${geo.H}`);
     svg.innerHTML = "";
     const el = (name, attrs) => {
@@ -2236,15 +2315,17 @@ const Review = {
       return e;
     };
     // y labels + move label
-    for (const [s, label] of [[geo.M, "B 100%"], [0, "50%"], [-geo.M, "W 100%"]])
+    for (const [s, label] of pts_ ? [[geo.M, `B+${geo.M}`], [0, "0"], [-geo.M, `W+${geo.M}`]] : [[geo.M, "B 100%"], [0, "50%"], [-geo.M, "W 100%"]])
       el("text", { x: geo.L - 6, y: this.chartY(s, geo) + 3.5, "text-anchor": "end",
                    "font-size": 10, fill: "#8a8578" }).textContent = label;
     el("text", { x: geo.L, y: geo.H - 6, "font-size": 10, fill: "#8a8578" }).textContent = "move";
 
     // two-tone advantage fields: white's field on top, black's area below the curve
     const pts = [];
-    for (let k = 0; k <= this.game.n; k++)
-      if (this.analyses[k]) pts.push([this.chartX(k, geo), this.chartY(this.chartV(this.analyses[k]), geo), k]);
+    for (let k = 0; k <= this.game.n; k++) {
+      const v = this.chartVal(k);
+      if (v != null) pts.push([this.chartX(k, geo), this.chartY(Math.max(-geo.M, Math.min(geo.M, v)), geo), k]);
+    }
     const yTop = geo.T, yBot = geo.H - geo.B;
     if (pts.length > 1) {
       const x0 = pts[0][0], x1 = pts[pts.length - 1][0];
@@ -2258,8 +2339,9 @@ const Review = {
                  stroke: "#8a8578", "stroke-width": 1, "stroke-dasharray": "4 3", opacity: 0.6 });
     // mistake markers
     for (const m of this.mistakes()) {
-      const a = this.analyses[m.k + 1];
-      el("circle", { cx: this.chartX(m.k + 1, geo), cy: this.chartY(this.chartV(a), geo), r: 4.5,
+      const v = this.chartVal(m.k + 1);
+      if (v == null) continue;
+      el("circle", { cx: this.chartX(m.k + 1, geo), cy: this.chartY(Math.max(-geo.M, Math.min(geo.M, v)), geo), r: 4.5,
                      fill: CHART_STATUS, stroke: "#fff", "stroke-width": 1.5 });
     }
     // current-move cursor (two-tone so it reads on both fields)
@@ -2283,13 +2365,13 @@ const Review = {
       for (const [line, op] of [[hoverDark, 0.3], [hover, 0.8]]) {
         line.setAttribute("x1", x); line.setAttribute("x2", x); line.setAttribute("opacity", op);
       }
-      const a = this.analyses[k];
+      const a = this.analyses[k], sc = this.scores && this.scores[k];
       const box = svg.getBoundingClientRect();
       tip.style.display = "block";
       tip.style.left = `${x * box.width / geo.W}px`;
       tip.style.top = `${geo.T * box.height / geo.H}px`;
       tip.textContent = `${k ? "move " + k + " · " + this.moveLabel(k - 1) : "start"}` +
-        (a ? ` — ${winText(a.w)}` : "");
+        (pts_ ? (sc != null ? ` — ${ScoreEngine.text(sc)}` : "") : (a ? ` — ${winText(a.w)}` : ""));
     });
     hit.addEventListener("mouseleave", () => {
       hover.setAttribute("opacity", 0); hoverDark.setAttribute("opacity", 0); tip.style.display = "none";
@@ -2307,7 +2389,8 @@ const Review = {
         h("span", { class: "dot" }),
         h("span", { class: "who" }, `Move ${m.k + 1} · ${who}`),
         h("span", {}, this.moveLabel(m.k)),
-        h("span", { class: "loss" + (m.loss < 20 ? " minor" : "") }, `−${Math.round(m.loss)}%`),
+        this.shownUnit() === "pts" ? h("span", { class: "loss" + (m.loss < 8 ? " minor" : "") }, `−${Math.round(m.loss)} pts`)
+          : h("span", { class: "loss" + (m.loss < 20 ? " minor" : "") }, `−${Math.round(m.loss)}%`),
       ]));
     }
     if (!box.children.length)
@@ -4222,6 +4305,8 @@ function mountReview(target, opts = {}) {
   const note = h("textarea", { class: "move-note", placeholder: "Note on this move…", rows: 3 });
   note.addEventListener("input", () => Review.onNoteInput(note.value));
   const btnAnalyze = h("button", { class: "primary", onclick: () => Review.analyzeAll() }, "Analyze game");
+  const unitWr = h("button", { onclick: () => Review.setUnit("wr") }, "Win rate"), unitPts = h("button", { onclick: () => Review.setUnit("pts") }, "Points");
+  const unitNote = h("div", { class: "chart-note" });
   const btnMain = h("button", { onclick: () => Review.setNode(Review.mainAncestor()) }, "Main line");
   const btnDelete = h("button", { onclick: () => Review.deleteBranch() }, "Delete branch");
   const btnHints = h("button", { onclick: () => {
@@ -4253,8 +4338,9 @@ function mountReview(target, opts = {}) {
       note,
     ]),
     h("div", { class: "panel" }, [
-      h("h2", {}, "Score"),
+      h("div", { class: "rv-score-head" }, [h("h2", {}, "Score"), h("div", { class: "seg rv-unit" }, [unitWr, unitPts])]),
       (() => { const w = h("div", { class: "chart-wrap" }); w.append(chart, tip); return w; })(),
+      unitNote,
     ]),
     h("div", { class: "panel" }, [
       h("h2", {}, "Biggest mistakes"),
@@ -4281,7 +4367,8 @@ function mountReview(target, opts = {}) {
   target.append(wrap);
 
   Review.els = { chart, tip, pos, progress, mistakes, moves: movesEl, movesToggle, note,
-                 btnAnalyze, btnMain, btnDelete, btnHints };
+                 btnAnalyze, btnMain, btnDelete, btnHints, unitWr, unitPts, unitNote };
+  if (Review.unitWanted === "pts" && Review.count("pts") < g.n + 1) Review.analyzeScores();   // (Points chosen: carry on with them)
   Review.goban = new Goban(svg, { c0: 0, c1: 18, r0: 0, r1: 18 }, (c, r) => Review.click(c, r));
   Review.renderBoard(); Review.renderReadout(); Review.renderChart();
   Review.renderMistakes(); Review.renderProgress(); Review.renderActions(); Review.renderVariations(); Review.renderNote();
