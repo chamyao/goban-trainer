@@ -95,8 +95,8 @@ const AIRank = {
 };
 
 // Teaching games (apo110: "these are meant to be teaching games, write some dialogues for the characters on good and bad
-// moves"): the opponent speaks up when you find a strong move or give points away, in their own voice, with the points
-// lost (not the better move: you find it yourself). Judged in points (apo110: "winrate is a bad measure here, since its handicap": with stones you're at
+// moves"): the opponent speaks up when you find a strong move or give points away, in their own voice (just the line:
+// not the better move or the points, which you find yourself). Judged in points (apo110: "winrate is a bad measure here, since its handicap": with stones you're at
 // 95-99% for most of the game), by the score network (ScoreEngine, kata1-b15c192) at one look, in the background:
 // the lead before your move against the lead after it. A mistake: 6 points or more; a blunder: 15 or more; a strong
 // move: the score network's own first choice where it wasn't obvious (under half its weight) and nothing was lost.
@@ -159,9 +159,8 @@ const AICoach = {
     const set = AI_COACH[who][kind]; let i = Math.floor(Math.random() * set.length);
     if (set.length > 1 && i === this.last[who + kind]) i = (i + 1) % set.length;
     this.last[who + kind] = i; this.since = 0;
-    const [zh, en] = set[i];
-    const note = kind === "great" ? "" : ` (about ${Math.round(lost)} points)`;   // (not where it should have gone: apo110, "dont have it give the best move after a bad one")
-    if (location.hash === `#/ai/${who}` && typeof Avatars !== "undefined" && Avatars.say((zh ? `${zh} ` : "") + en + note)) this.saidAt = g.S.moves.length;
+    const [zh, en] = set[i];   // (the line alone: not the better move nor the points, apo110: "dont have it give the best move after a bad one", "dont say the point count either")
+    if (location.hash === `#/ai/${who}` && typeof Avatars !== "undefined" && Avatars.say((zh ? `${zh} ` : "") + en)) this.saidAt = g.S.moves.length;
   },
   // a remark stays for the avatar's reply and goes with your next move (apo110: "make it so the dialogue just persists 1
   // or 2 moves")
