@@ -102,7 +102,7 @@ const Events = (() => {
     { id: "title-snow-spirit", rar: "R", ev: "winter", type: "title", name: "Snow Spirit", icon: "⛄", price: 20 },
     { id: "hat-santa", rar: "SR", ev: "winter", type: "hat", name: "Santa hat for Sun Wukong", price: 45 },
     { id: "skin-diaochan-winter", rar: "SSR", ev: "winter", type: "skin", who: "diaochan", file: "skins/diaochan-winter.webp", name: "Diaochan · Winter plum", price: 90 },
-    { id: "skin-ahn-winter", rar: "SR", ev: "winter", type: "skin", who: "ms_ahn", file: "skins/ahn-winter.webp", v: 2, name: "Ahn Young-yi · Winter coat", price: 70 },
+    { id: "skin-ahn-winter", rar: "SR", ev: "winter", type: "skin", who: "ms_ahn", file: "skins/ahn-winter.webp", v: 3, name: "Ahn Young-yi · Christmas elf", price: 70 },
     { id: "hat-bobble", rar: "SR", ev: "winter", type: "hat", name: "Bobble hat for Sun Wukong", price: 0, gift: true, slot: 5 },
     { id: "board-pine", rar: "SSR", ev: "winter", type: "board", name: "Pine board", price: 0, gift: true, slot: 10,
       board: { id: "pine", name: "Pine", wood: ["#d9a55e", "#cc9852", "#bf8b46"], tex: "assets/boards/pine.webp", line: "#2a1a08", label: "#fff1d6", stone: "rgba(0,0,0,.45)" } },
