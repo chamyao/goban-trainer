@@ -51,7 +51,9 @@ check(await p.evaluate(()=>Events.equipped('hat')&&Events.equipped('hat').id==='
 await p.evaluate(()=>{Sync.username=null;localStorage.removeItem('gt-username');});
 // a skin (the user: skins for the major avatars; "price the new stuff to make it more challenging"): priced high, worn for
 // its own character only, the figure by the board and the Events host in it
-check(await p.evaluate(()=>Events.ITEMS.filter(it=>it.type==='skin').reduce((a,it)=>a+it.price,0))===220,'the three skins cost 220 in all');
+check(await p.evaluate(()=>Events.ITEMS.filter(it=>it.type==='skin'&&it.ev==='halloween').reduce((a,it)=>a+it.price,0))===220,'Halloween\'s three skins cost 220 in all');
+const ws=await p.evaluate(()=>Events.ITEMS.filter(it=>it.ev==='winter').map(it=>it.id+(it.gift?(it.slot?'@day'+it.slot:'@goals'):':'+it.price)).join(' '));
+check(/skin-diaochan-winter:90/.test(ws)&&/skin-ahn-winter:70/.test(ws)&&/hat-bobble@day5/.test(ws)&&/board-pine@day10/.test(ws)&&/@goals/.test(ws),'Winter\'s shop: Diaochan and Ahn Young-yi skins, prizes on days 5 and 10 and for the goals ('+ws+')');
 await p.evaluate(()=>{const q=loadProgress();q.ev.earn.halloween.gift2=200;q.av={own:{diaochan:1,caocao:1},pick:'diaochan'};TK.saveProg(q);});
 check(await p.evaluate(()=>Events.buy('skin-diaochan-fox')&&Events.buy('skin-caocao-armor')),'two skins bought');
 check(await p.evaluate(()=>Events.isOn(Events.ITEMS.find(x=>x.id==='skin-diaochan-fox'))&&Events.isOn(Events.ITEMS.find(x=>x.id==='skin-caocao-armor'))),'each worn for its own character, both at once');

@@ -13,6 +13,7 @@ const WK = (() => {
     p: "#f08a78", c: "#e8604c", L: "#d9461a", s: "#c8351a", h: "#f3d2a2",
     v: "#6b3fa0", V: "#472870", O: "#ff8a1f",   // (the witch hat)
     B: "#33302d", X: "#1d1b19", m: "#d8c27a", a: "#9a6430", A: "#6e421c",   // (the Harvest hats: pilgrim, acorn cap)
+    R: "#d0202a", D: "#9e1820", u: "#d9dde3", q: "#2e8b57", Q: "#1f6b41",   // (the Winter hats: Santa, bobble)
   };
   const HEAD = [
     "...............gg.....",
@@ -93,6 +94,33 @@ const WK = (() => {
       "...kkaAaAaAaAaAaAkk...",
       "..kaAaAaAaAaAaAaAaAk..",
       "..kAaAaAaAaAaAaAaAak..",
+      "...kkkkkkkkkkkkkkkk...",
+    ],
+    "hat-santa": [
+      "..................kkk.",
+      ".................kwwwk",
+      "..........kkkk...kwuwk",
+      "........kkRRRRkk.kkwk.",
+      ".......kRRRRRRRRkRkk..",
+      "......kRRRRRRRRRRRk...",
+      ".....kRRRRRRRRRRDDk...",
+      "....kRRRRRRRRRRRDDk...",
+      "..kkwwwwwwwwwwwwwwwkk.",
+      ".kwwuwwwuwwwuwwwuwwwk.",
+      "..kkkkkkkkkkkkkkkkkk..",
+    ],
+    "hat-bobble": [
+      "..........kk..........",
+      ".........kwwk.........",
+      "........kwuwwk........",
+      ".........kwwk.........",
+      "......kkkkkkkkkk......",
+      "....kkqqqqqqqqqqkk....",
+      "...kqqqqqqqqqqqqqqk...",
+      "...kwwwwwwwwwwwwwwk...",
+      "..kqQqQqQqQqQqQqQqQk..",
+      "..kwwwwwwwwwwwwwwwwk..",
+      "..kQqQqQqQqQqQqQqQqk..",
       "...kkkkkkkkkkkkkkkk...",
     ],
   };

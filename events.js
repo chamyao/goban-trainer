@@ -57,12 +57,12 @@ const Events = (() => {
     { id: "harvest", name: "Harvest", native: "感恩节", kind: "west", icon: "🌰", cur: ["acorn", "acorns"],
       blurb: "Thanksgiving.", when: y => around(thanksgiving(y), 10, 4) },
     { id: "winter", name: "Winter", native: "冬", kind: "west", icon: "❄️", cur: ["snowflake", "snowflakes"],
-      blurb: "", when: y => [D(y, 12, 1), D(y + 1, 1, 5)] },
+      blurb: "Christmas and the New Year.", when: y => [D(y, 12, 1), D(y + 1, 1, 5)] },
   ];
   for (const e of LIST) e.ci = e.ci || e.icon;   // (the currency's icon: the event's, unless it has its own)
   const KINDS = { west: "Holiday", china: "Chinese festival", go: "Go event" };
   // the seasons with a look of their own (theme-seasonal.css: body.season-<id>); the others show Classic until painted
-  const RESKINS = ["halloween", "harvest"];
+  const RESKINS = ["halloween", "harvest", "winter"];
 
   // the shops: looks only. board: a board look (BoardTheme), title: by the player's name, hat: on Sun Wukong
   const ITEMS = [
@@ -95,6 +95,18 @@ const Events = (() => {
     { id: "board-hearth", rar: "SSR", ev: "harvest", type: "board", name: "Hearth board", price: 0, gift: true, slot: 10,
       board: { id: "hearth", name: "Hearth", wood: ["#9a5a2c", "#8c4f25", "#7e451f"], tex: "assets/boards/hearth.webp", line: "#1e0f06", label: "#f3dcc0", stone: "rgba(0,0,0,.45)" } },
     { id: "title-thankful", rar: "SR", ev: "harvest", type: "title", name: "Thankful", icon: "🦃", price: 0, gift: true, goals: true },
+    // Winter (apo110: "have the christmas/ winter event ready for tomorrow? I want diaochan and young gi to be included
+    // in the skins shop"): art by the Graphics session (caadaab), priced like Harvest's
+    { id: "board-frost", rar: "SR", ev: "winter", type: "board", name: "Frost board", price: 40,
+      board: { id: "frost", name: "Frost", wood: ["#d9d4c8", "#cdc7ba", "#c0b9ab"], tex: "assets/boards/frost.webp", line: "#1f2a36", label: "#24364a", stone: "rgba(0,0,0,.45)" } },
+    { id: "title-snow-spirit", rar: "R", ev: "winter", type: "title", name: "Snow Spirit", icon: "⛄", price: 20 },
+    { id: "hat-santa", rar: "SR", ev: "winter", type: "hat", name: "Santa hat for Sun Wukong", price: 45 },
+    { id: "skin-diaochan-winter", rar: "SSR", ev: "winter", type: "skin", who: "diaochan", file: "skins/diaochan-winter.webp", name: "Diaochan · Winter plum", price: 90 },
+    { id: "skin-ahn-winter", rar: "SR", ev: "winter", type: "skin", who: "ms_ahn", file: "skins/ahn-winter.webp", name: "Ahn Young-yi · Winter coat", price: 70 },
+    { id: "hat-bobble", rar: "SR", ev: "winter", type: "hat", name: "Bobble hat for Sun Wukong", price: 0, gift: true, slot: 5 },
+    { id: "board-pine", rar: "SSR", ev: "winter", type: "board", name: "Pine board", price: 0, gift: true, slot: 10,
+      board: { id: "pine", name: "Pine", wood: ["#d9a55e", "#cc9852", "#bf8b46"], tex: "assets/boards/pine.webp", line: "#2a1a08", label: "#fff1d6", stone: "rgba(0,0,0,.45)" } },
+    { id: "title-merry-bright", rar: "SR", ev: "winter", type: "title", name: "Merry & Bright", icon: "🎄", price: 0, gift: true, goals: true },
   ];
   // what an item is worn in: one of each type, but a skin per character
   const slot = it => it.type === "skin" ? `skin:${it.who}` : it.type;
