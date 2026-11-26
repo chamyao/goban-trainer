@@ -46,9 +46,11 @@ SKINS = {   # skin: (source portrait, the new outfit)
     "diaochan-winter": ("diaochan", "Dress her for a festive winter: a rich crimson hanfu with soft white fur trim at the "
                         "collar and cuffs, a white fur-lined cape over her shoulders, a red plum-blossom hairpin in her hair, "
                         "and a few small snowflakes drifting around her."),
-    "ahn-winter": ("ms_ahn", "Dress her for a snowy Christmas evening in place of the office suit: a long ivory wool "
-                   "coat, a chunky red knit scarf wrapped around her neck, red knit gloves, and a small gift box wrapped in "
-                   "green paper with a red ribbon held in her hand. Keep her small gold earrings and necklace."),
+    "ahn-winter": ("ms_ahn", "Dress her as a Christmas elf in place of the office suit: a green elf tunic-dress with "
+                   "red and white fur trim at the collar, cuffs and hem, a wide black belt with a gold buckle, and a "
+                   "pointed green-and-red elf hat with white trim and a little gold bell on its tip. Her hands hold nothing "
+                   "and stay exactly where they are in the original, resting naturally against her body, arms relaxed at "
+                   "her sides. Keep her small gold earrings and necklace."),
     "jang-autumn": ("ms_jang", "Dress him in a cosy autumn outfit in place of the office clothes: a chunky oatmeal "
                     "cable-knit cardigan over a rust-orange crew-neck sweater, and a dark green and brown plaid scarf "
                     "loosely around his neck."),
