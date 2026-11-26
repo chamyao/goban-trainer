@@ -43,6 +43,12 @@ SKINS = {   # skin: (source portrait, the new outfit)
     "liubei-harvest": ("liubei", "Dress him as a farmer bringing in the harvest: a homespun undyed hemp tunic with "
                        "rolled sleeves and a rope belt, a wide woven straw hat in place of any headwear, and a bundle of "
                        "golden wheat sheaves over one shoulder."),
+    "diaochan-winter": ("diaochan", "Dress her for a festive winter: a rich crimson hanfu with soft white fur trim at the "
+                        "collar and cuffs, a white fur-lined cape over her shoulders, a red plum-blossom hairpin in her hair, "
+                        "and a few small snowflakes drifting around her."),
+    "ahn-winter": ("ms_ahn", "Dress her for a snowy Christmas evening in place of the office suit: a long ivory wool "
+                   "coat, a chunky red knit scarf wrapped around her neck, red knit gloves, and a small gift box wrapped in "
+                   "green paper with a red ribbon held in her hand. Keep her small gold earrings and necklace."),
     "jang-autumn": ("ms_jang", "Dress him in a cosy autumn outfit in place of the office clothes: a chunky oatmeal "
                     "cable-knit cardigan over a rust-orange crew-neck sweater, and a dark green and brown plaid scarf "
                     "loosely around his neck."),

@@ -1,0 +1,123 @@
+{
+ "wall": {
+  "file": "wall.webp",
+  "size": [
+   1024,
+   1024
+  ]
+ },
+ "parchment": {
+  "file": "parchment.webp",
+  "size": [
+   512,
+   512
+  ]
+ },
+ "header-beam": {
+  "file": "header-beam.webp",
+  "size": [
+   744,
+   160
+  ]
+ },
+ "board-frame": {
+  "file": "board-frame.png",
+  "size": [
+   512,
+   512
+  ],
+  "slice": 115
+ },
+ "panel-frame": {
+  "file": "panel-frame.png",
+  "size": [
+   256,
+   256
+  ],
+  "slice": 37
+ },
+ "btn-ornament": {
+  "file": "btn-ornament.png",
+  "size": [
+   181,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-ornament-hover": {
+  "file": "btn-ornament-hover.png",
+  "size": [
+   181,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-ornament-pressed": {
+  "file": "btn-ornament-pressed.png",
+  "size": [
+   181,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-frost": {
+  "file": "btn-frost.png",
+  "size": [
+   197,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-frost-hover": {
+  "file": "btn-frost-hover.png",
+  "size": [
+   197,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "btn-frost-pressed": {
+  "file": "btn-frost-pressed.png",
+  "size": [
+   197,
+   64
+  ],
+  "slice": [
+   0,
+   48
+  ]
+ },
+ "ribbon": {
+  "file": "ribbon.png",
+  "size": [
+   305,
+   72
+  ],
+  "slice": [
+   0,
+   72
+  ]
+ },
+ "snowflake": {
+  "file": "snowflake.png",
+  "size": [
+   84,
+   96
+  ]
+ }
+}

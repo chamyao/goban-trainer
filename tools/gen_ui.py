@@ -161,13 +161,55 @@ BD_PAINT = {   # the event boards' surfaces (Events ITEMS board.tex): drawn unde
     "maple": ("1:1", "The playing surface of a harvest go board: warm medium amber-honey maple wood with soft, flowing "
                      "golden grain, a gentle late-afternoon glow, a few faint red-orange maple leaves drifting in the far "
                      "corners. " + BD_LOOK),
+    "frost": ("1:1", "The playing surface of a winter go board: pale silver-birch wood in a medium cool grey-blue tone "
+                     "with clearly visible long flowing natural wood grain running across it, a soft frosty sheen, the "
+                     "faintest frost crystals only in the corners. " + BD_LOOK),
+    "pine": ("1:1", "The playing surface of a Christmas go board: warm medium honey-gold pine wood with clearly visible "
+                    "long flowing natural wood grain and a few soft knots, a soft warm candlelit glow, the faintest "
+                    "sprigs of holly only in the corners. " + BD_LOOK),
     "hearth": ("1:1", "The playing surface of a hearthside go board: medium russet-copper burnished wood, softly lit as "
                       "by a fireplace, a warm glow from one corner, faint wheat-stalk and acorn motifs etched very lightly "
                       "in the corners. " + BD_LOOK),
 }
 
 
-BD_SOFTEN = {"haunted": .15}   # less softening where the grain is the point (the user: 'look like wood grain')
+BD_SOFTEN = {"haunted": .15, "frost": .15, "pine": .15}   # less softening where the grain is the point (the user: 'look like wood grain')
+
+
+WT_LOOK = ("Painterly hand-painted game UI art, chunky and cosy, in the style of a fantasy card game's winter holiday "
+           "festival: snowy night blues, frosted silver, evergreen pine, holly red and warm golden candle and fairy "
+           "light glow, dark timber, snow on everything. Warm and festive. No text, no letters, no logos, no people.")
+WT_PAINT = {
+    "wall": ("1:1", "A flat, front-on texture of a cosy snowy lodge wall at night: dark timber logs running horizontally, "
+                    "dusted with snow at the edges, a few sprigs of pine and holly and tiny warm glowing lights, evenly "
+                    "lit, no windows, fills the whole frame edge to edge, seamless texture. " + WT_LOOK),
+    "parchment": ("1:1", "A flat, front-on texture of soft frosty white paper, pale ivory and the faintest icy blue "
+                         "mottling, light overall, evenly lit, no marks, no border, no objects, fills the whole frame "
+                         "edge to edge, seamless texture. " + WT_LOOK),
+    "header-beam": ("21:9", "A flat, front-on texture of one long dark wooden beam running horizontally across the whole "
+                            "frame and off both edges, snow resting on top, a garland of pine with red holly berries and "
+                            "small warm fairy lights draped along it, dark timber behind, fills the whole frame edge to "
+                            "edge with no empty background, seamless texture. " + WT_LOOK),
+    "board-frame": ("1:1", "A square ornate picture frame, front-on: thick carved dark wood wrapped in snowy pine garland "
+                           "with red ribbon and holly along each side, a red and gold glass ornament bauble on each of the "
+                           "four corners, a little snow, the centre an empty plain white square, the frame only. "
+                           + ON_WHITE + " " + WT_LOOK),
+    "panel-frame": ("1:1", "A thin square decorative border, front-on: a slim line of frosted silver filigree with a small "
+                           "sprig of holly with red berries in each of the four corners, the centre empty plain white, "
+                           "the border only. " + ON_WHITE + " " + WT_LOOK),
+    "btn-ornament": ("21:9", "A single wide chunky game button plate, front-on, rounded rectangle: glossy deep holly-red "
+                             "lacquer like a Christmas ornament with a gold bevelled rim, a warm highlight on top, a small "
+                             "holly sprig ornament at each end, empty in the middle. " + ON_WHITE + " " + WT_LOOK),
+    "btn-frost": ("21:9", "A single wide chunky game button plate, front-on, rounded rectangle: frosted icy blue-silver "
+                          "glass with a polished silver bevelled rim, a soft glossy highlight on top, a small snowflake "
+                          "ornament at each end, empty in the middle. " + ON_WHITE + " " + WT_LOOK),
+    "ribbon": ("21:9", "A single long red velvet ribbon banner for a title, front-on, flat in the middle with folded "
+                       "swallow-tail ends at both sides, a thin gold trim along its edges, a small sprig of holly at each "
+                       "end, empty in the middle. " + ON_WHITE + " " + WT_LOOK),
+    "snowflake": ("1:1", "A single large ornate six-pointed snowflake, seen flat from the front, icy white and pale blue "
+                         "with a soft glow, simple bold crystal shape. " + ON_WHITE + " " + WT_LOOK),
+}
+WT_SLICES = {"btn-ornament": [0, 48], "btn-frost": [0, 48], "ribbon": [0, 72]}   # the frames: measured in build
 
 
 def build_boards(save):
@@ -373,6 +415,10 @@ def build_halloween(save):   # a haunted go hall; its candy stones for the Easte
         save(f"stone-{c}-1", candy_stone(cutout(f"stone-{c}")), "webp")
 
 
+def build_winter(save):   # a snowy lodge at the winter holidays
+    build_skin(save, ("btn-ornament", "btn-frost"), "snowflake")
+
+
 def build_harvest(save):   # a harvest barn at Thanksgiving
     build_skin(save, ("btn-wheat", "btn-cranberry"), "leaf")
 
@@ -404,6 +450,7 @@ SETS = {
     "tavern": {"dir": UI, "paint": PAINT, "slices": SLICES, "build": build_tavern},
     "halloween": {"dir": UI / "halloween", "paint": HW_PAINT, "slices": HW_SLICES, "build": build_halloween},
     "harvest": {"dir": UI / "harvest", "paint": HV_PAINT, "slices": HV_SLICES, "build": build_harvest},
+    "winter": {"dir": UI / "winter", "paint": WT_PAINT, "slices": WT_SLICES, "build": build_winter},
     "boards": {"dir": ROOT / "assets/boards", "paint": BD_PAINT, "slices": {}, "build": build_boards},
 }
 SET = SETS["tavern"]
