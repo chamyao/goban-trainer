@@ -161,7 +161,13 @@ const AICoach = {
     this.last[who + kind] = i; this.since = 0;
     const [zh, en] = set[i], at = top >= 0 ? `${COLS[top % sz]}${sz - Math.floor(top / sz)}` : "";
     const note = kind === "great" ? "" : ` (about ${Math.round(lost)} points${at && top !== r * sz + c ? `; better: ${at}` : ""})`;
-    if (location.hash === `#/ai/${who}` && typeof Avatars !== "undefined") Avatars.say((zh ? `${zh} ` : "") + en + note);
+    if (location.hash === `#/ai/${who}` && typeof Avatars !== "undefined" && Avatars.say((zh ? `${zh} ` : "") + en + note)) this.saidAt = g.S.moves.length;
+  },
+  // a remark stays for the avatar's reply and goes with your next move (apo110: "make it so the dialogue just persists 1
+  // or 2 moves")
+  saidAt: null,
+  moved(g) {
+    if (this.saidAt != null && g.S.moves.length >= this.saidAt + 2) { this.saidAt = null; if (typeof Avatars !== "undefined") Avatars.say(""); }
   },
 };
 
@@ -330,6 +336,7 @@ const AIPlay = {
       const n = S.moves.length;
       if (n >= 2 && S.moves[n - 1][0] < 0 && S.moves[n - 2][0] < 0) { S.phase = "stone removal"; S.removed = []; S.accepted = {}; }
     });
+    AICoach.moved(this.game);
     if (this.game.S.phase === "stone removal") this.markDead();
   },
   // two passes: the score network (ScoreEngine, app.js) marks the dead stones; you can change its marks, then accept
