@@ -1,0 +1,9 @@
+# Thu Nov 26 18:26:17 UTC 2026 on 64ef39698f8f
+VAL {'step': 20000, 'val_softce': np.float64(2.086676800251007), 'val_value': np.float64(0.19452079236507416), 'val_agree_teacher': np.float64(0.5559000253677369), 'val_pro_move': np.float64(0.4615000203251839), 'time': 1795715870
+VAL {'step': 30000, 'val_softce': np.float64(2.0599220752716065), 'val_value': np.float64(0.16968247182667257), 'val_agree_teacher': np.float64(0.5639500349760056), 'val_pro_move': np.float64(0.46850002110004424), 'time': 17957164
+VAL {'step': 40000, 'val_softce': np.float64(2.0299098789691925), 'val_value': np.float64(0.16478420235216618), 'val_agree_teacher': np.float64(0.571700033545494), 'val_pro_move': np.float64(0.46830002069473264), 'time': 179571705
+[17:00:02] pro games: 98621
+[17:00:02] labelling
+[17:37:42] 98621 games, 305 held out 100015 sent, 98086 labelled, 913/s 200019 sent, 198040 labelled, 923/s 300008 sent, 298020 labelled, 1045/s 400027 sent, 398080 labelled, 1118/s 500015 sent, 49803
+[17:37:42] distilling into 8x96
+# exit 0
