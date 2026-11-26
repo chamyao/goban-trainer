@@ -4950,6 +4950,7 @@ function playGame(g, P = OGSPlay) {
   });
   goban.hoverColor = g.myColor || BLACK;
   goban.render(grid, last, g.myTurn || scoring);
+  if (P.overlay) P.overlay(goban, g);   // (games against an avatar: where it would have played your move, AIPlay)
   if (typeof Avatars !== "undefined") Avatars.onGame(g);   // the avatar's word as a game begins and ends
   if (g.pending && g.myTurn)
     goban.el("circle", { cx: goban.px(g.pending[0]), cy: goban.py(g.pending[1]), r: goban.cell * .47, opacity: .55,

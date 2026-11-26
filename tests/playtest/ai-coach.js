@@ -32,4 +32,22 @@ check(/(make its case|weak point first|At the board too|city given away)/.test(t
 await turn();const kept=await said();
 t=await playAs(5,4,14,14,pol2);
 check(!!kept&&t==='','the remark stayed through the reply ('+(kept?'yes':'no')+') and went with your next move ('+JSON.stringify(t)+')');
+// the orange dot: where Li Su would have played your move (his network, stubbed to want C17); played it: a ring and a remark
+await p.evaluate(()=>{window.__own=OwnPlay.analyze;OwnPlay.analyze=async(g)=>{const pol=new Array(362).fill(0.001);for(let i=0;i<361;i++) if(!g.legal(i%19,Math.floor(i/19))) pol[i]=-1;
+  const free=[2*19+2,2*19+16,16*19+2,3*19+9,9*19+3,9*19+15,15*19+9,6*19+6].find(i=>pol[i]>=0);window.__want=free;pol[free]=0.5;return {policy:pol};};});
+const orange=()=>p.evaluate(()=>[...document.querySelectorAll('svg circle')].filter(e=>e.getAttribute('stroke')==='#e8590c').map(e=>(e.getAttribute('fill')==='none'?'ring':'dot')+'@'+Math.round(+e.getAttribute('cx'))+','+Math.round(+e.getAttribute('cy'))));
+await turn();
+const want=await p.evaluate(()=>{AICoach.yourTurn(AIPlay.game);return new Promise(r=>setTimeout(()=>r(window.__want),300));});
+const other=await p.evaluate(w=>{for(const i of [5*19+5,5*19+13,13*19+5,13*19+13,4*19+10]) if(i!==w&&AIPlay.game.legal(i%19,Math.floor(i/19))) return i;},want);
+await p.evaluate(([b,a])=>{window.__leads=[b,a];window.__pol=null;AICoach.since=99;AICoach.before=AICoach.look(AIPlay.game);},[5,5]);
+await p.evaluate(o=>AIPlay.move(o%19,Math.floor(o/19)),other);await p.waitForTimeout(500);
+let o=await orange();
+check(o.length===1&&o[0].startsWith('dot@'),'another move: an orange dot where Li Su would have played ('+o.join(' ')+')');
+await turn();
+const want2=await p.evaluate(()=>{AICoach.yourTurn(AIPlay.game);return new Promise(r=>setTimeout(()=>r(window.__want),300));});
+o=await orange();check(o.length===1&&o[0].startsWith('dot@'),'the dot stays through the reply, into your turn ('+o.join(' ')+')');
+await p.evaluate(([b,a])=>{window.__leads=[b,a];window.__pol=null;AICoach.since=99;AICoach.before=AICoach.look(AIPlay.game);},[5,5]);
+await p.evaluate(w=>AIPlay.move(w%19,Math.floor(w/19)),want2);await p.waitForTimeout(600);
+o=await orange();t=await said();
+check(o.length===1&&o[0].startsWith('ring@')&&/(advise exactly that|precisely the move I saw|kindred minds|what I'd have said)/.test(t),'his move: a ring around your stone and a Li Su "same" line: '+o.join(' ')+' / '+t);
 await b.close();process.exit(fails?1:0);})();

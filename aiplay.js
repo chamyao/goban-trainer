@@ -104,35 +104,55 @@ const AI_COACH = {
   lvbu: {
     great: [["好！竟能接我一戟！", "Ha! You parried my halberd!"], ["有点本事。", "So you've got some skill."], ["这一手，连我也要正眼看你。", "That move: now even I have to take you seriously."], ["不错！再来，让我看看你还有几招！", "Not bad! Come on, show me what else you've got!"]],
     bad: [["破绽！你的后背露出来了。", "An opening! You've left your back exposed."], ["急什么？先护住自己的阵脚。", "Why the hurry? Guard your own lines first."], ["这一手软了。战场上，软一步就是死。", "Soft. On the battlefield, one soft step is death."], ["看清我上一手在打什么主意！", "Look at what my last move was aiming at!"]],
-    blunder: [["哈哈！送到我戟下来了！", "Ha! You walked right onto my halberd!"], ["这一手，够我杀个痛快！", "That move gives me a feast of a kill!"], ["下之前，先数数气！", "Count the liberties before you play!"], ["大将阵前，岂可儿戏？", "In front of the enemy's lines, no child's play!"]] },
+    blunder: [["哈哈！送到我戟下来了！", "Ha! You walked right onto my halberd!"], ["这一手，够我杀个痛快！", "That move gives me a feast of a kill!"], ["下之前，先数数气！", "Count the liberties before you play!"], ["大将阵前，岂可儿戏？", "In front of the enemy's lines, no child's play!"]],
+    same: [["哈！你也看中了这里？", "Ha! You had your eye on that point too?"], ["英雄所见略同！", "Great warriors think alike!"], ["我的方天画戟也要落在此处。", "My halberd would have struck right there."], ["这一手，我吕布也会这样下。", "That's exactly the move Lü Bu would make."]] },
   diaochan: {
     great: [["呀，这一手妾身倒没想到。", "Oh, I hadn't foreseen that one."], ["好手。妾身的计，被你看穿了。", "A good move. You saw through my scheme."], ["这一子落得轻巧，却最要紧。", "A light stone, yet the one that matters most."], ["您比看上去聪明得多呢。", "You're far cleverer than you look."]],
     bad: [["您被妾身引过去了。", "You followed where I led you."], ["这一手，正中妾身下怀。", "That move falls right into my plan."], ["别只看眼前的子，看全盘。", "Don't look only at the stones in front of you; see the whole board."], ["慢些。先问问自己：我刚才想要什么？", "Slowly. First ask yourself: what did I just want?"]],
-    blunder: [["连环计，就差您这一环了。", "My chain of stratagems needed just this one link from you."], ["哎呀，这块棋，妾身就收下了。", "Oh my, I'll be taking that group, then."], ["美人计都不用使，您自己就送来了。", "I didn't even need my charms; you came on your own."], ["下之前，看看哪块棋还没活。", "Before you play, check which group isn't alive yet."]] },
+    blunder: [["连环计，就差您这一环了。", "My chain of stratagems needed just this one link from you."], ["哎呀，这块棋，妾身就收下了。", "Oh my, I'll be taking that group, then."], ["美人计都不用使，您自己就送来了。", "I didn't even need my charms; you came on your own."], ["下之前，看看哪块棋还没活。", "Before you play, check which group isn't alive yet."]],
+    same: [["咦，您竟与妾身想到一处了。", "Oh, you thought of the very same point as I did."], ["这一手，妾身也正想下呢。", "I was about to play that one myself."], ["您学得真快，连妾身的心思都猜中了。", "You learn fast. You even guessed my thoughts."], ["心有灵犀，一点即通。", "Hearts in tune, minds that meet."]] },
   caocao: {
     great: [["好！天下英雄，你也算一个。", "Good! You too are one of the heroes under heaven."], ["此着深得兵法。", "That move understands the art of war."], ["孤正欲取此处，竟被你先得。", "I wanted that point myself, and you took it first."], ["有此一手，可为孤之谋士。", "With moves like that, you could be my strategist."]],
     bad: [["兵贵神速，这一手却慢了。", "Speed is the soul of war; that move was slow."], ["舍大取小，非将才也。", "Taking the small and leaving the large: not a general's move."], ["先察敌意，再落子。", "Read the enemy's intent before you place a stone."], ["此处不急，急处在别处。", "Nothing is urgent here; the urgent point is elsewhere."]],
-    blunder: [["宁教我负天下人……这块棋，孤收下了。", "Better I wrong the world… I'll take this group."], ["赤壁之火，也不过如此。", "Even the fire at Red Cliffs was no worse."], ["一着失算，满盘皆输——记住了。", "One miscalculation loses the whole board. Remember it."], ["你的棋，气数已尽。", "Your stones have run out of breath."]] },
+    blunder: [["宁教我负天下人……这块棋，孤收下了。", "Better I wrong the world… I'll take this group."], ["赤壁之火，也不过如此。", "Even the fire at Red Cliffs was no worse."], ["一着失算，满盘皆输——记住了。", "One miscalculation loses the whole board. Remember it."], ["你的棋，气数已尽。", "Your stones have run out of breath."]],
+    same: [["正合孤意！", "Exactly what I had in mind!"], ["孤若执你之子，亦落此处。", "Had I held your stones, I'd have played there too."], ["英雄所见，果然相同。", "Heroes do see alike."], ["此手与孤不谋而合。", "That move matches my own plan."]] },
   lisu: {
     great: [["这一手，有理有据，在下佩服。", "That move stands on reason. I'm impressed."], ["连我都被说服了。", "Even I'm persuaded."], ["好棋，比我的说辞还动听。", "A fine move, better than my best speech."], ["一语中的。", "Straight to the point."]],
     bad: [["这一手，说不通啊。", "That move doesn't make its case."], ["在下劝你：先补自己的弱处。", "A word of advice: shore up your weak point first."], ["想清楚对方要什么，再开口——下棋也一样。", "Know what the other side wants before you speak. At the board too."], ["多走一步无用之棋，等于白送一城。", "A wasted move is a city given away."]],
-    blunder: [["此子一出，在下不战而胜。", "With that stone, I win without a fight."], ["赤兔都没这么好送。", "Even Red Hare wasn't that easy to hand over."], ["下这一手之前，可曾问过自己的棋？", "Did you consult your own stones before playing that?"], ["一失言，满盘输。", "One slip of the tongue, and the whole board is lost."]] },
+    blunder: [["此子一出，在下不战而胜。", "With that stone, I win without a fight."], ["赤兔都没这么好送。", "Even Red Hare wasn't that easy to hand over."], ["下这一手之前，可曾问过自己的棋？", "Did you consult your own stones before playing that?"], ["一失言，满盘输。", "One slip of the tongue, and the whole board is lost."]],
+    same: [["在下也正想如此进言。", "I was about to advise exactly that."], ["此手与在下所见一般无二。", "That's precisely the move I saw."], ["你我所见相同，可谓知己。", "We see it the same way: kindred minds."], ["说得好，正是在下想说的。", "Well said: just what I'd have said."]] },
   dongzhuo: {
     great: [["哼，竟敢从咱家嘴边夺食！", "Hmph! You dare snatch food from my mouth!"], ["这一手……咱家记下了。", "That move… I'll remember it."], ["有点意思，赏你一杯酒。", "Interesting. Have a cup of wine on me."], ["好大胆子！", "What nerve!"]],
     bad: [["哈哈，咱家又多了一块肉。", "Ha! One more piece of meat for me."], ["贪多嚼不烂，这一手太贪了。", "Bite off too much and you can't chew. Too greedy."], ["你那块棋，饿着呢，先喂饱它。", "That group of yours is starving. Feed it first."], ["别急着抢，先看看谁的棋更弱。", "Don't rush to grab; see whose stones are weaker."]],
-    blunder: [["顺我者昌，逆我者——这块棋就是下场！", "Cross me, and this group is how you end up!"], ["多谢多谢，咱家笑纳了。", "Many thanks. I'll gladly accept."], ["这么大一块，够咱家吃三天！", "A group this big feeds me for three days!"], ["下之前数数气，莫让咱家白捡便宜。", "Count the liberties first; don't hand me freebies."]] },
+    blunder: [["顺我者昌，逆我者——这块棋就是下场！", "Cross me, and this group is how you end up!"], ["多谢多谢，咱家笑纳了。", "Many thanks. I'll gladly accept."], ["这么大一块，够咱家吃三天！", "A group this big feeds me for three days!"], ["下之前数数气，莫让咱家白捡便宜。", "Count the liberties first; don't hand me freebies."]],
+    same: [["哼，那是咱家看中的地方！", "Hmph, that was the spot I had my eye on!"], ["你竟抢了咱家的好点。", "You took the point I wanted."], ["咱家也要下这里，算你识相。", "I'd have played there too. You know what's good."], ["这块肥肉，咱家也想要。", "I wanted that juicy bit myself."]] },
   ms_jang: {
     great: [["", "That's the move. I'd have played it too."], ["", "You read that one all the way out."], ["", "Good. That stone does two jobs."], ["", "In baduk, that's called finding the vital point."]],
     bad: [["", "My teacher used to say: before you play, look at what my last move wants."], ["", "That one's a little slow. Is there a bigger place?"], ["", "Hm. Your stones there are getting thin."], ["", "You answered where I wanted you to answer."]],
-    blunder: [["", "Sorry, I have to take this."], ["", "Count the liberties. Then count them again."], ["", "That group wasn't alive yet."], ["", "One careless move undoes a lot of hard work. I know that feeling."]] },
+    blunder: [["", "Sorry, I have to take this."], ["", "Count the liberties. Then count them again."], ["", "That group wasn't alive yet."], ["", "One careless move undoes a lot of hard work. I know that feeling."]],
+    same: [["", "That's where I would have played too."], ["", "Same move I had in mind."], ["", "We read it the same way."], ["", "Good. That's the move I was going to make."]] },
   ms_ahn: {
     great: [["", "Good."], ["", "Correct. That's the number that works."], ["", "Efficient."], ["", "You did the homework."]],
     bad: [["", "Inefficient."], ["", "Check your weak group first."], ["", "That doesn't add up."], ["", "You're spending moves where they don't count."]],
-    blunder: [["", "That's a costly error."], ["", "Read it before you play it."], ["", "I'll take it. Next time, count."], ["", "Unacceptable. Look again."]] },
+    blunder: [["", "That's a costly error."], ["", "Read it before you play it."], ["", "I'll take it. Next time, count."], ["", "Unacceptable. Look again."]],
+    same: [["", "Same as mine."], ["", "That's my move too."], ["", "Agreed."], ["", "I'd have played that."]] },
 };
 const AICoach = {
   MISTAKE: 6, BLUNDER: 15, GAP: 3,   // (points; GAP: your moves between two remarks, but a blunder is always remarked)
   last: {}, since: 99, before: null,
+  // where the avatar would have played your move (apo110: "the choice they would have chosen as my move is shown as a
+  // orange dot", "and then a dialogue if I played what they would have played"): its own network's first choice in
+  // your position, drawn after your move until your next one
+  pick: null, dot: null,
+  choose(g) {
+    const who = g.S.foe && g.S.foe.who; if (!who || !AI_PRO[who]) return null;
+    const grid = g.replay().grid, sz = g.S.size, seq = g.S.seq;
+    return OwnPlay.analyze(g, grid, g.myColor, aiProUrl(who, g.S.tier)).then(a => {
+      let best = -1, bp = -1;
+      for (let i = 0; i < sz * sz; i++) if (a.policy[i] > bp && g.legal(i % sz, Math.floor(i / sz))) { bp = a.policy[i]; best = i; }
+      return { seq, idx: best };
+    }).catch(() => null);
+  },
   // the score network's look at the game as it stands: your lead (points) and its move weights; null if it can't
   look(g) {
     if (typeof ScoreEngine === "undefined") return null;
@@ -143,17 +163,28 @@ const AICoach = {
       .then(a => ({ seq, lead: a.rootScoreLead * mine, policy: a.policy })).catch(() => null);
   },
   // your turn has come: read the position you're about to play in
-  yourTurn(g) { if (g.S.foe && AI_COACH[g.S.foe.who] && g.S.phase === "play") this.before = this.look(g); },
+  yourTurn(g) {
+    if (!(g.S.foe && AI_COACH[g.S.foe.who] && g.S.phase === "play")) return;
+    this.before = this.look(g); this.pick = this.choose(g);
+  },
   // you played (c, r) at seq: read what's left, and say something if it's worth saying
   async youPlayed(g, c, r) {
-    const before = await this.before, who = g.S.foe && g.S.foe.who;
-    if (!before || !who || !AI_COACH[who] || c < 0) return;
+    const who = g.S.foe && g.S.foe.who, seq0 = g.S.seq - 1, at = g.S.moves.length;
+    if (!who || !AI_COACH[who] || c < 0) return;
+    const pick = await this.pick, sz0 = g.S.size;
+    const same = !!pick && pick.seq === seq0 && pick.idx === r * sz0 + c;
+    if (pick && pick.seq === seq0 && pick.idx >= 0 && AIPlay.game === g) { this.dot = { at, idx: pick.idx, same }; AIPlay.emit(); }
+    const before = await this.before;
+    if (!before) { if (same) this.remark(g, who, "same"); return; }
     const after = await this.look(g);
     if (!after || AIPlay.game !== g || after.seq !== before.seq + 1) return;   // (an Undo, or another game, meanwhile)
     const lost = before.lead - after.lead, sz = g.S.size, pol = before.policy || [];
     let top = -1, topP = 0;
     for (let i = 0; i < sz * sz; i++) if (pol[i] > topP) { topP = pol[i]; top = i; }
-    const kind = lost >= this.BLUNDER ? "blunder" : lost >= this.MISTAKE ? "bad" : top === r * sz + c && topP < 0.5 && lost < 1 ? "great" : null;
+    const kind = lost >= this.BLUNDER ? "blunder" : lost >= this.MISTAKE ? "bad" : same ? "same" : top === r * sz + c && topP < 0.5 && lost < 1 ? "great" : null;
+    this.remark(g, who, kind);
+  },
+  remark(g, who, kind) {
     this.since++;
     if (!kind || (kind !== "blunder" && this.since < this.GAP)) return;
     const set = AI_COACH[who][kind]; let i = Math.floor(Math.random() * set.length);
@@ -167,6 +198,15 @@ const AICoach = {
   saidAt: null,
   moved(g) {
     if (this.saidAt != null && g.S.moves.length >= this.saidAt + 2) { this.saidAt = null; if (typeof Avatars !== "undefined") Avatars.say(""); }
+    if (this.dot && (g.S.moves.length >= this.dot.at + 2 || g.S.moves.length < this.dot.at)) this.dot = null;   // (gone with your next move, or an Undo)
+  },
+  // the orange dot on the board (playGame calls it after drawing): filled where it would have played, a ring around
+  // your stone when you played it
+  overlay(goban, g) {
+    const d = this.dot; if (!d || AIPlay.game !== g || g.S.moves.length < d.at || g.S.moves.length > d.at + 1) return;
+    const sz = g.S.size, c = d.idx % sz, r = Math.floor(d.idx / sz), O = "#e8590c";
+    if (d.same) goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * 0.5, fill: "none", stroke: O, "stroke-width": 3, "pointer-events": "none" });
+    else goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * 0.4, fill: O, opacity: 0.45, stroke: O, "stroke-width": 2.5, "pointer-events": "none" });
   },
 };
 
@@ -365,6 +405,7 @@ const AIPlay = {
   },
   // take back your last move, and the avatar's reply after it (apo110: "i lost a promotion match due to misclick ...
   // add an undo button"); while it thinks, its move is dropped (maybeAI checks seq)
+  overlay(goban, g) { AICoach.overlay(goban, g); },
   canUndo() { const g = this.game; return !!g && g.S.phase === "play" && g.S.moves.some((_, k) => g.colorOf(k) === g.myColor); },
   undo() {
     const g = this.game; if (!this.canUndo()) return;
