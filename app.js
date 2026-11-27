@@ -5013,6 +5013,7 @@ function playGame(g, P = OGSPlay) {
     pass.disabled = !g.myTurn;
     buttons.push(pass);
     if (P.undo) { const u = h("button", { onclick: () => P.undo() }, "Undo"); u.disabled = !P.canUndo(); buttons.push(u); }   // (games against an avatar: AIPlay)
+    if (P.winCheck) buttons.push(h("button", { onclick: () => P.winCheck() }, "Win %"));   // (games against an avatar)
     buttons.push(h("button", { onclick: () => { if (confirm("Resign this game?")) P.resign(); } }, "Resign"));
   } else if (scoring && g.myColor) {
     buttons.push(h("button", { class: "primary", onclick: () => P.acceptScore() }, "Accept score"));
@@ -5025,6 +5026,7 @@ function playGame(g, P = OGSPlay) {
 
   const aside = h("aside", {}, [
     h("div", { class: "panel" }, [h("h2", {}, g.title || `OGS game ${g.id}`), ...rows, status, err, g.extra ? g.extra() : "",
+      P.winRead && P.winRead.seq === g.S.seq ? h("div", { class: "meta-sub ai-winread" }, P.winRead.text) : "",   // (the Win % button's reading, this position only)
       g.myColor ? h("label", { class: "byo-voice" }, [h("input", { type: "checkbox", ...(ByoVoice.on ? { checked: "" } : {}),
         onchange: e => { ByoVoice.on = e.target.checked; if (e.target.checked) ByoVoice.say("초읽기"); } }), " 초읽기 Korean byoyomi voice"]) : ""]),
     buttons.length ? h("div", { class: "panel" }, [h("div", { class: "rv-actions" }, buttons)]) : "",

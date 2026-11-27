@@ -53,4 +53,14 @@ await p.evaluate(([b,a])=>{window.__leads=[b,a];window.__pol=null;AICoach.since=
 await p.evaluate(w=>AIPlay.move(w%19,Math.floor(w/19)),want2);await p.waitForTimeout(600);
 o=await orange();t=await said();
 check(o.length===1&&o[0].startsWith('ring@')&&/(advise exactly that|precisely the move I saw|kindred minds|what I'd have said)/.test(t),'his move: a ring around your stone and a Li Su "same" line: '+o.join(' ')+' / '+t);
+// the Win % button: your chance from Lionffen (stubbed: Black 72%, you Black), shown for this position only
+await turn();
+await p.evaluate(()=>{Engine.analyze=async()=>({rootWinRate:0.72,moves:[]});});
+const btn=await p.locator('.rv-actions button',{hasText:'Win %'}).count();
+await p.locator('.rv-actions button',{hasText:'Win %'}).click();await p.waitForTimeout(400);
+const wr=await p.evaluate(()=>{const e=document.querySelector('.ai-winread');return e?e.textContent:'';});
+check(btn===1&&wr==='Your win chance: 72%','Win %: '+wr);
+await p.evaluate(()=>AIPlay.move(9,9));await p.waitForTimeout(400);
+const wr2=await p.evaluate(()=>{const e=document.querySelector('.ai-winread');return e?e.textContent:'';});
+check(wr2==='','the reading goes with the next move ('+JSON.stringify(wr2)+')');
 await b.close();process.exit(fails?1:0);})();

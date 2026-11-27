@@ -457,6 +457,23 @@ const AIPlay = {
   // take back your last move, and the avatar's reply after it (apo110: "i lost a promotion match due to misclick ...
   // add an undo button"); while it thinks, its move is dropped (maybeAI checks seq)
   overlay(goban, g) { AICoach.overlay(goban, g); },
+  // your chance to win here (apo110: "add a win percentage check button to the games"): Lionffen's search of the
+  // position on the board, shown until the next move (games against an avatar only: not a person's game)
+  winRead: null,
+  async winCheck() {
+    const g = this.game; if (!g || g.S.phase !== "play") return;
+    const seq = g.S.seq, sz = g.S.size, hist = [];
+    g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
+    const board = gridToBoardState(g.replay().grid).slice(0, sz).map(row => row.slice(0, sz));
+    this.winRead = { seq, text: Engine.status === "ready" ? "Reading the position…" : "Loading KataGo…" }; this.emit();
+    try {
+      const a = await Engine.analyze({ board, currentPlayer: g.toMove() === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
+        visits: 200, maxTimeMs: 8000, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false });
+      const mine = g.myColor === BLACK ? a.rootWinRate : 1 - a.rootWinRate;
+      if (this.game === g && g.S.seq === seq) this.winRead = { seq, text: `Your win chance: ${Math.round(mine * 100)}%` };
+    } catch (e) { console.error("[ai] win check", e); if (this.game === g) this.winRead = { seq, text: "Couldn't read the position." }; }
+    this.emit();
+  },
   canUndo() { const g = this.game; return !!g && g.S.phase === "play" && g.S.moves.some((_, k) => g.colorOf(k) === g.myColor); },
   undo() {
     const g = this.game; if (!this.canUndo()) return;
