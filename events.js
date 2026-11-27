@@ -55,9 +55,9 @@ const Events = (() => {
     { id: "halloween", name: "Halloween", native: "万圣节", kind: "west", icon: "🎃", ci: "🍬", cur: ["candy", "candy"],
       blurb: "The haunted go hall, and the stones are candy.", when: y => [D(y, 10, 1), D(y, 11, 2)] },
     { id: "harvest", name: "Harvest", native: "感恩节", kind: "west", icon: "🌰", cur: ["acorn", "acorns"],
-      blurb: "Thanksgiving.", when: y => around(thanksgiving(y), 10, 4) },
+      blurb: "Thanksgiving.", when: y => y === 2026 ? [around(thanksgiving(y), 10, 4)[0], D(2026, 11, 25)] : around(thanksgiving(y), 10, 4) },   // (2026: ends a few days early, for Winter)
     { id: "winter", name: "Winter", native: "冬", kind: "west", icon: "❄️", cur: ["snowflake", "snowflakes"],
-      blurb: "Christmas and the New Year.", when: y => [D(y, 12, 1), D(y + 1, 1, 5)] },
+      blurb: "Christmas and the New Year.", when: y => [y === 2026 ? D(2026, 11, 26) : D(y, 12, 1), D(y + 1, 1, 5)] },   // (2026: opened early, apo110 "out now")
   ];
   for (const e of LIST) e.ci = e.ci || e.icon;   // (the currency's icon: the event's, unless it has its own)
   const KINDS = { west: "Holiday", china: "Chinese festival", go: "Go event" };
