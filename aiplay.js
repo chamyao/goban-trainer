@@ -405,6 +405,7 @@ const AIPlay = {
     else if (n === 1) S.komi = 0.5;
     S.phase = "play"; S.level = "strong"; S.foe = foe; S.tier = st.tier;
     S.promo = { target: st.target, d: st.d };
+    S.gid = Date.now();   // (the game's id: its win's candies are paid once)
     this.game = aiGame(S, { role: "host", color: hostColor, token: null }); this.cur = foe.who; this.status = "";
     this.persist();
     location.hash = `#/ai/${this.cur}`;
@@ -417,8 +418,15 @@ const AIPlay = {
       const out = AIRank.count(S), r = AIRank.get();
       if (out) this.status = out === "promoted" ? `Promoted to ${AIRank.text(r.kyu)}!` :
         `${out === "win" ? "A win" : "A loss"} toward ${AIRank.text(r.kyu - 1)} (last games: ${(r.series || []).map(x => x ? "W" : "L").join(" ")}).`;
+      // a win against an avatar pays the event's currency (apo110: "also give candies for a win vs the avatar"):
+      // 5, once per game (an undone and replayed ending pays nothing more), and the day's first earn adds its 2
+      if (S.result && S.result.winner === this.game.myColor && typeof Events !== "undefined") {
+        S.gid = S.gid || Date.now();
+        Events.earn(`ai:${S.foe ? S.foe.who : "?"}:${S.gid}`, 5);
+      }
     }
     this.persist(); this.emit();
+    if (this.scoreOn) this.readScore();
   },
   play(c, r) {
     this.change(S => {
@@ -457,21 +465,29 @@ const AIPlay = {
   // take back your last move, and the avatar's reply after it (apo110: "i lost a promotion match due to misclick ...
   // add an undo button"); while it thinks, its move is dropped (maybeAI checks seq)
   overlay(goban, g) { AICoach.overlay(goban, g); },
-  // your chance to win here (apo110: "add a win percentage check button to the games"): Lionffen's search of the
-  // position on the board, shown until the next move (games against an avatar only: not a person's game)
+  // the score, on demand and kept on (apo110: "add a win percentage check button", "make it so its score and make it a
+  // toggle", "I want it to stay on if I chose to turn it on"): the score network's read of the position on the board
+  // after every move while on (the choice kept on this device); games against an avatar only, not a person's game
   winRead: null,
-  async winCheck() {
-    const g = this.game; if (!g || g.S.phase !== "play") return;
-    const seq = g.S.seq, sz = g.S.size, hist = [];
-    g.S.moves.slice(-6).forEach(([c, r], i, arr) => { const k = g.S.moves.length - arr.length + i; hist.push({ x: c >= 0 ? c : -1, y: c >= 0 ? r : -1, player: g.colorOf(k) === WHITE ? "white" : "black" }); });
+  get scoreOn() { try { return localStorage.getItem("gt-ai-score") === "1"; } catch { return false; } },
+  winCheck() {   // (the button: on / off)
+    const on = !this.scoreOn;
+    try { on ? localStorage.setItem("gt-ai-score", "1") : localStorage.removeItem("gt-ai-score"); } catch {}
+    this.winRead = null;
+    if (on) this.readScore(); else this.emit();
+  },
+  async readScore() {
+    const g = this.game; if (!g || !this.scoreOn || g.S.phase === "finished" || typeof ScoreEngine === "undefined") return;
+    const seq = g.S.seq, sz = g.S.size;
+    if (this.winRead && this.winRead.seq === seq) return;
     const board = gridToBoardState(g.replay().grid).slice(0, sz).map(row => row.slice(0, sz));
-    this.winRead = { seq, text: Engine.status === "ready" ? "Reading the position…" : "Loading KataGo…" }; this.emit();
+    this.winRead = { seq, text: ScoreEngine.status === "ready" ? "Score: reading…" : "Score: loading the scoring network…" }; this.emit();
     try {
-      const a = await Engine.analyze({ board, currentPlayer: g.toMove() === BLACK ? "black" : "white", moveHistory: hist, komi: g.S.komi, rules: "chinese",
-        visits: 200, maxTimeMs: 8000, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false });
-      const mine = g.myColor === BLACK ? a.rootWinRate : 1 - a.rootWinRate;
-      if (this.game === g && g.S.seq === seq) this.winRead = { seq, text: `Your win chance: ${Math.round(mine * 100)}%` };
-    } catch (e) { console.error("[ai] win check", e); if (this.game === g) this.winRead = { seq, text: "Couldn't read the position." }; }
+      const a = await ScoreEngine.analyze({ board, currentPlayer: g.toMove() === BLACK ? "black" : "white", moveHistory: [], komi: g.S.komi, rules: "chinese",
+        visits: 1, maxTimeMs: 8000, ownershipMode: "none", topK: 1, analysisPvLen: 1, reuseTree: false });
+      const mine = (g.myColor === BLACK ? 1 : -1) * a.rootScoreLead, pts = Math.abs(Math.round(mine * 2) / 2).toFixed(1).replace(/\.0$/, "");
+      if (this.game === g && g.S.seq === seq) this.winRead = { seq, text: `Score: ${ScoreEngine.text(a.rootScoreLead)} · ${Math.abs(mine) < 0.25 ? "even" : mine > 0 ? `you lead by ${pts}` : `you trail by ${pts}`}` };
+    } catch (e) { console.error("[ai] score", e); if (this.game === g && g.S.seq === seq) this.winRead = { seq, text: "Score: couldn't read the position." }; }
     this.emit();
   },
   canUndo() { const g = this.game; return !!g && g.S.phase === "play" && g.S.moves.some((_, k) => g.colorOf(k) === g.myColor); },
@@ -627,4 +643,5 @@ function viewAI() {
   rerender();
   P.maybeAI();   // its move, if it was KataGo's turn when the page closed
   if (P.game.myTurn && P.game.S.phase === "play") AICoach.yourTurn(P.game);   // (yours: the coach reads it)
+  if (P.scoreOn) P.readScore();   // (the score, if it's on)
 }

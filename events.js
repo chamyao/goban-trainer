@@ -3,7 +3,7 @@
 // yearly comeback, Mahjong Soul's event shops, Neopets' albums), with "calendar + seasons + rewards" and Western
 // holidays, Chinese festivals and Go events. Each event has its own currency, earned by solving: a problem never
 // solved before, first try (no hint, no wrong move), pays once ever, so there's nothing to grind; a turning point or
-// key move found pays 3; the first solve of a day 2 more. It's spent in the event's shop on looks only (never a rating
+// key move found pays 3; a win against an avatar 5 (aiplay.js); the first solve of a day 2 more. It's spent in the event's shop on looks only (never a rating
 // or a problem): a board, a title by the player's name, a hat for Sun Wukong. A shop opens with its event and comes
 // back the next year. Two events at once: the shorter is featured (its look, its currency).
 // The ledger rides the progress row (progress.ev: earn {event: {source: n}}, own {item: 1}, eq {title, hat}), merged
@@ -164,7 +164,7 @@ const Events = (() => {
   // what the event's goals count, from the ledger
   function counts(ev, L = ledger()) {
     const keys = Object.keys((L.earn || {})[ev] || {});
-    return { solved: keys.filter(k => !/^(tp|day|cal|goal):/.test(k)).length, turning: keys.filter(k => k.startsWith("tp:")).length,
+    return { solved: keys.filter(k => !/^(tp|day|cal|goal|ai):/.test(k)).length, turning: keys.filter(k => k.startsWith("tp:")).length,
              signins: Object.keys((L.days || {})[ev] || {}).length };
   }
   const prizes = ev => ITEMS.filter(it => it.ev === ev && it.gift && it.slot).sort((a, b) => a.slot - b.slot);
@@ -342,6 +342,7 @@ const Events = (() => {
     ev => `Sign in each day: the fifth and tenth days hold something special.`,
     ev => `The shop closes when ${ev.name} ends. Spend your ${ev.cur[1]} before then.`,
     ev => `A turning point found is worth three ${ev.cur[1]}. Shall we look at your games?`,
+    ev => `Beat an avatar and the win is worth five ${ev.cur[1]}.`,
   ];
   // what's waiting to be claimed (a red dot on its tab)
   const claimable = ev => { const book = (ledger().earn || {})[ev.id] || {}, c = counts(ev.id);
@@ -442,7 +443,7 @@ const Events = (() => {
           h("span", { class: "ev-note" }, `${TYPE[goalPrize.type]} · not in the shop`)]),
         allDone ? h("div", { class: "ev-stamp small" }, "Yours") : h("span", { class: "ev-prog" }, `${GOALS.filter(g => book[`goal:${g.id}`] != null).length} / ${GOALS.length}`),
       ]) : null].filter(Boolean)),
-      h("p", { class: "ev-note" }, `Earn ${ev.cur[1]} by solving: 1 for a problem you've never solved, first try (no hint, no wrong move); 3 for a turning point or key move you find; 2 more for the day's first. Each problem pays once.`),
+      h("p", { class: "ev-note" }, `Earn ${ev.cur[1]} by solving: 1 for a problem you've never solved, first try (no hint, no wrong move); 3 for a turning point or key move you find; 5 for a win against an avatar; 2 more for the day's first. Each problem pays once.`),
     ]);
   }
   // the exchange shop: a card per item; a tap opens it, to look at and exchange

@@ -53,14 +53,27 @@ await p.evaluate(([b,a])=>{window.__leads=[b,a];window.__pol=null;AICoach.since=
 await p.evaluate(w=>AIPlay.move(w%19,Math.floor(w/19)),want2);await p.waitForTimeout(600);
 o=await orange();t=await said();
 check(o.length===1&&o[0].startsWith('ring@')&&/(advise exactly that|precisely the move I saw|kindred minds|what I'd have said)/.test(t),'his move: a ring around your stone and a Li Su "same" line: '+o.join(' ')+' / '+t);
-// the Win % button: your chance from Lionffen (stubbed: Black 72%, you Black), shown for this position only
+// the score toggle (apo110: "make it so its score and make it a toggle on off", "I want it to stay on if I chose to turn
+// it on"): the score network's read (stubbed: Black +12, you Black), read again after each move while on, and kept on
 await turn();
-await p.evaluate(()=>{Engine.analyze=async()=>({rootWinRate:0.72,moves:[]});});
-const btn=await p.locator('.rv-actions button',{hasText:'Win %'}).count();
-await p.locator('.rv-actions button',{hasText:'Win %'}).click();await p.waitForTimeout(400);
-const wr=await p.evaluate(()=>{const e=document.querySelector('.ai-winread');return e?e.textContent:'';});
-check(btn===1&&wr==='Your win chance: 72%','Win %: '+wr);
-await p.evaluate(()=>AIPlay.move(9,9));await p.waitForTimeout(400);
-const wr2=await p.evaluate(()=>{const e=document.querySelector('.ai-winread');return e?e.textContent:'';});
-check(wr2==='','the reading goes with the next move ('+JSON.stringify(wr2)+')');
+await p.evaluate(()=>{const was=ScoreEngine.analyze;ScoreEngine.analyze=async(o)=>o.ownershipMode==='none'?{rootScoreLead:window.__score??12}:was(o);});
+const read=()=>p.evaluate(()=>{const e=document.querySelector('.ai-winread');return e?e.textContent:'';});
+const label=()=>p.evaluate(()=>{const e=document.querySelector('.ai-score-btn');return e?e.textContent+'|'+e.getAttribute('aria-pressed'):'';});
+check(await label()==='Score: off|false','the toggle starts off ('+await label()+')');
+await p.locator('.ai-score-btn').click();await p.waitForTimeout(400);
+let sc=await read();
+check(await label()==='Score: on|true'&&/^Score: B\+12/.test(sc)&&/you lead by 12/.test(sc),'on: '+sc);
+await p.evaluate(()=>{window.__score=-3.5;AIPlay.move(9,9);});await p.waitForTimeout(500);
+sc=await read();
+check(/you trail by 3\.5/.test(sc)&&await label()==='Score: on|true','still on after a move, read again: '+sc);
+await p.reload();await p.waitForTimeout(1500);await p.evaluate(()=>{const m=document.getElementById('authModalBackdrop');if(m)m.hidden=true;});await p.evaluate(()=>{ScoreEngine.analyze=async()=>({rootScoreLead:12});});
+check(await label()==='Score: on|true','still on after a reload ('+await label()+')');
+await p.locator('.ai-score-btn').click();await p.waitForTimeout(300);
+check(await label()==='Score: off|false'&&await read()==='','off again: the reading goes ('+JSON.stringify(await read())+')');
+// a win against an avatar pays the event's currency (apo110: "also give candies for a win vs the avatar"): 5, once
+const pay=await p.evaluate(()=>{const f=Events.featured();if(!f) return 'no event';const ev=f.ev.id,b0=Events.balance(ev);
+  AIPlay.change(S=>{S.phase='finished';S.result={winner:AIPlay.game.myColor,how:'resignation'};});const b1=Events.balance(ev);
+  AIPlay.change(S=>{S.phase='play';S.result=null;});AIPlay.change(S=>{S.phase='finished';S.result={winner:AIPlay.game.myColor,how:'resignation'};});
+  return [b1-b0,Events.balance(ev)-b1];});
+check(pay==='no event'||(pay[0]>=5&&pay[0]<=7&&pay[1]===0),'a win pays 5 (+2 if the day\'s first), once: '+JSON.stringify(pay));
 await b.close();process.exit(fails?1:0);})();

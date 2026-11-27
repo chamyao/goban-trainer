@@ -1334,6 +1334,7 @@ body.has-avatar main { padding-bottom: calc(32vh + 12px); }
 .ai-foe-locked { cursor: default; opacity: .55; } .ai-foe-locked img { filter: brightness(0); }   /* not collected yet: a silhouette */
 .rv-score-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .rv-unit { display: flex; gap: 4px; } .rv-unit button { padding: 2px 10px; font-size: 12px; } .rv-unit button:not(.active) { opacity: .45; }   /* Review: win rate or points (the chosen one at full strength, whatever the theme draws buttons as) */
 .ai-dot { animation-name: ai-dot-fade; animation-timing-function: linear; animation-fill-mode: forwards; } @keyframes ai-dot-fade { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }   /* the avatar's choice on the board: seen, then gone */
+.ai-score-btn:not(.on) { opacity: .6; }   /* the score toggle in avatar games: off, dimmed */
 .ai-foe-going small { opacity: 1; color: var(--accent); font-weight: 600; }   /* a game under way with this avatar */
 .ai-rank { margin: 4px 0; } .ai-rank .ai-w, .ai-rank .ai-l { display: inline-block; width: 1.4em; text-align: center; border-radius: 4px; font-weight: 700; margin-left: 2px; } .ai-rank .ai-w { background: #2e7d3233; color: #2e7d32; } .ai-rank .ai-l { background: #c6282833; color: #c62828; }
 .ai-foe-card { display: flex; gap: 10px; align-items: center; margin: 6px 0; }

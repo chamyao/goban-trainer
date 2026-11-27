@@ -5013,7 +5013,7 @@ function playGame(g, P = OGSPlay) {
     pass.disabled = !g.myTurn;
     buttons.push(pass);
     if (P.undo) { const u = h("button", { onclick: () => P.undo() }, "Undo"); u.disabled = !P.canUndo(); buttons.push(u); }   // (games against an avatar: AIPlay)
-    if (P.winCheck) buttons.push(h("button", { onclick: () => P.winCheck() }, "Win %"));   // (games against an avatar)
+    if (P.winCheck) buttons.push(h("button", { class: "ai-score-btn" + (P.scoreOn ? " on" : ""), "aria-pressed": P.scoreOn ? "true" : "false", onclick: () => P.winCheck() }, P.scoreOn ? "Score: on" : "Score: off"));   // (games against an avatar: the score, kept on)
     buttons.push(h("button", { onclick: () => { if (confirm("Resign this game?")) P.resign(); } }, "Resign"));
   } else if (scoring && g.myColor) {
     buttons.push(h("button", { class: "primary", onclick: () => P.acceptScore() }, "Accept score"));
