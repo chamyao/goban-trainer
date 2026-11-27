@@ -716,6 +716,7 @@ class Goban {
   }
 
   render(grid, lastMove, interactive) {
+    if (typeof StoneSound !== "undefined") StoneSound.seen(grid, lastMove);   // (a stone placed: its clack)
     const { c0, c1, r0, r1 } = this.crop, E = (this.crop.sz || 19) - 1;   // E: the board's last line
     this.svg.innerHTML = ""; this.ghost = null;
     const t = BoardTheme.current;
@@ -3810,6 +3811,59 @@ const Music = {
   },
 };
 Music.mount();
+
+// The stone's sound (apo110: "add a stones sound for placement"): a short wooden clack, made in the browser (a
+// noise click through a band-pass and a damped knock), when one stone goes down on a board: the newly placed stone at
+// the last-move mark, with nothing else added (stepping through a review forward clacks too; back, or a new board, is
+// silent). A 🔊 / 🔇 button in the header turns it off, kept on this device.
+const StoneSound = {
+  prev: null,
+  get on() { try { return localStorage.getItem("gt-stone-sound") !== "0"; } catch { return true; } },
+  set on(v) { try { v ? localStorage.removeItem("gt-stone-sound") : localStorage.setItem("gt-stone-sound", "0"); } catch {} },
+  ctx() {
+    if (!this.ac) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; this.ac = new AC(); }
+    if (this.ac.state === "suspended") this.ac.resume().catch(() => {});
+    return this.ac;
+  },
+  play() {
+    if (!this.on) return;
+    const ac = this.ctx(); if (!ac || ac.state !== "running") return;
+    const t = ac.currentTime, out = ac.createGain(); out.gain.value = 0.55; out.connect(ac.destination);
+    // the click: 25 ms of noise, band-passed around 2.6 kHz, falling fast
+    const n = Math.round(ac.sampleRate * 0.03), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 4);
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 2600 * (0.94 + Math.random() * 0.12); bp.Q.value = 1.4;
+    src.connect(bp); bp.connect(out); src.start(t);
+    // the board's knock: a damped tone near 1 kHz sliding down
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(1150 * (0.95 + Math.random() * 0.1), t); o.frequency.exponentialRampToValueAtTime(700, t + 0.08);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.1);
+  },
+  // from Goban.render: a stone newly at lastMove, and no other point newly filled since the last board drawn
+  seen(grid, lastMove) {
+    const prev = this.prev; this.prev = grid && grid.map(row => row.slice());
+    if (!prev || !grid || !lastMove || prev.length !== grid.length) return;
+    const [c, r] = lastMove;
+    if (!grid[r] || !grid[r][c] || prev[r][c]) return;
+    for (let y = 0; y < grid.length; y++) for (let x = 0; x < grid[y].length; x++)
+      if (grid[y][x] && !prev[y][x] && !(x === c && y === r)) return;
+    this.play();
+  },
+  mount() {
+    const header = document.querySelector("header");
+    if (!header || this.btn) return;
+    const draw = () => { this.btn.textContent = this.on ? "🔊" : "🔇"; this.btn.title = this.on ? "Stone sound: on" : "Stone sound: off"; this.btn.setAttribute("aria-pressed", this.on ? "true" : "false"); };
+    this.btn = h("button", { class: "music-toggle stone-sound-toggle", "aria-label": "Stone sound" }, "");
+    this.btn.addEventListener("click", () => { this.on = !this.on; draw(); if (this.on) { this.ctx(); setTimeout(() => this.play(), 30); } });
+    draw(); header.append(this.btn);
+    // the browser lets sound start only after a tap: wake it on the first one
+    const wake = () => { if (this.on) this.ctx(); document.removeEventListener("pointerdown", wake, true); };
+    document.addEventListener("pointerdown", wake, true);
+  },
+};
+StoneSound.mount();
 
 /* ---- record an in-person game: tap moves onto a board, then send to Review ---- */
 
