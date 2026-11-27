@@ -195,9 +195,10 @@ const AICoach = {
     const same = !!pick && pick.seq === seq0 && pick.idx === r * sz0 + c;
     const unforeseen = !!pick && pick.seq === seq0 && !pick.top3.includes(r * sz0 + c);   // (not among its own three first choices)
     if (pick && pick.seq === seq0 && pick.idx >= 0 && AIPlay.game === g) { this.dot = { at, idx: pick.idx, same }; AIPlay.emit(); }
-    const lion = await this.lion, lionOk = lion && lion.seq === seq0 ? this.decent(lion, g, c, r) : null;
+    // (Lionffen is waited for only when its word decides: a surprise; everything else is said without it)
+    const lionSays = async () => { const lion = await this.lion; return lion && lion.seq === seq0 ? this.decent(lion, g, c, r) : null; };
     const before = await this.before;
-    if (!before) { if (same) this.remark(g, who, "same"); else if (unforeseen && lionOk && AI_COACH[who].surprise) this.remark(g, who, "surprise"); return; }
+    if (!before) { if (same) this.remark(g, who, "same"); else if (unforeseen && AI_COACH[who].surprise && await lionSays()) this.remark(g, who, "surprise"); return; }
     const after = await this.look(g);
     if (!after || AIPlay.game !== g || after.seq !== before.seq + 1) return;   // (an Undo, or another game, meanwhile)
     const lost = before.lead - after.lead, sz = g.S.size, pol = before.policy || [];
@@ -206,8 +207,9 @@ const AICoach = {
     // "I hadn't foreseen that" (apo110: "only ... if it was actually true. meaning its a decent move according to a
     // stronger net but not in her top 3 choices"): Lionffen finds it decent (the score network's points, if Lionffen
     // couldn't read it), and the avatar didn't have it among its three
-    const kind = lost >= this.BLUNDER ? "blunder" : lost >= this.MISTAKE ? "bad" : same ? "same"
-      : unforeseen && (lionOk ?? lost < 1.5) && lost < this.MISTAKE && AI_COACH[who].surprise ? "surprise" : top === r * sz + c && topP < 0.5 && lost < 1 ? "great" : null;
+    let kind = lost >= this.BLUNDER ? "blunder" : lost >= this.MISTAKE ? "bad" : same ? "same" : null;
+    if (!kind && unforeseen && AI_COACH[who].surprise && ((await lionSays()) ?? lost < 1.5)) kind = "surprise";
+    if (!kind && top === r * sz + c && topP < 0.5 && lost < 1) kind = "great";
     this.remark(g, who, kind);
   },
   remark(g, who, kind) {
