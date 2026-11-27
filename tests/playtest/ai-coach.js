@@ -16,7 +16,8 @@ await p.evaluate(()=>{window.__leads=[];window.__pol=null;ScoreEngine.analyze=as
 const turn=()=>p.evaluate(async()=>{for(let i=0;i<80&&(AIPlay.thinking||!AIPlay.game.myTurn);i++) await new Promise(r=>setTimeout(r,250));return AIPlay.game.myTurn;});
 const said=()=>p.evaluate(()=>{const e=document.querySelector('.avatar-say');return e&&!e.closest('[hidden]')?e.textContent:'';});
 const playAs=async(before,after,c,r,pol)=>{await turn();await p.evaluate(([b,a,pl])=>{window.__leads=[b,a];window.__pol=pl;AICoach.since=99;AICoach.yourTurn(AIPlay.game);},[before,after,pol]);
-  await p.evaluate(([c,r])=>{AIPlay.move(c,r);},[c,r]);await p.waitForTimeout(600);return said();};
+  await p.evaluate(([c,r])=>{AIPlay.move(c,r);},[c,r]);
+  for(let i=0;i<12;i++){await p.waitForTimeout(250);const t=await said();if(t)return t;}return said();};   // (a remark within 3 s, or none)
 check(await turn(),'your turn after Li Su\'s first move');
 let t=await playAs(20,3,2,16,null);
 check(/(win without a fight|Red Hare|consult your own stones|whole board is lost)/.test(t)&&!/points|better/.test(t),'a 17-point loss: a Li Su blunder line, just the line: '+t);
