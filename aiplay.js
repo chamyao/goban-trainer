@@ -144,7 +144,7 @@ const AICoach = {
   // where the avatar would have played your move (apo110: "the choice they would have chosen as my move is shown as a
   // orange dot", "and then a dialogue if I played what they would have played"): its own network's first choice in
   // your position, drawn after your move until your next one
-  pick: null, dot: null, lion: null,
+  pick: null, dot: null, lion: null, FADE: 4000,
   // Lionffen's search of your position (apo110: "we can have lionfenn running in the background since its strong"):
   // is a move decent? Among its three most-searched moves, or within 3 points of win rate of its best (relative, so
   // the handicap doesn't flatten it)
@@ -194,7 +194,7 @@ const AICoach = {
     const pick = await this.pick, sz0 = g.S.size;
     const same = !!pick && pick.seq === seq0 && pick.idx === r * sz0 + c;
     const unforeseen = !!pick && pick.seq === seq0 && !pick.top3.includes(r * sz0 + c);   // (not among its own three first choices)
-    if (pick && pick.seq === seq0 && pick.idx >= 0 && AIPlay.game === g) { this.dot = { at, idx: pick.idx, same }; AIPlay.emit(); }
+    if (pick && pick.seq === seq0 && pick.idx >= 0 && AIPlay.game === g) { this.dot = { at, idx: pick.idx, same, t: Date.now() }; AIPlay.emit(); }
     // (Lionffen is waited for only when its word decides: a surprise; everything else is said without it)
     const lionSays = async () => { const lion = await this.lion; return lion && lion.seq === seq0 ? this.decent(lion, g, c, r) : null; };
     const before = await this.before;
@@ -250,9 +250,14 @@ const AICoach = {
   // your stone when you played it
   overlay(goban, g) {
     const d = this.dot; if (!d || AIPlay.game !== g || g.S.moves.length < d.at || g.S.moves.length > d.at + 1) return;
+    // it fades away (apo110: "can you have the orange fade away"): 4 s from your move, the board's redraws on the way
+    // picking the fade up where it was (a negative delay)
+    const age = Date.now() - (d.t || (d.t = Date.now()));
+    if (age >= this.FADE) return;
     const sz = g.S.size, c = d.idx % sz, r = Math.floor(d.idx / sz), O = "#e8590c";
-    if (d.same) goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * 0.5, fill: "none", stroke: O, "stroke-width": 3, "pointer-events": "none" });
-    else goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * 0.4, fill: O, opacity: 0.45, stroke: O, "stroke-width": 2.5, "pointer-events": "none" });
+    const e = d.same ? goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * 0.5, fill: "none", stroke: O, "stroke-width": 3, "pointer-events": "none", class: "ai-dot" })
+      : goban.el("circle", { cx: goban.px(c), cy: goban.py(r), r: goban.cell * 0.4, fill: O, "fill-opacity": 0.45, stroke: O, "stroke-width": 2.5, "pointer-events": "none", class: "ai-dot" });
+    e.style.animationDuration = `${this.FADE}ms`; e.style.animationDelay = `-${age}ms`;
   },
 };
 
