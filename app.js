@@ -3812,34 +3812,40 @@ const Music = {
 };
 Music.mount();
 
-// The stone's sound (apo110: "add a stones sound for placement"): a short wooden clack, made in the browser (a
-// noise click through a band-pass and a damped knock), when one stone goes down on a board: the newly placed stone at
-// the last-move mark, with nothing else added (stepping through a review forward clacks too; back, or a new board, is
-// silent). A 🔊 / 🔇 button in the header turns it off, kept on this device.
+// The stone's sound (apo110: "add a stones sound for placement", then "the stones sound is really weird. choose
+// something similar to what they use on ogs"): recorded stones on a wooden board, from Sabaki (MIT; credited on
+// About): one of five takes for a stone placed, and a capture's rattle with it when stones come off. Played when one
+// stone goes down on a board: the newly placed stone at the last-move mark, with nothing else added (stepping through
+// a review forward clacks too; back, or a new board, is silent). A 🔊 / 🔇 button in the header turns it off, kept.
 const StoneSound = {
-  prev: null,
+  prev: null, bufs: null,
   get on() { try { return localStorage.getItem("gt-stone-sound") !== "0"; } catch { return true; } },
   set on(v) { try { v ? localStorage.removeItem("gt-stone-sound") : localStorage.setItem("gt-stone-sound", "0"); } catch {} },
   ctx() {
-    if (!this.ac) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; this.ac = new AC(); }
+    if (!this.ac) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; this.ac = new AC(); this.load(); }
     if (this.ac.state === "suspended") this.ac.resume().catch(() => {});
     return this.ac;
   },
-  play() {
+  load() {
+    if (this.bufs) return;
+    this.bufs = { stone: [], capture: [] };
+    for (const kind of ["stone", "capture"]) for (let i = 0; i < 5; i++)
+      fetch(`assets/sound/${kind}${i}.mp3?v=1`).then(r => r.arrayBuffer()).then(a => new Promise((ok, no) => this.ac.decodeAudioData(a, ok, no)))
+        .then(b => this.bufs[kind].push(b)).catch(() => {});
+  },
+  sound(kind, gain = 1, at = 0) {
+    const ac = this.ac, list = this.bufs && this.bufs[kind];
+    if (!ac || !list || !list.length) return false;
+    const src = ac.createBufferSource(), g = ac.createGain();
+    src.buffer = list[Math.floor(Math.random() * list.length)]; g.gain.value = gain;
+    src.connect(g); g.connect(ac.destination); src.start(ac.currentTime + at);
+    return true;
+  },
+  play(captured) {
     if (!this.on) return;
     const ac = this.ctx(); if (!ac || ac.state !== "running") return;
-    const t = ac.currentTime, out = ac.createGain(); out.gain.value = 0.55; out.connect(ac.destination);
-    // the click: 25 ms of noise, band-passed around 2.6 kHz, falling fast
-    const n = Math.round(ac.sampleRate * 0.03), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
-    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 4);
-    const src = ac.createBufferSource(); src.buffer = buf;
-    const bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 2600 * (0.94 + Math.random() * 0.12); bp.Q.value = 1.4;
-    src.connect(bp); bp.connect(out); src.start(t);
-    // the board's knock: a damped tone near 1 kHz sliding down
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = "sine"; o.frequency.setValueAtTime(1150 * (0.95 + Math.random() * 0.1), t); o.frequency.exponentialRampToValueAtTime(700, t + 0.08);
-    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
-    o.connect(g); g.connect(out); o.start(t); o.stop(t + 0.1);
+    this.sound("stone", 0.9);
+    if (captured) this.sound("capture", 0.7, 0.12);
   },
   // from Goban.render: a stone newly at lastMove, and no other point newly filled since the last board drawn
   seen(grid, lastMove) {
@@ -3847,16 +3853,19 @@ const StoneSound = {
     if (!prev || !grid || !lastMove || prev.length !== grid.length) return;
     const [c, r] = lastMove;
     if (!grid[r] || !grid[r][c] || prev[r][c]) return;
-    for (let y = 0; y < grid.length; y++) for (let x = 0; x < grid[y].length; x++)
+    let captured = 0;
+    for (let y = 0; y < grid.length; y++) for (let x = 0; x < grid[y].length; x++) {
       if (grid[y][x] && !prev[y][x] && !(x === c && y === r)) return;
-    this.play();
+      if (!grid[y][x] && prev[y][x]) captured++;
+    }
+    this.play(captured);
   },
   mount() {
     const header = document.querySelector("header");
     if (!header || this.btn) return;
     const draw = () => { this.btn.textContent = this.on ? "🔊" : "🔇"; this.btn.title = this.on ? "Stone sound: on" : "Stone sound: off"; this.btn.setAttribute("aria-pressed", this.on ? "true" : "false"); };
     this.btn = h("button", { class: "music-toggle stone-sound-toggle", "aria-label": "Stone sound" }, "");
-    this.btn.addEventListener("click", () => { this.on = !this.on; draw(); if (this.on) { this.ctx(); setTimeout(() => this.play(), 30); } });
+    this.btn.addEventListener("click", () => { this.on = !this.on; draw(); if (this.on) { this.ctx(); setTimeout(() => this.play(), 200); } });
     draw(); header.append(this.btn);
     // the browser lets sound start only after a tap: wake it on the first one
     const wake = () => { if (this.on) this.ctx(); document.removeEventListener("pointerdown", wake, true); };
@@ -5818,7 +5827,8 @@ function viewFeedback() {
       link("https://www.silvermansound.com/free-music/imperial-china-cinematic", "Imperial China Cinematic"), " by Shane Ivers, silvermansound.com (CC BY 4.0); boss fights: ",
       link("https://opengameart.org/content/taiko-drums-seamless-loop", "Taiko drums"), " by jobro (CC BY 3.0), and a gong from ",
       link("https://opengameart.org/content/100-cc0-sfx", "100 CC0 SFX"), " by rubberduck (CC0). Horses: ",
-      link("https://opengameart.org/content/lpc-horses", "[LPC] Horses"), " by bluecarrot16 (OGA-BY 3.0)."]),
+      link("https://opengameart.org/content/lpc-horses", "[LPC] Horses"), " by bluecarrot16 (OGA-BY 3.0). Stone sounds: from ",
+      link("https://github.com/SabakiHQ/Sabaki", "Sabaki"), " by Yichuan Shen (MIT)."]),
   ]));
 }
 

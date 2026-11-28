@@ -1,5 +1,5 @@
 // The stone's sound (apo110: "add a stones sound for placement"): one clack per stone placed (yours and the avatar's
-// reply), none for a redraw, and the 🔊 button turns it off (kept).
+// reply; recorded stones from Sabaki, apo110: "choose something similar to what they use on ogs"), none for a redraw, and the 🔊 button turns it off (kept).
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim()+'/playwright');
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1300,height:900}});let fails=0;
 const check=(ok,what)=>{if(!ok)fails++;console.log((ok?'ok   ':'FAIL ')+what);};
@@ -27,6 +27,7 @@ await p.evaluate(()=>{for(const [c,r] of [[15,3],[3,15],[15,15],[9,3],[3,3]]) if
 check(await p.evaluate(()=>window.__clacks)===c2,'off: no clack');
 // the real sound: it builds without an error once the page has been tapped
 await p.locator('.stone-sound-toggle').click();
-const real=await p.evaluate(()=>{try{StoneSound.play=window.__realPlay;StoneSound.play();return 'ok '+(StoneSound.ac?StoneSound.ac.state:'no ctx');}catch(e){return 'error '+e.message;}});
-check(real.startsWith('ok'),'the clack plays: '+real);
+await p.waitForTimeout(1500);
+const real=await p.evaluate(()=>{try{StoneSound.play=window.__realPlay;StoneSound.play(2);return 'ok '+(StoneSound.ac?StoneSound.ac.state:'no ctx')+' stone takes '+StoneSound.bufs.stone.length+', capture '+StoneSound.bufs.capture.length;}catch(e){return 'error '+e.message;}});
+check(/^ok running stone takes 5, capture 5$/.test(real),'the recorded stones load and play: '+real);
 await b.close();process.exit(fails?1:0);})();
